@@ -1,0 +1,1128 @@
+/* ==============================================
+   style.css — Flying Dev Lab 共通スタイル
+
+   🎨 色を変えたいときはここだけ編集してください！
+   ============================================== */
+
+/* =====================
+   CSS変数（色・デザイントークン）
+   ここを変えるだけでサイト全体の色が変わります
+   ===================== */
+:root {
+  /* ── メインカラー ── */
+  --primary:    #1e3a6e;   /* ヘッダー・ボタン・フッターの濃紺 */
+  --primary-lt: #2a4d8f;   /* ホバー時などの少し明るい濃紺 */
+  --accent:     #e8834a;   /* アクセントカラー（オレンジ） */
+  --accent-light: #4a90d9; /* ポリシー等の強調ボーダー */
+
+  /* ── テキスト ── */
+  --text:       #1a1a28;   /* メインテキスト */
+  --text-sub:   #4a4a5a;   /* サブテキスト */
+  --muted:      #888898;   /* 薄いテキスト・補足 */
+
+  /* ── 背景・カード ── */
+  --bg:         #f8f7f4;   /* ページ背景 */
+  --bg-soft:    #f0ede8;   /* 少し濃い背景 */
+  --card:       #ffffff;   /* カード背景 */
+  --white:      #ffffff;
+
+  /* ── ボーダー・シャドウ ── */
+  --border:     #e4e0da;
+  --shadow:     0 4px 24px rgba(0, 0, 0, 0.07);
+  --shadow-sm:  0 2px 10px rgba(0, 0, 0, 0.05);
+
+  /* ── 角丸 ── */
+  --radius-lg:  20px;
+  --radius-md:  14px;
+  --radius-sm:  8px;
+
+  /* ── フッター（半透明白の統一） ── */
+  --footer-link:    rgba(255, 255, 255, 0.75);
+  --footer-muted:   rgba(255, 255, 255, 0.45);
+
+  /* ── フォーカスリング ── */
+  --focus-ring:  #4a90d9;
+}
+
+/* ==============================================
+   共通リセット・ベーススタイル
+   ============================================== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* スムーズスクロール（モーション許容ユーザーのみ）
+   prefers-reduced-motionで包むことでアニメーション軽減設定のユーザーには適用しない */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  line-height: 1.7;
+  /* macOS/iOSでフォントのサブピクセルレンダリングを抑制して細く読みやすく見せる */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* デフォルトのリンク色・下線をリセットし、親要素の色を継承させる */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 本文中のリンクは下線で識別可能にする（WCAG 1.4.1） */
+main p a,
+main li a,
+.contact-box a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+img { max-width: 100%; display: block; }
+
+/* ==============================================
+   フォーカスリング（キーボードナビゲーション）
+   ============================================== */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ボタン・リンクのフォーカス時にも hover 同等の視覚フィードバック */
+.contact-btn:focus-visible,
+.home-btn:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+/* ==============================================
+   スキップリンク（アクセシビリティ）
+   ============================================== */
+/* 通常は画面外に配置し、フォーカス時のみ上部に表示してキーボードユーザーに提供する */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 0 0 8px 8px;
+  z-index: 9999;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==============================================
+   アニメーション
+   ============================================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+/*
+ * .fade-up 要素の出現タイミングをずらすアニメーション遅延
+ * アプリカードの遅延もここで管理しています（apps.jsで個別設定不要）
+ * アプリが8本を超えたらここに nth-child(9) 以降を追加してください
+ */
+.fade-up:nth-child(1) { animation-delay: 0.1s; }
+.fade-up:nth-child(2) { animation-delay: 0.2s; }
+.fade-up:nth-child(3) { animation-delay: 0.3s; }
+.fade-up:nth-child(4) { animation-delay: 0.4s; }
+.fade-up:nth-child(5) { animation-delay: 0.5s; }
+.fade-up:nth-child(6) { animation-delay: 0.6s; }
+.fade-up:nth-child(7) { animation-delay: 0.7s; }
+.fade-up:nth-child(8) { animation-delay: 0.8s; }
+
+/* モーション軽減設定: opacity: 0 のままだと要素が見えなくなるため即時完了させる */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ==============================================
+   共通ヘッダー
+   ============================================== */
+header {
+  background: var(--primary);
+  color: var(--white);
+  padding: 56px 24px 64px;
+  text-align: center;
+  position: relative;
+  overflow: hidden; /* 擬似要素の装飾円がはみ出ないよう切り取る */
+}
+
+/* ヘッダー右上の装飾用半透明円。pointer-events: none でクリックを透過させる */
+header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ヘッダー左下の装飾用半透明円 */
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 180px; height: 180px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ヘッダー内サブタイトル（privacy-policy, pledge 共通） */
+.header-subtitle {
+  font-size: 0.65em;
+  opacity: 0.8;
+}
+
+/* ==============================================
+   共通フッター
+   ============================================== */
+footer {
+  background: var(--primary);
+  color: var(--footer-muted);
+  text-align: center;
+  padding: 36px 24px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--footer-link);
+  font-size: 20px;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-links a:hover { color: white; }
+
+.x-icon {
+  font-size: 22px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+}
+
+/* NOTE: .footer-policy は現在未使用（index.html でコメントアウト中）
+   将来復活する可能性があるため残置 */
+.footer-policy {
+  display: block;
+  color: var(--footer-link);
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+.footer-policy:hover { color: white; }
+
+.footer-top {
+  display: block;
+  color: var(--footer-link);
+  font-size: 12px;
+  margin-bottom: 4px;
+  transition: color 0.2s;
+}
+.footer-top:hover { color: white; }
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--footer-muted);
+  font-family: 'Outfit', sans-serif;
+}
+
+/* ==============================================
+   共通メインレイアウト
+   ============================================== */
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 56px 20px 80px;
+}
+
+/* ==============================================
+   セクションタイトル（共通）
+   ============================================== */
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* flex: 1 で残り幅いっぱいに伸びるセパレーター線 */
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* ==============================================
+   index.html — ヘッダー固有スタイル
+   ============================================== */
+/* ナビリンクをヘッダー内の上部に引き上げる */
+.header-policy {
+  text-align: center;
+  margin-top: -40px;
+  margin-bottom: 50px;
+}
+
+.header-policy a {
+  font-size: 13px;
+  color: var(--footer-link);
+  font-family: 'Outfit', sans-serif;
+  transition: color 0.2s;
+}
+
+.header-policy a:hover {
+  color: white;
+}
+
+/* 擬似要素（装飾円）より手前に表示するためz-index: 1を指定 */
+.header-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 雲と家の絵文字を重ねて表示するための固定サイズのコンテナ */
+.site-logo {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 70px;
+  margin-bottom: 16px;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+/* 雲の絵文字：ロゴの土台として絶対配置 */
+.site-logo .logo-cloud {
+  font-size: 99px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  line-height: 1;
+}
+
+/* 家の絵文字：雲の上に重なるよう絶対配置。z-index: 2 で雲の手前に表示する */
+.site-logo .logo-house {
+  font-size: 52px;
+  position: absolute;
+  bottom: 42px;
+  left: 32px;
+  z-index: 2;
+  line-height: 1;
+}
+
+/* opacity: 0 が初期値。fadeUpアニメーションで出現するまで非表示にする */
+.site-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  animation: fadeUp 0.5s 0.1s ease forwards;
+  opacity: 0;
+}
+
+.site-name span { color: #a8c4ff; }
+
+/* opacity: 0 が初期値。0.2s遅れてfadeUpで出現する */
+.site-sub {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s 0.2s ease forwards;
+  opacity: 0;
+}
+
+/* キャッチコピーを白カードで囲んで視覚的に際立たせる */
+.catchcopy {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: inline-block;
+  animation: fadeUp 0.5s 0.3s ease forwards;
+  opacity: 0;
+}
+
+.catchcopy p:first-child {
+  font-size: clamp(16px, 4vw, 20px);
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.catchcopy p:last-child {
+  font-size: 13px;
+  color: var(--text-sub);
+  font-weight: 400;
+}
+
+/* ==============================================
+   index.html — アプリ一覧
+   ============================================== */
+/* JSがAPPS配列からカードを動的に追加するグリッドコンテナ */
+#app-list {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.app-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.app-card a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.app-card blockquote.instagram-media {
+  margin: 0 auto !important;
+  max-width: 100% !important;
+}
+
+.app-card iframe {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* アプリアイコン領域。iconImgが指定されない場合はグラデーションがフォールバック背景になる */
+.app-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--primary-lt), #4a6fa5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  flex-shrink: 0;
+}
+
+/* iconImgが指定された場合の実画像スタイル */
+.app-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+
+.app-info { flex: 1; }
+
+.app-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.app-desc {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+
+/* 公開状態を示すバッジ（COMING SOON / LIVE）。flex-shrinkで縮まないよう固定 */
+.app-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* 近日公開：オレンジ系 */
+.badge-coming {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+/* 公開中：グリーン系 */
+.badge-live {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* ==============================================
+   index.html — MAKE10 Web体験セクション
+   ============================================== */
+.try-game-section { margin-bottom: 56px; }
+
+.try-game-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.try-game-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+/* アイコン画像のサイズを min-width/max-width で固定してflexでも縮まないようにする */
+.try-game-icon {
+  width: 72px;
+  height: 72px;
+  max-width: 72px;
+  min-width: 72px;
+  border-radius: 16px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.try-game-info { flex: 1; }
+
+.try-game-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.try-game-desc {
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.6;
+}
+
+.try-game-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.try-game-btn:hover {
+  background: #d5743e;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+  .try-game-card { padding: 20px 18px; }
+  .try-game-icon { width: 60px; height: 60px; max-width: 60px; min-width: 60px; }
+  .try-game-name { font-size: 15px; }
+}
+
+/* ==============================================
+   index.html — お問い合わせ
+   ============================================== */
+.contact-section { margin-bottom: 56px; }
+
+.contact-wrap {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+.contact-box-inner {
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.contact-desc {
+  font-size: 14px;
+  color: var(--text-sub);
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--primary);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: 'Noto Sans JP', sans-serif;
+  text-align: center;
+  white-space: nowrap; /* 長いボタンテキストが折り返さないよう固定 */
+  max-width: 100%;
+}
+
+/* モバイルでは折り返しを許可して縦長にしてもテキストを収める */
+@media (max-width: 768px) {
+  .contact-btn {
+    white-space: normal;
+    padding: 14px 24px;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+}
+
+.contact-btn:hover {
+  background: var(--primary-lt);
+  transform: translateY(-2px);
+}
+
+/* ==============================================
+   index.html — SNS投稿埋め込み
+   ============================================== */
+/* SNS埋め込みセクション。max-widthでコンテンツ幅に揃える */
+.x-embed {
+  max-width: 600px;
+  margin: 60px auto;
+  text-align: left;
+}
+
+/* SNS埋め込みカードの共通レイアウト（index.html インラインstyle置き換え） */
+.sns-embed-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.sns-embed-card {
+  width: 100%;
+  padding: 10px;
+  display: block;
+}
+
+/* ==============================================
+   privacy-policy.html / pledge.html — ヘッダー固有
+   ============================================== */
+header h1 {
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.updated {
+  font-size: 12px;
+  opacity: 0.55;
+  font-family: 'Outfit', sans-serif;
+  margin-top: 8px;
+}
+
+/* ==============================================
+   privacy-policy.html / pledge.html — 言語タブ
+   ============================================== */
+.lang-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.lang-tab {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid var(--border);
+  background: var(--white);
+  color: var(--muted);
+  transition: all 0.2s;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* 選択中のタブはprimaryカラーで塗りつぶす */
+.lang-tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* 非アクティブなパネルはdisplay:noneで完全に隠す。JSでactiveクラスを付け外しして切り替える */
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+
+/* ==============================================
+   privacy-policy.html — ポリシーセクション
+   ============================================== */
+.policy-section {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+/* こども向けアプリ方針の強調ボーダー（インラインstyle置き換え） */
+.policy-children {
+  border-left: 4px solid var(--accent-light);
+}
+
+.policy-section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.policy-section p {
+  font-size: 14px;
+  color: var(--text-sub);
+  margin-bottom: 10px;
+}
+
+.policy-section p:last-child { margin-bottom: 0; }
+
+.policy-section ul {
+  padding-left: 18px;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+
+.policy-section ul li { margin-bottom: 6px; }
+
+/* メールアドレスを視覚的に区別するための薄い青系背景 */
+.contact-box {
+  background: #f0f4ff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 12px;
+}
+
+.contact-box p {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.contact-box p:last-child { margin-bottom: 0; }
+
+/* ==============================================
+   レスポンシブ
+   ============================================== */
+@media (max-width: 480px) {
+  header { padding: 44px 20px 52px; }
+  .catchcopy { padding: 20px; }
+  .app-card { padding: 18px; gap: 14px; }
+  .app-icon { width: 60px; height: 60px; font-size: 28px; }
+  .app-name { font-size: 16px; }
+  .policy-section { padding: 20px; }
+}
+
+/* ==============================================
+   404.html — ページ固有スタイル
+   ============================================== */
+/* bodyをflex縦並びにして、フッターをページ下端に固定する */
+.page-404 {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* mainを残り縦幅いっぱいに伸ばし、コンテンツを上下左右中央に配置する */
+.page-404 main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px 80px;
+}
+
+/* 雲と家をまとめて上下に浮遊させる外枠 */
+.lost-house {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 32px;
+  animation: floatCloud 4s ease-in-out infinite;
+}
+
+/* 上下に緩やかに浮き沈みするアニメーション */
+@keyframes floatCloud {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* 雲の絵文字（家の土台として下に敷く装飾） */
+.lost-cloud {
+  font-size: 120px;
+  line-height: 1;
+  display: block;
+}
+
+/* 雲の上に絶対配置した家の絵文字 */
+.lost-home {
+  font-size: 64px;
+  position: absolute;
+  bottom: 46px;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 1;
+  animation: wobble 3s ease-in-out infinite;
+}
+
+/* 家が左右にゆらゆら揺れるアニメーション */
+@keyframes wobble {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  25%       { transform: translateX(-50%) rotate(-4deg); }
+  75%       { transform: translateX(-50%) rotate(4deg); }
+}
+
+/* 家の絵文字の右上に絶対配置して重ねるバッジ */
+.question-badge {
+  position: absolute;
+  top: -4px;
+  right: -12px;
+  font-size: 28px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.25); }
+}
+
+/* 大きな「404」の数字 */
+.error-code {
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(72px, 20vw, 120px);
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.1s ease forwards;
+}
+
+/* 中央の「0」だけアクセントカラーで色付け */
+.error-code span {
+  color: var(--accent);
+}
+
+.error-title {
+  font-size: clamp(18px, 5vw, 24px);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.2s ease forwards;
+}
+
+.error-desc {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.9;
+  margin-bottom: 32px;
+  max-width: 360px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.3s ease forwards;
+}
+
+/* カウントダウンバー */
+.countdown-wrap {
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.4s ease forwards;
+}
+
+.countdown-text {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  margin-bottom: 10px;
+}
+
+.countdown-text strong {
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.progress-bar-bg {
+  width: 240px;
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 99px;
+  width: 100%;
+  transform-origin: left;
+  transition: transform 1s linear;
+}
+
+/* TOPへ戻るボタン */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: "Noto Sans JP", sans-serif;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.5s ease forwards;
+}
+
+.home-btn:hover {
+  background: var(--primary-lt);
+  transform: translateY(-2px);
+}
+
+.error-sub-en {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.6s ease forwards;
+}
+
+/* カウントダウン一時停止ボタン（WCAG 2.2.1 タイミング調整可能） */
+.countdown-pause {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.countdown-pause:hover {
+  color: var(--text);
+  border-color: var(--text-sub);
+}
+
+/* アニメーション軽減設定への対応（WCAG） */
+@media (prefers-reduced-motion: reduce) {
+  .lost-house,
+  .lost-home,
+  .question-badge {
+    animation: none;
+  }
+  .error-code,
+  .error-title,
+  .error-desc,
+  .countdown-wrap,
+  .home-btn,
+  .error-sub-en {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ==============================================
+   pledge.html — ページ固有スタイル
+   ============================================== */
+/* 将来のヒーロー追加時のために定義 */
+.pledge-hero {
+  text-align: center;
+  padding: 48px 24px 40px;
+  margin-bottom: 8px;
+}
+
+.pledge-hero .elephant {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+/* 将来のリード文追加時のために定義 */
+.pledge-lead {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  letter-spacing: 0.04em;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+/* 各誓いのセクションを囲むカード */
+.pledge-section {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+.pledge-section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pledge-section p {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.9;
+  margin-bottom: 12px;
+}
+
+.pledge-section p:last-child {
+  margin-bottom: 0;
+}
+
+.pledge-section p.highlight {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* 強調セクション（左ボーダーでアクセント色を付ける） */
+.pledge-section-accent {
+  border-left: 4px solid var(--accent);
+}
+
+/* 締めの言葉カード */
+.pledge-final {
+  background: var(--primary);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.pledge-final p {
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.pledge-final p:last-child {
+  margin-bottom: 0;
+  opacity: 1;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.pledge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pledge-list li {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.9;
+  margin-bottom: 8px;
+  font-family: "Outfit", sans-serif;
+}
+
+.pledge-list li.pledge-gap {
+  margin-bottom: 16px;
+}
+
+/* 将来の導線追加時のために定義 */
+.back-to-policy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+  font-family: "Outfit", sans-serif;
+}
+.back-to-policy:hover { color: var(--text); }

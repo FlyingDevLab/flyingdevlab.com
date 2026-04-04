@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- TOPページ -->
+  <url>
+    <loc>https://flyingdevlab.com/</loc>
+    <lastmod>2026-03-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/"/>
+  </url>
+
+  <!-- プライバシーポリシー -->
+  <url>
+    <loc>https://flyingdevlab.com/privacy-policy.html</loc>
+    <lastmod>2026-03-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy.html"/>
+  </url>
+
+  <!-- こどもたちへの誓い -->
+  <url>
+    <loc>https://flyingdevlab.com/pledge.html</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/pledge.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/pledge.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/pledge.html"/>
+  </url>
+
+</urlset>

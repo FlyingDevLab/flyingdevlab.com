@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#" id="top">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== 基本SEOタグ ===== -->
+  <title>空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室</title>
+  <meta name="description" content="空飛ぶ研究室（Flying Dev Lab）は、こどもも大人も笑顔になる安心・安全・便利なiOSアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう」など。">
+  <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
+  <meta name="keywords" content="iOSアプリ,こども向けアプリ,知育アプリ,足し算ゲーム,Flying Dev Lab,空飛ぶ研究室,インディーデベロッパー">
+  <meta name="author" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://flyingdevlab.com/">
+
+  <!-- ===== hreflang（言語バリアント） ===== -->
+  <!-- ja・en ともに同じURLを指定しているのは、言語切り替えをJSで同一ページ内で行うため -->
+  <link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/">
+  <link rel="alternate" hreflang="en" href="https://flyingdevlab.com/">
+  <link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/">
+
+  <!-- ===== OGP（Open Graph Protocol） ===== -->
+  <!-- SNSシェア時のタイトル・説明・サムネイル画像などを指定する -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://flyingdevlab.com/">
+  <meta property="og:title" content="空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室">
+  <meta property="og:description" content="こどもも大人も笑顔になる安心・安全・便利なiOSアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう」など。">
+  <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
+  <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- ===== Twitter Card ===== -->
+  <!-- X（旧Twitter）でシェアされた際のカード表示を制御する -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@FlyingDevLab">
+  <meta name="twitter:creator" content="@FlyingDevLab">
+  <meta name="twitter:title" content="空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室">
+  <meta name="twitter:description" content="こどもも大人も笑顔になる、安心・安全・便利なiOSアプリを開発しています。">
+  <meta name="twitter:image" content="https://flyingdevlab.com/ogp.png">
+  <meta name="twitter:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
+
+  <!-- ===== JSON-LD 構造化データ ===== -->
+  <!-- 検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応） -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://flyingdevlab.com/#organization",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "alternateName": "空飛ぶ研究室",
+        "url": "https://flyingdevlab.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://flyingdevlab.com/favicon-512.png"
+        },
+        "description": "こどもも大人も笑顔になる、安心・安全・便利なiOSアプリを開発するインディー開発者。",
+        "sameAs": [
+          "https://x.com/FlyingDevLab",
+          "https://www.instagram.com/flyingdevlab/",
+          "https://github.com/FlyingDevLab"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://flyingdevlab.com/#website",
+        "url": "https://flyingdevlab.com/",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "publisher": { "@id": "https://flyingdevlab.com/#organization" },
+        "inLanguage": ["ja", "en"]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://flyingdevlab.com/#webpage",
+        "url": "https://flyingdevlab.com/",
+        "name": "空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室",
+        "description": "こどもも大人も笑顔になる、安心・安全・便利なiOSアプリを開発しています。",
+        "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
+        "about": { "@id": "https://flyingdevlab.com/#organization" },
+        "inLanguage": ["ja", "en"]
+      }
+    ]
+  }
+  </script>
+
+  <!-- ===== Favicon ===== -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon-512.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#1e3a6e">
+
+  <!-- ===== Web Fonts =====
+       Google Fonts は動的に CSS を生成するため SRI (integrity) を付与できません。
+       preconnect で接続を高速化しています。 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- スキップリンク（キーボード操作・スクリーンリーダー向け） -->
+<a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+
+<!-- ヘッダー：ロゴ・サイト名・キャッチコピー・ナビゲーションリンクを含む -->
+<header>
+  <div class="header-inner">
+    <nav aria-label="サイトナビゲーション">
+      <div class="header-policy">
+        <a href="/privacy-policy.html" id="nav-policy">プライバシーポリシー・免責事項</a>
+      </div>
+    </nav>
+    <div class="site-logo" aria-hidden="true">
+      <span class="logo-cloud">☁️</span>
+      <span class="logo-house">🏠</span>
+    </div>
+    <h1 class="site-name">Flying <span>Dev</span> Lab</h1>
+    <p class="site-sub">空飛ぶ研究室</p>
+    <div class="catchcopy">
+      <p id="catch-main">こどもも大人も笑顔になる</p>
+      <p id="catch-sub">安心・安全・便利な<strong>iOSアプリ</strong>をつくっています。</p>
+    </div>
+  </div>
+</header>
+
+<!-- メインコンテンツ：言語タブ・アプリ一覧・SNS投稿・お問い合わせを含む -->
+<main id="main">
+
+  <!-- 言語タブ：WAI-ARIA の tablist パターンで実装。キーボードの左右矢印でも切り替え可能 -->
+  <div class="lang-tabs" role="tablist" aria-label="言語切り替え / Language">
+    <button class="lang-tab active"
+            role="tab"
+            id="tab-ja"
+            aria-selected="true"
+            aria-controls="lang-ja"
+            type="button">日本語</button>
+    <button class="lang-tab"
+            role="tab"
+            id="tab-en"
+            aria-selected="false"
+            aria-controls="lang-en"
+            type="button">English</button>
+  </div>
+
+  <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される -->
+  <section aria-labelledby="apps-heading">
+    <div class="section-header fade-up">
+      <h2 id="apps-heading" class="section-title">
+        <span aria-hidden="true">📱</span> <span id="apps-heading-text">アプリ</span>
+      </h2>
+    </div>
+    <div id="app-list"></div>
+  </section>
+
+  <!-- MAKE10 Web体験：App Store公開前にブラウザでゲームを試せるプロモーション導線 -->
+  <section class="try-game-section" aria-labelledby="try-heading">
+    <div class="section-header fade-up">
+      <h2 id="try-heading" class="section-title">
+        <span aria-hidden="true">📱💻</span> <span id="try-heading-text">ブラウザで体験</span>
+      </h2>
+    </div>
+    <div class="try-game-card fade-up">
+      <div class="try-game-inner">
+        <img src="images/icon-MAKE10.png" alt="MAKE10 icon" class="try-game-icon">
+        <div class="try-game-info">
+          <div class="try-game-name">MAKE10 / 10をつくろう</div>
+          <p class="try-game-desc">
+            数字を足して10にしよう！<br>
+            Pick the number that adds up to 10!
+          </p>
+        </div>
+      </div>
+      <a href="/make10/make10-web.html" class="try-game-btn" aria-label="MAKE10をブラウザでプレイ">
+        <span aria-hidden="true">▶</span> プレイ / Play
+      </a>
+    </div>
+  </section>
+
+  <!-- ==================== 日本語コンテンツ ==================== -->
+  <div class="lang-content active"
+       id="lang-ja"
+       role="tabpanel"
+       aria-labelledby="tab-ja">
+
+    <!-- お問い合わせ（日本語） -->
+    <section class="contact-section" aria-labelledby="contact-heading-ja">
+      <div class="section-header fade-up">
+        <h2 id="contact-heading-ja" class="section-title">
+          <span aria-hidden="true">📬</span> お問い合わせ
+        </h2>
+      </div>
+      <div class="contact-wrap fade-up">
+        <div class="contact-box-inner">
+          <p class="contact-desc">Google Formsが開きます。<br>入力した内容だけが送信される仕組みになっております。<br>それ以外の情報は取得しません。<br>バグの報告や気になることは、遠慮なく教えてくださいね😊</p>
+          <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="contact-btn"
+             aria-label="お問い合わせ・バグ報告はこちら（Google Formsが新しいタブで開きます）">
+            <span aria-hidden="true">📬</span> お問い合わせ・バグ報告はこちら
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SNS投稿埋め込み（日本語）：X（旧Twitter）投稿と Instagram 投稿と Threads 投稿を混在して掲載 -->
+    <section class="x-embed" aria-labelledby="sns-heading-ja">
+      <div class="section-header fade-up">
+        <h2 id="sns-heading-ja" class="section-title">
+          <span aria-hidden="true">📣</span> 活動状況
+        </h2>
+      </div>
+      <div class="sns-embed-list">
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">App Storeの審査を待っている間、遊んでください。<br> 迷路を進んでチーズを運びます。<br> いざとなったらネズミを追い払って下さい。<a href="https://t.co/pHAnPNy3Fm">https://t.co/pHAnPNy3Fm</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2039991667370147860?ref_src=twsrc%5Etfw">April 3, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">App Storeの審査を待っている間、<br>web版で雰囲気だけでも楽しんでください🥂<a href="https://t.co/jULRYyG99r">https://t.co/jULRYyG99r</a><a href="https://twitter.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a> <a href="https://twitter.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a> <a href="https://twitter.com/hashtag/iOS?src=hash&amp;ref_src=twsrc%5Etfw">#iOS</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2040212644507111919?ref_src=twsrc%5Etfw">April 3, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">超定番の価格比較アプリ<br>A classic price comparison app<br>複数商品の価格を一括比較<br>Compare multiple products at once<br>履歴を保存できる<br>Save your history<br>過去や他店舗の価格も比較可能<br>Compare past and store prices<br>広告なし<br>No ads <a href="https://t.co/R1y08sng0k">pic.twitter.com/R1y08sng0k</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2036974855460184270?ref_src=twsrc%5Etfw">March 26, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">Added English support and fixed social media embed issues.<br>日英対応とSNS投稿の埋め込みの修正。<a href="https://t.co/rFfPLdcTSh">https://t.co/rFfPLdcTSh</a><a href="https://twitter.com/hashtag/indiegame?src=hash&amp;ref_src=twsrc%5Etfw">#indiegame</a><a href="https://twitter.com/hashtag/iOS%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#iOSゲーム</a><a href="https://twitter.com/hashtag/%E7%84%A1%E6%96%99%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#無料ゲーム</a><a href="https://twitter.com/hashtag/%E5%BA%83%E5%91%8A%E3%81%AA%E3%81%97?src=hash&amp;ref_src=twsrc%5Etfw">#広告なし</a><a href="https://twitter.com/hashtag/%E3%82%B7%E3%83%B3%E3%83%97%E3%83%AB%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#シンプルゲーム</a><a href="https://twitter.com/hashtag/gamedev?src=hash&amp;ref_src=twsrc%5Etfw">#gamedev</a><a href="https://twitter.com/hashtag/mobilegame?src=hash&amp;ref_src=twsrc%5Etfw">#mobilegame</a><a href="https://twitter.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2036529887239086543?ref_src=twsrc%5Etfw">March 24, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="text-post-media" data-text-post-permalink="https://www.threads.com/@flyingdevlab/post/DWDfAf_kzT5" data-text-post-version="0" id="ig-tp-DWDfAf_kzT5" style=" background:#FFF; border-width: 1px; border-style: solid; border-color: #00000026; border-radius: 16px; max-width:650px; margin: 1px; min-width:270px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"> <a href="https://www.threads.com/@flyingdevlab/post/DWDfAf_kzT5" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%; font-family: -apple-system, BlinkMacSystemFont, sans-serif;" target="_blank" rel="noopener noreferrer"> <div style=" padding: 40px; display: flex; flex-direction: column; align-items: center;"><div style=" display:block; height:32px; width:32px; padding-bottom:20px;"> <svg aria-label="Threads" height="32px" role="img" viewBox="0 0 192 192" width="32px" xmlns="http://www.w3.org/2000/svg"> <path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7443 97.3355 44.7443 97.222 44.7443C82.2364 44.7443 69.7731 51.1409 62.102 62.7807L75.881 72.2328C81.6116 63.5383 90.6052 61.6848 97.2286 61.6848C97.3051 61.6848 97.3819 61.6848 97.4576 61.6855C105.707 61.7381 111.932 64.1366 115.961 68.814C118.893 72.2193 120.854 76.925 121.825 82.8638C114.511 81.6207 106.601 81.2385 98.145 81.7233C74.3247 83.0954 59.0111 96.9879 60.0396 116.292C60.5615 126.084 65.4397 134.508 73.775 140.011C80.8224 144.663 89.899 146.938 99.3323 146.423C111.79 145.74 121.563 140.987 128.381 132.296C133.559 125.696 136.834 117.143 138.28 106.366C144.217 109.949 148.617 114.664 151.047 120.332C155.179 129.967 155.42 145.8 142.501 158.708C131.182 170.016 117.576 174.908 97.0135 175.059C74.2042 174.89 56.9538 167.575 45.7381 153.317C35.2355 139.966 29.8077 120.682 29.6052 96C29.8077 71.3178 35.2355 52.0336 45.7381 38.6827C56.9538 24.4249 74.2039 17.11 97.0132 16.9405C119.988 17.1113 137.539 24.4614 149.184 38.788C154.894 45.8136 159.199 54.6488 162.037 64.9503L178.184 60.6422C174.744 47.9622 169.331 37.0357 161.965 27.974C147.036 9.60668 125.202 0.195148 97.0695 0H96.9569C68.8816 0.19447 47.2921 9.6418 32.7883 28.0793C19.8819 44.4864 13.2244 67.3157 13.0007 95.9325L13 96L13.0007 96.0675C13.2244 124.684 19.8819 147.514 32.7883 163.921C47.2921 182.358 68.8816 191.806 96.9569 192H97.0695C122.03 191.827 139.624 185.292 154.118 170.811C173.081 151.866 172.51 128.119 166.26 113.541C161.776 103.087 153.227 94.5962 141.537 88.9883ZM98.4405 129.507C88.0005 130.095 77.1544 125.409 76.6196 115.372C76.2232 107.93 81.9158 99.626 99.0812 98.6368C101.047 98.5234 102.976 98.468 104.871 98.468C111.106 98.468 116.939 99.0737 122.242 100.233C120.264 124.935 108.662 128.946 98.4405 129.507Z" /></svg></div><div style=" font-size: 15px; line-height: 21px; color: #000000; font-weight: 600; "> Threadsで見る</div></div></a></blockquote>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">おはようございます。<br>今作ってるアプリの方針は画像の通りです。<br>近日公開予定です。<a href="https://twitter.com/hashtag/indiegame?src=hash&amp;ref_src=twsrc%5Etfw">#indiegame</a> <a href="https://twitter.com/hashtag/iOS%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#iOSゲーム</a> <a href="https://twitter.com/hashtag/%E7%84%A1%E6%96%99%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#無料ゲーム</a> <a href="https://twitter.com/hashtag/%E5%BA%83%E5%91%8A%E3%81%AA%E3%81%97?src=hash&amp;ref_src=twsrc%5Etfw">#広告なし</a> <a href="https://twitter.com/hashtag/%E3%82%B7%E3%83%B3%E3%83%97%E3%83%AB%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#シンプルゲーム</a> <a href="https://twitter.com/hashtag/gamedev?src=hash&amp;ref_src=twsrc%5Etfw">#gamedev</a> <a href="https://twitter.com/hashtag/mobilegame?src=hash&amp;ref_src=twsrc%5Etfw">#mobilegame</a> <a href="https://twitter.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a> <a href="https://t.co/mNcMU0W2yb">pic.twitter.com/mNcMU0W2yb</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2033603955624661243?ref_src=twsrc%5Etfw">March 16, 2026</a></blockquote>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==================== English コンテンツ ==================== -->
+  <div class="lang-content"
+       id="lang-en"
+       lang="en"
+       role="tabpanel"
+       aria-labelledby="tab-en">
+
+    <!-- Contact（English） -->
+    <section class="contact-section" aria-labelledby="contact-heading-en">
+      <div class="section-header fade-up">
+        <h2 id="contact-heading-en" class="section-title">
+          <span aria-hidden="true">📬</span> Contact
+        </h2>
+      </div>
+      <div class="contact-wrap fade-up">
+        <div class="contact-box-inner">
+          <p class="contact-desc">Opens Google Forms.<br>Only the information you enter will be submitted.<br>We do not collect any other data.<br>Feel free to report bugs or ask questions 😊</p>
+          <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="contact-btn"
+             aria-label="Contact / Bug Report (opens Google Forms in a new tab)">
+            <span aria-hidden="true">📬</span> Contact / Bug Report
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Updates（English）：X（旧Twitter）投稿と Threads 投稿を混在して掲載 -->
+    <section class="x-embed" aria-labelledby="sns-heading-en">
+      <div class="section-header fade-up">
+        <h2 id="sns-heading-en" class="section-title">
+          <span aria-hidden="true">📣</span> Updates
+        </h2>
+      </div>
+      <div class="sns-embed-list">
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="en" dir="ltr">While waiting for the App Store review, come and play! 🧀 Navigate the maze and deliver the cheese. Don&#39;t forget to fend off the rats when they get in your way! 🐭🚫<a href="https://t.co/pHAnPNy3Fm">https://t.co/pHAnPNy3Fm</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2039992223962669275?ref_src=twsrc%5Etfw">April 3, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="en" dir="ltr">While waiting for App Store review, enjoy the web version in the meantime 🥂<a href="https://t.co/jULRYyG99r">https://t.co/jULRYyG99r</a><a href="https://twitter.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a> <a href="https://twitter.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a> <a href="https://twitter.com/hashtag/iOS?src=hash&amp;ref_src=twsrc%5Etfw">#iOS</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2040213081649975500?ref_src=twsrc%5Etfw">April 3, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">超定番の価格比較アプリ<br>A classic price comparison app<br>複数商品の価格を一括比較<br>Compare multiple products at once<br>履歴を保存できる<br>Save your history<br>過去や他店舗の価格も比較可能<br>Compare past and store prices<br>広告なし<br>No ads <a href="https://t.co/R1y08sng0k">pic.twitter.com/R1y08sng0k</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2036974855460184270?ref_src=twsrc%5Etfw">March 26, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">Added English support and fixed social media embed issues.<br>日英対応とSNS投稿の埋め込みの修正。<a href="https://t.co/rFfPLdcTSh">https://t.co/rFfPLdcTSh</a><a href="https://twitter.com/hashtag/indiegame?src=hash&amp;ref_src=twsrc%5Etfw">#indiegame</a><a href="https://twitter.com/hashtag/iOS%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#iOSゲーム</a><a href="https://twitter.com/hashtag/%E7%84%A1%E6%96%99%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#無料ゲーム</a><a href="https://twitter.com/hashtag/%E5%BA%83%E5%91%8A%E3%81%AA%E3%81%97?src=hash&amp;ref_src=twsrc%5Etfw">#広告なし</a><a href="https://twitter.com/hashtag/%E3%82%B7%E3%83%B3%E3%83%97%E3%83%AB%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#シンプルゲーム</a><a href="https://twitter.com/hashtag/gamedev?src=hash&amp;ref_src=twsrc%5Etfw">#gamedev</a><a href="https://twitter.com/hashtag/mobilegame?src=hash&amp;ref_src=twsrc%5Etfw">#mobilegame</a><a href="https://twitter.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2036529887239086543?ref_src=twsrc%5Etfw">March 24, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="text-post-media" data-text-post-permalink="https://www.threads.com/@flyingdevlab/post/DWDfAf_kzT5" data-text-post-version="0" style=" background:#FFF; border-width: 1px; border-style: solid; border-color: #00000026; border-radius: 16px; max-width:650px; margin: 1px; min-width:270px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"> <a href="https://www.threads.com/@flyingdevlab/post/DWDfAf_kzT5" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%; font-family: -apple-system, BlinkMacSystemFont, sans-serif;" target="_blank" rel="noopener noreferrer"> <div style=" padding: 40px; display: flex; flex-direction: column; align-items: center;"><div style=" display:block; height:32px; width:32px; padding-bottom:20px;"> <svg aria-label="Threads" height="32px" role="img" viewBox="0 0 192 192" width="32px" xmlns="http://www.w3.org/2000/svg"> <path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7443 97.3355 44.7443 97.222 44.7443C82.2364 44.7443 69.7731 51.1409 62.102 62.7807L75.881 72.2328C81.6116 63.5383 90.6052 61.6848 97.2286 61.6848C97.3051 61.6848 97.3819 61.6848 97.4576 61.6855C105.707 61.7381 111.932 64.1366 115.961 68.814C118.893 72.2193 120.854 76.925 121.825 82.8638C114.511 81.6207 106.601 81.2385 98.145 81.7233C74.3247 83.0954 59.0111 96.9879 60.0396 116.292C60.5615 126.084 65.4397 134.508 73.775 140.011C80.8224 144.663 89.899 146.938 99.3323 146.423C111.79 145.74 121.563 140.987 128.381 132.296C133.559 125.696 136.834 117.143 138.28 106.366C144.217 109.949 148.617 114.664 151.047 120.332C155.179 129.967 155.42 145.8 142.501 158.708C131.182 170.016 117.576 174.908 97.0135 175.059C74.2042 174.89 56.9538 167.575 45.7381 153.317C35.2355 139.966 29.8077 120.682 29.6052 96C29.8077 71.3178 35.2355 52.0336 45.7381 38.6827C56.9538 24.4249 74.2039 17.11 97.0132 16.9405C119.988 17.1113 137.539 24.4614 149.184 38.788C154.894 45.8136 159.199 54.6488 162.037 64.9503L178.184 60.6422C174.744 47.9622 169.331 37.0357 161.965 27.974C147.036 9.60668 125.202 0.195148 97.0695 0H96.9569C68.8816 0.19447 47.2921 9.6418 32.7883 28.0793C19.8819 44.4864 13.2244 67.3157 13.0007 95.9325L13 96L13.0007 96.0675C13.2244 124.684 19.8819 147.514 32.7883 163.921C47.2921 182.358 68.8816 191.806 96.9569 192H97.0695C122.03 191.827 139.624 185.292 154.118 170.811C173.081 151.866 172.51 128.119 166.26 113.541C161.776 103.087 153.227 94.5962 141.537 88.9883ZM98.4405 129.507C88.0005 130.095 77.1544 125.409 76.6196 115.372C76.2232 107.93 81.9158 99.626 99.0812 98.6368C101.047 98.5234 102.976 98.468 104.871 98.468C111.106 98.468 116.939 99.0737 122.242 100.233C120.264 124.935 108.662 128.946 98.4405 129.507Z" /></svg></div><div style=" font-size: 15px; line-height: 21px; color: #000000; font-weight: 600; "> View on Threads</div></div></a></blockquote>
+        </div>
+
+        <div class="app-card sns-embed-card fade-up">
+          <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">おはようございます。<br>今作ってるアプリの方針は画像の通りです。<br>近日公開予定です。<a href="https://twitter.com/hashtag/indiegame?src=hash&amp;ref_src=twsrc%5Etfw">#indiegame</a> <a href="https://twitter.com/hashtag/iOS%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#iOSゲーム</a> <a href="https://twitter.com/hashtag/%E7%84%A1%E6%96%99%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#無料ゲーム</a> <a href="https://twitter.com/hashtag/%E5%BA%83%E5%91%8A%E3%81%AA%E3%81%97?src=hash&amp;ref_src=twsrc%5Etfw">#広告なし</a> <a href="https://twitter.com/hashtag/%E3%82%B7%E3%83%B3%E3%83%97%E3%83%AB%E3%82%B2%E3%83%BC%E3%83%A0?src=hash&amp;ref_src=twsrc%5Etfw">#シンプルゲーム</a> <a href="https://twitter.com/hashtag/gamedev?src=hash&amp;ref_src=twsrc%5Etfw">#gamedev</a> <a href="https://twitter.com/hashtag/mobilegame?src=hash&amp;ref_src=twsrc%5Etfw">#mobilegame</a> <a href="https://twitter.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a> <a href="https://t.co/mNcMU0W2yb">pic.twitter.com/mNcMU0W2yb</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2033603955624661243?ref_src=twsrc%5Etfw">March 16, 2026</a></blockquote>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<!-- フッター：外部SNSリンク・TOPへ戻るリンク・著作権表記を含む -->
+<footer>
+  <div class="footer-links">
+    <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" aria-label="GitHub（新しいタブで開きます）">GitHub</a>
+    <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" aria-label="X（旧Twitter）（新しいタブで開きます）">
+      <span class="x-icon" aria-hidden="true">𝕏</span>
+    </a>
+    <a href="https://www.instagram.com/flyingdevlab/" target="_blank" rel="noopener noreferrer" aria-label="Instagram（新しいタブで開きます）">
+      <span class="x-icon" aria-hidden="true">Instagram</span>
+    </a>
+  </div>
+  <a href="#top" class="footer-top" aria-label="ページの先頭へ">↑ TOP</a>
+  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+</footer>
+
+<!-- ===== JavaScript ===== -->
+<!-- apps.js 読み込み・アプリ一覧レンダリング -->
+<script src="apps.js" defer></script>
+<script>
+  /**
+   * 言語切り替え＆アプリ一覧レンダリング
+   * apps.js の APPS 配列を編集するだけで自動反映されます
+   */
+  (function () {
+    "use strict";
+
+    /* 切り替え可能な言語コードのホワイトリスト（不正な値の混入を防ぐ） */
+    var VALID_LANGS = ["ja", "en"];
+    /* 現在表示している言語。初期値は日本語 */
+    var currentLang = "ja";
+
+    /* ─── i18n テキスト定義 ─── */
+    var I18N = {
+      ja: {
+        appsHeading:  "アプリ",
+        tryHeading:   "ブラウザで体験",
+        badgeLive:    "公開中",
+        badgeComing:  "COMING SOON",
+        emptyMsg:     "アプリは近日公開予定です。",
+        catchMain:    "こどもも大人も笑顔になる",
+        catchSub:     "安心・安全・便利な<strong>iOSアプリ</strong>をつくっています。",
+        navPolicy:    "プライバシーポリシー・免責事項",
+        skipLink:     "メインコンテンツへスキップ"
+      },
+      en: {
+        appsHeading:  "Apps",
+        tryHeading:   "Try in Browser",
+        badgeLive:    "LIVE",
+        badgeComing:  "COMING SOON",
+        emptyMsg:     "Apps coming soon.",
+        catchMain:    "Safe, reliable & delightful",
+        catchSub:     "We build <strong>iOS apps</strong> for kids and grown-ups alike.",
+        navPolicy:    "Privacy Policy & Disclaimer",
+        skipLink:     "Skip to main content"
+      }
+    };
+
+    /** HTML特殊文字をエスケープする（XSS防止） */
+    function esc(str) {
+      if (typeof str !== "string") return "";
+      var d = document.createElement("div");
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    /**
+     * 1枚のアプリカードの内部HTML文字列を生成して返す
+     * @param {Object} app  - APPS配列の1要素
+     * @param {string} lang - 表示言語コード（"ja" または "en"）
+     */
+    function cardContent(app, lang) {
+      var t = I18N[lang];
+      var badgeClass = app.status === "live" ? "badge-live" : "badge-coming";
+      var badgeText  = app.status === "live" ? t.badgeLive : t.badgeComing;
+      var appName = lang === "en" ? (app.name_en || app.name) : app.name;
+      var appDesc = lang === "en" ? (app.desc_en || app.desc) : app.desc;
+      var iconHtml   = app.iconImg
+        ? "<img src=\"" + esc(app.iconImg) + "\" alt=\"" + esc(appName) + " icon\" class=\"app-icon-img\">"
+        : esc(app.icon);
+      return "<div class=\"app-icon\">" + iconHtml + "</div>"
+        + "<div class=\"app-info\">"
+        +   "<div class=\"app-name\">" + esc(appName) + "</div>"
+        +   "<div class=\"app-desc\">" + esc(appDesc) + "</div>"
+        + "</div>"
+        + "<span class=\"app-badge " + esc(badgeClass) + "\">" + esc(badgeText) + "</span>";
+    }
+
+    /**
+     * APPS配列をもとにアプリカードを描画する
+     * 公開中（live + url あり）はリンク要素、未公開（coming）はdivのみで出力する
+     * @param {string} lang - 表示言語コード（"ja" または "en"）
+     */
+    function renderApps(lang) {
+      var container = document.getElementById("app-list");
+      if (!container) return;
+
+      var t = I18N[lang];
+
+      // セクション見出し更新
+      var headingText = document.getElementById("apps-heading-text");
+      if (headingText) headingText.textContent = t.appsHeading;
+
+      // カードをクリア
+      container.innerHTML = "";
+
+      if (typeof APPS === "undefined" || !APPS || APPS.length === 0) {
+        var msg = document.createElement("p");
+        msg.style.cssText = "color:var(--muted);text-align:center;padding:32px;";
+        msg.textContent = t.emptyMsg;
+        container.appendChild(msg);
+        return;
+      }
+
+      APPS.forEach(function (app) {
+        /* 公開中（status === "live"）かつApp Store URLが設定されている場合のみリンクにする */
+        var isLive = app.status === "live" && app.url;
+
+        var card = document.createElement("div");
+        card.className = "app-card fade-up";
+
+        if (isLive) {
+          /* 公開中：カード全体をApp StoreへのリンクとしてWrap */
+          var link = document.createElement("a");
+          link.href = app.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.innerHTML = cardContent(app, lang);
+          card.appendChild(link);
+        } else {
+          /* 未公開：リンクなしのdivのみで出力 */
+          card.innerHTML = cardContent(app, lang);
+        }
+
+        container.appendChild(card);
+      });
+    }
+
+    /**
+     * 表示言語を切り替える
+     * html要素のlang属性・タブの選択状態・コンテンツパネル・ヘッダーテキスト・アプリ一覧を一括更新する
+     * @param {string} lang - 切り替え先の言語コード（"ja" または "en"）
+     */
+    function switchLang(lang) {
+      if (VALID_LANGS.indexOf(lang) === -1) return;
+      currentLang = lang;
+
+      // html lang 属性更新（スクリーンリーダーや翻訳ツールへの伝達）
+      document.documentElement.lang = lang;
+
+      // タブ状態更新
+      document.querySelectorAll(".lang-tab").forEach(function (tab) {
+        var isActive = tab.getAttribute("aria-controls") === "lang-" + lang;
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      // コンテンツパネル更新
+      document.querySelectorAll(".lang-content").forEach(function (panel) {
+        panel.classList.toggle("active", panel.id === "lang-" + lang);
+      });
+
+      // ヘッダーテキスト更新
+      var t = I18N[lang];
+      var catchMain = document.getElementById("catch-main");
+      var catchSub  = document.getElementById("catch-sub");
+      var navPolicy = document.getElementById("nav-policy");
+      var skipLink  = document.querySelector(".skip-link");
+
+      if (catchMain) catchMain.textContent = t.catchMain;
+      if (catchSub)  catchSub.innerHTML = t.catchSub;
+      if (navPolicy) navPolicy.textContent = t.navPolicy;
+      if (skipLink)  skipLink.textContent = t.skipLink;
+
+      // アプリ一覧を再描画
+      renderApps(lang);
+
+      // 体験セクション見出し更新
+      var tryHeadingText = document.getElementById("try-heading-text");
+      if (tryHeadingText) tryHeadingText.textContent = t.tryHeading;
+    }
+
+    // タブクリック：クリックされたタブの aria-controls からlangコードを取得して切り替える
+    document.querySelectorAll(".lang-tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        var lang = this.getAttribute("aria-controls").replace("lang-", "");
+        switchLang(lang);
+      });
+
+      // キーボード操作：左右矢印キーでタブを移動（WAI-ARIA Tabパターン準拠）
+      tab.addEventListener("keydown", function (e) {
+        var tabs = Array.from(document.querySelectorAll(".lang-tab"));
+        var index = tabs.indexOf(this);
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          var next = e.key === "ArrowRight"
+            ? tabs[(index + 1) % tabs.length]
+            : tabs[(index - 1 + tabs.length) % tabs.length];
+          next.focus();
+          next.click();
+        }
+      });
+    });
+
+    // 初期描画：DOMが構築済みなら即実行、まだの場合はDOMContentLoadedを待つ
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () { renderApps("ja"); });
+    } else {
+      renderApps("ja");
+    }
+  })();
+</script>
+
+<!-- Threads 埋め込みスクリプト -->
+<script async src="https://www.threads.com/embed.js" crossorigin="anonymous"></script>
+<!-- Twitter / X ウィジェット（1回だけ読み込む） -->
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8" crossorigin="anonymous"></script>
+
+</body>
+</html>

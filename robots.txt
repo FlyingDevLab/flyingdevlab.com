@@ -1,0 +1,8 @@
+# robots.txt — Flying Dev Lab
+# https://flyingdevlab.com/
+
+User-agent: *
+Allow: /
+
+# サイトマップの場所を検索エンジンに伝える
+Sitemap: https://flyingdevlab.com/sitemap.xml

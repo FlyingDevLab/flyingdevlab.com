@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - 雲の上で迷子 | 空飛ぶ研究室</title>
+  <!-- エラーページのため検索エンジンにインデックスさせない -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Outfit：英数字・見出し用 / Noto Sans JP：日本語テキスト用 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- サイト共通スタイル（CSS変数・ヘッダー・フッターなど）を読み込む -->
+  <link rel="stylesheet" href="style.css"></head>
+<body class="page-404">
+
+<header>
+  <div class="header-inner">
+    <div class="site-logo" aria-hidden="true">
+      <span class="logo-cloud">☁️</span>
+      <span class="logo-house">🏠</span>
+    </div>
+    <p class="site-name">Flying <span>Dev</span> Lab</p>
+    <p class="site-sub">空飛ぶ研究室</p>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 浮遊する雲と家の絵文字（装飾のみ・スクリーンリーダーには読み上げさせない） -->
+  <div class="lost-house" aria-hidden="true">
+    <span class="lost-cloud">☁️</span>
+    <span class="lost-home">🏠<span class="question-badge">❓</span></span>
+  </div>
+
+  <!-- 装飾用の「404」数字（aria-hiddenで隠し、直後のh1をスクリーンリーダーの読み上げ対象にする） -->
+  <p class="error-code" aria-hidden="true">4<span>0</span>4</p>
+
+  <!-- エラーページの主見出し（スクリーンリーダーはここを読む） -->
+  <h1 class="error-title">雲の上で迷子になりました。</h1>
+
+  <!-- エラーの補足説明とトップページへの案内 -->
+  <p class="error-desc">
+    このページは雲の上のどこかに飛んでいってしまったようです。<br>
+    URLのつづりを確認するか、<br>
+    おうちに戻りましょう<span aria-hidden="true">☁️</span>
+  </p>
+
+  <!-- 自動リダイレクトのカウントダウンと一時停止ボタン -->
+  <div class="countdown-wrap">
+    <p class="countdown-text" aria-live="polite" aria-atomic="true">
+      <strong id="count">10</strong> 秒後にTOPへ移動します
+    </p>
+    <div class="progress-bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10" id="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-bar"></div>
+    </div>
+    <button type="button" class="countdown-pause" id="pause-btn" aria-label="カウントダウンを一時停止">⏸ 一時停止</button>
+  </div>
+
+  <!-- トップページへ即時移動するリンクボタン -->
+  <a href="/" class="home-btn">
+    <span aria-hidden="true">🏠</span> 今すぐTOPへ帰る
+  </a>
+
+  <!-- 英語ユーザー向けのカウントダウン補足テキスト（秒数はJSで更新される） -->
+  <p class="error-sub-en" lang="en">Lost in the clouds. Heading home in <span id="count-en">10</span>s…</p>
+
+</main>
+
+<footer>
+  <a href="/" class="footer-top" aria-label="トップページへ戻る">↑ TOP</a>
+  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+</footer>
+
+<script>
+  /* 即時実行関数（IIFE）でスコープを閉じ、グローバル変数の汚染を防ぐ */
+  (function () {
+    "use strict";
+
+    /* カウントダウンの開始秒数 */
+    var SECONDS = 10;
+    /* 残り秒数。1秒ごとにデクリメントされる */
+    var remaining = SECONDS;
+    /* 一時停止フラグ。trueのときはカウントを進めない */
+    var paused = false;
+
+    /* 操作対象のDOM要素をまとめて取得する */
+    var countEl   = document.getElementById("count");
+    var countEnEl = document.getElementById("count-en");
+    var barEl     = document.getElementById("progress-bar");
+    var barWrap   = document.getElementById("progress-bar-wrap");
+    var pauseBtn  = document.getElementById("pause-btn");
+
+    /* バーを初期状態（100%表示）にする */
+    barEl.style.transform = "scaleX(1)";
+
+    /* 1秒ごとにカウントダウンを進めるタイマー */
+    var timer = setInterval(function () {
+      /* 一時停止中はスキップして何もしない */
+      if (paused) return;
+
+      remaining--;
+
+      /* 日本語・英語それぞれの残り秒数テキストを更新する */
+      countEl.textContent   = remaining;
+      countEnEl.textContent = remaining;
+
+      /* 残り割合に応じてプログレスバーを左端へ向けて縮小する */
+      var ratio = remaining / SECONDS;
+      barEl.style.transform = "scaleX(" + ratio + ")";
+      /* WAI-ARIAのaria-valuenowも同時に更新してスクリーンリーダーに変化を伝える */
+      barWrap.setAttribute("aria-valuenow", remaining);
+
+      /* 0秒になったらタイマーを止め、トップページへリダイレクトする */
+      if (remaining <= 0) {
+        clearInterval(timer);
+        window.location.href = "/";
+      }
+    }, 1000);
+
+    /* 一時停止 / 再開ボタンの制御
+       WCAG 2.2.1（タイミング調整可能）に対応し、自動遷移をユーザーが制御できるようにする */
+    pauseBtn.addEventListener("click", function () {
+      paused = !paused;
+      /* 状態に合わせてボタンのラベルテキストとaria-labelを切り替える */
+      if (paused) {
+        pauseBtn.textContent = "▶ 再開";
+        pauseBtn.setAttribute("aria-label", "カウントダウンを再開");
+      } else {
+        pauseBtn.textContent = "⏸ 一時停止";
+        pauseBtn.setAttribute("aria-label", "カウントダウンを一時停止");
+      }
+    });
+
+    /* OSやブラウザで「視差効果を減らす」設定が有効な場合、
+       自動リダイレクトも無効化してユーザーの意思に従う
+       （装飾アニメーションの停止はCSSの @media prefers-reduced-motion で対応済み） */
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      /* タイマーを止め、一時停止状態にする */
+      clearInterval(timer);
+      paused = true;
+      /* カウントダウン機能を使わないため一時停止ボタンを非表示にする */
+      pauseBtn.style.display = "none";
+      /* 秒数表示を消去し、代わりにボタンへの案内テキストを表示する */
+      countEl.textContent = "";
+      countEnEl.textContent = "";
+      var textEl = countEl.parentElement;
+      if (textEl) {
+        textEl.textContent = "下のボタンからTOPへ移動できます";
+      }
+    }
+  })();
+</script>
+
+</body>
+</html>
