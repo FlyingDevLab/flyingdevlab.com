@@ -772,6 +772,27 @@ header h1 {
 .contact-box p:last-child { margin-bottom: 0; }
 
 /* ==============================================
+   app-guide.html — 有料プランセクション固有スタイル
+   「冷たさ」を排除するため、強い色の境界線ではなく、
+   柔らかな背景色（--bg-soft）で包み込むようなレイアウトにしています。
+   ============================================== */
+.billing-info {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  margin: 20px 0;
+  line-height: 1.8;
+}
+
+.price-notice {
+  font-weight: 500;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+/* ==============================================
    レスポンシブ
    ============================================== */
 @media (max-width: 480px) {
