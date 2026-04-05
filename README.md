@@ -7,6 +7,28 @@ Making safe, reliable, and delightful iOS apps — for kids and grown-ups alike.
 
 -----
 
+## 私について / About Us
+
+### Background & Philosophy
+
+高校時代にBASIC言語に触れたことからプログラミングの歩みを始めました。
+前職の航空宇宙関連企業では、安全管理や情報機密保持が極めて重要視される環境に身を置いていました。
+そこで培われた「正確さ」と「誠実さ」を、現在はソフトウェア開発における大切な指針としています。
+
+My programming journey began with the BASIC language during my time at a technical high school. 
+My subsequent career in the aerospace industry involved working within environments that demanded the highest standards of safety and information security.
+The principles of "precision" and "integrity" I embraced there now serve as the core philosophy behind my software development.
+
+### The Mission
+
+親戚のこどもが広告の多いアプリで遊んでいる姿を見て、より健やかなデジタル環境の必要性を感じ、個人開発をスタートしました。
+「こどもたちが安心して活用できる、シンプルで誠実なツールを届けたい」という想いから、広告や過剰な演出を排除したアプリ制作に取り組んでいます。
+
+The sight of a young relative playing with apps cluttered with advertisements inspired me to start independent development.
+With a mission to "provide simple, honest tools that children can use with peace of mind," I strive to create apps free from intrusive ads and focused on genuine utility.
+
+-----
+
 ## こどもたちへの誓い / Our Pledge to Children
 
 私たちは、こどもを利益の手段にしません。  
@@ -40,12 +62,17 @@ Our children's apps are built with **no ads, no in-app purchases, and no externa
 
 -----
 
-## 技術スタック / Tech Stack
+## 技術スタック / Tech Stack & Qualifications
 
-- HTML / CSS / JavaScript（静的サイト）
-- ホスティング：GitHub Pages
-- フォント：Google Fonts（Noto Sans JP, Outfit）
-- エディタ：VS Code
+### Stack
+- **Languages:** Swift (SwiftUI), HTML5, CSS3, JavaScript
+- **Hosting:** GitHub Pages
+- **Typography:** Google Fonts (Noto Sans JP, Outfit)
+- **Tools:** VS Code, Xcode, M4 MacBook Pro
+
+### Qualifications
+- **ITパスポート (国家資格):** IT全般および経営戦略の体系的理解
+- **Webクリエイター能力認定試験 エキスパート:** デザインと実装の専門スキル証明
 
 -----
 
