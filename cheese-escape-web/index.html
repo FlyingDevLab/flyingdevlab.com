@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cheese Quest / チーズクエスト – Maze Action Game</title>
+  <meta name="description" content="Drag the cheese to the goal! Repel mice with shockwaves. チーズをドラッグしてゴールへ！迫り来るネズミを衝撃波で撃退するブラウザ迷路アクションゲーム。">
+
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="Cheese Quest / チーズクエスト">
+  <meta property="og:description" content="Drag the cheese to the goal! チーズをドラッグしてゴールへ運ぼう！">
+  <meta property="og:url"         content="https://flyingdevlab.com/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="Cheese Quest / チーズクエスト">
+  <meta name="twitter:description" content="Drag cheese to the goal! / チーズをゴールへ運ぼう！">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="site-header" role="banner">
+    <h1 class="site-title">
+      <span class="title-emoji" aria-hidden="true">🧀</span>
+      Cheese Quest
+      <span class="title-sub">チーズクエスト</span>
+    </h1>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main id="main-content" role="main">
+
+    <!-- トップ画面 -->
+    <section id="screen-top" class="screen screen--top" aria-label="Title Screen / タイトル画面">
+
+      <div class="top-description">
+        <h2 class="section-title">How to Play&ensp;/&ensp;あそびかた</h2>
+        <ul class="how-to-play-list" role="list">
+          <li>
+            <span class="icon" aria-hidden="true">🧀</span>
+            <span>
+              <strong>Drag</strong> the cheese to the goal <span aria-hidden="true">🏁</span><br>
+              <span class="tip-ja"><strong>ドラッグ</strong>でチーズをゴールへ運ぼう</span>
+            </span>
+          </li>
+          <li>
+            <span class="icon" aria-hidden="true">🐭</span>
+            <span>
+              Mice reduce HP &mdash; 0 HP = Game Over<br>
+              <span class="tip-ja">ネズミに触れると HP が減る（HP0でゲームオーバー）</span>
+            </span>
+          </li>
+          <li>
+            <span class="icon" aria-hidden="true">💥</span>
+            <span>
+              <strong>Tap / Click</strong> to fire a shockwave!<br>
+              <span class="tip-ja"><strong>タップ / クリック</strong>で衝撃波を発射！</span>
+            </span>
+          </li>
+          <li>
+            <span class="icon" aria-hidden="true">⚡</span>
+            <span>
+              Low HP = <strong>bigger</strong> shockwave — turn the tide!<br>
+              <span class="tip-ja">HP が低いほど衝撃波が<strong>広くなる</strong>！ピンチを逆転しよう</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ハイスコア（JS が注入） -->
+      <div class="highscore-display" id="top-highscore" aria-live="polite"></div>
+
+      <button id="btn-start" class="btn btn--primary btn--large">
+        ▶ START
+      </button>
+    </section>
+
+    <!-- ゲーム画面 -->
+    <section id="screen-game" class="screen screen--game" aria-label="Game Screen / ゲームプレイ画面">
+      <canvas
+        id="gameCanvas"
+        width="570"
+        height="570"
+        role="img"
+        aria-label="Cheese Quest game screen / チーズクエストのゲーム画面"
+      ></canvas>
+    </section>
+
+    <!-- リザルト画面 -->
+    <section id="screen-result" class="screen screen--result" aria-label="Result Screen / リザルト画面" aria-live="assertive">
+
+      <div class="result-header">
+        <p class="result-gameover-emoji" aria-hidden="true">😢</p>
+        <h2 class="result-title">Game Over!</h2>
+        <p class="result-subtitle">You lost!&ensp;/&ensp;やられた！</p>
+      </div>
+
+      <div class="result-scores">
+        <div class="result-score-current" id="result-score"></div>
+        <div class="result-score-best"    id="result-highscore"></div>
+      </div>
+
+      <div class="result-buttons" role="group">
+        <button id="btn-retry" class="btn btn--primary">
+          🔄 Play Again&ensp;/&ensp;もう一度
+        </button>
+        <button id="btn-top" class="btn btn--secondary">
+          🏠 Top&ensp;/&ensp;トップへ
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+   <!-- ========================================
+       フッター / Footer
+       全画面共通で表示されるコピーライト
+       Displayed on all screens at all times
+  ======================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time>
+      <a
+        href="https://FlyingDevLab.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-link"
+        aria-label="Flying Dev Lab（新しいタブで開く）"
+      >Flying Dev Lab</a>. All rights reserved.
+    </p>
+  </footer>
+
+  <script src="game.js"></script>
+</body>
+</html>

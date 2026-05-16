@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- 文字コード・ビューポート設定 -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO: タイトル / Title -->
+  <title>モグラ叩き / Whack-a-Mole | Flying Dev Lab</title>
+
+  <!-- SEO: メタディスクリプション / Meta Description -->
+  <meta name="description" content="モグラ叩きブラウザゲーム。30秒でハイスコアを目指せ！/ Browser-based Whack-a-Mole game. Aim for the highest score in 30 seconds!" />
+
+  <!-- OGP タグ / OGP Tags -->
+  <meta property="og:title" content="モグラ叩き / Whack-a-Mole | Flying Dev Lab" />
+  <meta property="og:description" content="モグラ叩きブラウザゲーム。30秒でハイスコアを目指せ！/ Browser-based Whack-a-Mole game. Aim for the highest score in 30 seconds!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://FlyingDevLab.com" />
+  <meta property="og:site_name" content="Flying Dev Lab" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="モグラ叩き / Whack-a-Mole | Flying Dev Lab" />
+  <meta name="twitter:description" content="30秒でハイスコアを目指せ！/ Aim for the highest score in 30 seconds!" />
+
+  <!-- スタイルシート読み込み / Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Google Fonts: レトロポップなフォント / Retro-pop fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ========================================
+       ヘッダー / Header
+       全画面共通で表示されるゲームタイトル
+       Displayed on all screens at all times
+  ======================================== -->
+  <header role="banner">
+    <div class="header-inner">
+      <!-- モグラのデコレーション / Mole decoration -->
+      <span class="header-mole" aria-hidden="true">🐭</span>
+      <h1>
+        <span class="title-ja">モグラ叩き</span>
+        <span class="title-sep" aria-hidden="true">/</span>
+        <span class="title-en">Whack-a-Mole</span>
+      </h1>
+      <span class="header-mole" aria-hidden="true">🐭</span>
+    </div>
+  </header>
+
+  <!-- ========================================
+       メインコンテンツ / Main Content
+       3つの画面を内包 / Contains 3 screens
+  ======================================== -->
+  <main role="main" id="main-content">
+
+    <!-- ----------------------------------------
+         トップ画面 / Top Screen (#screen-top)
+         ゲーム説明・ハイスコア・スタートボタン
+         Game description, high score, start button
+    ---------------------------------------- -->
+    <section id="screen-top" class="screen" aria-label="トップ画面 / Top Screen">
+      <div class="screen-inner">
+
+        <!-- ゲーム説明 / Game Description -->
+        <div class="intro-box" role="region" aria-labelledby="intro-heading">
+          <h2 id="intro-heading" class="section-title">
+            <span class="ja">遊び方</span>
+            <span class="sep">/</span>
+            <span class="en">How to Play</span>
+          </h2>
+          <ul class="intro-list" aria-label="ゲームの説明 / Game instructions">
+            <li>
+              <span class="emoji" aria-hidden="true">⏱️</span>
+              <span class="ja"> 30秒以内にできるだけ多くのモグラを叩こう！</span>
+              <span class="sep">/</span>
+              <span class="en">Whack as many moles as possible within 30 seconds!</span>
+            </li>
+            <li>
+              <span class="emoji" aria-hidden="true">👆</span>
+              <span class="ja">穴から出たモグラをタップ・クリックでやっつけよう！</span>
+              <span class="sep">/</span>
+              <span class="en">Tap or click moles as they pop out of holes!</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- ハイスコア表示 / High Score Display -->
+        <div class="highscore-box" role="region" aria-label="ハイスコア / High Score">
+          <p class="highscore-label">
+            <span class="ja">ハイスコア</span>
+            <span class="sep">/</span>
+            <span class="en">High Score</span>
+          </p>
+          <p class="highscore-value" id="top-highscore" aria-live="polite">0</p>
+        </div>
+
+        <!-- スタートボタン / Start Button -->
+        <button
+          id="btn-start"
+          class="btn btn-primary"
+          aria-label="ゲームスタート / Start Game"
+          onclick="startGame()"
+        >
+          <span class="ja">ゲームスタート</span>
+          <span class="sep">/</span>
+          <span class="en">Start Game</span>
+        </button>
+
+      </div>
+    </section><!-- /#screen-top -->
+
+    <!-- ----------------------------------------
+         ゲーム画面 / Game Screen (#screen-game)
+         スコア・タイマー・モグラグリッド
+         Score, timer, and mole grid
+    ---------------------------------------- -->
+    <section id="screen-game" class="screen" aria-label="ゲーム画面 / Game Screen" aria-hidden="true">
+      <div class="screen-inner">
+
+        <!-- ステータスバー / Status Bar -->
+        <div class="status-bar" role="region" aria-label="ゲーム状態 / Game Status">
+
+          <!-- スコア表示 / Score Display -->
+          <div class="status-item" aria-live="polite" aria-atomic="true">
+            <span class="status-label">
+              <span class="ja">スコア</span>
+              <span class="sep">/</span>
+              <span class="en">Score</span>
+            </span>
+            <span class="status-value" id="score-display">0</span>
+          </div>
+
+          <!-- 残り時間表示 / Time Left Display -->
+          <div class="status-item" aria-live="assertive" aria-atomic="true">
+            <span class="status-label">
+              <span class="ja">残り時間</span>
+              <span class="sep">/</span>
+              <span class="en">Time Left</span>
+            </span>
+            <span class="status-value" id="timer-display">30</span>
+          </div>
+
+        </div><!-- /.status-bar -->
+
+        <!-- モグラ穴グリッド / Mole Hole Grid (3x3) -->
+        <div
+          class="grid"
+          role="grid"
+          aria-label="モグラ穴グリッド / Mole Hole Grid"
+          id="mole-grid"
+        >
+          <!-- 穴はgame.jsで動的生成 / Holes are dynamically generated by game.js -->
+        </div><!-- /.grid -->
+
+        <!-- スコアポップアップ用コンテナ / Score Popup Container -->
+        <div id="popup-container" aria-hidden="true"></div>
+
+      </div>
+    </section><!-- /#screen-game -->
+
+    <!-- ----------------------------------------
+         リザルト画面 / Result Screen (#screen-result)
+         スコア結果・ハイスコア・再プレイボタン
+         Score result, high score, replay buttons
+    ---------------------------------------- -->
+    <section id="screen-result" class="screen" aria-label="リザルト画面 / Result Screen" aria-hidden="true">
+      <div class="screen-inner">
+
+        <h2 class="section-title result-title">
+          <span class="ja">ゲーム終了！</span>
+          <span class="sep">/</span>
+          <span class="en">Game Over!</span>
+        </h2>
+
+        <!-- ハイスコア更新演出エリア / New High Score Area -->
+        <div id="new-record-area" class="new-record" aria-live="assertive" hidden>
+          <span class="ja">🎉 新記録達成！</span>
+          <span class="sep">/</span>
+          <span class="en">New High Score!</span>
+        </div>
+
+        <!-- 今回のスコア / Your Score -->
+        <div class="result-score-box" role="region" aria-label="今回のスコア / Your Score">
+          <p class="result-label">
+            <span class="ja">あなたのスコア</span>
+            <span class="sep">/</span>
+            <span class="en">Your Score</span>
+          </p>
+          <p class="result-value" id="result-score" aria-live="polite">0</p>
+        </div>
+
+        <!-- ハイスコア / High Score -->
+        <div class="result-highscore-box" role="region" aria-label="ハイスコア / High Score">
+          <p class="result-hs-label">
+            <span class="ja">ハイスコア</span>
+            <span class="sep">/</span>
+            <span class="en">High Score</span>
+          </p>
+          <p class="result-hs-value" id="result-highscore">0</p>
+        </div>
+
+        <!-- アクションボタン / Action Buttons -->
+        <div class="result-buttons">
+          <button
+            id="btn-retry"
+            class="btn btn-primary"
+            aria-label="もう一度遊ぶ / Play Again"
+            onclick="startGame()"
+          >
+            <span class="ja">もう一度</span>
+            <span class="sep">/</span>
+            <span class="en">Play Again</span>
+          </button>
+          <button
+            id="btn-top"
+            class="btn btn-secondary"
+            aria-label="トップへ戻る / Back to Top"
+            onclick="goToTop()"
+          >
+            <span class="ja">トップへ</span>
+            <span class="sep">/</span>
+            <span class="en">Back to Top</span>
+          </button>
+        </div>
+
+      </div>
+    </section><!-- /#screen-result -->
+
+  </main><!-- /#main-content -->
+
+  <!-- ========================================
+       フッター / Footer
+       全画面共通で表示されるコピーライト
+       Displayed on all screens at all times
+  ======================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time>
+      <a
+        href="https://FlyingDevLab.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-link"
+        aria-label="Flying Dev Lab（新しいタブで開く）"
+      >Flying Dev Lab</a>. All rights reserved.
+    </p>
+  </footer>
+
+
+  <!-- ゲームロジック読み込み / Game Logic -->
+  <script src="game.js"></script>
+
+</body>
+</html>

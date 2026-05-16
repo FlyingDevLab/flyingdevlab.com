@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>MAKE10 – 30秒チャレンジ | 足して10を作る暗算ゲーム</title>
+  <meta name="description" content="30秒で「足して10」を何問解けるか！シンプルな暗算アクションゲーム。コンボでタイムボーナス獲得！スマホ・PCで遊べるブラウザゲーム。">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="MAKE10 – 30秒チャレンジ">
+  <meta property="og:description" content="30秒で「足して10」を何問解けるか！コンボでタイムボーナス獲得のシンプル暗算ゲーム。">
+  <meta property="og:url"         content="https://flyingdevlab.com/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="MAKE10 – 30秒チャレンジ">
+  <meta name="twitter:description" content="30秒で「足して10」を何問解けるか！シンプル暗算ゲーム。">
+
+  <!-- ===== Google Fonts（Nunito）：接続を事前に確立して読み込みを高速化する ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <!-- ===== スタイルシート ===== -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- アニメーションする背景の光球（装飾のみ・スクリーンリーダーには読み上げさせない） -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <!-- ===== ヘッダー：全画面共通のゲームタイトルバー ===== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <h1 class="site-title">
+        <!-- [FIX] title-num → title-accent に修正（CSS クラス名の不一致を解消） -->
+        MAKE<span class="title-accent">10</span>
+      </h1>
+      <p class="site-tagline" aria-label="30秒チャレンジ">30-SECOND CHALLENGE</p>
+    </div>
+  </header>
+
+  <!-- ===== メインコンテンツ：3つの画面を切り替えて表示 ===== -->
+  <main id="main-content" role="main">
+
+    <!-- ゲーム全体のコンテナ（各画面を内包する） -->
+    <div class="game-container" id="gameContainer">
+
+      <!-- ── トップ画面：ゲーム説明・ハイスコア・スタートボタン ── -->
+      <section class="screen active" id="screen-top" aria-label="タイトル画面">
+        <div class="glass-card" style="text-align:center;">
+
+          <!-- ゲームルール見出し -->
+          <h2 class="rule-heading" id="rule-heading">あそびかた</h2>
+
+          <!-- ゲームルール説明 -->
+          <p class="title-rule">
+            数字を足して <strong>10</strong> にしよう！<br>
+            Pick the number that adds up to <strong>10</strong>!
+          </p>
+
+          <!-- ハイスコア表示（JS で値を注入。スコアがない場合は空） -->
+          <div
+            class="title-hi"
+            id="titleHi"
+            aria-live="polite"
+            aria-label="ベストスコア"
+          ></div>
+
+          <!-- スタートボタン -->
+          <button
+            class="btn btn-primary"
+            id="btn-start"
+            style="width:100%;"
+            aria-label="ゲームをスタートする"
+          >
+            🚀 スタート / START
+          </button>
+        </div>
+      </section><!-- /#screen-top -->
+
+      <!-- ── ゲーム画面：実際のゲームプレイ ── -->
+      <section class="screen" id="screen-game" aria-label="ゲームプレイ画面">
+
+        <!-- ヘッダー行：ホームボタン・スコア・コンボ表示 -->
+        <div class="play-header">
+          <div class="score-display" aria-label="スコア">
+            SCORE <span id="scoreValue" aria-live="polite">0</span>
+          </div>
+          <div
+            class="combo-display"
+            id="comboDisplay"
+            aria-live="polite"
+            aria-label="コンボ数"
+          ></div>
+        </div>
+
+        <!-- タイムゲージ：残り時間を割合で表示する -->
+        <div
+          class="gauge-wrapper"
+          role="progressbar"
+          aria-label="残り時間"
+          aria-valuemin="0"
+          aria-valuemax="30"
+          aria-valuenow="30"
+          id="gaugeWrapper"
+        >
+          <div class="gauge-bar" id="gaugeBar" style="width:100%;"></div>
+        </div>
+
+        <!-- 問題エリア：現在の数字・ヒント・次の数字プレビューを表示する -->
+        <div class="question-area" id="questionArea" aria-label="問題エリア">
+          <div class="question-card">
+            <div class="question-label">MAKE 10!</div>
+            <div
+              class="question-number"
+              id="questionNumber"
+              aria-live="assertive"
+              aria-label="問題の数字"
+            >5</div>
+            <div class="question-hint">
+              <span id="questionPlus" aria-hidden="true">5</span> + ? = 10
+            </div>
+            <!-- 次の問題の数字をプレビュー表示してプレイヤーに予告する -->
+            <div class="next-label" aria-hidden="true">NEXT</div>
+            <div class="next-number" id="nextNumber" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <!-- 選択肢タイル：JS で動的に生成される -->
+        <div
+          class="tiles-grid"
+          id="tilesGrid"
+          role="group"
+          aria-label="答えを選んでください"
+        ></div>
+
+      </section><!-- /#screen-game -->
+
+      <!-- ── リザルト画面：スコア・ハイスコア・ボタン ── -->
+      <section
+        class="screen"
+        id="screen-result"
+        aria-label="リザルト画面"
+        aria-live="assertive"
+      >
+        <div class="glass-card" style="text-align:center;">
+
+          <!-- スコア表示 -->
+          <p class="result-score-label">YOUR SCORE</p>
+          <div class="result-score" id="resultScore" aria-label="今回のスコア">0</div>
+
+          <!-- ハイスコア表示（新記録時は JS でスタイルを切り替える） -->
+          <div class="result-hi" id="resultHi" aria-live="polite"></div>
+
+          <!-- スコアに応じたメッセージ -->
+          <h2 class="result-message" id="resultMessage" aria-live="polite">Try again!</h2>
+
+          <!-- 最大コンボ数 -->
+          <p class="result-combo" id="resultCombo" aria-live="polite"></p>
+
+          <!-- ボタン群 -->
+          <div class="result-buttons" role="group" aria-label="ゲーム終了後の選択">
+            <button
+              class="btn btn-primary"
+              id="btn-retry"
+              style="width:100%;"
+              aria-label="もう一度プレイする"
+            >
+              🔄 もう一度 / Retry
+            </button>
+            <!--
+              App Store ボタン：URL 確定後にコメントアウトを解除する
+              <a class="btn btn-appstore" href="#" id="appStoreBtn" style="width:100%;"
+                 aria-label="App Store でダウンロード（新しいタブで開く）"
+                 target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                App Store でダウンロード
+              </a>
+            -->
+            <button
+              class="btn btn-secondary"
+              id="btn-top"
+              style="width:100%;"
+              aria-label="タイトル画面に戻る"
+            >
+              ← タイトルへ / Title
+            </button>
+          </div>
+        </div>
+      </section><!-- /#screen-result -->
+
+    </div><!-- /.game-container -->
+  </main><!-- /#main-content -->
+
+  <!-- ===== フッター：全画面共通のコピーライト ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time>
+      <a
+        href="https://FlyingDevLab.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-link"
+        aria-label="Flying Dev Lab（新しいタブで開く）"
+      >Flying Dev Lab</a>. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- ===== ゲームロジック（body 末尾で読み込み） ===== -->
+  <script src="game.js"></script>
+</body>
+</html>

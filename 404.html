@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!-- DOCTYPE宣言：「これはHTML5のページです」とブラウザに伝える必須の宣言 -->
+<!-- lang="ja"：主要言語が日本語であることを宣言。スクリーンリーダーや翻訳ツールが正しく動作します。 -->
+<html lang="ja">
+<head>
+  <!-- 文字コード宣言：UTF-8は日本語・英語・絵文字をすべて扱える文字コード。
+       先頭近くに書かないと文字化けの原因になります。 -->
+  <meta charset="UTF-8">
+  <!-- ビューポート設定：スマホで正しいサイズで表示するための必須設定 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ページタイトル：ブラウザのタブに表示される文字列。
+       ユーモアのあるタイトルにすることで、ユーザーが迷子になっても温かく迎えられます。 -->
+  <title>404 - 雲の上で迷子 | 空飛ぶ研究室</title>
+  <!-- エラーページのため検索エンジンにインデックスさせない。
+       noindex → 検索結果への登録を禁止
+       nofollow → このページ内のリンクをたどらないよう指示
+       404ページが検索結果に出ると混乱を招くため、明示的に除外しています。 -->
+  <meta name="robots" content="noindex, nofollow">
+  <!-- Favicon：ブラウザのタブやブックマークに表示される小さなアイコン -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <!-- apple-touch-icon：iPhoneでホーム画面に追加したときのアイコン -->
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- preconnect：フォントサーバーへの接続を事前に確立して読み込みを高速化 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Outfit：英数字・見出し用 / Noto Sans JP：日本語テキスト用
+       display=swap → 読み込み完了まではシステムフォントで表示し、文字が見えない時間をなくす -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- サイト共通スタイル（CSS変数・ヘッダー・フッターなど）を読み込む。
+       / から始まるパスはドメインのルートからの絶対パスです。 -->
+  <link rel="stylesheet" href="/style.css"></head>
+<!-- class="page-404" をbodyに付けることでCSSが404専用レイアウトを適用します。
+     style.cssで min-height: 100vh + display: flex により、
+     コンテンツが少なくてもフッターが常に最下部に来るレイアウトになっています。 -->
+<body class="page-404">
+
+<!-- <header>：ページ上部のヘッダー領域を示すセマンティックタグ。
+     このページではロゴとサイト名だけを表示し、ナビゲーションリンクは省いています。 -->
+<header>
+  <!-- header-inner：コンテンツを中央に固定幅で配置するためのレイアウト用ラッパー -->
+  <div class="header-inner">
+    <!-- site-logo：雲と家の絵文字を重ねて表示するロゴエリア。
+         aria-hidden="true" → 絵文字ロゴは装飾目的のため、スクリーンリーダーに読ませません。 -->
+    <div class="site-logo" aria-hidden="true">
+      <span class="logo-cloud">☁️</span>
+      <span class="logo-house">🏠</span>
+    </div>
+    <!-- サイト名とサブタイトル。
+         index.html では <h1> を使っていますが、このページでは
+         404の見出し（h1）がmain内にあるため、ここは <p> を使っています。
+         1ページに <h1> は1つだけというルールを守るための設計です。 -->
+    <p class="site-name">Flying <span>Dev</span> Lab</p>
+    <p class="site-sub">空飛ぶ研究室</p>
+  </div>
+</header>
+
+<!-- <main>：ページのメインコンテンツを示すセマンティックタグ。
+     id="main" はスキップリンクのジャンプ先です（このページにはスキップリンクはありませんが
+     style.cssで定義されているため id を維持しています）。 -->
+<main id="main">
+
+  <!-- 浮遊する雲と家の絵文字（装飾のみ・スクリーンリーダーには読み上げさせない）
+       aria-hidden="true" → 視覚的な装飾であるため読み上げ不要として隠しています。
+       style.cssで floatCloud アニメーションによりふわふわ浮くように設定されています。 -->
+  <div class="lost-house" aria-hidden="true">
+    <span class="lost-cloud">☁️</span>
+    <!-- lost-home の中に question-badge（❓）を入れ子にすることで
+         家の上に重ねて表示しています（絶対配置で右上に配置）。 -->
+    <span class="lost-home">🏠<span class="question-badge">❓</span></span>
+  </div>
+
+  <!-- 装飾用の「404」数字。
+       aria-hidden="true" で隠し、直後の <h1> をスクリーンリーダーの読み上げ対象にします。
+       <h1> ではなく <p> を使っているのは、この数字があくまで視覚的な装飾だからです。
+       意味のある見出しは下の <h1 class="error-title"> が担います。
+       <span> で中央の「0」だけ別クラスを付け、アクセントカラーで色付けしています。 -->
+  <p class="error-code" aria-hidden="true">4<span>0</span>4</p>
+
+  <!-- エラーページの主見出し（スクリーンリーダーはここを読む）。
+       aria-hidden な装飾数字の後にこの <h1> を置くことで、
+       視覚ユーザーには「404」の大きな数字が見え、
+       読み上げユーザーには「雲の上で迷子になりました。」が読まれます。 -->
+  <h1 class="error-title">雲の上で迷子になりました。</h1>
+
+  <!-- エラーの補足説明とトップページへの案内。
+       <br> で改行を入れてモバイルでも読みやすい行割りにしています。
+       aria-hidden="true" の絵文字は装飾のみです。 -->
+  <p class="error-desc">
+    このページは雲の上のどこかに飛んでいってしまったようです。<br>
+    URLのつづりを確認するか、<br>
+    おうちに戻りましょう<span aria-hidden="true">☁️</span>
+  </p>
+
+  <!-- 自動リダイレクトのカウントダウンと一時停止ボタン。
+       <section> タグ：独立したコンテンツのかたまりを示すセマンティックタグ。
+       aria-labelledby="countdown-heading" → このセクションの見出しが
+       id="countdown-heading" の要素であることをスクリーンリーダーに伝えます。 -->
+  <section class="countdown-wrap" aria-labelledby="countdown-heading">
+    <!-- visually-hidden：CSSで画面外に配置して視覚的には見えないが、
+         スクリーンリーダーには読み上げられる見出しです。
+         「自動リダイレクト」という文脈をスクリーンリーダーユーザーに伝えます。 -->
+    <h2 id="countdown-heading" class="visually-hidden">自動リダイレクト</h2>
+    <!-- aria-live="polite"：この要素の内容が変化したとき（JSが秒数を書き換えたとき）、
+         スクリーンリーダーが現在の読み上げを終えてから変化を通知します（割り込まない）。
+         aria-atomic="true"：要素全体をひとかたまりとして読み上げます。
+         「10 秒後にTOPへ移動します」を丸ごと読むため、秒数だけでなく文脈も伝わります。 -->
+    <p class="countdown-text" aria-live="polite" aria-atomic="true">
+      <strong id="count">10</strong> 秒後にTOPへ移動します
+    </p>
+    <!-- role="progressbar"：この要素がプログレスバーであることをスクリーンリーダーに伝えます。
+         aria-valuemin / aria-valuemax → 最小値と最大値（0〜10秒）
+         aria-valuenow → 現在値。JSが1秒ごとに更新してスクリーンリーダーに変化を伝えます。 -->
+    <div class="progress-bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10" id="progress-bar-wrap">
+      <!-- JSが transform: scaleX() でバーの幅を縮小してカウントダウンを視覚表示します -->
+      <div class="progress-bar-fill" id="progress-bar"></div>
+    </div>
+    <!-- type="button"：<button> がフォーム内にある場合にsubmitを起こさないための明示的な指定。
+         aria-label：ボタンの目的をスクリーンリーダーに伝えます（絵文字だけでは不明確なため）。 -->
+    <button type="button" class="countdown-pause" id="pause-btn" aria-label="カウントダウンを一時停止">⏸ 一時停止</button>
+  </section>
+
+  <!-- トップページへ即時移動するリンクボタン。
+       href="/" → ドメインのルート（トップページ）へのリンク。
+       <a> タグをボタン風にスタイリングしています（クリックでページ遷移するため <button> ではなくリンクが適切）。 -->
+  <a href="/" class="home-btn">
+    <span aria-hidden="true">🏠</span> 今すぐTOPへ帰る
+  </a>
+
+  <!-- 英語ユーザー向けの補足テキスト。
+       lang="en" を付けてスクリーンリーダーが英語で読み上げられるようにしています。
+       <span id="count-en"> の数字はJSが1秒ごとに書き換えます。 -->
+  <p class="error-sub-en" lang="en">Lost in the clouds. Heading home in <span id="count-en">10</span>s…</p>
+
+</main>
+
+<!-- <footer>：ページ下部のフッター領域を示すセマンティックタグ。
+     href="/" → ルートへのリンク。aria-label でリンクの目的を伝えています。
+     © はHTMLエンティティで © （著作権マーク）を表示しています。 -->
+<footer>
+  <a href="/" class="footer-top" aria-label="トップページへ戻る">↑ TOP</a>
+  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+</footer>
+
+<!-- ===== JavaScript =====
+     ページ末尾（</body>直前）に置くのが基本です。HTMLの描画を妨げないためです。 -->
+<script>
+  /**
+   * IIFE（即時実行関数式）でスコープを閉じ、グローバル変数の汚染を防ぐ。
+   * (function(){...})() という書き方で定義と同時に実行されます。
+   * 内部の変数が外部のスクリプトと名前衝突するリスクをなくします。
+   */
+  (function () {
+    "use strict";
+    /*
+     * "use strict"（厳格モード）：
+     * 宣言していない変数への代入などよくあるバグをエラーとして検出します。
+     */
+
+    /* カウントダウンの開始秒数。この値を変えれば秒数を調整できます。 */
+    var SECONDS = 10;
+    /* 残り秒数。setIntervalで1秒ごとにデクリメント（1ずつ減算）されます。 */
+    var remaining = SECONDS;
+    /* 一時停止フラグ。true のときはカウントを進めずスキップします。 */
+    var paused = false;
+
+    /* 操作対象のDOM要素をまとめて取得する。
+       getElementById("id名") → id属性で要素を1つ取得するDOM操作です。
+       まとめて変数に入れておくことで、毎回検索せず効率よく参照できます。 */
+    var countEl   = document.getElementById("count");
+    var countEnEl = document.getElementById("count-en");
+    var barEl     = document.getElementById("progress-bar");
+    var barWrap   = document.getElementById("progress-bar-wrap");
+    var pauseBtn  = document.getElementById("pause-btn");
+
+    /* バーを初期状態（scaleX(1) = 100%表示）にする。
+       transform: scaleX(値) → X軸方向（横幅）を0〜1の倍率で拡大縮小します。 */
+    barEl.style.transform = "scaleX(1)";
+
+    /* setInterval(コールバック関数, ミリ秒)：
+       指定した時間（ここでは1000ms = 1秒）ごとにコールバック関数を繰り返し実行します。
+       戻り値の timer は後で clearInterval() でタイマーを止めるために保持します。
+       1秒ごとにカウントダウンを進めるタイマー */
+    var timer = setInterval(function () {
+      /* 一時停止中はスキップして何もしない */
+      if (paused) return;
+
+      /* -- （デクリメント）：変数を1ずつ減らす演算子。remaining-- は remaining = remaining - 1 と同じ。 */
+      remaining--;
+
+      /* textContent：要素のテキストを書き換えます（HTMLタグは無効化される安全な方法）。
+         日本語・英語それぞれの残り秒数テキストを更新します。 */
+      countEl.textContent   = remaining;
+      countEnEl.textContent = remaining;
+
+      /* 残り割合（0.0〜1.0）を計算してプログレスバーを左端へ向けて縮小する。
+         例：remaining=5, SECONDS=10 のとき ratio=0.5 → バーが50%の幅になります。 */
+      var ratio = remaining / SECONDS;
+      barEl.style.transform = "scaleX(" + ratio + ")";
+      /* setAttribute("属性名", 値)：要素の属性を書き換えます。
+         WAI-ARIAのaria-valuenowも同時に更新してスクリーンリーダーに変化を伝えます。 */
+      barWrap.setAttribute("aria-valuenow", remaining);
+
+      /* 0秒になったらタイマーを止め、トップページへリダイレクトする。
+         clearInterval(timer)：setIntervalで作ったタイマーを止めます。
+         window.location.href にURLを代入するとそのページへ移動します。 */
+      if (remaining <= 0) {
+        clearInterval(timer);
+        window.location.href = "/";
+      }
+    }, 1000);
+
+    /* 一時停止 / 再開ボタンの制御。
+       WCAG 2.2.1（タイミング調整可能）：自動で変化するコンテンツには
+       ユーザーが一時停止・延長できる手段を提供することが求められています。 */
+    pauseBtn.addEventListener("click", function () {
+      /* ! （論理否定）：true を false に、false を true に反転します。
+         クリックのたびに paused の状態をトグル（切り替え）します。 */
+      paused = !paused;
+      /* 状態に合わせてボタンのラベルテキストとaria-labelを切り替えます。
+         aria-label を動的に更新することでスクリーンリーダーにも現在の状態が伝わります。 */
+      if (paused) {
+        pauseBtn.textContent = "▶ 再開";
+        pauseBtn.setAttribute("aria-label", "カウントダウンを再開");
+      } else {
+        pauseBtn.textContent = "⏸ 一時停止";
+        pauseBtn.setAttribute("aria-label", "カウントダウンを一時停止");
+      }
+    });
+
+    /* window.matchMedia("メディアクエリ文字列")：
+       CSSのメディアクエリをJavaScriptで判定できます。
+       .matches が true なら「視差効果を減らす」設定が有効です。
+       装飾アニメーションの停止はCSSの @media prefers-reduced-motion で対応済みですが、
+       自動リダイレクトという動作もユーザーの意思に従って無効化します。 */
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      /* タイマーを止め、一時停止状態にする */
+      clearInterval(timer);
+      paused = true;
+      /* カウントダウン機能を使わないため一時停止ボタンを非表示にする。
+         style.display = "none" → 要素をレイアウトから完全に消します。 */
+      pauseBtn.style.display = "none";
+      /* 秒数表示を消去し、代わりにボタンへの案内テキストを表示する。
+         parentElement → 対象要素の親要素を取得します。
+         ここでは <strong id="count"> の親の <p> を取得して
+         段落全体のテキストを書き換えています。 */
+      countEl.textContent = "";
+      countEnEl.textContent = "";
+      var textEl = countEl.parentElement;
+      if (textEl) {
+        textEl.textContent = "下のボタンからTOPへ移動できます";
+      }
+    }
+  })();
+</script>
+
+</body>
+</html>

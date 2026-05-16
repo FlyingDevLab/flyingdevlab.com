@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy & Support – MAKE10</title>
+  <meta name="description" content="Privacy Policy and Support for MAKE10 – a free, ad-free, data-free math game for kids by Flying Dev Lab.">
+  <link rel="icon" href="https://flyingdevlab.com/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="https://flyingdevlab.com/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fffdf7; --surface: #ffffff; --primary: #ff7043; --primary-light: #fff3ee;
+      --accent: #ffd54f; --text: #2d2d2d; --text-muted: #777; --border: #ede8e0;
+      --radius: 16px; --shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Nunito','Noto Sans JP',sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.75; }
+    a { color: var(--primary); font-weight: 700; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .skip-link { position: absolute; top: -40px; left: 0; background: var(--primary); color: #fff; padding: 8px 16px; z-index: 200; transition: top .2s; }
+    .skip-link:focus { top: 0; }
+
+    header { background: var(--surface); border-bottom: 2px solid var(--border); padding: 0 24px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .header-inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: white; letter-spacing: -1px; box-shadow: 0 2px 8px rgba(255,112,67,0.35); }
+    .logo-name { font-size: 18px; font-weight: 800; color: var(--primary); }
+
+    .lang-select { padding: 6px 32px 6px 12px; border: 2px solid var(--border); border-radius: 20px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; background: var(--surface); color: var(--text); outline: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23777' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; transition: border-color .2s; }
+    .lang-select:focus { border-color: var(--primary); }
+
+    .hero { background: linear-gradient(135deg,#fff3ee 0%,#fff8e6 50%,#f0f7ff 100%); padding: 56px 24px 48px; text-align: center; border-bottom: 2px solid var(--border); position: relative; overflow: hidden; }
+    .hero::before { content: '10'; position: absolute; font-size: 240px; font-weight: 900; color: rgba(255,112,67,0.06); top: -40px; left: 50%; transform: translateX(-50%); pointer-events: none; line-height: 1; }
+    .hero-badge { display: inline-block; background: var(--accent); color: #5d4e00; font-size: 12px; font-weight: 800; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: .5px; }
+    .hero h1 { font-size: clamp(24px,5vw,34px); font-weight: 900; color: var(--primary); margin-bottom: 8px; }
+    .hero-app { font-size: 15px; color: var(--text-muted); font-weight: 600; margin-bottom: 20px; }
+    .hero-updated { font-size: 13px; color: var(--text-muted); }
+
+    .promises-section { max-width: 760px; margin: 0 auto; padding: 40px 24px 0; }
+    .promises-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 14px; margin-top: 16px; }
+    .promise-card { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 20px 18px; text-align: center; transition: transform .2s, box-shadow .2s; }
+    .promise-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .promise-card .icon { font-size: 32px; margin-bottom: 10px; }
+    .promise-card .label { font-size: 13px; font-weight: 800; }
+    .promise-card.green  { border-color: #a5d6a7; background: #f1f8f1; }
+    .promise-card.blue   { border-color: #90caf9; background: #f0f6ff; }
+    .promise-card.yellow { border-color: #ffe082; background: #fffde7; }
+    .promise-card.orange { border-color: #ffab91; background: #fff3ee; }
+
+    .content { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+    .section { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+    .section-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 8px; font-size: 13px; font-weight: 900; margin-right: 10px; vertical-align: middle; flex-shrink: 0; }
+    .section h2 { font-size: 17px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; }
+    .section p { font-size: 15px; color: var(--text); margin-bottom: 10px; }
+    .section p:last-child { margin-bottom: 0; }
+    .highlight-box { background: var(--primary-light); border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 16px; margin: 12px 0; font-size: 15px; font-weight: 700; color: var(--primary); }
+
+    .contact-box { background: #f0f6ff; border: 2px solid #90caf9; border-radius: var(--radius); padding: 24px 28px; margin-bottom: 20px; }
+    .contact-box h2 { font-size: 17px; font-weight: 800; margin-bottom: 12px; }
+    .contact-box p { font-size: 15px; margin-bottom: 10px; }
+    .contact-box p:last-child { margin-bottom: 0; }
+    .contact-inner { background: #e3f0ff; border: 1px solid #90caf9; border-radius: 10px; padding: 14px 18px; margin-top: 12px; }
+    .contact-inner p { margin: 4px 0 !important; }
+    .contact-box a { color: #1565c0; }
+
+    .footer-note { text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 20px; }
+    .footer-note a { color: var(--primary); }
+
+    @media (max-width: 500px) { .section { padding: 20px 18px; } .hero { padding: 40px 18px 36px; } .contact-box { padding: 20px 18px; } }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" href="https://flyingdevlab.com">
+      <div class="logo-icon">10</div>
+      <span class="logo-name">MAKE10</span>
+    </a>
+    <select class="lang-select" id="lang-select" onchange="setLang(this.value)" aria-label="Language">
+      <option value="en">🇺🇸 English</option>
+      <option value="ja">🇯🇵 日本語</option>
+      <option value="zh-Hans">🇨🇳 中文（简体）</option>
+      <option value="zh-Hant">🇹🇼 中文（繁體）</option>
+      <option value="es">🇪🇸 Español</option>
+      <option value="pt-BR">🇧🇷 Português</option>
+      <option value="id">🇮🇩 Indonesia</option>
+      <option value="vi">🇻🇳 Tiếng Việt</option>
+      <option value="th">🇹🇭 ภาษาไทย</option>
+      <option value="ko">🇰🇷 한국어</option>
+      <option value="hi">🇮🇳 हिन्दी</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="de">🇩🇪 Deutsch</option>
+      <option value="it">🇮🇹 Italiano</option>
+      <option value="nl">🇳🇱 Nederlands</option>
+    </select>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-badge" data-key="badge">Privacy Policy & Support</div>
+  <h1 data-key="title">Privacy Policy & Support</h1>
+  <p class="hero-app">MAKE10 – 10をつくろう</p>
+  <p class="hero-updated" data-key="updated">Effective: April 28, 2026</p>
+</div>
+
+<div class="promises-section">
+  <div class="promises-grid">
+    <div class="promise-card green"><div class="icon">🚫📊</div><div class="label" data-key="p1">No Data Collection</div></div>
+    <div class="promise-card blue"><div class="icon">🚫📡</div><div class="label" data-key="p2">No Data Transmission</div></div>
+    <div class="promise-card yellow"><div class="icon">🚫🎯</div><div class="label" data-key="p3">No Ads, Ever</div></div>
+    <div class="promise-card orange"><div class="icon">🚫🔗</div><div class="label" data-key="p4">No External Links</div></div>
+  </div>
+</div>
+
+<div class="content" id="main">
+
+  <div class="section">
+    <h2><span class="section-num">1</span><span data-key="s1-title">Overview</span></h2>
+    <p data-key="s1-p1"></p>
+    <div class="highlight-box" data-key="s1-highlight"></div>
+    <p data-key="s1-p2"></p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">2</span><span data-key="s2-title">Information We Collect</span></h2>
+    <p data-key="s2-p1"></p>
+    <p data-key="s2-p2"></p>
+    <p data-key="s2-list"></p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">3</span><span data-key="s3-title">Network Activity</span></h2>
+    <p data-key="s3-p1"></p>
+    <p data-key="s3-p2"></p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">4</span><span data-key="s4-title">Advertising & In-App Purchases</span></h2>
+    <p data-key="s4-p1"></p>
+    <p data-key="s4-p2"></p>
+    <p data-key="s4-p3"></p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">5</span><span data-key="s5-title">Children's Privacy (COPPA)</span></h2>
+    <p data-key="s5-p1"></p>
+    <p data-key="s5-p2"></p>
+    <p data-key="s5-p3"></p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">6</span><span data-key="s6-title">Open Source</span></h2>
+    <p data-key="s6-p1"></p>
+    <p data-key="s6-p2"></p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">7</span><span data-key="s7-title">Changes to This Policy</span></h2>
+    <p data-key="s7-p1"></p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">8</span><span data-key="s8-title">Disclaimer</span></h2>
+    <p data-key="s8-p1"></p>
+    <p data-key="s8-p2"></p>
+    <p data-key="s8-p3"></p>
+  </div>
+
+  <div class="contact-box">
+    <h2>📬 <span data-key="contact-title">Support & Contact</span></h2>
+    <p data-key="contact-form-p"></p>
+    <p data-key="contact-email-p"></p>
+    <div class="contact-inner">
+      <p>🌐 <a href="https://flyingdevlab.com" data-key="contact-web-label">flyingdevlab.com</a></p>
+      <p>📧 <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a></p>
+    </div>
+  </div>
+
+  <p class="footer-note">
+    <span data-key="footer-copy"></span><br>
+    <span data-key="footer2"></span>
+  </p>
+
+</div>
+
+<script>
+const S = {
+  en: {
+    badge:'Privacy Policy & Support', title:'Privacy Policy & Support', updated:'Effective: April 28, 2026',
+    p1:'No Data Collection', p2:'No Data Transmission', p3:'No Ads, Ever', p4:'No External Links',
+    's1-title':'Overview',
+    's1-p1':'MAKE10 (10をつくろう) is a free math puzzle game for children, developed by Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 does not collect, store, or transmit any personal information — from anyone, of any age.',
+    's1-p2':'This policy describes what data MAKE10 does and does not handle, and confirms our commitment to keeping the app completely safe for children.',
+    's2-title':'Information We Collect',
+    's2-p1':'We collect <strong>nothing</strong>.',
+    's2-p2':'MAKE10 does not collect, request, or store any of the following:',
+    's2-list':'• Name, email address, or contact information<br>• Device identifiers or advertising IDs<br>• Location data<br>• Usage analytics or behavioral data<br>• Cookies or tracking technologies<br>• Any other personal or non-personal information',
+    's3-title':'Network Activity',
+    's3-p1':'MAKE10 does not connect to the internet during normal use. The app operates entirely offline.',
+    's3-p2':'No data is sent to Flying Dev Lab, third-party analytics services, advertising networks, or any other external servers.',
+    's4-title':'Advertising & In-App Purchases',
+    's4-p1':'MAKE10 contains <strong>no advertisements</strong> of any kind.',
+    's4-p2':'MAKE10 contains <strong>no in-app purchases</strong>. The app is completely free.',
+    's4-p3':'There are no links to external websites, social media, or other apps within MAKE10.',
+    's5-title':"Children's Privacy (COPPA)",
+    's5-p1':"MAKE10 is designed for children and complies fully with the Children's Online Privacy Protection Act (COPPA) and applicable international children's privacy laws.",
+    's5-p2':'Because we collect no personal information from anyone, there is no data to protect, share, or delete — for children or adults.',
+    's5-p3':'We do not knowingly collect information from children under 13 (or any age).',
+    's6-title':'Open Source',
+    's6-p1':'MAKE10 is open-sourced on GitHub as a transparency measure. Anyone can inspect the source code to verify our privacy claims.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Changes to This Policy',
+    's7-p1':'If this policy is ever updated, the new version will be posted on this page with a revised effective date. Because no data is collected, any changes will not affect stored user data.',
+    's8-title':'Disclaimer',
+    's8-p1':'While we strive to provide accurate content and stable functionality, we do not guarantee the completeness, accuracy, or uninterrupted operation of the App.',
+    's8-p2':'iOS updates or changes in device environment may affect app behavior without prior notice. The Developer shall not be liable for any data loss resulting from such changes.',
+    's8-p3':'The Developer may terminate or modify the App without prior notice.',
+    'contact-title':'Support & Contact',
+    'contact-form-p':'You can send anonymous feedback or requests via the contact form at our official website.',
+    'contact-email-p':'If you prefer email, please reach out using the address below.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Made with ❤️ for curious kids everywhere.',
+  },
+  ja: {
+    badge:'プライバシーポリシー・サポート', title:'プライバシーポリシー・サポート', updated:'発効日：2026年4月28日',
+    p1:'個人情報の収集なし', p2:'データ送信なし', p3:'広告なし（永久に）', p4:'外部リンクなし',
+    's1-title':'概要',
+    's1-p1':'MAKE10（10をつくろう）は、空飛ぶ研究室（Flying Dev Lab）が開発した、子ども向けの無料算数パズルゲームです。',
+    's1-highlight':'MAKE10は、いかなる個人情報も収集・保存・送信しません。年齢や属性を問わず、すべてのユーザーが対象です。',
+    's1-p2':'このポリシーでは、MAKE10がどのようなデータを扱うか（あるいは扱わないか）を説明し、子どもたちにとって安全なアプリであることをお約束します。',
+    's2-title':'収集する情報',
+    's2-p1':'<strong>何も収集しません。</strong>',
+    's2-p2':'MAKE10は以下のいかなる情報も収集・要求・保存しません：',
+    's2-list':'• 氏名・メールアドレス・連絡先情報<br>• デバイス識別子・広告ID<br>• 位置情報<br>• 利用状況の分析データ・行動データ<br>• クッキーやトラッキング技術<br>• その他一切の個人情報・非個人情報',
+    's3-title':'ネットワーク通信',
+    's3-p1':'MAKE10は通常の使用においてインターネットに接続しません。アプリは完全にオフラインで動作します。',
+    's3-p2':'データは空飛ぶ研究室、サードパーティの分析サービス、広告ネットワーク、その他いかなる外部サーバーにも送信されません。',
+    's4-title':'広告・アプリ内課金',
+    's4-p1':'MAKE10には<strong>広告は一切ありません</strong>。',
+    's4-p2':'MAKE10には<strong>アプリ内課金はありません</strong>。完全無料のアプリです。',
+    's4-p3':'MAKE10内には外部ウェブサイト、SNS、他のアプリへのリンクは含まれていません。',
+    's5-title':'子どものプライバシー（COPPA準拠）',
+    's5-p1':'MAKE10は子ども向けに設計されており、COPPA（児童オンラインプライバシー保護法）およびその他適用される国際的な子どものプライバシー法を完全に遵守しています。',
+    's5-p2':'誰からも個人情報を収集しないため、保護・共有・削除すべきデータは存在しません。子どもも大人も同様です。',
+    's5-p3':'13歳未満の子ども（およびいかなる年齢の方）からも、意図的に情報を収集することはありません。',
+    's6-title':'オープンソース',
+    's6-p1':'MAKE10は透明性の確保のためGitHubでオープンソース公開しています。誰でもソースコードを確認し、プライバシーに関する主張を検証することができます。',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'ポリシーの変更について',
+    's7-p1':'このポリシーが更新された場合、改訂後の発効日とともにこのページに掲載されます。データを収集していないため、変更によってユーザーの保存データに影響が生じることはありません。',
+    's8-title':'免責事項',
+    's8-p1':'本アプリは正確な情報と安定した動作の提供に努めていますが、その完全性・正確性・継続的な動作を保証するものではありません。',
+    's8-p2':'iOSのアップデートや端末環境の変化により、予告なくアプリの動作に影響が生じる場合があります。これに起因するデータの消失についても、当開発者は責任を負いかねます。',
+    's8-p3':'当開発者は、事前の予告なくアプリの提供を終了・変更する場合があります。',
+    'contact-title':'サポート・お問い合わせ',
+    'contact-form-p':'公式サイトのお問い合わせフォームから、匿名でご意見・ご要望をお送りいただけます。',
+    'contact-email-p':'メールでのお問い合わせをご希望の方は、以下よりご連絡ください。',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">空飛ぶ研究室</a> · Flying Dev Lab',
+    'footer2':'子どもたちの好奇心のために、愛を込めて作りました。',
+  },
+  th: {
+    badge:'นโยบายความเป็นส่วนตัว & ช่วยเหลือ', title:'นโยบายความเป็นส่วนตัว & ช่วยเหลือ', updated:'มีผลบังคับใช้: 28 เมษายน 2026',
+    p1:'ไม่เก็บข้อมูล', p2:'ไม่ส่งข้อมูล', p3:'ไม่มีโฆษณา', p4:'ไม่มีลิงก์ภายนอก',
+    's1-title':'ภาพรวม',
+    's1-p1':'MAKE10 (สร้างสิบ) คือเกมปริศนาคณิตศาสตร์ฟรีสำหรับเด็ก พัฒนาโดย Flying Dev Lab (空飛ぶ研究室)',
+    's1-highlight':'MAKE10 ไม่เก็บ จัดเก็บ หรือส่งข้อมูลส่วนบุคคลใดๆ ไม่ว่าจะเป็นใครหรืออายุเท่าไร',
+    's1-p2':'นโยบายนี้อธิบายว่า MAKE10 จัดการกับข้อมูลอย่างไร และยืนยันความมุ่งมั่นในการทำให้แอปปลอดภัยสำหรับเด็ก',
+    's2-title':'ข้อมูลที่เราเก็บ',
+    's2-p1':'เราไม่เก็บ<strong>อะไรเลย</strong>',
+    's2-p2':'MAKE10 ไม่เก็บ ไม่ขอ หรือจัดเก็บสิ่งต่อไปนี้:',
+    's2-list':'• ชื่อ อีเมล หรือข้อมูลติดต่อ<br>• ตัวระบุอุปกรณ์หรือ ID โฆษณา<br>• ข้อมูลตำแหน่ง<br>• ข้อมูลการใช้งานหรือพฤติกรรม<br>• คุกกี้หรือเทคโนโลยีติดตาม<br>• ข้อมูลอื่นใดทั้งส่วนบุคคลและไม่ส่วนบุคคล',
+    's3-title':'กิจกรรมเครือข่าย',
+    's3-p1':'MAKE10 ไม่เชื่อมต่ออินเทอร์เน็ตในการใช้งานปกติ แอปทำงานแบบออฟไลน์ทั้งหมด',
+    's3-p2':'ไม่มีการส่งข้อมูลไปยัง Flying Dev Lab บริการวิเคราะห์ เครือข่ายโฆษณา หรือเซิร์ฟเวอร์ภายนอกใดๆ',
+    's4-title':'โฆษณาและการซื้อในแอป',
+    's4-p1':'MAKE10 ไม่มี<strong>โฆษณาใดๆ</strong>ทั้งสิ้น',
+    's4-p2':'MAKE10 ไม่มี<strong>การซื้อในแอป</strong> แอปนี้ฟรีสมบูรณ์',
+    's4-p3':'ไม่มีลิงก์ไปยังเว็บไซต์ภายนอก โซเชียลมีเดีย หรือแอปอื่นๆ ภายใน MAKE10',
+    's5-title':'ความเป็นส่วนตัวของเด็ก (COPPA)',
+    's5-p1':'MAKE10 ออกแบบมาสำหรับเด็กและปฏิบัติตาม COPPA และกฎหมายความเป็นส่วนตัวของเด็กนานาชาติอย่างครบถ้วน',
+    's5-p2':'เนื่องจากเราไม่เก็บข้อมูลส่วนบุคคลจากใคร จึงไม่มีข้อมูลที่ต้องปกป้อง แบ่งปัน หรือลบ',
+    's5-p3':'เราไม่เก็บข้อมูลจากเด็กอายุต่ำกว่า 13 ปี (หรืออายุใดๆ) โดยเจตนา',
+    's6-title':'โอเพนซอร์ส',
+    's6-p1':'MAKE10 เปิดซอร์สโค้ดบน GitHub เพื่อความโปร่งใส ทุกคนสามารถตรวจสอบเพื่อยืนยันคำอ้างสิทธิ์ด้านความเป็นส่วนตัว',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'การเปลี่ยนแปลงนโยบายนี้',
+    's7-p1':'หากมีการอัปเดตนโยบายนี้ เวอร์ชันใหม่จะถูกโพสต์บนหน้านี้พร้อมวันที่มีผลบังคับใช้ใหม่ เนื่องจากไม่มีการเก็บข้อมูล การเปลี่ยนแปลงจะไม่ส่งผลต่อข้อมูลผู้ใช้ที่จัดเก็บไว้',
+    's8-title':'ข้อจำกัดความรับผิดชอบ',
+    's8-p1':'เราไม่รับประกันความสมบูรณ์ ความถูกต้อง หรือการทำงานต่อเนื่องของแอป',
+    's8-p2':'การอัปเดต iOS หรือสภาพแวดล้อมอุปกรณ์อาจส่งผลต่อพฤติกรรมของแอปโดยไม่แจ้งล่วงหน้า ผู้พัฒนาจะไม่รับผิดชอบต่อการสูญหายของข้อมูล',
+    's8-p3':'ผู้พัฒนาอาจยุติหรือแก้ไขแอปโดยไม่แจ้งล่วงหน้า',
+    'contact-title':'ช่วยเหลือ & ติดต่อ',
+    'contact-form-p':'คุณสามารถส่งความคิดเห็นหรือคำขอแบบไม่ระบุตัวตนผ่านแบบฟอร์มติดต่อบนเว็บไซต์ทางการของเรา',
+    'contact-email-p':'หากต้องการติดต่อทางอีเมล กรุณาใช้ที่อยู่ด้านล่าง',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'สร้างด้วยความรักเพื่อเด็กๆ ที่อยากรู้อยากเห็นทั่วโลก',
+  },
+  hi: {
+    badge:'गोपनीयता नीति & सहायता', title:'गोपनीयता नीति & सहायता', updated:'प्रभावी: 28 अप्रैल 2026',
+    p1:'कोई डेटा संग्रह नहीं', p2:'कोई डेटा प्रसारण नहीं', p3:'कोई विज्ञापन नहीं', p4:'कोई बाहरी लिंक नहीं',
+    's1-title':'अवलोकन',
+    's1-p1':'MAKE10 (दस बनाओ) बच्चों के लिए एक मुफ़्त गणित पहेली गेम है, जिसे Flying Dev Lab (空飛ぶ研究室) ने विकसित किया है।',
+    's1-highlight':'MAKE10 किसी भी उम्र के किसी भी व्यक्ति की कोई भी व्यक्तिगत जानकारी एकत्र, संग्रहीत या प्रसारित नहीं करता।',
+    's1-p2':'यह नीति बताती है कि MAKE10 डेटा को कैसे संभालता है, और बच्चों के लिए ऐप को पूरी तरह सुरक्षित रखने की हमारी प्रतिबद्धता की पुष्टि करती है।',
+    's2-title':'हम क्या जानकारी एकत्र करते हैं',
+    's2-p1':'हम <strong>कुछ भी</strong> एकत्र नहीं करते।',
+    's2-p2':'MAKE10 निम्नलिखित में से कुछ भी एकत्र, अनुरोध या संग्रहीत नहीं करता:',
+    's2-list':'• नाम, ईमेल पता या संपर्क जानकारी<br>• डिवाइस पहचानकर्ता या विज्ञापन ID<br>• स्थान डेटा<br>• उपयोग विश्लेषण या व्यवहार डेटा<br>• कुकीज़ या ट्रैकिंग तकनीक<br>• कोई भी अन्य व्यक्तिगत या गैर-व्यक्तिगत जानकारी',
+    's3-title':'नेटवर्क गतिविधि',
+    's3-p1':'MAKE10 सामान्य उपयोग के दौरान इंटरनेट से नहीं जुड़ता। ऐप पूरी तरह ऑफलाइन काम करता है।',
+    's3-p2':'Flying Dev Lab, तृतीय-पक्ष सेवाओं, विज्ञापन नेटवर्क या किसी अन्य बाहरी सर्वर को कोई डेटा नहीं भेजा जाता।',
+    's4-title':'विज्ञापन और इन-ऐप खरीदारी',
+    's4-p1':'MAKE10 में किसी भी प्रकार के <strong>कोई विज्ञापन नहीं हैं</strong>।',
+    's4-p2':'MAKE10 में <strong>कोई इन-ऐप खरीदारी नहीं है</strong>। ऐप बिल्कुल मुफ़्त है।',
+    's4-p3':'MAKE10 में बाहरी वेबसाइट, सोशल मीडिया या अन्य ऐप के कोई लिंक नहीं हैं।',
+    's5-title':'बच्चों की गोपनीयता (COPPA)',
+    's5-p1':'MAKE10 बच्चों के लिए डिज़ाइन किया गया है और COPPA तथा लागू अंतर्राष्ट्रीय बाल गोपनीयता कानूनों का पूरी तरह पालन करता है।',
+    's5-p2':'चूंकि हम किसी से भी कोई व्यक्तिगत जानकारी एकत्र नहीं करते, इसलिए सुरक्षित, साझा या हटाने के लिए कोई डेटा नहीं है।',
+    's5-p3':'हम जानबूझकर 13 वर्ष से कम उम्र के बच्चों (या किसी भी उम्र) से जानकारी एकत्र नहीं करते।',
+    's6-title':'ओपन सोर्स',
+    's6-p1':'MAKE10 पारदर्शिता के लिए GitHub पर ओपन-सोर्स है। कोई भी हमारे गोपनीयता दावों को सत्यापित करने के लिए स्रोत कोड देख सकता है।',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'इस नीति में बदलाव',
+    's7-p1':'यदि यह नीति अपडेट होती है, तो नया संस्करण संशोधित तिथि के साथ इस पृष्ठ पर पोस्ट किया जाएगा। कोई डेटा एकत्र नहीं किया जाता, इसलिए किसी बदलाव से उपयोगकर्ता डेटा प्रभावित नहीं होगा।',
+    's8-title':'अस्वीकरण',
+    's8-p1':'हम सटीक सामग्री और स्थिर कार्यक्षमता प्रदान करने का प्रयास करते हैं, लेकिन इसकी पूर्णता या निर्बाध संचालन की गारंटी नहीं देते।',
+    's8-p2':'iOS अपडेट या डिवाइस में बदलाव बिना सूचना के ऐप को प्रभावित कर सकते हैं। डेवलपर किसी भी डेटा हानि के लिए उत्तरदायी नहीं होगा।',
+    's8-p3':'डेवलपर बिना पूर्व सूचना के ऐप को समाप्त या संशोधित कर सकता है।',
+    'contact-title':'सहायता & संपर्क',
+    'contact-form-p':'आप हमारी आधिकारिक वेबसाइट पर संपर्क फ़ॉर्म के माध्यम से गुमनाम रूप से फ़ीडबैक या अनुरोध भेज सकते हैं।',
+    'contact-email-p':'यदि आप ईमेल से संपर्क करना चाहते हैं, तो नीचे दिए गए पते का उपयोग करें।',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'दुनिया भर के जिज्ञासु बच्चों के लिए ❤️ के साथ बनाया गया।',
+  },
+  fr: {
+    badge:'Politique de confidentialité & Support', title:'Politique de confidentialité & Support', updated:'En vigueur : 28 avril 2026',
+    p1:'Aucune collecte de données', p2:'Aucune transmission', p3:'Aucune publicité', p4:'Aucun lien externe',
+    's1-title':'Présentation',
+    's1-p1':'MAKE10 est un jeu de puzzle mathématique gratuit pour enfants, développé par Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 ne collecte, ne stocke ni ne transmet aucune information personnelle — de qui que ce soit, quel que soit l\'âge.',
+    's1-p2':'Cette politique décrit comment MAKE10 traite (ou ne traite pas) les données, et confirme notre engagement à garder l\'application sûre pour les enfants.',
+    's2-title':'Informations collectées',
+    's2-p1':'Nous ne collectons <strong>rien</strong>.',
+    's2-p2':'MAKE10 ne collecte, ne demande ni ne stocke les éléments suivants :',
+    's2-list':'• Nom, adresse e-mail ou coordonnées<br>• Identifiants d\'appareil ou ID publicitaires<br>• Données de localisation<br>• Données d\'utilisation ou comportementales<br>• Cookies ou technologies de suivi<br>• Toute autre information personnelle ou non personnelle',
+    's3-title':'Activité réseau',
+    's3-p1':'MAKE10 ne se connecte pas à Internet lors d\'une utilisation normale. L\'application fonctionne entièrement hors ligne.',
+    's3-p2':'Aucune donnée n\'est envoyée à Flying Dev Lab, à des services d\'analyse tiers, à des réseaux publicitaires ou à tout autre serveur externe.',
+    's4-title':'Publicité et achats intégrés',
+    's4-p1':'MAKE10 ne contient <strong>aucune publicité</strong>.',
+    's4-p2':'MAKE10 ne contient <strong>aucun achat intégré</strong>. L\'application est entièrement gratuite.',
+    's4-p3':'Il n\'y a aucun lien vers des sites externes, des réseaux sociaux ou d\'autres applications dans MAKE10.',
+    's5-title':'Confidentialité des enfants (COPPA)',
+    's5-p1':'MAKE10 est conçu pour les enfants et respecte pleinement le COPPA et les lois internationales applicables sur la protection de la vie privée des enfants.',
+    's5-p2':'Comme nous ne collectons aucune information personnelle, il n\'y a aucune donnée à protéger, partager ou supprimer.',
+    's5-p3':'Nous ne collectons pas sciemment d\'informations sur des enfants de moins de 13 ans (ni de tout âge).',
+    's6-title':'Open Source',
+    's6-p1':'MAKE10 est open source sur GitHub à des fins de transparence. Chacun peut inspecter le code source pour vérifier nos déclarations.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Modifications de cette politique',
+    's7-p1':'Si cette politique est mise à jour, la nouvelle version sera publiée sur cette page avec une nouvelle date d\'entrée en vigueur. Comme aucune donnée n\'est collectée, les modifications n\'affecteront pas les données utilisateur.',
+    's8-title':'Clause de non-responsabilité',
+    's8-p1':'Bien que nous nous efforcions de fournir un contenu précis et un fonctionnement stable, nous ne garantissons pas l\'exhaustivité, l\'exactitude ou le fonctionnement ininterrompu de l\'application.',
+    's8-p2':'Les mises à jour iOS ou les changements d\'environnement peuvent affecter le comportement de l\'application sans préavis. Le développeur ne sera pas responsable des pertes de données.',
+    's8-p3':'Le développeur peut mettre fin à l\'application ou la modifier sans préavis.',
+    'contact-title':'Support & Contact',
+    'contact-form-p':'Vous pouvez envoyer des commentaires ou des demandes de manière anonyme via le formulaire de contact sur notre site officiel.',
+    'contact-email-p':'Si vous préférez nous contacter par e-mail, utilisez l\'adresse ci-dessous.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Fait avec ❤️ pour les enfants curieux du monde entier.',
+  },
+  de: {
+    badge:'Datenschutz & Support', title:'Datenschutzrichtlinie & Support', updated:'Gültig ab: 28. April 2026',
+    p1:'Keine Datenerfassung', p2:'Keine Datenübertragung', p3:'Keine Werbung', p4:'Keine externen Links',
+    's1-title':'Übersicht',
+    's1-p1':'MAKE10 ist ein kostenloses Mathe-Puzzle-Spiel für Kinder, entwickelt von Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 erfasst, speichert oder überträgt keinerlei personenbezogene Daten — von niemandem, in keinem Alter.',
+    's1-p2':'Diese Richtlinie beschreibt, wie MAKE10 mit Daten umgeht (oder nicht), und bestätigt unser Engagement für die Sicherheit der App für Kinder.',
+    's2-title':'Erfasste Informationen',
+    's2-p1':'Wir erfassen <strong>nichts</strong>.',
+    's2-p2':'MAKE10 erfasst, fordert oder speichert nicht:',
+    's2-list':'• Name, E-Mail-Adresse oder Kontaktinformationen<br>• Gerätekennungen oder Werbe-IDs<br>• Standortdaten<br>• Nutzungsanalysen oder Verhaltensdaten<br>• Cookies oder Tracking-Technologien<br>• Sonstige persönliche oder nicht-persönliche Informationen',
+    's3-title':'Netzwerkaktivität',
+    's3-p1':'MAKE10 verbindet sich im normalen Betrieb nicht mit dem Internet. Die App funktioniert vollständig offline.',
+    's3-p2':'Es werden keine Daten an Flying Dev Lab, Drittanbieter-Analysedienste, Werbenetzwerke oder andere externe Server gesendet.',
+    's4-title':'Werbung & In-App-Käufe',
+    's4-p1':'MAKE10 enthält <strong>keinerlei Werbung</strong>.',
+    's4-p2':'MAKE10 enthält <strong>keine In-App-Käufe</strong>. Die App ist vollständig kostenlos.',
+    's4-p3':'Es gibt keine Links zu externen Websites, sozialen Medien oder anderen Apps in MAKE10.',
+    's5-title':'Datenschutz für Kinder (COPPA)',
+    's5-p1':'MAKE10 ist für Kinder konzipiert und entspricht vollständig dem COPPA und den geltenden internationalen Kinderdatenschutzgesetzen.',
+    's5-p2':'Da wir keine personenbezogenen Daten erfassen, gibt es keine Daten, die zu schützen, teilen oder löschen wären.',
+    's5-p3':'Wir erfassen wissentlich keine Informationen von Kindern unter 13 Jahren (oder in jedem Alter).',
+    's6-title':'Open Source',
+    's6-p1':'MAKE10 ist auf GitHub als Open-Source veröffentlicht. Jeder kann den Quellcode einsehen, um unsere Datenschutzangaben zu verifizieren.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Änderungen dieser Richtlinie',
+    's7-p1':'Wenn diese Richtlinie aktualisiert wird, wird die neue Version mit einem neuen Datum auf dieser Seite veröffentlicht. Da keine Daten erfasst werden, wirken sich Änderungen nicht auf gespeicherte Nutzerdaten aus.',
+    's8-title':'Haftungsausschluss',
+    's8-p1':'Wir bemühen uns um genaue Inhalte und stabile Funktionalität, übernehmen jedoch keine Garantie für Vollständigkeit oder unterbrechungsfreien Betrieb.',
+    's8-p2':'iOS-Updates oder Umgebungsänderungen können das App-Verhalten ohne vorherige Ankündigung beeinflussen. Der Entwickler haftet nicht für Datenverluste.',
+    's8-p3':'Der Entwickler kann die App ohne vorherige Ankündigung beenden oder ändern.',
+    'contact-title':'Support & Kontakt',
+    'contact-form-p':'Sie können anonymes Feedback oder Anfragen über das Kontaktformular auf unserer offiziellen Website senden.',
+    'contact-email-p':'Wenn Sie uns per E-Mail kontaktieren möchten, verwenden Sie bitte die untenstehende Adresse.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Mit ❤️ für neugierige Kinder weltweit gemacht.',
+  },
+  es: {
+    badge:'Política de privacidad & Soporte', title:'Política de privacidad & Soporte', updated:'En vigor: 28 de abril de 2026',
+    p1:'Sin recopilación de datos', p2:'Sin transmisión de datos', p3:'Sin publicidad', p4:'Sin enlaces externos',
+    's1-title':'Descripción general',
+    's1-p1':'MAKE10 es un juego de puzle matemático gratuito para niños, desarrollado por Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 no recopila, almacena ni transmite ninguna información personal — de nadie, de ninguna edad.',
+    's1-p2':'Esta política describe cómo MAKE10 maneja (o no) los datos, y confirma nuestro compromiso de mantener la app segura para los niños.',
+    's2-title':'Información recopilada',
+    's2-p1':'No recopilamos <strong>nada</strong>.',
+    's2-p2':'MAKE10 no recopila, solicita ni almacena ninguno de los siguientes datos:',
+    's2-list':'• Nombre, correo electrónico o información de contacto<br>• Identificadores de dispositivo o IDs publicitarios<br>• Datos de ubicación<br>• Análisis de uso o datos de comportamiento<br>• Cookies o tecnologías de seguimiento<br>• Cualquier otra información personal o no personal',
+    's3-title':'Actividad de red',
+    's3-p1':'MAKE10 no se conecta a Internet durante el uso normal. La app funciona completamente sin conexión.',
+    's3-p2':'No se envían datos a Flying Dev Lab, servicios de análisis de terceros, redes publicitarias ni ningún otro servidor externo.',
+    's4-title':'Publicidad y compras integradas',
+    's4-p1':'MAKE10 no contiene <strong>ningún tipo de publicidad</strong>.',
+    's4-p2':'MAKE10 no contiene <strong>compras integradas</strong>. La app es completamente gratuita.',
+    's4-p3':'No hay enlaces a sitios externos, redes sociales u otras apps dentro de MAKE10.',
+    's5-title':'Privacidad de los niños (COPPA)',
+    's5-p1':'MAKE10 está diseñado para niños y cumple plenamente con el COPPA y las leyes internacionales de privacidad infantil aplicables.',
+    's5-p2':'Como no recopilamos información personal de nadie, no hay datos que proteger, compartir o eliminar.',
+    's5-p3':'No recopilamos conscientemente información de menores de 13 años (ni de ninguna edad).',
+    's6-title':'Código abierto',
+    's6-p1':'MAKE10 es de código abierto en GitHub como medida de transparencia. Cualquiera puede inspeccionar el código fuente para verificar nuestras declaraciones.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Cambios en esta política',
+    's7-p1':'Si esta política se actualiza, la nueva versión se publicará en esta página con una nueva fecha de entrada en vigor. Como no se recopilan datos, los cambios no afectarán los datos almacenados.',
+    's8-title':'Aviso legal',
+    's8-p1':'Aunque nos esforzamos por proporcionar contenido preciso y funcionamiento estable, no garantizamos la exactitud o el funcionamiento ininterrumpido de la app.',
+    's8-p2':'Las actualizaciones de iOS o cambios en el entorno del dispositivo pueden afectar el comportamiento de la app sin previo aviso. El desarrollador no se hace responsable de pérdidas de datos.',
+    's8-p3':'El desarrollador puede terminar o modificar la app sin previo aviso.',
+    'contact-title':'Soporte & Contacto',
+    'contact-form-p':'Puedes enviar comentarios o solicitudes de forma anónima a través del formulario de contacto en nuestro sitio oficial.',
+    'contact-email-p':'Si prefieres contactar por correo electrónico, usa la dirección de abajo.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Hecho con ❤️ para niños curiosos de todo el mundo.',
+  },
+  'pt-BR': {
+    badge:'Política de Privacidade & Suporte', title:'Política de Privacidade & Suporte', updated:'Em vigor: 28 de abril de 2026',
+    p1:'Sem coleta de dados', p2:'Sem transmissão de dados', p3:'Sem publicidade', p4:'Sem links externos',
+    's1-title':'Visão geral',
+    's1-p1':'MAKE10 é um jogo de quebra-cabeça matemático gratuito para crianças, desenvolvido pela Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 não coleta, armazena nem transmite nenhuma informação pessoal — de ninguém, de nenhuma idade.',
+    's1-p2':'Esta política descreve como o MAKE10 lida (ou não) com dados, e confirma nosso compromisso de manter o app seguro para crianças.',
+    's2-title':'Informações coletadas',
+    's2-p1':'Não coletamos <strong>nada</strong>.',
+    's2-p2':'O MAKE10 não coleta, solicita nem armazena nenhum dos seguintes dados:',
+    's2-list':'• Nome, endereço de e-mail ou informações de contato<br>• Identificadores de dispositivo ou IDs de publicidade<br>• Dados de localização<br>• Análise de uso ou dados comportamentais<br>• Cookies ou tecnologias de rastreamento<br>• Qualquer outra informação pessoal ou não pessoal',
+    's3-title':'Atividade de rede',
+    's3-p1':'O MAKE10 não se conecta à internet durante o uso normal. O app funciona completamente offline.',
+    's3-p2':'Nenhum dado é enviado à Flying Dev Lab, serviços de análise de terceiros, redes de publicidade ou quaisquer outros servidores externos.',
+    's4-title':'Publicidade e compras no app',
+    's4-p1':'O MAKE10 não contém <strong>nenhuma publicidade</strong>.',
+    's4-p2':'O MAKE10 não contém <strong>compras no app</strong>. O app é completamente gratuito.',
+    's4-p3':'Não há links para sites externos, redes sociais ou outros apps dentro do MAKE10.',
+    's5-title':'Privacidade infantil (COPPA)',
+    's5-p1':'O MAKE10 foi desenvolvido para crianças e cumpre integralmente o COPPA e as leis internacionais de privacidade infantil aplicáveis.',
+    's5-p2':'Como não coletamos nenhuma informação pessoal de ninguém, não há dados a proteger, compartilhar ou excluir.',
+    's5-p3':'Não coletamos conscientemente informações de crianças menores de 13 anos (nem de qualquer idade).',
+    's6-title':'Código aberto',
+    's6-p1':'O MAKE10 é open source no GitHub como medida de transparência. Qualquer pessoa pode inspecionar o código-fonte para verificar nossas declarações.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Alterações nesta política',
+    's7-p1':'Se esta política for atualizada, a nova versão será publicada nesta página com uma nova data de vigência. Como nenhum dado é coletado, as alterações não afetarão os dados armazenados.',
+    's8-title':'Isenção de responsabilidade',
+    's8-p1':'Embora nos esforcemos para fornecer conteúdo preciso e funcionamento estável, não garantimos a completude, precisão ou operação ininterrupta do app.',
+    's8-p2':'Atualizações do iOS ou mudanças no ambiente do dispositivo podem afetar o comportamento do app sem aviso prévio. O desenvolvedor não se responsabiliza por perda de dados.',
+    's8-p3':'O desenvolvedor pode encerrar ou modificar o app sem aviso prévio.',
+    'contact-title':'Suporte & Contato',
+    'contact-form-p':'Você pode enviar feedback ou solicitações anonimamente pelo formulário de contato em nosso site oficial.',
+    'contact-email-p':'Se preferir entrar em contato por e-mail, use o endereço abaixo.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Feito com ❤️ para crianças curiosas de todo o mundo.',
+  },
+  it: {
+    badge:'Informativa sulla privacy & Supporto', title:'Informativa sulla privacy & Supporto', updated:'In vigore: 28 aprile 2026',
+    p1:'Nessuna raccolta di dati', p2:'Nessuna trasmissione', p3:'Nessuna pubblicità', p4:'Nessun link esterno',
+    's1-title':'Panoramica',
+    's1-p1':'MAKE10 è un gioco di puzzle matematico gratuito per bambini, sviluppato da Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 non raccoglie, archivia né trasmette alcuna informazione personale — da nessuno, di nessuna età.',
+    's1-p2':'Questa informativa descrive come MAKE10 gestisce (o non gestisce) i dati, e conferma il nostro impegno a mantenere l\'app sicura per i bambini.',
+    's2-title':'Informazioni raccolte',
+    's2-p1':'Non raccogliamo <strong>nulla</strong>.',
+    's2-p2':'MAKE10 non raccoglie, richiede né archivia nessuno dei seguenti dati:',
+    's2-list':'• Nome, indirizzo e-mail o informazioni di contatto<br>• Identificatori di dispositivo o ID pubblicitari<br>• Dati di localizzazione<br>• Analisi dell\'utilizzo o dati comportamentali<br>• Cookie o tecnologie di tracciamento<br>• Qualsiasi altra informazione personale o non personale',
+    's3-title':'Attività di rete',
+    's3-p1':'MAKE10 non si connette a Internet durante l\'uso normale. L\'app funziona completamente offline.',
+    's3-p2':'Nessun dato viene inviato a Flying Dev Lab, servizi di analisi di terze parti, reti pubblicitarie o altri server esterni.',
+    's4-title':'Pubblicità e acquisti in-app',
+    's4-p1':'MAKE10 non contiene <strong>alcuna pubblicità</strong>.',
+    's4-p2':'MAKE10 non contiene <strong>acquisti in-app</strong>. L\'app è completamente gratuita.',
+    's4-p3':'Non ci sono link a siti esterni, social media o altre app all\'interno di MAKE10.',
+    's5-title':'Privacy dei minori (COPPA)',
+    's5-p1':'MAKE10 è progettato per i bambini e rispetta pienamente il COPPA e le leggi internazionali sulla privacy dei minori.',
+    's5-p2':'Poiché non raccogliamo informazioni personali da nessuno, non ci sono dati da proteggere, condividere o eliminare.',
+    's5-p3':'Non raccogliamo consapevolmente informazioni da bambini di età inferiore ai 13 anni (né di qualsiasi età).',
+    's6-title':'Open Source',
+    's6-p1':'MAKE10 è open source su GitHub come misura di trasparenza. Chiunque può ispezionare il codice sorgente per verificare le nostre affermazioni.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Modifiche a questa informativa',
+    's7-p1':'Se questa informativa viene aggiornata, la nuova versione sarà pubblicata su questa pagina con una nuova data di entrata in vigore. Poiché non vengono raccolti dati, le modifiche non influiranno sui dati degli utenti.',
+    's8-title':'Dichiarazione di non responsabilità',
+    's8-p1':'Pur sforzandoci di fornire contenuti accurati e funzionamento stabile, non garantiamo la completezza, l\'accuratezza o il funzionamento ininterrotto dell\'app.',
+    's8-p2':'Gli aggiornamenti iOS o le modifiche all\'ambiente del dispositivo possono influire sul comportamento dell\'app senza preavviso. Lo sviluppatore non è responsabile per perdite di dati.',
+    's8-p3':'Lo sviluppatore può terminare o modificare l\'app senza preavviso.',
+    'contact-title':'Supporto & Contatto',
+    'contact-form-p':'Puoi inviare feedback o richieste in modo anonimo tramite il modulo di contatto sul nostro sito ufficiale.',
+    'contact-email-p':'Se preferisci contattarci via e-mail, usa l\'indirizzo qui sotto.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Fatto con ❤️ per bambini curiosi di tutto il mondo.',
+  },
+  nl: {
+    badge:'Privacybeleid & Ondersteuning', title:'Privacybeleid & Ondersteuning', updated:'Van kracht: 28 april 2026',
+    p1:'Geen gegevensverzameling', p2:'Geen gegevensoverdracht', p3:'Geen advertenties', p4:'Geen externe links',
+    's1-title':'Overzicht',
+    's1-p1':'MAKE10 is een gratis wiskundig puzzelspel voor kinderen, ontwikkeld door Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 verzamelt, slaat op noch verzendt enige persoonlijke informatie — van wie dan ook, ongeacht leeftijd.',
+    's1-p2':'Dit beleid beschrijft hoe MAKE10 omgaat (of niet omgaat) met gegevens, en bevestigt onze inzet om de app volledig veilig te houden voor kinderen.',
+    's2-title':'Verzamelde informatie',
+    's2-p1':'Wij verzamelen <strong>niets</strong>.',
+    's2-p2':'MAKE10 verzamelt, vraagt of slaat het volgende niet op:',
+    's2-list':'• Naam, e-mailadres of contactgegevens<br>• Apparaat-ID\'s of advertentie-ID\'s<br>• Locatiegegevens<br>• Gebruiksanalyses of gedragsgegevens<br>• Cookies of trackingtechnologieën<br>• Andere persoonlijke of niet-persoonlijke informatie',
+    's3-title':'Netwerkactiviteit',
+    's3-p1':'MAKE10 maakt geen verbinding met het internet tijdens normaal gebruik. De app werkt volledig offline.',
+    's3-p2':'Er worden geen gegevens verzonden naar Flying Dev Lab, derden-analysediensten, advertentienetwerken of andere externe servers.',
+    's4-title':'Advertenties en in-app aankopen',
+    's4-p1':'MAKE10 bevat <strong>geen advertenties</strong>.',
+    's4-p2':'MAKE10 bevat <strong>geen in-app aankopen</strong>. De app is volledig gratis.',
+    's4-p3':'Er zijn geen links naar externe websites, sociale media of andere apps in MAKE10.',
+    's5-title':'Privacy van kinderen (COPPA)',
+    's5-p1':'MAKE10 is ontworpen voor kinderen en voldoet volledig aan COPPA en toepasselijke internationale wetgeving inzake kinderprivacy.',
+    's5-p2':'Omdat we geen persoonlijke informatie verzamelen, zijn er geen gegevens te beschermen, te delen of te verwijderen.',
+    's5-p3':'We verzamelen niet bewust informatie van kinderen onder de 13 jaar (of van welke leeftijd dan ook).',
+    's6-title':'Open Source',
+    's6-p1':'MAKE10 is open source op GitHub als transparantiemaatregel. Iedereen kan de broncode inspecteren om onze privacyclaims te verifiëren.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Wijzigingen in dit beleid',
+    's7-p1':'Als dit beleid wordt bijgewerkt, wordt de nieuwe versie op deze pagina gepubliceerd met een nieuwe ingangsdatum. Omdat er geen gegevens worden verzameld, zullen wijzigingen geen invloed hebben op opgeslagen gebruikersgegevens.',
+    's8-title':'Disclaimer',
+    's8-p1':'Hoewel we streven naar nauwkeurige inhoud en stabiele werking, garanderen we niet de volledigheid, nauwkeurigheid of ononderbroken werking van de app.',
+    's8-p2':'iOS-updates of wijzigingen in de apparaatomgeving kunnen het gedrag van de app beïnvloeden zonder voorafgaande kennisgeving. De ontwikkelaar is niet aansprakelijk voor gegevensverlies.',
+    's8-p3':'De ontwikkelaar kan de app beëindigen of wijzigen zonder voorafgaande kennisgeving.',
+    'contact-title':'Ondersteuning & Contact',
+    'contact-form-p':'Je kunt anoniem feedback of verzoeken sturen via het contactformulier op onze officiële website.',
+    'contact-email-p':'Als je liever per e-mail contact opneemt, gebruik dan het onderstaande adres.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Gemaakt met ❤️ voor nieuwsgierige kinderen overal ter wereld.',
+  },
+  ko: {
+    badge:'개인정보 처리방침 & 지원', title:'개인정보 처리방침 & 지원', updated:'시행일: 2026년 4월 28일',
+    p1:'데이터 수집 없음', p2:'데이터 전송 없음', p3:'광고 없음', p4:'외부 링크 없음',
+    's1-title':'개요',
+    's1-p1':'MAKE10(10 만들기)은 Flying Dev Lab(空飛ぶ研究室)이 개발한 어린이용 무료 수학 퍼즐 게임입니다.',
+    's1-highlight':'MAKE10은 어떠한 개인정보도 수집, 저장 또는 전송하지 않습니다 — 누구든, 어떤 나이든 관계없이.',
+    's1-p2':'이 방침은 MAKE10이 데이터를 어떻게 처리하는지(또는 처리하지 않는지) 설명하고, 어린이에게 완전히 안전한 앱으로 유지하겠다는 약속을 확인합니다.',
+    's2-title':'수집하는 정보',
+    's2-p1':'저희는 <strong>아무것도</strong> 수집하지 않습니다.',
+    's2-p2':'MAKE10은 다음 중 어느 것도 수집, 요청 또는 저장하지 않습니다:',
+    's2-list':'• 이름, 이메일 주소 또는 연락처 정보<br>• 기기 식별자 또는 광고 ID<br>• 위치 데이터<br>• 사용 분석 또는 행동 데이터<br>• 쿠키 또는 추적 기술<br>• 기타 모든 개인 또는 비개인 정보',
+    's3-title':'네트워크 활동',
+    's3-p1':'MAKE10은 정상 사용 중 인터넷에 연결되지 않습니다. 앱은 완전히 오프라인으로 작동합니다.',
+    's3-p2':'Flying Dev Lab, 제3자 분석 서비스, 광고 네트워크 또는 다른 외부 서버로 데이터가 전송되지 않습니다.',
+    's4-title':'광고 및 인앱 구매',
+    's4-p1':'MAKE10에는 <strong>어떠한 광고도</strong> 없습니다.',
+    's4-p2':'MAKE10에는 <strong>인앱 구매가 없습니다</strong>. 앱은 완전히 무료입니다.',
+    's4-p3':'MAKE10 내에는 외부 웹사이트, 소셜 미디어 또는 다른 앱으로의 링크가 없습니다.',
+    's5-title':'아동 개인정보 보호 (COPPA)',
+    's5-p1':'MAKE10은 어린이를 위해 설계되었으며 COPPA 및 적용 가능한 국제 아동 개인정보 보호법을 완전히 준수합니다.',
+    's5-p2':'누구로부터도 개인정보를 수집하지 않으므로 보호, 공유 또는 삭제할 데이터가 없습니다.',
+    's5-p3':'저희는 13세 미만의 어린이(또는 어떤 나이)로부터도 고의로 정보를 수집하지 않습니다.',
+    's6-title':'오픈 소스',
+    's6-p1':'MAKE10은 투명성 조치로 GitHub에 오픈 소스로 공개되어 있습니다. 누구든지 소스 코드를 검사하여 개인정보 보호 주장을 확인할 수 있습니다.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'이 방침의 변경',
+    's7-p1':'이 방침이 업데이트되면 새 버전이 수정된 시행일과 함께 이 페이지에 게시됩니다. 데이터가 수집되지 않으므로 변경사항은 저장된 사용자 데이터에 영향을 주지 않습니다.',
+    's8-title':'면책 조항',
+    's8-p1':'정확한 콘텐츠와 안정적인 기능을 제공하기 위해 노력하지만, 앱의 완전성, 정확성 또는 중단 없는 운영을 보장하지 않습니다.',
+    's8-p2':'iOS 업데이트 또는 기기 환경 변화로 인해 사전 통보 없이 앱 동작에 영향이 있을 수 있습니다. 개발자는 그로 인한 데이터 손실에 대해 책임지지 않습니다.',
+    's8-p3':'개발자는 사전 통보 없이 앱을 종료 또는 수정할 수 있습니다.',
+    'contact-title':'지원 및 문의',
+    'contact-form-p':'공식 웹사이트의 문의 양식을 통해 익명으로 의견이나 요청을 보내실 수 있습니다.',
+    'contact-email-p':'이메일로 문의하시려면 아래 주소를 이용해 주세요.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'전 세계 호기심 많은 어린이들을 위해 ❤️로 만들었습니다.',
+  },
+  'zh-Hans': {
+    badge:'隐私政策 & 支持', title:'隐私政策 & 支持', updated:'生效日期：2026年4月28日',
+    p1:'不收集数据', p2:'不传输数据', p3:'无广告', p4:'无外部链接',
+    's1-title':'概述',
+    's1-p1':'MAKE10（凑十）是由Flying Dev Lab（空飛ぶ研究室）开发的儿童免费数学益智游戏。',
+    's1-highlight':'MAKE10不收集、存储或传输任何个人信息——无论是谁，无论年龄。',
+    's1-p2':'本政策说明MAKE10如何处理（或不处理）数据，并确认我们对保持应用对儿童完全安全的承诺。',
+    's2-title':'我们收集的信息',
+    's2-p1':'我们<strong>什么都不</strong>收集。',
+    's2-p2':'MAKE10不收集、请求或存储以下任何内容：',
+    's2-list':'• 姓名、电子邮件地址或联系信息<br>• 设备标识符或广告ID<br>• 位置数据<br>• 使用分析或行为数据<br>• Cookie或跟踪技术<br>• 任何其他个人或非个人信息',
+    's3-title':'网络活动',
+    's3-p1':'MAKE10在正常使用期间不连接互联网。应用完全离线运行。',
+    's3-p2':'不向Flying Dev Lab、第三方分析服务、广告网络或任何其他外部服务器发送数据。',
+    's4-title':'广告与应用内购买',
+    's4-p1':'MAKE10不包含<strong>任何广告</strong>。',
+    's4-p2':'MAKE10不包含<strong>应用内购买</strong>。应用完全免费。',
+    's4-p3':'MAKE10内没有指向外部网站、社交媒体或其他应用的链接。',
+    's5-title':'儿童隐私（COPPA）',
+    's5-p1':'MAKE10专为儿童设计，完全遵守COPPA及适用的国际儿童隐私法律。',
+    's5-p2':'由于我们不从任何人处收集个人信息，因此没有需要保护、共享或删除的数据。',
+    's5-p3':'我们不会故意收集13岁以下儿童（或任何年龄）的信息。',
+    's6-title':'开源',
+    's6-p1':'MAKE10在GitHub上开源，作为透明度措施。任何人都可以检查源代码以验证我们的隐私声明。',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'本政策的变更',
+    's7-p1':'如果本政策更新，新版本将以修订后的生效日期发布在此页面上。由于不收集任何数据，任何变更都不会影响存储的用户数据。',
+    's8-title':'免责声明',
+    's8-p1':'虽然我们努力提供准确的内容和稳定的功能，但我们不保证应用的完整性、准确性或不间断运行。',
+    's8-p2':'iOS更新或设备环境变化可能在不事先通知的情况下影响应用行为。开发者不对由此产生的数据损失承担责任。',
+    's8-p3':'开发者可能在不事先通知的情况下终止或修改应用。',
+    'contact-title':'支持 & 联系',
+    'contact-form-p':'您可以通过我们官方网站上的联系表单匿名发送反馈或请求。',
+    'contact-email-p':'如果您希望通过电子邮件联系我们，请使用以下地址。',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'用❤️为全世界好奇的孩子们制作。',
+  },
+  'zh-Hant': {
+    badge:'隱私政策 & 支援', title:'隱私政策 & 支援', updated:'生效日期：2026年4月28日',
+    p1:'不收集資料', p2:'不傳輸資料', p3:'無廣告', p4:'無外部連結',
+    's1-title':'概述',
+    's1-p1':'MAKE10（湊十）是由Flying Dev Lab（空飛ぶ研究室）開發的兒童免費數學益智遊戲。',
+    's1-highlight':'MAKE10不收集、儲存或傳輸任何個人資訊——無論是誰，無論年齡。',
+    's1-p2':'本政策說明MAKE10如何處理（或不處理）資料，並確認我們對保持應用程式對兒童完全安全的承諾。',
+    's2-title':'我們收集的資訊',
+    's2-p1':'我們<strong>什麼都不</strong>收集。',
+    's2-p2':'MAKE10不收集、請求或儲存以下任何內容：',
+    's2-list':'• 姓名、電子郵件地址或聯絡資訊<br>• 裝置識別碼或廣告ID<br>• 位置資料<br>• 使用分析或行為資料<br>• Cookie或追蹤技術<br>• 任何其他個人或非個人資訊',
+    's3-title':'網路活動',
+    's3-p1':'MAKE10在正常使用期間不連接網際網路。應用程式完全離線運行。',
+    's3-p2':'不向Flying Dev Lab、第三方分析服務、廣告網路或任何其他外部伺服器傳送資料。',
+    's4-title':'廣告與應用程式內購買',
+    's4-p1':'MAKE10不包含<strong>任何廣告</strong>。',
+    's4-p2':'MAKE10不包含<strong>應用程式內購買</strong>。應用程式完全免費。',
+    's4-p3':'MAKE10內沒有指向外部網站、社群媒體或其他應用程式的連結。',
+    's5-title':'兒童隱私（COPPA）',
+    's5-p1':'MAKE10專為兒童設計，完全遵守COPPA及適用的國際兒童隱私法律。',
+    's5-p2':'由於我們不從任何人處收集個人資訊，因此沒有需要保護、共享或刪除的資料。',
+    's5-p3':'我們不會故意收集13歲以下兒童（或任何年齡）的資訊。',
+    's6-title':'開源',
+    's6-p1':'MAKE10在GitHub上開源，作為透明度措施。任何人都可以檢查原始碼以驗證我們的隱私聲明。',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'本政策的變更',
+    's7-p1':'如果本政策更新，新版本將以修訂後的生效日期發布在此頁面上。由於不收集任何資料，任何變更都不會影響儲存的使用者資料。',
+    's8-title':'免責聲明',
+    's8-p1':'雖然我們努力提供準確的內容和穩定的功能，但我們不保證應用程式的完整性、準確性或不間斷運行。',
+    's8-p2':'iOS更新或裝置環境變化可能在不事先通知的情況下影響應用程式行為。開發者不對由此產生的資料損失承擔責任。',
+    's8-p3':'開發者可能在不事先通知的情況下終止或修改應用程式。',
+    'contact-title':'支援 & 聯絡',
+    'contact-form-p':'您可以透過我們官方網站上的聯絡表單匿名傳送意見或請求。',
+    'contact-email-p':'如果您希望透過電子郵件聯絡我們，請使用以下地址。',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'用❤️為全世界好奇的孩子們製作。',
+  },
+  id: {
+    badge:'Kebijakan Privasi & Dukungan', title:'Kebijakan Privasi & Dukungan', updated:'Berlaku: 28 April 2026',
+    p1:'Tidak ada pengumpulan data', p2:'Tidak ada transmisi data', p3:'Tidak ada iklan', p4:'Tidak ada tautan eksternal',
+    's1-title':'Ikhtisar',
+    's1-p1':'MAKE10 adalah game puzzle matematika gratis untuk anak-anak, dikembangkan oleh Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 tidak mengumpulkan, menyimpan, atau mengirimkan informasi pribadi apa pun — dari siapa pun, usia berapa pun.',
+    's1-p2':'Kebijakan ini menjelaskan bagaimana MAKE10 menangani (atau tidak menangani) data, dan menegaskan komitmen kami untuk menjaga app sepenuhnya aman bagi anak-anak.',
+    's2-title':'Informasi yang Dikumpulkan',
+    's2-p1':'Kami tidak mengumpulkan <strong>apa pun</strong>.',
+    's2-p2':'MAKE10 tidak mengumpulkan, meminta, atau menyimpan hal-hal berikut:',
+    's2-list':'• Nama, alamat email, atau informasi kontak<br>• Pengidentifikasi perangkat atau ID iklan<br>• Data lokasi<br>• Analitik penggunaan atau data perilaku<br>• Cookie atau teknologi pelacakan<br>• Informasi pribadi atau non-pribadi lainnya',
+    's3-title':'Aktivitas Jaringan',
+    's3-p1':'MAKE10 tidak terhubung ke internet saat penggunaan normal. App berjalan sepenuhnya offline.',
+    's3-p2':'Tidak ada data yang dikirim ke Flying Dev Lab, layanan analitik pihak ketiga, jaringan iklan, atau server eksternal lainnya.',
+    's4-title':'Iklan & Pembelian Dalam App',
+    's4-p1':'MAKE10 tidak mengandung <strong>iklan apa pun</strong>.',
+    's4-p2':'MAKE10 tidak mengandung <strong>pembelian dalam app</strong>. App sepenuhnya gratis.',
+    's4-p3':'Tidak ada tautan ke situs eksternal, media sosial, atau app lain di dalam MAKE10.',
+    's5-title':'Privasi Anak (COPPA)',
+    's5-p1':'MAKE10 dirancang untuk anak-anak dan sepenuhnya mematuhi COPPA dan hukum privasi anak internasional yang berlaku.',
+    's5-p2':'Karena kami tidak mengumpulkan informasi pribadi dari siapa pun, tidak ada data yang perlu dilindungi, dibagikan, atau dihapus.',
+    's5-p3':'Kami tidak secara sengaja mengumpulkan informasi dari anak-anak di bawah 13 tahun (atau usia berapa pun).',
+    's6-title':'Open Source',
+    's6-p1':'MAKE10 bersumber terbuka di GitHub sebagai langkah transparansi. Siapa pun dapat memeriksa kode sumber untuk memverifikasi klaim privasi kami.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Perubahan Kebijakan Ini',
+    's7-p1':'Jika kebijakan ini diperbarui, versi baru akan diterbitkan di halaman ini dengan tanggal berlaku yang direvisi. Karena tidak ada data yang dikumpulkan, perubahan apa pun tidak akan memengaruhi data pengguna yang tersimpan.',
+    's8-title':'Penafian',
+    's8-p1':'Meskipun kami berusaha memberikan konten yang akurat dan fungsionalitas yang stabil, kami tidak menjamin kelengkapan, akurasi, atau pengoperasian app yang tidak terputus.',
+    's8-p2':'Pembaruan iOS atau perubahan lingkungan perangkat dapat memengaruhi perilaku app tanpa pemberitahuan sebelumnya. Pengembang tidak bertanggung jawab atas kehilangan data.',
+    's8-p3':'Pengembang dapat menghentikan atau mengubah app tanpa pemberitahuan sebelumnya.',
+    'contact-title':'Dukungan & Kontak',
+    'contact-form-p':'Kamu dapat mengirim masukan atau permintaan secara anonim melalui formulir kontak di situs resmi kami.',
+    'contact-email-p':'Jika ingin menghubungi kami lewat email, gunakan alamat di bawah ini.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Dibuat dengan ❤️ untuk anak-anak yang penasaran di seluruh dunia.',
+  },
+  vi: {
+    badge:'Chính sách Quyền riêng tư & Hỗ trợ', title:'Chính sách Quyền riêng tư & Hỗ trợ', updated:'Có hiệu lực: 28 tháng 4 năm 2026',
+    p1:'Không thu thập dữ liệu', p2:'Không truyền dữ liệu', p3:'Không có quảng cáo', p4:'Không có liên kết ngoài',
+    's1-title':'Tổng quan',
+    's1-p1':'MAKE10 là trò chơi đố toán học miễn phí dành cho trẻ em, phát triển bởi Flying Dev Lab (空飛ぶ研究室).',
+    's1-highlight':'MAKE10 không thu thập, lưu trữ hay truyền bất kỳ thông tin cá nhân nào — của bất kỳ ai, ở bất kỳ độ tuổi nào.',
+    's1-p2':'Chính sách này mô tả cách MAKE10 xử lý (hoặc không xử lý) dữ liệu, và xác nhận cam kết giữ ứng dụng hoàn toàn an toàn cho trẻ em.',
+    's2-title':'Thông tin chúng tôi thu thập',
+    's2-p1':'Chúng tôi không thu thập <strong>bất cứ điều gì</strong>.',
+    's2-p2':'MAKE10 không thu thập, yêu cầu hoặc lưu trữ bất kỳ điều nào sau đây:',
+    's2-list':'• Tên, địa chỉ email hoặc thông tin liên hệ<br>• Mã định danh thiết bị hoặc ID quảng cáo<br>• Dữ liệu vị trí<br>• Phân tích sử dụng hoặc dữ liệu hành vi<br>• Cookie hoặc công nghệ theo dõi<br>• Bất kỳ thông tin cá nhân hoặc phi cá nhân nào khác',
+    's3-title':'Hoạt động mạng',
+    's3-p1':'MAKE10 không kết nối internet trong quá trình sử dụng bình thường. Ứng dụng hoạt động hoàn toàn ngoại tuyến.',
+    's3-p2':'Không có dữ liệu nào được gửi đến Flying Dev Lab, dịch vụ phân tích của bên thứ ba, mạng quảng cáo hoặc bất kỳ máy chủ bên ngoài nào khác.',
+    's4-title':'Quảng cáo & Mua hàng trong ứng dụng',
+    's4-p1':'MAKE10 không chứa <strong>bất kỳ quảng cáo nào</strong>.',
+    's4-p2':'MAKE10 không có <strong>mua hàng trong ứng dụng</strong>. Ứng dụng hoàn toàn miễn phí.',
+    's4-p3':'Không có liên kết đến trang web bên ngoài, mạng xã hội hoặc ứng dụng khác trong MAKE10.',
+    's5-title':'Quyền riêng tư của trẻ em (COPPA)',
+    's5-p1':'MAKE10 được thiết kế cho trẻ em và tuân thủ đầy đủ COPPA cũng như các luật bảo vệ quyền riêng tư trẻ em quốc tế hiện hành.',
+    's5-p2':'Vì chúng tôi không thu thập thông tin cá nhân từ bất kỳ ai, nên không có dữ liệu nào cần bảo vệ, chia sẻ hoặc xóa.',
+    's5-p3':'Chúng tôi không cố ý thu thập thông tin từ trẻ em dưới 13 tuổi (hoặc bất kỳ độ tuổi nào).',
+    's6-title':'Mã nguồn mở',
+    's6-p1':'MAKE10 được mã nguồn mở trên GitHub như một biện pháp minh bạch. Bất kỳ ai cũng có thể kiểm tra mã nguồn để xác minh các tuyên bố quyền riêng tư của chúng tôi.',
+    's6-p2':'→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a>',
+    's7-title':'Thay đổi chính sách này',
+    's7-p1':'Nếu chính sách này được cập nhật, phiên bản mới sẽ được đăng trên trang này với ngày hiệu lực sửa đổi. Vì không thu thập dữ liệu, bất kỳ thay đổi nào cũng sẽ không ảnh hưởng đến dữ liệu người dùng đã lưu.',
+    's8-title':'Miễn trách nhiệm',
+    's8-p1':'Mặc dù chúng tôi cố gắng cung cấp nội dung chính xác và chức năng ổn định, chúng tôi không đảm bảo tính đầy đủ, chính xác hoặc hoạt động liên tục của ứng dụng.',
+    's8-p2':'Cập nhật iOS hoặc thay đổi môi trường thiết bị có thể ảnh hưởng đến hành vi ứng dụng mà không có thông báo trước. Nhà phát triển sẽ không chịu trách nhiệm về bất kỳ mất mát dữ liệu nào.',
+    's8-p3':'Nhà phát triển có thể chấm dứt hoặc sửa đổi ứng dụng mà không có thông báo trước.',
+    'contact-title':'Hỗ trợ & Liên hệ',
+    'contact-form-p':'Bạn có thể gửi phản hồi hoặc yêu cầu ẩn danh qua biểu mẫu liên hệ trên trang web chính thức của chúng tôi.',
+    'contact-email-p':'Nếu bạn muốn liên hệ qua email, vui lòng sử dụng địa chỉ bên dưới.',
+    'contact-web-label':'flyingdevlab.com',
+    'footer-copy':'© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室',
+    'footer2':'Được tạo ra với ❤️ cho những đứa trẻ tò mò trên khắp thế giới.',
+  },
+};
+
+function setLang(lang) {
+  const d = S[lang];
+  if (!d) return;
+  // BCP 47 準拠の html[lang] 設定
+  const bcp47 = { 'zh-Hans': 'zh-Hans', 'zh-Hant': 'zh-Hant', 'pt-BR': 'pt-BR' };
+  document.documentElement.lang = bcp47[lang] || lang.split('-')[0];
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.getAttribute('data-key');
+    // ② 英語フォールバック: キーが欠けていても en の値を使う
+    const val = (d[k] !== undefined) ? d[k] : (S['en'][k] !== undefined ? S['en'][k] : '');
+    el.innerHTML = val;
+  });
+  document.title = d.title + ' – MAKE10';
+  document.getElementById('lang-select').value = lang;
+}
+
+(function () {
+  const nav = navigator.language || 'en';
+  // BCP47ベースのnabigator.language照合テーブル
+  const map = {
+    'ja':'ja',
+    'zh-Hans':'zh-Hans','zh-CN':'zh-Hans','zh-SG':'zh-Hans',
+    'zh-Hant':'zh-Hant','zh-TW':'zh-Hant','zh-HK':'zh-Hant',
+    'es':'es',
+    'pt':'pt-BR',
+    'id':'id',
+    'vi':'vi',
+    'th':'th',
+    'ko':'ko',
+    'hi':'hi',
+    'fr':'fr',
+    'de':'de',
+    'it':'it',
+    'nl':'nl',
+  };
+  const code = nav.toLowerCase();
+  let matched = 'en';
+  for (const [k,v] of Object.entries(map)) {
+    if (code.startsWith(k.toLowerCase())) { matched = v; break; }
+  }
+  setLang(matched);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1554 @@
+/* ==============================================
+   style.css — Flying Dev Lab 共通スタイル
+
+   🎨 色を変えたいときはここだけ編集してください！
+   ============================================== */
+
+/* =====================
+   CSS変数（色・デザイントークン）
+   ここを変えるだけでサイト全体の色が変わります
+ 
+   :root とは：
+   HTMLのルート要素（<html>タグ）を指す特殊なセレクタです。
+   ここに --変数名: 値; の形式で定義した値は
+   ページ内のどこからでも var(--変数名) で参照できます。
+   「マジックナンバー（意味不明な数値）」をなくし、
+   1か所の変更だけで全体を統一して変えられるのが大きなメリットです。
+   ===================== */
+
+:root {
+  /* ── メインカラー ── */
+  --primary:    #1e3a6e;   /* ヘッダー・ボタン・フッターの濃紺 */
+  --primary-lt: #2a4d8f;   /* ホバー時などの少し明るい濃紺 */
+  --accent:     #e8834a;   /* アクセントカラー（オレンジ） */
+  --accent-light: #4a90d9; /* ポリシー等の強調ボーダー */
+
+  /* ── テキスト ── */
+  --text:       #1a1a28;   /* メインテキスト */
+  --text-sub:   #4a4a5a;   /* サブテキスト */
+  --muted:      #888898;   /* 薄いテキスト・補足 */
+
+  /* ── 背景・カード ── */
+  --bg:         #f8f7f4;   /* ページ背景 */
+  --bg-soft:    #f0ede8;   /* 少し濃い背景 */
+  --card:       #ffffff;   /* カード背景 */
+  --white:      #ffffff;
+
+  /* ── ボーダー・シャドウ ── */
+  --border:     #e4e0da;
+  --shadow:     0 4px 24px rgba(0, 0, 0, 0.07);
+  --shadow-sm:  0 2px 10px rgba(0, 0, 0, 0.05);
+
+  /* ── 角丸 ── */
+  --radius-lg:  20px;
+  --radius-md:  14px;
+  --radius-sm:  8px;
+
+  /* ── フッター（半透明白の統一） ── */
+  --footer-link:    rgba(255, 255, 255, 0.75);
+  --footer-muted:   rgba(255, 255, 255, 0.45);
+
+  /* ── フォーカスリング ── */
+  --focus-ring:  #4a90d9;
+}
+
+/* ==============================================
+   共通リセット・ベーススタイル
+   ============================================== */
+/*
+ * ユニバーサルセレクタ（*）：ページ上のすべての要素に適用します。
+ * ::before / ::after は疑似要素（後述）も含めてリセットします。
+ *
+ * margin / padding を 0 にリセット：
+ * ブラウザごとにデフォルトの余白が異なるため、一度ゼロにしてから
+ * 自分で必要な余白を指定するのが「CSSリセット」の基本パターンです。
+ *
+ * box-sizing: border-box：
+ * デフォルト（content-box）では width はコンテンツ幅だけを指し、
+ * padding や border はその外側に追加されます。
+ * border-box にすると padding・border を含めた値が width になります。
+ * 「width: 100px と書いたのに実際には大きくなる」バグを防ぐために
+ * 全要素に適用するのが現代CSSの標準的な書き方です。
+ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* スムーズスクロール（モーション許容ユーザーのみ）
+   prefers-reduced-motionで包むことでアニメーション軽減設定のユーザーには適用しない */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  /* line-height：行の高さ（行間）。単位なしの数値は font-size への倍率です。
+     1.7 = フォントサイズの1.7倍の行間。日本語は1.6〜1.8が読みやすいとされます。 */
+  line-height: 1.7;
+  /* macOS/iOSでフォントのサブピクセルレンダリングを抑制して細く読みやすく見せる */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* デフォルトのリンク色・下線をリセットし、親要素の色を継承させる
+   color: inherit → 親要素のテキスト色をそのまま引き継ぐ指定。
+   これがないとブラウザデフォルトの青色リンクになってしまいます。 */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 本文中のリンクは下線で識別可能にする（WCAG 1.4.1 — 色だけに頼らない識別）
+   text-underline-offset：下線とテキストの間隔を調整します。3pxで少し離してすっきりさせています。 */
+main p a,
+main li a,
+.contact-box a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* img のデフォルト display は inline のため、下に謎の隙間ができる場合があります。
+   display: block にするとその隙間がなくなります。
+   max-width: 100% は画像が親要素からはみ出ないようにするレスポンシブ対応の定番指定です。 */
+img { max-width: 100%; display: block; }
+
+/* ==============================================
+   フォーカスリング（キーボードナビゲーション）
+   ============================================== */
+/*
+ * :focus-visible とは：
+ * キーボードのTabキーでフォーカスが当たった要素にのみ適用される疑似クラスです。
+ * :focus（マウスクリックでも適用）とは異なり、キーボード操作時だけ
+ * フォーカスリング（枠線）を表示できるため、マウスユーザーには不要な枠が出ません。
+ * outline（アウトライン）は border と異なりレイアウトに影響しないため、
+ * フォーカス表示に適しています。
+ */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ボタン・リンクのフォーカス時にも hover 同等の視覚フィードバック
+   box-shadow の4つの値：X軸 Y軸 ぼかし幅 広がり幅。
+   0 0 0 4px は「ぼかしなし・4px外側に広がる影」= 外枠のような見た目になります。 */
+.contact-btn:focus-visible,
+.home-btn:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+/* ==============================================
+   スキップリンク（アクセシビリティ）
+   ============================================== */
+/* 通常は画面外に配置し、フォーカス時のみ上部に表示してキーボードユーザーに提供する */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 0 0 8px 8px;
+  z-index: 9999;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==============================================
+   アニメーション
+   ============================================== */
+/*
+ * @keyframes（キーフレーム）：
+ * アニメーションの各段階（from〜to、または0%〜100%）を定義します。
+ * ここでは「透明・20px下 → 不透明・元の位置」という動きを定義しています。
+ * opacity：不透明度（0=透明、1=不透明）
+ * transform: translateY(20px)：Y軸方向（縦）に20px移動させる変形。
+ * translateYはレイアウトに影響を与えずに見た目だけ動かせるため、
+ * アニメーションのパフォーマンスが良い（GPUが使えるため）です。
+ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/*
+ * .fade-up クラスが付いた要素にアニメーションを適用します。
+ * animation の値の意味：
+ *   fadeUp   → 使うキーフレームの名前
+ *   0.6s     → アニメーションの所要時間
+ *   ease     → 緩急パターン（最初ゆっくり・中間速く・最後ゆっくり）
+ *   forwards → アニメーション終了後、最終フレームの状態（opacity: 1）を維持する。
+ *              これがないとアニメーション後に opacity: 0 に戻ってしまいます。
+ * opacity: 0 が初期値なのは、アニメーション開始前に要素が見えないようにするためです。
+ */
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+/*
+ * .fade-up 要素の出現タイミングをずらすアニメーション遅延
+ * アプリカードの遅延もここで管理しています（apps.jsで個別設定不要）
+ * アプリが8本を超えたらここに nth-child(9) 以降を追加してください
+ *
+ * :nth-child(N) とは：
+ * 親要素の中でN番目の子要素を選択する疑似クラスです。
+ * animation-delay でカードごとに 0.1s ずつ遅らせることで
+ * 「順番にふわっと現れる」演出を作っています。
+ */
+.fade-up:nth-child(1) { animation-delay: 0.1s; }
+.fade-up:nth-child(2) { animation-delay: 0.2s; }
+.fade-up:nth-child(3) { animation-delay: 0.3s; }
+.fade-up:nth-child(4) { animation-delay: 0.4s; }
+.fade-up:nth-child(5) { animation-delay: 0.5s; }
+.fade-up:nth-child(6) { animation-delay: 0.6s; }
+.fade-up:nth-child(7) { animation-delay: 0.7s; }
+.fade-up:nth-child(8) { animation-delay: 0.8s; }
+
+/* モーション軽減設定: opacity: 0 のままだと要素が見えなくなるため即時完了させる */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ==============================================
+   共通ヘッダー
+   ============================================== */
+header {
+  background: var(--primary);
+  color: var(--white);
+  padding: 56px 24px 64px;
+  text-align: center;
+  position: relative;
+  /* overflow: hidden：子要素や疑似要素がはみ出た場合に切り取ります。
+  下の ::before / ::after で配置する装飾円がヘッダー外に出ないようにするためです。 */
+  overflow: hidden;
+}
+
+/*
+ * ::before / ::after（疑似要素）とは：
+ * HTMLにタグを追加せずに、CSSだけで要素の「前後」に装飾コンテンツを挿入できる機能です。
+ * content: '' は必須（省略すると表示されません）。空文字でも書く必要があります。
+ * position: absolute で親要素（header）の中を自由に配置できます。
+ * ここでは装飾用の半透明の円形をヘッダーの隅に置いています。
+ *
+ * ヘッダー右上の装飾用半透明円。pointer-events: none でクリックを透過させる
+ * border-radius: 50% → 正方形を円形に変える指定（width=height のときに真円になります）
+ */
+header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ヘッダー左下の装飾用半透明円 */
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 180px; height: 180px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ヘッダー内サブタイトル（privacy-policy, pledge 共通） */
+.header-subtitle {
+  font-size: 0.65em;
+  opacity: 0.8;
+}
+
+/* ==============================================
+   共通フッター
+   ============================================== */
+footer {
+  background: var(--primary);
+  color: var(--footer-muted);
+  text-align: center;
+  padding: 36px 24px;
+}
+
+.footer-links {
+  /* display: flex：子要素を横並びにするFlexboxレイアウト。
+    justify-content: center → 主軸（横）方向に中央寄せ
+    align-items: center     → 交差軸（縦）方向に中央揃え
+    gap: 24px               → 子要素どうしの間隔（margin を個別指定するより簡潔）
+    flex-wrap: wrap         → 画面が狭くなったとき自動で折り返す */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--footer-link);
+  font-size: 20px;
+  /* transition：プロパティの変化を滑らかなアニメーションにします。
+    書式：「変化させるプロパティ名 所要時間」
+    color 0.2s → color プロパティが 0.2秒かけて変化する（hover時など）*/
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-links a:hover { color: white; }
+
+.x-icon {
+  font-size: 22px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+}
+
+/* NOTE: .footer-policy は現在未使用（index.html でコメントアウト中）
+   将来復活する可能性があるため残置 */
+.footer-policy {
+  display: block;
+  color: var(--footer-link);
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+.footer-policy:hover { color: white; }
+
+.footer-top {
+  display: block;
+  color: var(--footer-link);
+  font-size: 12px;
+  margin-bottom: 4px;
+  transition: color 0.2s;
+}
+.footer-top:hover { color: white; }
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--footer-muted);
+  font-family: 'Outfit', sans-serif;
+}
+
+/* ==============================================
+   共通メインレイアウト
+   ============================================== */
+main {
+  /* max-width + margin: 0 auto の組み合わせは「コンテンツを中央に固定幅で表示する」
+    最も定番のパターンです。
+    max-width: 680px → コンテンツ幅の上限を680pxに制限（それ以上は広がらない）
+    margin: 0 auto  → 上下の余白は0、左右を auto（均等）にすることで中央寄せになります */
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 56px 20px 80px;
+}
+
+/* ==============================================
+   セクションタイトル（共通）
+   ============================================== */
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ::after 疑似要素で見出し右側に伸びるセパレーター線を作ります。
+  flex: 1 → 「残りの幅をすべて使って伸びる」指定。
+  見出しテキストの幅が変わっても自動で残り幅いっぱいに伸びるので、
+  どの長さの見出しにも対応できます。 */
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* ==============================================
+   index.html — ヘッダー固有スタイル
+   ============================================== */
+/* ナビリンクをヘッダー内の上部に引き上げる */
+.header-policy {
+  text-align: center;
+  margin-top: -40px;
+  margin-bottom: 50px;
+}
+
+.header-policy a {
+  font-size: 13px;
+  color: var(--footer-link);
+  font-family: 'Outfit', sans-serif;
+  transition: color 0.2s;
+}
+
+.header-policy a:hover {
+  color: white;
+}
+
+/*
+ * position: relative + z-index の仕組み：
+ * position: relative にすると、その要素が「重ね順（スタッキングコンテキスト）」に
+ * 参加できるようになります。
+ * z-index: 1 → header::before / ::after（z-indexなし＝0相当）より手前に表示されます。
+ * これにより装飾円の上にナビやタイトルが正しく重なります。
+ * max-width / margin: 0 auto でヘッダー内のコンテンツを中央に固定幅で配置します。
+ */
+.header-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 雲と家の絵文字を重ねて表示するための固定サイズのコンテナ */
+.site-logo {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 70px;
+  margin-bottom: 16px;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+/* 雲の絵文字：ロゴの土台として絶対配置 */
+.site-logo .logo-cloud {
+  font-size: 99px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  line-height: 1;
+}
+
+/* 家の絵文字：雲の上に重なるよう絶対配置。z-index: 2 で雲の手前に表示する */
+.site-logo .logo-house {
+  font-size: 52px;
+  position: absolute;
+  bottom: 42px;
+  left: 32px;
+  z-index: 2;
+  line-height: 1;
+}
+
+/* opacity: 0 が初期値。fadeUpアニメーションで出現するまで非表示にする
+ * animation の第3引数 0.1s はアニメーション開始までの遅延時間（animation-delay）です。
+ * letter-spacing：文字どうしの間隔。em は現在のフォントサイズに対する倍率の単位です。
+ */
+.site-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  animation: fadeUp 0.5s 0.1s ease forwards;
+  opacity: 0;
+}
+
+.site-name span { color: #a8c4ff; }
+
+/* opacity: 0 が初期値。0.2s遅れてfadeUpで出現する
+ * clamp(最小値, 推奨値, 最大値)：
+ * 画面幅に応じて値が変動しますが、最小〜最大の範囲に収まります。
+ * clamp(28px, 7vw, 44px) → スマホでは最小28px、PCでは最大44px、
+ * 画面幅の7%（7vw）という推奨値がその間で連続的に変化します。
+ * これによりメディアクエリなしでレスポンシブなフォントサイズになります。
+ */
+.site-sub {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: 28px;
+  animation: fadeUp 0.5s 0.2s ease forwards;
+  opacity: 0;
+}
+
+/* キャッチコピーを白カードで囲んで視覚的に際立たせる */
+.catchcopy {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: inline-block;
+  animation: fadeUp 0.5s 0.3s ease forwards;
+  opacity: 0;
+}
+
+/* :first-child / :last-child 疑似クラス：
+ * 親要素の中で最初・最後の子要素を選択します。
+ * .catchcopy の中には <p> が2つあり、それぞれ個別にスタイルを当てています。
+ * クラスを追加せずに「順番」だけで区別できる便利なセレクタです。 */
+.catchcopy p:first-child {
+  font-size: clamp(16px, 4vw, 20px);
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.catchcopy p:last-child {
+  font-size: 13px;
+  color: var(--text-sub);
+  font-weight: 400;
+}
+
+/* ==============================================
+   index.html — アプリ一覧
+   ============================================== */
+/*
+ * display: grid：2次元（行・列）のグリッドレイアウト。
+ * ここでは列指定がないため1列（縦積み）のグリッドになっています。
+ * display: flex（1次元）と異なり、将来的に
+ * grid-template-columns を追加するだけで複数列に切り替えられます。
+ * JSがAPPS配列からカードを動的に追加するグリッドコンテナです。
+ */
+#app-list {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.app-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  /* transition に複数のプロパティを指定するにはカンマで区切ります。
+     transform と box-shadow の両方を 0.2s で滑らかに変化させます。 */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* :hover 疑似クラス：マウスが重なったときのスタイルを定義します。
+   transform: translateY(-3px) → 3px 上に浮き上がる視覚効果。
+   box-shadow が濃くなることで「持ち上がった」ように見えます。 */
+.app-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.app-card a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* SNS埋め込みウィジェットが生成する blockquote / iframe を
+   カード内に収めるための上書き。
+   !important はインラインスタイルより優先させるために使っています。
+   通常は多用を避けるべきですが、外部ウィジェットの強力なインラインstyleを
+   打ち消す用途では許容されるケースです。 */
+.app-card blockquote.instagram-media {
+  margin: 0 auto !important;
+  max-width: 100% !important;
+}
+
+.app-card iframe {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* アプリアイコン領域。iconImgが指定されない場合はグラデーションがフォールバック背景になる
+ * linear-gradient(角度, 色1, 色2)：直線のグラデーション。
+ * 135deg は右下方向への斜めグラデーションです。
+ * flex-shrink: 0：flexコンテナの中で、この要素が縮まないよう固定します。
+ * これがないと画面が狭いとき画像が潰れてしまいます。 */
+.app-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--primary-lt), #4a6fa5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  flex-shrink: 0;
+}
+
+/* iconImgが指定された場合の実画像スタイル
+ * object-fit: cover：画像をトリミングして指定サイズに収めます。
+ * 縦横比を保ちながら領域を埋めるため、細長い画像でも歪みません。
+ * cover（切り取り）/ contain（全体表示） / fill（歪める）の3種が主要な値です。 */
+.app-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+
+/*
+ * flex: 1 → flexコンテナ内でアイコンが固定幅を占めた後、
+ * テキスト情報エリアが残りの幅をすべて埋めます。
+ * 「アイコン固定・テキスト可変」という左右レイアウトの定番パターンです。
+ */
+.app-info { flex: 1; }
+
+.app-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.app-desc {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+
+/* 公開状態を示すバッジ（COMING SOON / LIVE）。
+ * flex-shrink: 0 でアイコンと同様、縮まないよう固定します。
+ * letter-spacing: 0.05em で英字の間隔を少し広げて読みやすくしています。 */
+.app-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* 近日公開：オレンジ系 */
+.badge-coming {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+/* 公開中：グリーン系 */
+.badge-live {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* ==============================================
+   index.html — ブラウザで遊ぶセクション
+   ============================================== */
+/*
+ * <section class="try-game-section"> 自体をグリッドコンテナにしています。
+ * grid-template-columns: 1fr 1fr → 2列均等配置。
+ * fr（フラクション）は「残りの空きスペースを等分する」単位です。
+ * gap: 16px → 行・列の間隔を一括指定。
+ *
+ * ※ max-width / padding は親の <main> が担当するためここには不要です。
+ *   以前は重複指定していたため、ゲームカードの左右余白だけ2倍になるバグがありました。
+ */
+.try-game-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+/*
+ * grid-column: 1 / -1 → グリッドの全列をまたいで配置する指定。
+ * -1 は「末尾の線」を意味するため列数が変わっても自動で全幅になります。
+ * セクションヘッダーだけカードの上に全幅で表示するために指定しています。
+ */
+.try-game-section .section-header {
+  grid-column: 1 / -1;
+  margin-bottom: 8px;
+}
+
+/*
+ * カード全体を <a> タグにして「カードそのものがリンク」になるデザイン。
+ *
+ * display: flex + flex-direction: column → ゲーム名を縦方向に配置。
+ * align-items / justify-content: center → 横・縦ともに中央揃えでコンテンツを配置。
+ * text-decoration: none / color: inherit → <a> タグのデフォルトの青色リンクをリセット。
+ *
+ * transition に border-color と background を加えることで、
+ * ホバー時に「選択されている」感を色でも伝えられます。
+ */
+.try-game-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+              border-color 0.2s ease, background 0.2s ease;
+}
+
+/*
+ * ホバー時の視覚フィードバック。
+ * translateY(-3px) で浮き上がる効果は app-card と統一しています。
+ * border-color を --primary（濃紺）に変えることで「アクティブ」感を出します。
+ * background をごく薄い青みがかった白にすることで、
+ * 派手すぎずに「クリックできる」ことを直感的に伝えます。
+ */
+.try-game-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary);
+  background: #f4f7ff;
+}
+
+/*
+ * .try-game-inner はゲーム名を包むラッパー。
+ * width: 100% を維持することで、将来アイコン等を追加しても横並びに対応できます。
+ */
+.try-game-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/*
+ * ゲーム名テキスト。
+ * font-size: 15px → 2列グリッドで幅が狭くなるため、
+ * 長いゲーム名でも2行以内に収まるサイズにしています。
+ * line-height: 1.4 → 日英混在テキストが改行したとき詰まって見えないよう調整。
+ */
+.try-game-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/*
+ * スマホ（500px以下）では1列に切り替え。
+ * 2列だと1枚あたりの幅が150px程度になりゲーム名が窮屈になるためです。
+ * grid-template-columns を 1fr（1列）に上書きするだけで縦積みになります。
+ * .section-header の grid-column: 1 / -1 は1列でも問題なく機能します。
+ */
+@media (max-width: 500px) {
+  .try-game-section {
+    grid-template-columns: 1fr;
+  }
+  .try-game-card {
+    padding: 22px 18px;
+  }
+}
+
+/* ==============================================
+   index.html — お問い合わせ
+   ============================================== */
+.contact-section { margin-bottom: 56px; }
+
+/* overflow: hidden：子要素が border-radius の角丸からはみ出ないようにします。
+ * 特に子要素に背景色があるとき、角丸が正しく効くために必要なテクニックです。 */
+.contact-wrap {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+.contact-box-inner {
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.contact-desc {
+  font-size: 14px;
+  color: var(--text-sub);
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--primary);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: 'Noto Sans JP', sans-serif;
+  text-align: center;
+  /* white-space: nowrap：テキストを1行に固定して折り返しを禁止します。
+     長いボタンテキストが途中で改行されないようにするための指定です。 */
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* モバイルでは折り返しを許可して縦長にしてもテキストを収める
+ * @media (max-width: 768px)：画面幅が768px以下のとき（タブレット・スマホ）に適用。
+ * white-space: normal → 通常の折り返しに戻します。
+ * word-break: break-word → 長い単語を途中で折り返して枠からはみ出ないようにします。 */
+@media (max-width: 768px) {
+  .contact-btn {
+    white-space: normal;
+    padding: 14px 24px;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+}
+
+.contact-btn:hover {
+  background: var(--primary-lt);
+  transform: translateY(-2px);
+}
+
+/* ==============================================
+   index.html — SNS投稿埋め込み
+   ============================================== */
+/* SNS埋め込みセクション全体のコンテナ。
+ * max-width: 600px + margin: 0 auto → 幅を制限して中央に配置する定番パターン。
+ * text-align: left → 親要素で center になっている場合に左寄せに戻します。 */
+.x-embed {
+  max-width: 600px;
+  margin: 60px auto;
+  text-align: left;
+}
+
+/* SNS埋め込みカードを縦一列に並べるコンテナ。
+ * flex-direction: column + align-items: center の組み合わせで、
+ * 各カードを縦積みにしつつ横方向には中央揃えにします。 */
+.sns-embed-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 各SNS埋め込みカード。
+ * display: block → <div> のデフォルト値ですが、
+ * .app-card が flex になっているため明示的に block に戻しています。 */
+.sns-embed-card {
+  width: 100%;
+  padding: 10px;
+  display: block;
+}
+
+/* ==============================================
+   privacy-policy.html / pledge.html — ヘッダー固有
+   ============================================== */
+/* privacy-policy.html・pledge.html など、サブページのヘッダー <h1> 用スタイル。
+ * index.html の .site-name とは別の定義です。
+ * clamp(20px, 5vw, 28px) → スマホで最小20px、PCで最大28px、
+ * 画面幅5%という推奨値がその間を連続的に変化します。 */
+header h1 {
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* 最終更新日の表示エリア。
+ * opacity: 0.55 → 親要素の白色テキストに対して55%の不透明度。
+ * 直接 color で半透明色を指定するより、opacity を使うほうが
+ * 親の色を継承しつつ薄くできるためフレキシブルです。 */
+.updated {
+  font-size: 12px;
+  opacity: 0.55;
+  font-family: 'Outfit', sans-serif;
+  margin-top: 8px;
+}
+
+/* ==============================================
+   privacy-policy.html / pledge.html — 言語タブ
+   ============================================== */
+.lang-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.lang-tab {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  /* cursor: pointer：マウスカーソルをポインター（手の形）に変えます。
+     <button> タグはデフォルトでポインターになりますが、明示することで意図が明確になります。 */
+  cursor: pointer;
+  border: 2px solid var(--border);
+  background: var(--white);
+  color: var(--muted);
+  /* transition: all → すべてのCSSプロパティの変化をアニメーション化します。
+     background, color, border-color など複数が一括で滑らかに変わります。 */
+  transition: all 0.2s;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* 選択中のタブはprimaryカラーで塗りつぶす */
+.lang-tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* display: none → 要素を完全に非表示にし、レイアウト上のスペースも消します。
+ * visibility: hidden（見えないがスペースは残る）とは異なります。
+ * JSで .active クラスを付け外しすることで表示/非表示を切り替えます。 */
+.lang-content { display: none; }
+.lang-content.active { display: block; }
+
+/* ==============================================
+   privacy-policy.html — ポリシーセクション
+   ============================================== */
+/* 各ポリシー項目のカードUI。
+ * index.htmlの .app-card と同じ「背景・角丸・影・ボーダー」の
+ * カードパターンをポリシーページ用に再定義しています。 */
+.policy-section {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+/* こども向けアプリ方針カードの強調スタイル。
+ * border-left: 4px → 左側だけに太いボーダーを付けることで
+ * 他のカードより重要であることを視覚的に伝えます。
+ * （インラインstyle置き換えのためクラスとして定義） */
+.policy-children {
+  border-left: 4px solid var(--accent-light);
+}
+
+/* カード内の見出し（h2）。
+ * border-bottom で見出しとコンテンツの間にセパレーター線を引きます。
+ * display: flex + align-items: center + gap で
+ * 絵文字アイコンとテキストを横並びにしています。 */
+.policy-section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.policy-section p {
+  font-size: 14px;
+  color: var(--text-sub);
+  margin-bottom: 10px;
+}
+
+/* :last-child 疑似クラスで最後の <p> の下余白だけ打ち消します。
+ * これにより最後の段落とカードの下端の間隔が均等になります。 */
+.policy-section p:last-child { margin-bottom: 0; }
+
+/* padding-left：<ul> のデフォルト字下げは環境によって異なるため
+ * 明示的にピクセル値で指定して統一します。 */
+.policy-section ul {
+  padding-left: 18px;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+
+.policy-section ul li { margin-bottom: 6px; }
+
+/* メールアドレスを視覚的に区別するための薄い青系背景 */
+.contact-box {
+  background: #f0f4ff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 12px;
+}
+
+.contact-box p {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.contact-box p:last-child { margin-bottom: 0; }
+
+/* ==============================================
+   app-guide.html — 有料プランセクション固有スタイル
+   「冷たさ」を排除するため、強い色の境界線ではなく、
+   柔らかな背景色（--bg-soft）で包み込むようなレイアウトにしています。
+   ============================================== */
+.billing-info {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  margin: 20px 0;
+  line-height: 1.8;
+}
+
+.price-notice {
+  font-weight: 500;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+/* ==============================================
+   レスポンシブ
+   ============================================== */
+/*
+ * @media（メディアクエリ）：
+ * 画面幅などの条件に応じてスタイルを切り替える仕組みです。
+ * max-width: 480px → 幅が480px以下（主にスマートフォン）のときに適用されます。
+ * ここでは padding・font-size などを小さく調整して、
+ * 狭い画面でも読みやすいレイアウトにします。
+ */
+@media (max-width: 480px) {
+  header { padding: 44px 20px 52px; }
+  .catchcopy { padding: 20px; }
+  .app-card { padding: 18px; gap: 14px; }
+  .app-icon { width: 60px; height: 60px; font-size: 28px; }
+  .app-name { font-size: 16px; }
+  .policy-section { padding: 20px; }
+}
+
+/* ==============================================
+   404.html — ページ固有スタイル
+   ============================================== */
+/*
+ * bodyをflex縦並びにして、フッターをページ下端に固定する
+ * min-height: 100vh：ビューポート（ブラウザの表示領域）の高さ全体を最低限確保します。
+ * vh = viewport height。100vh = 画面の高さの100%。
+ * flex-direction: column → flex子要素を縦方向（列）に並べます。
+ * この組み合わせで、コンテンツが少なくてもフッターが常に最下部に来るレイアウトを実現します。
+ */
+.page-404 {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* mainを残り縦幅いっぱいに伸ばし、コンテンツを上下左右中央に配置する
+ * flex: 1 → 親のflexコンテナの中で残りの縦幅をすべて占有します。
+ * display: flex + align-items / justify-content: center の組み合わせで
+ * 子要素を完全に上下左右中央に配置するテクニックです。 */
+.page-404 main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px 80px;
+}
+
+/* 雲と家をまとめて上下に浮遊させる外枠
+ * animation: floatCloud 4s ease-in-out infinite
+ *   4s          → 1サイクル4秒
+ *   ease-in-out → 始まりと終わりが緩く、中間が速い緩急
+ *   infinite    → 無限ループ */
+.lost-house {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 32px;
+  animation: floatCloud 4s ease-in-out infinite;
+}
+
+/* 上下に緩やかに浮き沈みするアニメーション */
+@keyframes floatCloud {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* 雲の絵文字（家の土台として下に敷く装飾） */
+.lost-cloud {
+  font-size: 120px;
+  line-height: 1;
+  display: block;
+}
+
+/* 雲の上に絶対配置した家の絵文字
+ * left: 50% + transform: translateX(-50%) は「水平中央揃え」の定番テクニックです。
+ * left: 50% だけでは要素の左端が中央に来てしまうため、
+ * 自身の幅の50%分を左にずらして完全に中央に合わせます。 */
+.lost-home {
+  font-size: 64px;
+  position: absolute;
+  bottom: 46px;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 1;
+  animation: wobble 3s ease-in-out infinite;
+}
+
+/* 家が左右にゆらゆら揺れるアニメーション
+ * rotate(角度)：要素を回転させます。deg は角度の単位（度）です。
+ * translateX(-50%) を保持したまま rotate だけ変化させるため、
+ * translateX も毎フレームに含めて書く必要があります。 */
+@keyframes wobble {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  25%       { transform: translateX(-50%) rotate(-4deg); }
+  75%       { transform: translateX(-50%) rotate(4deg); }
+}
+
+/* 家の絵文字の右上に絶対配置して重ねるバッジ */
+.question-badge {
+  position: absolute;
+  top: -4px;
+  right: -12px;
+  font-size: 28px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* scale(倍率)：要素を拡大・縮小します。
+ * 1.0 が等倍、1.25 は25%拡大。中心点を基準に拡縮します。 */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.25); }
+}
+
+/* 大きな「404」の数字 */
+.error-code {
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(72px, 20vw, 120px);
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.1s ease forwards;
+}
+
+/* 中央の「0」だけアクセントカラーで色付け */
+.error-code span {
+  color: var(--accent);
+}
+
+.error-title {
+  font-size: clamp(18px, 5vw, 24px);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.2s ease forwards;
+}
+
+.error-desc {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.9;
+  margin-bottom: 32px;
+  max-width: 360px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.3s ease forwards;
+}
+
+/* カウントダウンバー */
+.countdown-wrap {
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.4s ease forwards;
+}
+
+.countdown-text {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  margin-bottom: 10px;
+}
+
+.countdown-text strong {
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.progress-bar-bg {
+  width: 240px;
+  height: 6px;
+  background: var(--border);
+  /* border-radius: 99px のような大きすぎる値は、どんな高さでも確実に半円になります。
+     高さが変わっても書き直し不要なため、バーやピル型要素によく使われます。 */
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  /* linear-gradient(90deg, ...) → 90度（左から右）方向のグラデーション */
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 99px;
+  width: 100%;
+  /* transform-origin: left → transform の基点を左端に設定します。
+     scaleX() で縮小するとき、右端が縮まって「バーが左から減っていく」ように見せます。 */
+  transform-origin: left;
+  /* transition: transform 1s linear → 1秒かけて一定速度で変化。
+     linear はイーズなし（等速）です。カウントダウンバーに適した緩急です。 */
+  transition: transform 1s linear;
+}
+
+/* TOPへ戻るボタン */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: "Noto Sans JP", sans-serif;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.5s ease forwards;
+}
+
+.home-btn:hover {
+  background: var(--primary-lt);
+  transform: translateY(-2px);
+}
+
+.error-sub-en {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeUp 0.5s 0.6s ease forwards;
+}
+
+/* カウントダウン一時停止ボタン
+ * WCAG 2.2.1（タイミング調整可能）：自動で変化するコンテンツには
+ * ユーザーが一時停止・延長できる手段を提供することが求められています。
+ * background: none + border のみにすることでネイティブ <button> の
+ * スタイルをリセットしてテキストリンク風ボタンを作っています。 */
+.countdown-pause {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.countdown-pause:hover {
+  color: var(--text);
+  border-color: var(--text-sub);
+}
+
+/* アニメーション軽減設定への対応（WCAG 2.3.3 Animation from Interactions）
+ * OS設定で「視差効果を減らす」を有効にしているユーザー向けの対応です。
+ * 浮遊・揺れ・脈動アニメーションを完全に停止します。
+ * また fadeUp で opacity: 0 のまま止まると要素が見えなくなるため、
+ * opacity: 1 に固定して確実に表示させます。 */
+@media (prefers-reduced-motion: reduce) {
+  .lost-house,
+  .lost-home,
+  .question-badge {
+    animation: none;
+  }
+  .error-code,
+  .error-title,
+  .error-desc,
+  .countdown-wrap,
+  .home-btn,
+  .error-sub-en {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ==============================================
+   pledge.html — ページ固有スタイル
+   ============================================== */
+/* 将来のヒーロー追加時のために定義 */
+.pledge-hero {
+  text-align: center;
+  padding: 48px 24px 40px;
+  margin-bottom: 8px;
+}
+
+.pledge-hero .elephant {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+/* 将来のリード文追加時のために定義 */
+.pledge-lead {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: "Outfit", sans-serif;
+  letter-spacing: 0.04em;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+/* pledge-section：policy-section と同じカードUIパターン。
+ * pledge.html専用の定義です。 */
+.pledge-section {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+/* カード内の見出し。border-bottom でセパレーター線を引いています。
+ * display: flex + align-items: center + gap で絵文字とテキストを横並びにします。 */
+.pledge-section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pledge-section p {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.9;
+  margin-bottom: 12px;
+}
+
+/* 最後の <p> の下余白を打ち消してカード内の余白を均等にします。 */
+.pledge-section p:last-child {
+  margin-bottom: 0;
+}
+
+/* .highlight クラスが付いた段落は通常テキスト色（より濃い）で強調します。
+ * クラス名を見るだけで「この段落は目立たせる」という意図が伝わるよう命名しています。 */
+.pledge-section p.highlight {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* 左側の太いボーダーでセクションを視覚的に強調するバリアントクラス。
+ * .pledge-section に追加で付けて使います（例：class="pledge-section pledge-section-accent"）。
+ * border-left のみを上書きすることで他のスタイルは pledge-section を継承します。 */
+.pledge-section-accent {
+  border-left: 4px solid var(--accent);
+}
+
+/* 締めの言葉カード：背景が --primary（濃紺）でテキストが白の反転デザイン。
+ * 他のカードとは意図的に見た目を変えてページの締めくくりを演出しています。 */
+.pledge-final {
+  background: var(--primary);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.pledge-final p {
+  font-size: 15px;
+  line-height: 1.9;
+  /* opacity: 0.9 → わずかに透明にして、背景との馴染みをよくしています。 */
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+/* 最後の <p> だけ完全不透明・太字・大きめにして締めの言葉を際立たせます。
+ * :last-child で最後の要素だけ個別スタイルを当てる使い方です。 */
+.pledge-final p:last-child {
+  margin-bottom: 0;
+  opacity: 1;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* list-style: none → ブラウザデフォルトの「・（ブレット）」を非表示にします。
+ * padding / margin も 0 にリセットして独自のデザインを適用しやすくします。 */
+.pledge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pledge-list li {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.9;
+  margin-bottom: 8px;
+  font-family: "Outfit", sans-serif;
+}
+
+/* .pledge-list li.pledge-gap：li タグに pledge-gap クラスが付いた要素を選択。
+ * このように「タグ名.クラス名」と続けると「タグ と クラスの両方」に一致する要素のみ選択できます。
+ * 特定の項目の下だけ余白を広くしてグループを視覚的に区切るために使っています。 */
+.pledge-list li.pledge-gap {
+  margin-bottom: 16px;
+}
+
+/* ページ内のナビゲーション（戻るリンク）。
+ * display: inline-flex + align-items: center + gap でアイコンとテキストを横並びにします。
+ * inline-flex は flex の特性を持ちながら、ブロック（横幅いっぱい）ではなく
+ * インライン（コンテンツ幅）で表示します。
+ * 将来の導線追加時のために定義しています */
+.back-to-policy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+  font-family: "Outfit", sans-serif;
+}
+
+/* 最後まで読んで頂きありがとうございます。
+ * このコメントは自分自身で修正する目的もありますが、
+ * 名前も顔も知らないあなたの為に書いたコメントです。
+ * ささやかながらあなたのキャリアのお役に立てることを祈っています。 */
+.back-to-policy:hover { color: var(--text); }
+
+/* ==============================================
+   tokusho.html — ページ固有スタイル
+   特定商取引法に基づく表示ページ専用のスタイル
+   ============================================== */
+
+/* 定義リスト（事業者情報・商品情報の key: value 表示）
+   dl > div.tokusho-dl-row > dt + dd という構造で使う。
+   grid-template-columns でラベル幅を固定し、値を揃える。 */
+.tokusho-dl {
+  padding: 0;
+  margin: 0;
+}
+
+/* 1行分のラッパー
+   grid で dt（ラベル）と dd（値）を横並びにし、区切り線で段落を明確にする */
+.tokusho-dl-row {
+  display: grid;
+  grid-template-columns: 7em 1fr;
+  gap: 4px 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: baseline;
+}
+
+/* 最終行の区切り線は不要 */
+.tokusho-dl-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* ラベル（dt）：primary カラーで強調、太字で識別しやすく */
+.tokusho-dl dt {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  font-family: 'Noto Sans JP', sans-serif;
+  white-space: nowrap;
+}
+
+/* 値（dd）：サブテキスト色・読みやすい行間 */
+.tokusho-dl dd {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.85;
+  margin: 0;
+}
+
+/* dd 内の補足テキスト（small）：価格注記などに使用 */
+.tokusho-dl dd small {
+  font-size: 12px;
+  color: var(--muted);
+  display: block;
+  margin-top: 4px;
+}
+
+/* 電話番号の請求制注記
+   muted カラーで目立たせすぎず、かつ内容は読める状態に */
+.tokusho-notice {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.85;
+  display: block;
+}
+
+/* スマホ対応（480px以下）
+   横並びが窮屈になるため dt / dd を縦積みに切り替える */
+@media (max-width: 480px) {
+  .tokusho-dl-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 10px 0;
+  }
+
+  .tokusho-dl dt {
+    font-size: 12px;
+  }
+
+  .tokusho-dl dd {
+    font-size: 13px;
+  }
+}
+
+
+/* ==============================================
+   フッター legal リンク（index.html）
+   プライバシーポリシーと特定商取引法ページへのリンクを
+   フッター内に横並びで表示するスタイル。
+   ============================================== */
+
+/* リンクを横並びに配置するコンテナ */
+.footer-legal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+/* 各リンクのスタイル。footer-links a と同系統のトーンで統一 */
+.footer-legal a {
+  color: var(--footer-link);
+  font-size: 13px;
+  font-family: 'Noto Sans JP', sans-serif;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-legal a:hover {
+  color: var(--white);
+}
+
+/* | セパレーター */
+.footer-legal-sep {
+  color: var(--footer-muted);
+  font-size: 13px;
+}

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  ファイル名  : index.html
+  プロジェクト: ピンボール / Pinball | Flying Dev Lab
+  役割        : ゲーム全体の HTML 骨格（構造・レイアウト）を定義する。
+                CSS は style.css、ゲームロジックは game.js に分離されており、
+                この HTML はあくまで「画面の枠組み」を担う。
+  画面構成    :
+    1. screen-top    … タイトル画面（遊び方・得点表・ハイスコア表示）
+    2. screen-game   … ゲーム画面（Canvas + HUD）
+    3. screen-result … リザルト画面（スコア・ハイスコア・ボタン）
+  ============================================================
+-->
+<html lang="ja">
+<!--
+  lang="ja" を指定することで、スクリーンリーダーや検索エンジンに
+  「このページは日本語」であることを伝える。
+-->
+<head>
+  <meta charset="UTF-8" />
+  <!-- 文字コードを UTF-8 に設定。日本語や絵文字を正しく表示するために必須。 -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    モバイル対応のビューポート設定。
+    width=device-width  … 画面の物理幅に合わせてレイアウト幅を決定する。
+    initial-scale=1.0   … ページ読み込み時のズーム倍率を 1 倍（等倍）にする。
+    これがないとスマートフォンでページが縮小表示されてしまう。
+  -->
+
+  <title>ピンボール / Pinball | Flying Dev Lab</title>
+  <!-- ブラウザのタブやブックマークに表示されるページタイトル。 -->
+
+  <meta name="description" content="ブラウザで遊べるピンボールゲーム。3ボールでハイスコアを目指そう！/ Browser pinball game. Go for the high score with 3 balls!" />
+  <!--
+    検索エンジン（Google など）の検索結果に表示される説明文（メタディスクリプション）。
+    クリック率に影響するため、ゲームの魅力が伝わる文言にしている。
+  -->
+
+  <!-- ── OGP（Open Graph Protocol）メタタグ ─────────────────────
+       SNS（Twitter / Facebook / LINE など）でリンクを共有したときに
+       表示されるカード（タイトル・説明文・画像など）の情報を定義する。
+  ──────────────────────────────────────────────────────────── -->
+  <meta property="og:title" content="ピンボール / Pinball | Flying Dev Lab" />
+  <!-- SNS カードに表示されるタイトル。 -->
+
+  <meta property="og:description" content="ブラウザで遊べるピンボールゲーム / Browser pinball game" />
+  <!-- SNS カードに表示される説明文。 -->
+
+  <meta property="og:type" content="website" />
+  <!-- コンテンツの種類。一般的な Web ページなので "website" を指定。 -->
+
+  <meta property="og:url" content="https://FlyingDevLab.com" />
+  <!-- このページの正規 URL。シェア時のリンク先として使われる。 -->
+
+  <meta property="og:site_name" content="Flying Dev Lab" />
+  <!-- サイト名。SNS カードの補足情報として表示される場合がある。 -->
+
+  <!-- ── Twitter Card メタタグ ──────────────────────────────────
+       Twitter（現 X）専用のカード設定。OGP と一部重複するが、
+       Twitter は独自の meta タグを優先して読み取る。
+  ──────────────────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary" />
+  <!--
+    カードのレイアウト種別。
+    "summary"            … タイトル・説明・小さいサムネイルを表示する標準形式。
+    "summary_large_image" … 大きな画像を全面に出すリッチ形式（og:image が必要）。
+  -->
+
+  <meta name="twitter:title" content="ピンボール / Pinball | Flying Dev Lab" />
+  <!-- Twitter カードに表示されるタイトル。 -->
+
+  <meta name="twitter:description" content="3ボールでハイスコアを目指そう！/ Go for the high score with 3 balls!" />
+  <!-- Twitter カードに表示される説明文。 -->
+
+  <!-- ── Google Fonts ──────────────────────────────────────────
+       2 種類のフォントを CDN から読み込む。
+         Orbitron    … SF・デジタル風の英字フォント。スコアや HUD に使用。
+         Noto Sans JP … 日本語対応の読みやすいゴシック体フォント。
+       preconnect で DNS・TLS ハンドシェイクを先行させ、
+       フォント読み込みを高速化している。
+  ──────────────────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <!-- Google Fonts サーバーへの事前接続。フォント取得を高速化する。 -->
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!--
+    フォントファイル本体を配信する静的サーバーへの事前接続。
+    crossorigin 属性は CORS（クロスオリジン）リクエストに対応するために必要。
+  -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet" />
+  <!--
+    フォントの CSS を読み込む本体リクエスト。
+    wght@400;700;900 … 通常・太字・極太の 3 ウェイトを取得。
+    display=swap     … フォント読み込み完了までシステムフォントで代替表示し、
+                        読み込み後に切り替える（FOUT 方式）。
+                        これによりテキストが「見えない空白」になる時間を防ぐ。
+  -->
+
+  <link rel="stylesheet" href="style.css" />
+  <!-- 外部 CSS ファイルを読み込む。レイアウト・色・アニメーションを定義。 -->
+</head>
+
+<body>
+<!--
+  ページ全体の可視コンテンツはここに記述する。
+  body 直下の構造: <header> → <main> → <footer> の 3 分割。
+  これはセマンティック HTML の基本構成であり、
+  スクリーンリーダーや検索エンジンがページ構造を把握しやすくなる。
+-->
+
+  <!-- ══════════════════════════════════════════════════════════
+       ヘッダー領域
+       ページ最上部に固定表示されるタイトルバー。
+       role="banner" は WAI-ARIA 属性で、補助技術に「サイト全体の
+       ヘッダー」であることを伝えるランドマークロール。
+  ══════════════════════════════════════════════════════════ -->
+  <header role="banner">
+    <div class="header-inner">
+    <!--
+      header-inner はフレックスコンテナ（CSS で定義）。
+      アイコン → タイトル → アイコン の 3 要素を横並びにする。
+    -->
+
+      <span class="header-icon" aria-hidden="true">🎯</span>
+      <!--
+        装飾用の絵文字アイコン。
+        aria-hidden="true" を付けることで、スクリーンリーダーが
+        「ダーツの的」と読み上げることを防ぎ、
+        視覚的装飾であることを明示する。
+      -->
+
+      <h1>
+      <!--
+        h1 はページ内で最も重要な見出し。
+        SEO・アクセシビリティの観点から 1 ページに 1 つが推奨。
+      -->
+        <span class="ja">ピンボール</span>
+        <!-- 日本語タイトル。CSS の .ja クラスでフォントや表示を制御。 -->
+
+        <span class="sep" aria-hidden="true">/</span>
+        <!--
+          日英テキストを視覚的に区切るセパレーター。
+          aria-hidden="true" でスクリーンリーダーに読まれないようにする
+          （「スラッシュ」と読まれると不自然なため）。
+        -->
+
+        <span class="en">Pinball</span>
+        <!-- 英語タイトル。CSS の .en クラスで Orbitron フォントを適用。 -->
+      </h1>
+
+      <span class="header-icon" aria-hidden="true">🎯</span>
+      <!-- 左右対称にするための装飾アイコン（右側）。 -->
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       メインコンテンツ領域
+       ゲームの 3 つの画面（タイトル・ゲーム・リザルト）をここに格納する。
+       role="main" … アクセシビリティ用のランドマークロール。
+       id="main-content" … スキップリンクなどのリンク先として使用可能。
+       画面の切り替えは game.js が CSS クラスを操作することで実現する。
+       アクティブな画面には "active" クラスが付き、他は非表示になる。
+  ══════════════════════════════════════════════════════════ -->
+  <main role="main" id="main-content">
+
+    <!-- ────────────────────────────────────────────────────────
+         【画面 1】タイトル画面（screen-top）
+         ゲーム開始前に表示されるスタート画面。
+         以下の 4 要素で構成される:
+           ① 遊び方の説明（intro-box）
+           ② 得点表（score-table-box）
+           ③ ハイスコア表示（highscore-box）
+           ④ スタートボタン
+         class="active" が付いているため、初期状態でこの画面が表示される。
+    ──────────────────────────────────────────────────────── -->
+    <section id="screen-top" class="screen active" aria-label="タイトル画面 / Title Screen">
+    <!--
+      <section> はテーマでまとまった独立したコンテンツの区画を表す。
+      aria-label で画面の名称を付けることで、スクリーンリーダーが
+      「タイトル画面」と認識できるようになる。
+    -->
+      <div class="screen-inner">
+      <!-- 内側の余白・最大幅制御などレイアウト用のラッパー要素。 -->
+
+        <!-- ① 遊び方ボックス ──────────────────────────────── -->
+        <div class="intro-box">
+          <h2 class="section-title">
+          <!-- h2 はページ内の第 2 レベル見出し。各セクションのタイトルに使用。 -->
+            <span class="ja">遊び方</span>
+            <span class="sep">/</span>
+            <span class="en">How to Play</span>
+          </h2>
+
+          <ul class="intro-list">
+          <!--
+            <ul> は順序なしリスト。操作方法の箇条書きに最適。
+            リストアイテム 1 つが 1 つの操作説明に対応する。
+          -->
+            <li>
+            <!-- 左フリッパーの操作説明（モバイルタップ）。 -->
+              <span class="emoji" aria-hidden="true">👈</span>
+              <span class="ja">画面左タップ → 左フリッパー</span>
+              <span class="sep">/</span>
+              <span class="en">Tap left → Left flipper</span>
+            </li>
+            <li>
+            <!-- 右フリッパーの操作説明（モバイルタップ）。 -->
+              <span class="emoji" aria-hidden="true">👉</span>
+              <span class="ja">画面右タップ → 右フリッパー</span>
+              <span class="sep">/</span>
+              <span class="en">Tap right → Right flipper</span>
+            </li>
+            <li>
+            <!--
+              PC キーボード操作の説明。
+              <kbd> タグはキーボードキーを表すセマンティック要素。
+              スクリーンリーダーや CSS で視覚的に区別できる。
+            -->
+              <span class="emoji" aria-hidden="true">⌨️</span>
+              <span class="ja">PC: <kbd>Z</kbd>・<kbd>←</kbd> で左、<kbd>M</kbd>・<kbd>→</kbd> で右</span>
+              <span class="sep">/</span>
+              <span class="en">PC: <kbd>Z</kbd>/<kbd>←</kbd> Left &nbsp; <kbd>M</kbd>/<kbd>→</kbd> Right</span>
+              <!--
+                &nbsp; は「ノーブレークスペース（改行されない空白）」。
+                ここでは Left と Right の間に視覚的な間隔を作るために使用。
+              -->
+            </li>
+            <li>
+            <!-- ゲームのメインルール（3ボール制）の説明。 -->
+              <span class="emoji" aria-hidden="true">🎱</span>
+              <span class="ja">3ボールでハイスコアを目指そう！</span>
+              <span class="sep">/</span>
+              <span class="en">Beat the high score with 3 balls!</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- ② 得点表ボックス ──────────────────────────────── -->
+        <div class="score-table-box">
+          <h2 class="section-title">
+            <span class="ja">得点表</span>
+            <span class="sep">/</span>
+            <span class="en">Scoring</span>
+          </h2>
+
+          <ul class="score-table">
+          <!--
+            各オブジェクトとその得点をリスト形式で表示する。
+            アイコン・名前・ポイントの 3 要素をフレックスで横並びにする（CSS 側で制御）。
+          -->
+            <li>
+            <!-- バンパー: ボールが当たると弾き返す円形障害物。100pt。 -->
+              <span class="st-icon" aria-hidden="true">🟡</span>
+              <span class="st-name"><span class="ja">バンパー</span><span class="sep">/</span><span class="en">Bumper</span></span>
+              <span class="st-pts">100 pt</span>
+            </li>
+            <li>
+            <!-- スリングショット: フリッパー上部の三角形の障害物。ボールを加速させる。500pt。 -->
+              <span class="st-icon" aria-hidden="true">🟠</span>
+              <span class="st-name"><span class="ja">スリングショット</span><span class="sep">/</span><span class="en">Slingshot</span></span>
+              <span class="st-pts">500 pt</span>
+            </li>
+            <li>
+            <!-- サイドターゲット: 盤面左右に配置された固定ターゲット。1000pt。 -->
+              <span class="st-icon" aria-hidden="true">🔵</span>
+              <span class="st-name"><span class="ja">サイドターゲット</span><span class="sep">/</span><span class="en">Side Target</span></span>
+              <span class="st-pts">1000 pt</span>
+            </li>
+            <li>
+            <!-- センターターゲット: 高得点の中央ターゲット。2500pt。 -->
+              <span class="st-icon" aria-hidden="true">🔵</span>
+              <span class="st-name"><span class="ja">センターターゲット</span><span class="sep">/</span><span class="en">Center Target</span></span>
+              <span class="st-pts">2500 pt</span>
+            </li>
+            <!-- トップターゲット: 最も高得点のターゲット。10000pt。 -->
+            <li>
+              <span class="st-icon" aria-hidden="true">🔵</span>
+              <span class="st-name"><span class="ja">トップターゲット</span><span class="sep">/</span><span class="en">Top Target</span></span>
+              <span class="st-pts">Multi Balls +10000 pt</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- ③ ハイスコア表示ボックス ────────────────────────
+             game.js がページ読み込み時に localStorage からハイスコアを
+             取得し、id="top-highscore" の要素に数値を書き込む。
+             初期値は 0 で、プレイするたびに更新される。
+        ──────────────────────────────────────────────────── -->
+        <div class="highscore-box">
+          <p class="highscore-label">
+            <span class="ja">ハイスコア</span>
+            <span class="sep">/</span>
+            <span class="en">High Score</span>
+          </p>
+          <p class="highscore-value" id="top-highscore">0</p>
+          <!--
+            id="top-highscore"
+            game.js の初期化処理が localStorage["pinball-highscore"] を読み取り、
+            この要素の textContent を書き換えることでスコアを表示する。
+          -->
+        </div>
+
+        <!-- ④ スタートボタン ─────────────────────────────────
+             クリック（タップ）で game.js の startGame() 関数を呼び出す。
+             startGame() は以下の処理を行う:
+               1. game.js 内の状態（スコア・ボール数など）を初期化する
+               2. screen-top を非表示、screen-game をアクティブにする
+               3. Canvas へのゲームループ描画を開始する
+        ──────────────────────────────────────────────────── -->
+        <button class="btn btn-primary" onclick="startGame()">
+          <span class="ja">ゲームスタート</span>
+          <span class="sep">/</span>
+          <span class="en">Start Game</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────
+         【画面 2】ゲーム画面（screen-game）
+         実際にピンボールをプレイする画面。
+         以下の 3 要素で構成される:
+           ① game-hud … スコア・終了ボタン・残りボール数を表示する HUD
+           ② game-canvas … ゲームを描画する HTML5 Canvas 要素
+           ③ touch-hint … モバイル向けの操作ヒント（左右タップ）
+         初期状態では aria-hidden="true" で非表示。
+         startGame() 呼び出し時に "active" クラスが付いて表示される。
+    ──────────────────────────────────────────────────────── -->
+    <section id="screen-game" class="screen" aria-label="ゲーム画面 / Game Screen" aria-hidden="true">
+    <!--
+      aria-hidden="true" … スクリーンリーダーに非表示であることを伝える。
+      game.js が画面切り替え時にこの属性を動的に変更する。
+    -->
+      <div class="game-wrapper">
+      <!-- Canvas とその周辺要素をまとめるラッパー。position: relative で内部の絶対配置の基準になる。 -->
+
+        <!-- ① スコア・残機数オーバーレイ ──────────────────────
+             Canvas の真上に絶対配置で重ねる透過オーバーレイ。
+             上部中央にスコア、その真下に残機数を大きく表示する。
+             game.js が id 要素の textContent を随時書き換えて更新する。
+        ──────────────────────────────────────────────────── -->
+        <div class="game-overlay" aria-hidden="true">
+
+          <!-- スコア表示: 画面上部・中央。最も目立つ大きさで表示。 -->
+          <div class="overlay-score-wrap">
+            <span class="overlay-score" id="score-display">0</span>
+            <!--
+              id="score-display"
+              ボールがオブジェクトに当たるたびに game.js が
+              この要素の textContent を加算・更新する。
+            -->
+          </div>
+
+          <!-- 残機数表示: スコアの真下・中央。 -->
+          <div class="overlay-balls-wrap">
+            <span class="overlay-balls" id="balls-display">●●●●●</span>
+            <!--
+              id="balls-display"
+              初期値は ●●●●●（3 個）。
+              ボールが落下するたびに game.js がひとつずつ ● を減らして表示する。
+              全て消えるとゲーム終了（showResult() が呼ばれる）。
+            -->
+          </div>
+
+          <!-- 終了ボタン: 右上隅に小さく配置。HUD 廃止後もタイトルへ戻る手段を確保する。 -->
+          <button class="btn-quit overlay-quit" onclick="goToTop()" title="タイトルへ / Go to Title">✕</button>
+          <!--
+            goToTop() は game.js で定義された関数。
+            ゲームループを停止し、screen-game → screen-top へ画面を切り替える。
+          -->
+
+        </div>
+
+        <!-- ② Canvas 要素 ──────────────────────────────────
+             ゲームの全グラフィック（ボール・フリッパー・バンパー等）を
+             JavaScript の 2D Context API で動的に描画するキャンバス。
+             サイズ: 390 × 700 px（縦長のスマートフォン画面を想定）。
+             実際の描画は game.js の requestAnimationFrame ループで行われる。
+        ──────────────────────────────────────────────────── -->
+        <canvas id="game-canvas" width="390" height="700"
+          aria-label="ピンボールゲーム / Pinball Game"></canvas>
+        <!--
+          id="game-canvas"
+          game.js で document.getElementById("game-canvas") により取得され、
+          getContext("2d") で 2D 描画コンテキストを得る。
+
+          width / height 属性は Canvas の「内部解像度」を指定する。
+          CSS での表示サイズとは独立しており、混同しないよう注意。
+
+          aria-label … Canvas は画像扱いのためスクリーンリーダー向けに
+                       内容を説明するテキストを付与する。
+        -->
+
+        <!-- ③ タッチ操作ヒント ──────────────────────────────
+             モバイルユーザー向けに画面下部に表示される操作ガイド。
+             aria-hidden="true" … 視覚的補助であるためスクリーンリーダーには不要。
+        ──────────────────────────────────────────────────── -->
+        <div class="touch-hint" aria-hidden="true">
+          <span class="hint-left">◀ <span class="ja">左</span> <span class="en">LEFT</span></span>
+          <!-- 左フリッパーのタップ位置を示す矢印と文字。 -->
+          <span class="hint-right"><span class="ja">右</span> <span class="en">RIGHT</span> ▶</span>
+          <!-- 右フリッパーのタップ位置を示す文字と矢印。 -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────
+         【画面 3】リザルト画面（screen-result）
+         ボール全てを使い切ったあとに表示される結果画面。
+         以下の要素で構成される:
+           ① 「ゲーム終了！」見出し
+           ② 新記録バナー（新記録時のみ表示）
+           ③ プレイヤーのスコア表示
+           ④ ハイスコア表示
+           ⑤ 「もう一度」「タイトルへ」ボタン
+         game.js の showResult() 関数がスコアを書き込んだあとで
+         この画面をアクティブにする。
+    ──────────────────────────────────────────────────────── -->
+    <section id="screen-result" class="screen" aria-label="リザルト画面 / Result Screen" aria-hidden="true">
+      <div class="screen-inner">
+
+        <!-- ① ゲーム終了見出し ──────────────────────────── -->
+        <h2 class="section-title result-title">
+          <span class="ja">ゲーム終了！</span>
+          <span class="sep">/</span>
+          <span class="en">Game Over!</span>
+        </h2>
+
+        <!-- ② 新記録バナー ─────────────────────────────────
+             今回のスコアが過去最高を上回った場合のみ表示される。
+             hidden 属性で初期非表示。新記録時に game.js が
+             removeAttribute("hidden") を呼んで表示する。
+             aria-live="polite" … スクリーンリーダーが動的な変化を
+             ユーザーに通知するための ARIA 属性（割り込まない形で読み上げる）。
+        ──────────────────────────────────────────────────── -->
+        <div id="new-record-area" class="new-record" hidden aria-live="polite">
+          <span aria-hidden="true">🎉</span>
+          <span class="ja">新記録達成！</span>
+          <span class="sep">/</span>
+          <span class="en">New High Score!</span>
+          <span aria-hidden="true">🎉</span>
+        </div>
+
+        <!-- ③ 今回のスコア表示ボックス ─────────────────────
+             game.js の showResult() が id="result-score" に
+             ゲーム終了時の合計スコアを書き込む。
+        ──────────────────────────────────────────────────── -->
+        <div class="result-score-box">
+          <p class="result-label">
+            <span class="ja">あなたのスコア</span>
+            <span class="sep">/</span>
+            <span class="en">Your Score</span>
+          </p>
+          <p class="result-value" id="result-score">0</p>
+          <!-- id="result-score": game.js が今回プレイのスコアを書き込む。 -->
+        </div>
+
+        <!-- ④ ハイスコア表示ボックス ─────────────────────────
+             game.js が localStorage に保存されているハイスコアと
+             今回のスコアを比較し、高い方を id="result-highscore" に書き込む。
+             今回が新記録なら localStorage も同時に更新される。
+        ──────────────────────────────────────────────────── -->
+        <div class="result-hs-box">
+          <p class="result-hs-label">
+            <span class="ja">ハイスコア</span>
+            <span class="sep">/</span>
+            <span class="en">High Score</span>
+          </p>
+          <p class="result-hs-value" id="result-highscore">0</p>
+          <!-- id="result-highscore": 保存済み（または更新後の）ハイスコアを表示。 -->
+        </div>
+
+        <!-- ⑤ アクションボタン群 ─────────────────────────────
+             「もう一度」… startGame() を呼び出してゲームを即再スタート。
+             「タイトルへ」… goToTop() を呼び出してタイトル画面に戻る。
+        ──────────────────────────────────────────────────── -->
+        <div class="result-buttons">
+          <button class="btn btn-primary" onclick="startGame()">
+            <span class="ja">もう一度</span>
+            <span class="sep">/</span>
+            <span class="en">Play Again</span>
+          </button>
+          <button class="btn btn-secondary" onclick="goToTop()">
+            <span class="ja">タイトルへ</span>
+            <span class="sep">/</span>
+            <span class="en">Back to Top</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════
+       フッター領域
+       ページ最下部に表示されるコピーライト表記。
+       role="contentinfo" … WAI-ARIA ランドマークロール。
+                             ページのメタ情報（著作権・連絡先等）を
+                             含む領域であることを補助技術に伝える。
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      &copy;
+      <!--
+        &copy; は著作権記号「©」の HTML エンティティ。
+        直接 © と書いても同じだが、エンティティ表記の方が
+        文字化けのリスクが低く、可読性も高い。
+      -->
+      <time datetime="2026">2026</time>
+      <!--
+        <time> タグは日付・時刻を機械可読な形で表すセマンティック要素。
+        datetime 属性に ISO 8601 形式の値を指定することで、
+        検索エンジンや補助技術が年号を正確に解釈できる。
+      -->
+      <a href="https://FlyingDevLab.com" target="_blank" rel="noopener noreferrer" class="footer-link">Flying Dev Lab</a>.
+      <!--
+        target="_blank" … リンクを新しいタブ（ウィンドウ）で開く。
+        rel="noopener"  … 新しいタブが window.opener 経由で元ページを
+                          操作できないようにするセキュリティ対策。
+        rel="noreferrer"… リファラー情報（どこから来たか）を送らない
+                          プライバシー保護の設定。noopener の効果も含む。
+      -->
+      All rights reserved.
+    </p>
+  </footer>
+
+  <script src="game.js"></script>
+  <!--
+    外部 JavaScript ファイルを読み込む。
+    </body> の直前に配置することで、HTML の解析が完了してから
+    スクリプトが実行されるようにしている（DOM が確実に存在する状態）。
+    game.js には以下の主要機能が実装されている:
+      ・startGame()   … ゲーム初期化・ループ開始
+      ・goToTop()     … タイトル画面への遷移・ループ停止
+      ・showResult()  … リザルト画面へのスコア書き込み・遷移
+      ・フリッパー制御（キーボード・タッチイベント）
+      ・物理演算（ボール・衝突判定・得点計算）
+      ・localStorage によるハイスコア永続化
+  -->
+</body>
+</html>

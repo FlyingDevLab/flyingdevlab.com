@@ -1,0 +1,870 @@
+/* ========================================
+   CSS カスタムプロパティ（デザイントークン）
+   Design Tokens / Color palette & spacing
+======================================== */
+:root {
+  /* カラーパレット / Color Palette */
+  --color-bg:          #1a0a2e;       /* 深い紫の背景 */
+  --color-bg-card:     #2d1b4e;       /* カード背景 */
+  --color-bg-card2:    #3a2060;       /* カード背景（濃） */
+  --color-primary:     #ff6b35;       /* オレンジ（メインアクション） */
+  --color-primary-h:   #ff8c5a;       /* ホバー時のオレンジ */
+  --color-secondary:   #7c3aed;       /* 紫（セカンダリ） */
+  --color-secondary-h: #9d5af0;       /* ホバー時の紫 */
+  --color-accent:      #ffd700;       /* ゴールド（スコア・ハイスコア） */
+  --color-accent2:     #00e5ff;       /* シアン（装飾） */
+  --color-danger:      #ff2d55;       /* 赤（残り時間警告） */
+  --color-text:        #f0e6ff;       /* テキスト（薄紫白） */
+  --color-text-muted:  #b39ddb;       /* サブテキスト */
+  --color-hole:        #0d0520;       /* モグラ穴の暗い色 */
+  --color-dirt:        #8B5E3C;       /* 土の色 */
+  --color-dirt-d:      #6B4226;       /* 土（影） */
+  --color-mole-body:   #8B6347;       /* モグラボディ */
+  --color-mole-face:   #C49A6C;       /* モグラ顔 */
+  --color-mole-nose:   #e57373;       /* モグラ鼻 */
+
+  /* タイポグラフィ / Typography */
+  --font-display:      'Boogaloo', 'Noto Sans JP', sans-serif;
+  --font-body:         'Noto Sans JP', sans-serif;
+
+  /* スペーシング / Spacing */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+
+  /* ボーダー / Borders */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 40px;
+
+  /* シャドウ / Shadows */
+  --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 20px rgba(255,107,53,0.5);
+  --shadow-gold: 0 0 16px rgba(255,215,0,0.6);
+}
+
+/* ========================================
+   リセット・ベーススタイル
+   CSS Reset & Base Styles
+======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  /* ドットパターン背景 / Dot pattern background */
+  background-image:
+    radial-gradient(circle, rgba(124,58,237,0.15) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* ========================================
+   ヘッダー / Header Styles
+   全画面で固定表示されるゲームタイトルバー
+======================================== */
+header {
+  background: linear-gradient(135deg, #2d1b4e 0%, #1a0a2e 100%);
+  border-bottom: 3px solid var(--color-primary);
+  box-shadow: 0 4px 24px rgba(255,107,53,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+/* ヘッダーのモグラ装飾 / Header mole decoration */
+.header-mole {
+  font-size: 1.8rem;
+  animation: wiggle 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+.header-mole:last-child {
+  animation-delay: 0.5s;
+  transform: scaleX(-1);
+}
+
+/* ゲームタイトル h1 / Game title h1 */
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  line-height: 1.2;
+}
+
+.title-ja {
+  color: var(--color-accent);
+  text-shadow: 0 0 12px rgba(255,215,0,0.5);
+}
+
+.title-en {
+  color: var(--color-accent2);
+  text-shadow: 0 0 12px rgba(0,229,255,0.4);
+}
+
+.title-sep {
+  color: var(--color-text-muted);
+  font-weight: 300;
+}
+
+/* ========================================
+   メインコンテンツ / Main Content
+   画面切り替えのコンテナ
+======================================== */
+main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   画面（スクリーン）共通スタイル
+   Common styles for all screens
+======================================== */
+.screen {
+  display: none;
+  flex: 1;
+  animation: fadeIn 0.35s ease;
+}
+
+/* アクティブな画面だけ表示 / Only active screen shown */
+.screen.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.screen-inner {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* ========================================
+   セクション見出し / Section Headings (h2)
+======================================== */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+  color: var(--color-accent2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+/* ========================================
+   日英テキスト共通スタイル / Bilingual text
+======================================== */
+.sep {
+  color: var(--color-text-muted);
+  font-weight: 300;
+  margin: 0 2px;
+}
+.ja { font-family: var(--font-body); }
+.en { font-family: var(--font-display); letter-spacing: 0.02em; }
+
+/* ========================================
+   トップ画面スタイル / Top Screen Styles
+======================================== */
+
+/* ゲーム説明ボックス / Intro box */
+.intro-box {
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  width: 100%;
+  box-shadow: var(--shadow-card);
+}
+
+/* 遊び方リスト / How-to-play list */
+.intro-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.intro-list li {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.intro-list .emoji {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+/* ハイスコアボックス（トップ） / High score box on top screen */
+.highscore-box {
+  background: linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-bg-card2) 100%);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-xl);
+  text-align: center;
+  box-shadow: var(--shadow-gold);
+  width: 100%;
+  max-width: 320px;
+}
+
+.highscore-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.highscore-value {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--color-accent);
+  text-shadow: var(--shadow-gold);
+  line-height: 1;
+}
+
+/* Flying Dev Lab リンク / Site link */
+.site-link {
+  margin-top: var(--space-sm);
+}
+
+.site-link a {
+  color: var(--color-accent2);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.site-link a:hover,
+.site-link a:focus {
+  color: #fff;
+  text-shadow: 0 0 12px var(--color-accent2);
+  outline: 2px solid var(--color-accent2);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ========================================
+   ボタンスタイル / Button Styles
+======================================== */
+.btn {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-xl);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  min-width: 220px;
+  justify-content: center;
+  /* タップしやすいサイズ確保 / Sufficient tap target */
+  min-height: 56px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* プライマリボタン（オレンジ） / Primary button */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), #e05525);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(255,107,53,0.5);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: linear-gradient(135deg, var(--color-primary-h), var(--color-primary));
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 28px rgba(255,107,53,0.7);
+  outline: 2px solid var(--color-primary-h);
+  outline-offset: 3px;
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px rgba(255,107,53,0.4);
+}
+
+/* セカンダリボタン（紫） / Secondary button */
+.btn-secondary {
+  background: linear-gradient(135deg, var(--color-secondary), #5b21b6);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(124,58,237,0.5);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background: linear-gradient(135deg, var(--color-secondary-h), var(--color-secondary));
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 28px rgba(124,58,237,0.7);
+  outline: 2px solid var(--color-secondary-h);
+  outline-offset: 3px;
+}
+
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ========================================
+   ゲーム画面スタイル / Game Screen Styles
+======================================== */
+
+/* ステータスバー / Status bar */
+.status-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--shadow-card);
+  gap: var(--space-md);
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.status-label {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.status-value {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: var(--color-accent);
+  text-shadow: var(--shadow-gold);
+  line-height: 1;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* 残り時間警告スタイル / Time warning style (10 seconds or less) */
+.status-value.warning {
+  color: var(--color-danger);
+  text-shadow: 0 0 16px rgba(255,45,85,0.8);
+  animation: pulse-danger 0.5s ease-in-out infinite alternate;
+}
+
+/* ========================================
+   モグラ穴グリッド / Mole Grid (3x3)
+======================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 3vw, 20px);
+  width: 100%;
+  max-width: 480px;
+  padding: var(--space-sm);
+  /* グリッド全体の背景：芝生っぽい緑 / Grass-like green background */
+  background: linear-gradient(180deg, #1a3a1a 0%, #0f2a0f 100%);
+  border-radius: var(--radius-lg);
+  border: 3px solid #2d5a2d;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* ========================================
+   穴コンテナ / Hole Container
+   穴全体のレイアウト基準
+======================================== */
+.hole {
+  aspect-ratio: 1 / 1;
+  position: relative;
+  cursor: default;
+  min-width: 80px;
+  min-height: 80px;
+  /* 穴ごとの芝生テクスチャ / Per-hole grass */
+  background: radial-gradient(ellipse at 50% 80%, #1e4a1e 30%, #152a15 100%);
+  border-radius: 12px;
+  padding-bottom: 10%;
+}
+
+/* 穴の楕円（暗い奥行き） / Dark ellipse – depth of hole */
+.hole::before {
+  content: '';
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 38%;
+  background: radial-gradient(ellipse at 50% 40%,
+    #050208 0%,
+    #0d0520 55%,
+    #1a0a2e 100%);
+  border-radius: 50%;
+  border: 3px solid var(--color-dirt-d);
+  box-shadow:
+    inset 0 6px 16px rgba(0,0,0,0.9),
+    0 2px 6px rgba(0,0,0,0.5);
+  z-index: 0;
+}
+
+/* 土の盛り上がり（穴の手前） / Dirt mound in front of hole */
+.hole::after {
+  content: '';
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  height: 22%;
+  background: linear-gradient(180deg,
+    #a0693f 0%,
+    var(--color-dirt) 30%,
+    var(--color-dirt-d) 100%);
+  border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+  z-index: 4;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+}
+
+/* ========================================
+   クリッピングコンテナ / Hole Clip Container
+   overflow:hidden でモグラを穴の中に完全に隠す
+   Hides mole below hole using overflow:hidden
+======================================== */
+.hole-clip {
+  position: absolute;
+  /* 穴の楕円の上端に合わせて配置 / Align top with hole opening */
+  bottom: 18%;
+  left: 10%;
+  width: 80%;
+  /* モグラが出てくる高さ分を確保 / Enough height for mole to emerge */
+  height: 70%;
+  overflow: hidden;
+  z-index: 2;
+  /* デバッグ時は border を追加可能 / Add border for debug if needed */
+}
+
+/* ========================================
+   モグラ要素 / Mole Element
+   クリップ内でスライドアップ
+   Slides up within the clip container
+======================================== */
+.mole {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  /* 初期状態：完全に穴の下に隠れている / Initial: fully hidden below */
+  transform: translateX(-50%) translateY(110%);
+  width: 80%;
+  aspect-ratio: 1 / 1.1;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.45, 0.64, 1);
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  z-index: 1;
+}
+
+/* モグラが出てきたとき：穴から飛び出す / Mole pops up out of hole */
+.mole.visible {
+  transform: translateX(-50%) translateY(5%);
+}
+
+/* モグラが叩かれたとき：くるっと消える / Mole spins away when whacked */
+.mole.hit {
+  transform: translateX(-50%) translateY(-20%) rotate(20deg) scale(0.5);
+  opacity: 0;
+  transition: transform 0.2s ease-in, opacity 0.2s ease-in;
+}
+
+/* ========================================
+   モグラの見た目（CSS描画）
+   Mole Appearance – drawn with CSS
+======================================== */
+
+/* モグラ本体ラッパー / Body wrapper */
+.mole-body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+
+/* モグラの頭部（丸みのある形） / Rounded mole head */
+.mole-head {
+  width: 86%;
+  height: 68%;
+  background: radial-gradient(circle at 38% 32%,
+    #d4a574 0%,
+    var(--color-mole-face) 30%,
+    var(--color-mole-body) 65%,
+    #5a3a22 100%);
+  border-radius: 50% 50% 42% 42%;
+  position: absolute;
+  top: 3%;
+  left: 7%;
+  box-shadow:
+    inset -4px -5px 10px rgba(0,0,0,0.35),
+    inset 2px 2px 6px rgba(255,255,255,0.08);
+}
+
+/* モグラの目（左） / Left eye */
+.mole-head::before {
+  content: '';
+  position: absolute;
+  width: 17%;
+  height: 20%;
+  background: radial-gradient(circle at 35% 35%, #555 0%, #111 100%);
+  border-radius: 50%;
+  top: 28%;
+  left: 20%;
+  box-shadow: 1px 1px 0 rgba(255,255,255,0.6);
+}
+
+/* モグラの目（右） / Right eye */
+.mole-head::after {
+  content: '';
+  position: absolute;
+  width: 17%;
+  height: 20%;
+  background: radial-gradient(circle at 35% 35%, #555 0%, #111 100%);
+  border-radius: 50%;
+  top: 28%;
+  right: 20%;
+  box-shadow: 1px 1px 0 rgba(255,255,255,0.6);
+}
+
+/* モグラの鼻 / Mole nose */
+.mole-nose {
+  position: absolute;
+  width: 24%;
+  height: 17%;
+  background: radial-gradient(circle at 40% 40%, #ff9999 0%, var(--color-mole-nose) 100%);
+  border-radius: 50%;
+  top: 52%;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+/* モグラのボディ下部（胴体） / Lower body / torso */
+.mole-torso {
+  width: 68%;
+  height: 40%;
+  background: linear-gradient(180deg,
+    var(--color-mole-body) 0%,
+    #6b3e22 50%,
+    var(--color-dirt-d) 100%);
+  border-radius: 45% 45% 30% 30%;
+  position: absolute;
+  bottom: 0;
+  left: 16%;
+  box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3);
+}
+
+/* モグラ叩き時のスター演出 / Star burst on whack */
+.mole-star {
+  position: absolute;
+  font-size: 1.4rem;
+  pointer-events: none;
+  top: -5%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  z-index: 10;
+}
+
+.mole.hit .mole-star {
+  animation: star-burst 0.4s ease-out forwards;
+}
+
+/* ========================================
+   スコアポップアップ / Score Popup (+1 Point)
+======================================== */
+#popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.score-popup {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-accent);
+  text-shadow: 0 0 8px rgba(255,215,0,0.8), 1px 1px 0 #000;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: popup-float 0.9s ease-out forwards;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ========================================
+   リザルト画面スタイル / Result Screen Styles
+======================================== */
+
+/* ゲーム終了タイトル / Game over title */
+.result-title {
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  color: var(--color-primary);
+  text-shadow: var(--shadow-glow);
+  justify-content: center;
+}
+
+/* 新記録エリア / New record area */
+.new-record {
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: #1a0a2e;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: var(--shadow-gold);
+  animation: new-record-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* 今回のスコアボックス / Your score box */
+.result-score-box {
+  background: linear-gradient(135deg, var(--color-bg-card2), var(--color-bg-card));
+  border: 3px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-xl);
+  text-align: center;
+  box-shadow: var(--shadow-glow);
+  width: 100%;
+  max-width: 320px;
+}
+
+.result-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.result-value {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--color-primary);
+  text-shadow: var(--shadow-glow);
+  line-height: 1;
+  animation: count-up-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ハイスコアボックス（リザルト） / High score box on result screen */
+.result-highscore-box {
+  text-align: center;
+}
+
+.result-hs-label {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.result-hs-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--color-accent);
+  text-shadow: var(--shadow-gold);
+}
+
+/* ボタン群 / Button group */
+.result-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+/* ========================================
+   フッター / Footer Styles
+======================================== */
+footer {
+  background: #0d0520;
+  border-top: 2px solid var(--color-secondary);
+  padding: var(--space-md) var(--space-lg);
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.footer-copy a {
+  color: var(--color-accent2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-copy a:hover,
+.footer-copy a:focus {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* ========================================
+   アニメーション定義 / Animation Keyframes
+======================================== */
+
+/* フェードイン（画面切り替え時） / Fade in on screen switch */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ヘッダーモグラの揺れ / Header mole wiggle */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-8deg); }
+  50%       { transform: rotate(8deg); }
+}
+
+/* スコアポップアップの浮上 / Score popup floating up */
+@keyframes popup-float {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-70px) scale(1.2); }
+}
+
+/* 残り時間警告の点滅 / Time warning pulse */
+@keyframes pulse-danger {
+  from { transform: scale(1); }
+  to   { transform: scale(1.08); }
+}
+
+/* 新記録ポップアニメーション / New record pop animation */
+@keyframes new-record-pop {
+  0%   { opacity: 0; transform: scale(0.5) rotate(-5deg); }
+  70%  { transform: scale(1.08) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* スコアのバウンス表示 / Score display bounce */
+@keyframes count-up-bounce {
+  0%   { transform: scale(0.7); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* スター演出 / Star burst */
+@keyframes star-burst {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(1.5); }
+}
+
+/* ========================================
+   レスポンシブ対応 / Responsive Design
+   PC幅での調整
+======================================== */
+@media (min-width: 520px) {
+  /* グリッドを少し大きく / Slightly larger grid on desktop */
+  .grid {
+    gap: 20px;
+  }
+
+  /* ボタンを横並びに（リザルト） / Side-by-side buttons on result */
+  .result-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .btn {
+    min-width: 180px;
+  }
+}
+
+@media (min-width: 680px) {
+  .screen-inner {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .status-value {
+    font-size: 2.8rem;
+  }
+}
+
+/* ========================================
+   アクセシビリティ：動きを減らす設定
+   Accessibility: Reduced motion preference
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

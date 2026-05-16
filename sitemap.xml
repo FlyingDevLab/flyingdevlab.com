@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================
+  1行目の <?xml ...?> はXML宣言です（HTMLの DOCTYPE に相当）。
+  - version="1.0"   → XML仕様のバージョン（現在も 1.0 が標準）
+  - encoding="UTF-8" → このファイルの文字コード（日本語対応）
+  この行は必ず先頭に書き、前に空行や空白を入れてはいけません。
+
+  sitemap.xml（サイトマップ）とは？
+  Googleなどの検索エンジンに「このサイトにはどんなページがあるか」
+  を伝えるためのファイルです。
+  検索エンジンのロボット（クローラー）がこのファイルを読み込み、
+  各ページを効率よく発見・インデックスしてくれます。
+
+  このファイルは robots.txt の Sitemap: 行から参照されており、
+  クローラーが自動的に見つけられるようになっています。
+  ============================================================
+  <urlset> はサイトマップ全体を囲む親タグです。
+  xmlns=...      → 「このファイルはサイトマップの標準形式に従っています」という名前空間宣言。変更不要です。
+  xmlns:xhtml=... → 多言語対応（hreflang）のタグを使うために必要な追加の名前空間宣言です。
+-->
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- 
+    ============================================================
+    TOPページ（サイトの入口。最も重要なページ）
+    ============================================================
+    <url>〜</url> はページ1件分の情報をまとめるブロックです。
+    ページが増えるたびにこのブロックを1つ追加します。
+  -->
+  <url>
+    <!-- <loc>：このページの正式なURL（必須）。https:// から始まる絶対URLで書きます。 -->
+    <loc>https://flyingdevlab.com/</loc>
+    <!-- 
+      <lastmod>：このページを最後に更新した日付（YYYY-MM-DD形式）。
+      検索エンジンが「最近更新されたか」を判断する参考にします。
+      実際に更新したときは日付を変えましょう。 
+    -->
+    <lastmod>2026-05-01</lastmod>
+    <!-- 
+      <changefreq>：このページがどのくらいの頻度で更新されるかの目安。
+      選択肢: always / hourly / daily / weekly / monthly / yearly / never
+      TOPページはアプリ追加・SNS更新が多いので daily（毎日）に設定しています。
+      あくまで検索エンジンへのヒントで、クロール頻度を強制するものではありません。 
+    -->
+    <changefreq>daily</changefreq>
+    <!--
+      <priority>：サイト内でのこのページの相対的な重要度（0.0〜1.0）。
+      1.0 が最高。TOPページなので最高値を設定しています。
+      他のページとの相対的な比較にしか使われません。 
+    -->
+    <priority>1.0</priority>
+    <!--
+      <xhtml:link>：多言語対応（hreflang）の設定。
+      「このページは日本語版・英語版・デフォルト版、どれも同じURLだよ」
+      と検索エンジンに伝えます。
+      - hreflang="ja"        → 日本語ユーザー向け
+      - hreflang="en"        → 英語ユーザー向け
+      - hreflang="x-default" → 言語が一致しない場合のフォールバック
+      TOPページは日英共通URLなのですべて同じhrefになっています。 
+    -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/"/>
+  </url>
+
+  <!-- 
+    ============================================================
+    プライバシーポリシー（個人情報の取り扱い方針のページ）
+    ============================================================ 
+  -->
+  <url>
+    <loc>https://flyingdevlab.com/privacy-policy.html</loc>
+    <!-- 法的文書なので変更頻度は低め。更新したときだけ日付を変えましょう。 -->
+    <lastmod>2026-03-10</lastmod>
+    <!-- 滅多に変わらないので monthly（月1回程度） -->
+    <changefreq>monthly</changefreq>
+    <!-- TOPよりは重要度が低いので 0.6（中程度）に設定 -->
+    <priority>0.6</priority>
+    <!-- このページも日英共通URLのため、すべて同じhref -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy.html"/>
+  </url>
+
+  <!--
+   ============================================================
+   こどもたちへの誓い（Flying Dev Lab のポリシー宣言ページ）
+   プライバシーポリシーと同じ重要度・更新頻度で設定しています。
+   ============================================================
+  -->
+  <url>
+    <loc>https://flyingdevlab.com/pledge.html</loc>
+    <lastmod>2026-03-13</lastmod>
+    <!-- 誓いの内容が変わることは少ないため monthly に設定 -->
+    <changefreq>monthly</changefreq>
+    <!-- TOPより重要度は低いため 0.4（中程度）に設定 -->
+    <priority>0.4</priority>
+    <!-- このページも日英共通URLのため、すべて同じhref -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/pledge.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/pledge.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/pledge.html"/>
+  </url>
+
+  <!--
+    ============================================================
+    新しいページを追加するときは、上の <url>〜</url> ブロックを
+    コピーして loc / lastmod / hreflang の href を書き換えてください。
+
+    ⚠️ 404ページ（404.html）はサイトマップに含めません。
+    エラーページを登録すると検索エンジンが誤ってインデックスするためです。
+    ============================================================
+  -->
+
+</urlset>

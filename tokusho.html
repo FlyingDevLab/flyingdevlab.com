@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: https://ogp.me/ns#">
+
+<!--
+  特定商取引法に基づく表記
+  ============================================================
+  特定商取引法（特商法）は、消費者保護を目的とした日本の法律です。
+  インターネットを通じてサービスや商品を販売する事業者は、
+  この法律に基づき、販売条件・事業者情報等を明示する義務があります。
+
+  【対象となる取引形態】
+  - 通信販売（ネット販売・アプリ内課金を含む）
+  - デジタルコンテンツの販売・提供
+  - サブスクリプション（継続課金）サービス
+
+  【表記が必要な主な理由】
+  1. 消費者が購入前に事業者・価格・返金条件を確認できるようにするため
+  2. 特商法 第11条（通信販売の広告）に基づく法的義務
+  3. 違反した場合、業務停止命令や罰則の対象となる可能性がある
+
+  【本ページの対象サービス】
+  Flying Dev Lab が提供する有料アプリおよびアプリ内課金サービス全般
+  ※ App Store 経由の課金は Apple の決済システムを利用するため、
+    返金対応等は Apple のポリシーに準じます。
+  ============================================================
+  -->
+
+<head>
+  <!-- 文字コード宣言 -->
+  <meta charset="UTF-8">
+  <!-- ビューポート設定 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ページタイトル -->
+  <title>特定商取引法に基づく表示 | 空飛ぶ研究室（Flying Dev Lab）</title>
+  <!-- description -->
+  <meta name="description" content="空飛ぶ研究室（Flying Dev Lab）の特定商取引法に基づく表示ページです。">
+  <!-- noindex：個人情報を含むため検索エンジンにインデックスさせない -->
+  <meta name="robots" content="noindex, nofollow">
+  <!-- canonical -->
+  <link rel="canonical" href="https://flyingdevlab.com/tokusho.html">
+
+  <!-- OGP（noindexだがSNSシェア対策として設定） -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://flyingdevlab.com/tokusho.html">
+  <meta property="og:title" content="特定商取引法に基づく表示 | Flying Dev Lab">
+  <meta property="og:description" content="空飛ぶ研究室（Flying Dev Lab）の特定商取引法に基づく表示ページです。">
+  <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
+  <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta property="og:locale" content="ja_JP">
+
+  <!-- JSON-LD 構造化データ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://flyingdevlab.com/tokusho.html",
+    "url": "https://flyingdevlab.com/tokusho.html",
+    "name": "特定商取引法に基づく表示 | Flying Dev Lab",
+    "description": "空飛ぶ研究室（Flying Dev Lab）の特定商取引法に基づく表示。",
+    "inLanguage": "ja",
+    "isPartOf": {
+      "@type": "WebSite",
+      "url": "https://flyingdevlab.com/",
+      "name": "空飛ぶ研究室（Flying Dev Lab）"
+    },
+    "dateModified": "2026-05-08",
+    "publisher": {
+      "@type": "Organization",
+      "name": "空飛ぶ研究室（Flying Dev Lab）",
+      "url": "https://flyingdevlab.com/"
+    }
+  }
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon-512.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#1e3a6e">
+
+  <!-- Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- 共通スタイルシート（tokusho固有スタイルも含む） -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<!-- スキップリンク（キーボード操作・スクリーンリーダー向け） -->
+<a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+
+<!-- ヘッダー -->
+<header>
+  <div class="header-inner">
+    <h1>
+      特定商取引法に基づく表示<br>
+      <small class="header-subtitle">Specified Commercial Transactions Act</small>
+    </h1>
+    <div class="updated">
+      <p>最終更新日 2026年5月8日</p>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 
+    ① 販売事業者：法人の場合は登記上の名称、
+    個人の場合は氏名の記載が必要 
+  -->
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🏢</span> 販売事業者</h2>
+    <dl class="tokusho-dl">
+      <div class="tokusho-dl-row">
+        <dt>屋号</dt>
+        <dd>空飛ぶ研究室</dd>
+      </div>
+      <div class="tokusho-dl-row">
+        <dt>室長</dt>
+        <!-- 難読化対象：JSで実行時にレンダリング -->
+        <dd><span id="tokusho-name" aria-label="室長名"></span></dd>
+      </div>
+      <!-- 所在地：特商法施行規則 第8条により、住所の明示が義務付けられている。バーチャルオフィスで対応可能なので事前に用意しておきましょう。 -->
+      <div class="tokusho-dl-row">
+        <dt>所在地</dt>
+        <!-- 難読化対象：JSで実行時にレンダリング -->
+        <dd><span id="tokusho-addr" aria-label="所在地"></span></dd>
+      </div>
+      <!-- 電話番号：問い合わせ手段として必須。非公開の場合は請求に応じる旨を記載しています。EU圏向けにサービスを提供する場合DSAトレーダー登録に必要となるので、こちらも事前に用意しておきましょう。 -->
+      <div class="tokusho-dl-row">
+        <dt>電話番号</dt>
+        <dd>
+          <!-- 電話番号は請求制。メールアドレス部分のみJSで描画 -->
+          <span class="tokusho-notice">
+            ※電話番号については<a id="tokusho-email-tel" href="#" aria-label="電話番号請求先メールアドレス">（読込中）</a>にご請求いただければ、遅滞なく電子メールにて開示いたします。お問い合わせは内容記録の観点からお問い合わせフォームよりご連絡ください。
+          </span>
+        </dd>
+      </div>
+      <div class="tokusho-dl-row">
+        <dt>メール</dt>
+        <!-- 難読化対象：JSで実行時にレンダリング -->
+        <dd><a id="tokusho-email" href="#" aria-label="メールアドレス">（読込中）</a></dd>
+      </div>
+    </dl>
+  </div>
+
+  <!--
+    ② 取扱商品・販売価格：税込みの最終価格を明示すること（消費税法・特商法の両方から要請）
+    取り扱う商品を全て表記する必要はないので、省略しています。
+  -->
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📱</span> 取扱商品・販売価格</h2>
+    <p>App Storeの各商品ページに表示された取扱商品・販売価格（税込）に基づきます。</p>
+  </div>
+
+  <!-- ③ 割増金・遅延損害金：デジタルコンテンツ・即時課金のため該当なし。省略。 -->
+
+  <!--
+    ④ お支払い方法・時期：特商法 第11条第1号・第2号により、
+    代金の支払い方法と支払い時期の明示が義務付けられている。
+    App Store 経由の場合、決済主体は Apple であり、
+    開発者が独自の支払い手段を設けているわけではないため、
+    Apple の仕組みに準じる旨を明記することで法的要件を満たす。
+  -->
+  <div class="policy-section">
+    <h2><span aria-hidden="true">💳</span> お支払い方法・時期</h2>
+    <p>お支払い方法およびお支払い時期は、Apple Inc. が提供するApp Storeの決済システムに準じます。購入確定時に課金が発生します。</p>
+    <p>詳細はApp Storeの利用規約をご確認ください。</p>
+  </div>
+
+  <!--
+    ⑤ サービスの提供時期：特商法 第11条により、商品・サービスの引渡し時期の
+    明示が必要。デジタルコンテンツ（アプリ内機能）は購入後即時有効化されるため、
+    その旨を明記する。物理的な配送を伴わない点がポイント。
+  -->
+  <div class="policy-section">
+    <h2><span aria-hidden="true">⚡</span> サービスの提供時期</h2>
+    <p>購入完了後、即時にアプリ内で機能が有効になります。</p>
+  </div>
+
+  <!--
+    ⑥ 返品・返金について：デジタルコンテンツは性質上、返品不可が一般的だが、
+    その旨を明確に記載しないと消費者契約法上のトラブルになりうる。
+  -->
+  <div class="policy-section">
+    <h2><span aria-hidden="true">↩️</span> 返品・返金について</h2>
+    <p>デジタルコンテンツの性質上、当開発者による返品・返金対応は行っておりません。</p>
+    <p>返金をご希望の場合は、Apple Inc. の返金ポリシーに基づき、Appleサポートへ直接お問い合わせください。</p>
+    <div class="contact-box">
+      <p><span aria-hidden="true">🔗</span> <a href="https://support.apple.com/ja-jp/118223" target="_blank" rel="noopener noreferrer">Appleサポート（返金について）</a></p>
+    </div>
+  </div>
+
+  <!--
+    ⑦ 動作環境：特商法の直接的な必須項目ではないが、
+    消費者契約法の観点から「購入後に使えない」というトラブルを防ぐために
+    必要な情報として強く推奨されている。
+    対応OS・端末を明記することで、購入前に動作確認できる状態を整える。
+    App Store の商品ページにも記載があるが、本ページにも明示しておくことが望ましい。
+  -->
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📋</span> 動作環境</h2>
+    <dl class="tokusho-dl">
+      <div class="tokusho-dl-row">
+        <dt>対応OS</dt>
+        <dd>iOS 16.0 以降</dd>
+      </div>
+      <div class="tokusho-dl-row">
+        <dt>対応端末</dt>
+        <dd>iPhone</dd>
+      </div>
+    </dl>
+  </div>
+
+  <!--
+    ⑧ お問い合わせ：特商法 第11条により、消費者が事業者に連絡できる手段を
+    明示する義務がある。電話番号を非公開にしている場合は、
+    メールアドレス等の代替連絡先を必ず掲載すること。
+    返信目安を添えることで、消費者保護の観点からの信頼性も高まる。
+  -->
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📬</span> お問い合わせ</h2>
+    <p>本表示に関するお問い合わせは、以下のメールアドレスよりご連絡ください。返信は数営業日以内を目安にしております。</p>
+    <div class="contact-box">
+      <!-- 難読化対象：JSで実行時にレンダリング -->
+      <p><span aria-hidden="true">📧</span> <a id="tokusho-email2" href="#" aria-label="お問い合わせメールアドレス">（読込中）</a></p>
+    </div>
+  </div>
+
+</main>
+
+<!-- フッター -->
+<footer>
+  <a href="/" class="footer-top" aria-label="トップページへ戻る">↑ TOP</a>
+  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+</footer>
+
+<!-- ===== JavaScript =====
+     難読化：室長名・住所・メールアドレスをUnicodeエスケープで格納し
+     実行時にDOMへ書き込む。ソースコードにプレーンテキストが残らないようにする。
+
+     ※ 特商法上、これらの情報は「ユーザーから請求があれば開示できる状態」で
+       あれば足りるため、Bot収集・スパム対策として難読化しても法的問題はない。
+       ブラウザでは正常に表示され、人間のユーザーは支障なく参照できる。
+-->
+<script>
+(function () {
+  "use strict";
+
+  /* ───────────────────────────────────────────────────────────
+     難読化データ（Bot / スクレイパー対策）
+     Unicodeエスケープ：\uXXXX 形式で文字を格納。
+     ブラウザは実行時にデコードして表示するが、
+     テキスト検索・スクレイパーの大半はソースの文字列をそのまま読むため
+     プレーンテキストとして認識されにくい。
+  ─────────────────────────────────────────────────────────── */
+
+  /* 室長名：** * */
+  var _n = "\u52a0\u85e4 \u8ce2";
+
+  /* 所在地：〒***-**** *********3**3*13* *******2* ****** */
+  var _a = "\u3012160-0023\u3000\u6771\u4eac\u90fd\u65b0\u5bbf\u533a\u897f\u65b0\u5bbf3\u4e01\u76ee3\u756a13\u53f7\u3000\u897f\u65b0\u5bbf\u6c34\u9593\u30d3\u30eb2F\u3000\u7a7a\u98db\u3076\u7814\u7a76\u5ba4";
+
+  /* メールアドレス：*******@**************** */
+  var _e = "\u0073\u0075\u0070\u0070\u006f\u0072\u0074"
+         + "\u0040"
+         + "\u0066\u006c\u0079\u0069\u006e\u0067\u0064\u0065\u0076\u006c\u0061\u0062\u002e\u0063\u006f\u006d";
+
+  /* ─── 室長名を描画 ─── */
+  var nameEl = document.getElementById("tokusho-name");
+  if (nameEl) nameEl.textContent = _n;
+
+  /* ─── 所在地を描画 ─── */
+  var addrEl = document.getElementById("tokusho-addr");
+  if (addrEl) addrEl.textContent = _a;
+
+  /* ─── メールアドレスを描画（通常・問い合わせ欄） ─── */
+  function setEmail(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.textContent = _e;
+      el.setAttribute("href", "mailto:" + _e);
+    }
+  }
+  setEmail("tokusho-email");
+  setEmail("tokusho-email2");
+  setEmail("tokusho-email-tel");
+
+})();
+</script>
+
+<!--
+  住所・氏名・電話番号・メールアドレスは、特商法表記のほか下記でも必要となるため早めに取得を推奨。
+  Apple に限らず、サービスを販売する事業者であれば共通して求められる情報です。
+
+  ・App Store Connect の銀行口座・納税情報登録
+  ・EU圏向け販売時のDSAトレーダー登録
+  ・各種問い合わせ対応・審査連絡
+  ・決済サービス・広告ネットワーク等の事業者登録全般
+
+  最後まで読んで頂きありがとうございます。
+-->
+</body>
+</html>

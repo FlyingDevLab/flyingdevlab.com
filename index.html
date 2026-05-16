@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<!-- DOCTYPE宣言（必須・1行目に書く）
+  「これはHTML5で書かれたWebページです」とブラウザに伝える宣言です。
+  この行がないとブラウザが古い互換モードで描画し、レイアウトが崩れることがあります。
+-->
+<!-- <html> タグ：ページ全体を囲む最外側のタグ
+  - lang="ja"       → このページの主要言語が日本語であることを宣言。
+                      スクリーンリーダー（視覚障害者向け読み上げソフト）や
+                      翻訳ツールが正しく動作するために重要。
+  - prefix="og:..." → OGP（SNSシェア時の見た目を制御）タグを使うための宣言。
+  - id="top"        → フッターの「↑ TOP」リンクから #top へ戻るためのアンカー。
+-->
+<html lang="ja" prefix="og: https://ogp.me/ns#" id="top">
+<!-- <head> セクション
+  ページの「見えない情報」を書く場所です。
+  ブラウザや検索エンジン・SNSへの指示をまとめています。
+  ここに書いた内容は画面には表示されません。
+-->
+
+<head>
+  <!-- 文字コード宣言（必須）
+    UTF-8 は日本語・英語・絵文字などほぼすべての文字を扱える文字コードです。
+    これがないと日本語が文字化けすることがあります。
+  -->
+  <meta charset="UTF-8">
+  <!-- ビューポート設定（スマホ対応に必須）
+    - width=device-width  → ページ幅をデバイスの画面幅に合わせる
+    - initial-scale=1.0   → 初期ズーム倍率を 1 倍（等倍）にする
+    これがないとスマホでPC向けの小さいレイアウトが表示されてしまいます。
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ===== 基本SEOタグ =====
+    SEO（Search Engine Optimization）＝検索エンジン最適化
+    Googleなどの検索結果に正しく表示されるための情報を設定します。
+    <title> : ブラウザのタブやGoogleの検索結果に表示されるページタイトル。
+    SEOで最も重要なタグのひとつです。
+  -->
+  <title>空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室</title>
+  <!-- description : 検索結果のタイトル下に表示される説明文（スニペット）。
+    クリック率に影響するため、内容を簡潔にアピールする文章を入れます。
+    Googleが必ずしもこの文章を使うとは限りませんが、設定しておくのがベストプラクティスです。
+  -->
+  <meta name="description"
+    content="空飛ぶ研究室（Flying Dev Lab）は、こどもも大人も笑顔になる安心・安全・便利なiOSアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう」など。">
+  <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
+  <meta name="keywords" content="iOSアプリ,こども向けアプリ,知育アプリ,足し算ゲーム,Flying Dev Lab,空飛ぶ研究室,インディーデベロッパー">
+  <!-- author : ページの作者・制作者名。SEO直接効果は薄いが明示しておくのがマナー。 -->
+  <meta name="author" content="空飛ぶ研究室（Flying Dev Lab）">
+  <!-- robots : 検索エンジンのクローラー（ロボット）への指示。
+    - index  → このページを検索インデックスに登録してよい
+    - follow → このページ内のリンクをたどってよい
+    デフォルト動作と同じですが、明示的に書いておくことで意図が伝わります。
+  -->
+  <meta name="robots" content="index, follow">
+  <!--  canonical : このページの「正規URL」を検索エンジンに伝えるタグ。
+    http / https、www あり / なし など複数URLが存在するときに
+    どれが本物のURLかを示すために使います。重複コンテンツ問題を防ぎます。
+  -->
+  <link rel="canonical" href="https://flyingdevlab.com/">
+
+  <!-- ===== hreflang（言語バリアント） =====
+   ja・en ともに同じURLを指定しているのは、言語切り替えをJSで同一ページ内で行うため
+    hreflang : 「このページには日本語版・英語版がある」と検索エンジンに伝えるタグ。
+    本来は言語ごとに別URLを持つケースで使いますが、
+    このサイトはJavaScriptで同一ページ内を切り替えるため、どちらも同じURLを指定しています。
+    x-default は「どの言語にも一致しないユーザーに見せるデフォルトURL」を示します。
+  -->
+  <link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/">
+  <link rel="alternate" hreflang="en" href="https://flyingdevlab.com/">
+  <link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/">
+  <!-- ===== OGP（Open Graph Protocol） =====
+    SNSシェア時のタイトル・説明・サムネイル画像などを指定する
+    OGP とは：SNS（X・Facebook・LINEなど）でURLをシェアしたときに
+    表示される「カード」の見た目を制御するためのメタタグ群です。
+    og:type     → コンテンツの種類（website = 普通のWebページ）
+    og:url      → このページのURL
+    og:title    → カードに表示されるタイトル
+    og:description → カードに表示される説明文
+    og:image    → カードに表示されるサムネイル画像のURL
+    og:image:width / height → 画像サイズ（1200×630 が推奨サイズ）
+    og:image:alt → 画像の代替テキスト（視覚障害者向けアクセシビリティ）
+    og:site_name → サイト名
+    og:locale   → 主要言語（ja_JP = 日本語）
+    og:locale:alternate → 対応している他の言語（en_US = 英語）
+  -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://flyingdevlab.com/">
+  <meta property="og:title" content="空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室">
+  <meta property="og:description" content="こどもも大人も笑顔になる安心・安全・便利なiOSアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう」など。">
+  <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
+  <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:locale:alternate" content="en_US">
+  <!-- ===== Twitter Card =====
+    X（旧Twitter）でシェアされた際のカード表示を制御する
+    Twitter Card は X（旧Twitter）専用の OGP 拡張です。
+    twitter:card → カードの種類。summary_large_image = 大きい画像付きカード
+    twitter:site → サイト運営者のXアカウント（@から始まる）
+    twitter:creator → 投稿者のXアカウント（著者がいる場合）
+    twitter:title / description / image は og: と同様ですが、
+    X専用の上書き設定として機能します。
+  -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@FlyingDevLab">
+  <meta name="twitter:creator" content="@FlyingDevLab">
+  <meta name="twitter:title" content="空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室">
+  <meta name="twitter:description" content="こどもも大人も笑顔になる、安心・安全・便利なiOSアプリを開発しています。">
+  <meta name="twitter:image" content="https://flyingdevlab.com/ogp.png">
+  <meta name="twitter:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
+  <!-- ===== JSON-LD 構造化データ ===== 
+    検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応） 
+    JSON-LD とは：Googleなどの検索エンジンに
+    「このサイトは〇〇という組織が運営しているWebサイトで、
+    このページは△△です」という関係性をJSON形式で伝える仕組みです。
+    うまく認識されると検索結果に「リッチリザルト」と呼ばれる
+    装飾された表示が出ることがあります。
+    type="application/ld+json" とすることでブラウザはJSとして実行せず、
+    検索エンジンだけが読み取ります。
+    @graph の中に Organization（組織）・WebSite・WebPage の3つを定義しています。
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://flyingdevlab.com/#organization",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "alternateName": "空飛ぶ研究室",
+        "url": "https://flyingdevlab.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://flyingdevlab.com/favicon-512.png"
+        },
+        "description": "こどもも大人も笑顔になる、安心・安全・便利なiOSアプリを開発するインディー開発者。",
+        "sameAs": [
+          "https://x.com/FlyingDevLab",
+          "https://www.instagram.com/flyingdevlab/",
+          "https://github.com/FlyingDevLab"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://flyingdevlab.com/#website",
+        "url": "https://flyingdevlab.com/",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "publisher": { "@id": "https://flyingdevlab.com/#organization" },
+        "inLanguage": ["ja", "en"]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://flyingdevlab.com/#webpage",
+        "url": "https://flyingdevlab.com/",
+        "name": "空飛ぶ研究室（Flying Dev Lab）｜iOSアプリ開発室",
+        "description": "こどもも大人も笑顔になる、安心・安全・便利なiOSアプリを開発しています。",
+        "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
+        "about": { "@id": "https://flyingdevlab.com/#organization" },
+        "inLanguage": ["ja", "en"]
+      }
+    ]
+  }
+  </script>
+
+  <!-- ===== Favicon =====
+    Favicon（ファビコン）とは：ブラウザのタブや
+    ブックマークに表示される小さなアイコンです。
+    - favicon.ico    → 最も古い形式。どのブラウザでも対応している汎用フォールバック。
+    - favicon-512.png → 高解像度ディスプレイ向けのPNG版。
+    - apple-touch-icon → iPhoneでホーム画面に追加したときのアイコン（180×180px推奨）。
+    - theme-color    → Androidのブラウザでアドレスバーの色を変える指定。
+  -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon-512.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#1e3a6e">
+
+  <!-- ===== Web Fonts =====
+  Google Fonts は動的に CSS を生成するため SRI (integrity) を付与できません。
+  preconnect で接続を高速化しています。 
+  Web Fonts（Webフォント）の読み込み設定。
+  preconnect はフォントサーバーへの接続を事前に確立しておくことで、
+  フォントの読み込みを高速化する最適化テクニックです。
+  - fonts.googleapis.com → フォントのCSS（どのファイルを使うか）を配信するサーバー
+  - fonts.gstatic.com    → フォントの実データ（.woff2 など）を配信するサーバー
+  読み込んでいるフォント：
+  - Noto Sans JP（日本語用）：ウェイト 400/500/700/900
+  - Outfit（英語・数字用）：ウェイト 400/600/800
+  display=swap → フォントが読み込まれるまでシステムフォントで表示し、
+                  読み込み完了後に切り替えることで文字が見えない時間をなくす。
+   最後に style.css（このサイト独自のスタイルシート）を読み込んでいます。
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<!-- <body> セクション
+  ここからがブラウザに実際に表示される内容です。
+  大きく「ヘッダー → メイン → フッター」という構造になっています。
+-->
+
+<body>
+  <!-- スキップリンク（キーボード操作・スクリーンリーダー向け）
+  スキップリンクとは：キーボードのTabキーだけでナビゲーションする
+  ユーザーや、スクリーンリーダーを使う視覚障害者が、
+  ヘッダーを毎回読み飛ばしてメインコンテンツへ直接移動できるリンクです。
+  CSSで通常は画面外に隠されており、Tabキーを押したときだけ表示されます。
+  href="#main" はページ内の id="main" の要素へジャンプします。
+-->
+  <a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+  <!-- ヘッダー：ロゴ・サイト名・キャッチコピー・ナビゲーションリンクを含む
+  <header> タグ：ページ上部のヘッダー領域を示すセマンティックタグ。
+  「セマンティック（意味のある）」とは、ブラウザや検索エンジンが
+  このエリアがヘッダーだと理解できる意味を持たせたタグのことです。
+  見た目は <div> と同じですが、役割を正しく伝えられます。
+-->
+  <header>
+    <div class="header-inner">
+      <!-- <nav> タグ：ナビゲーション（サイト内リンク群）を示すセマンティックタグ。
+      aria-label はスクリーンリーダーにこのナビゲーションの名前を伝えます。
+      キーボードや読み上げソフトのユーザーが複数の nav を区別するために重要です。
+    -->
+
+      <!-- aria-hidden="true" : スクリーンリーダーにこの要素を読み飛ばすよう指示します。
+      絵文字ロゴは装飾目的のため、読み上げ不要として非表示にしています。
+    -->
+      <div class="site-logo" aria-hidden="true">
+        <span class="logo-cloud">☁️</span>
+        <span class="logo-house">🏠</span>
+      </div>
+      <!-- <h1> タグ：ページで最も重要な見出し（1ページに1つが基本）。
+      SEOで重視されるタグです。
+      <span> タグ：インライン要素をグループ化して個別にスタイルを当てるために使用。
+    -->
+      <h1 class="site-name">Flying <span>Dev</span> Lab</h1>
+      <!-- サイト名の日本語サブタイトル。
+      <p> タグ：段落（Paragraph）を表すタグ。
+      ここでは短い添え書きとして使用しています。
+    -->
+      <p class="site-sub">空飛ぶ研究室</p>
+      <!-- キャッチコピー。
+      id を付けることでJSから言語切り替え時にテキストを書き換えられます。
+      - id="catch-main" → メインのキャッチコピー（1行目）
+      - id="catch-sub"  → サブのキャッチコピー（2行目）
+      <strong> タグ：テキストを強調するタグ。視覚的に太字になり、
+      スクリーンリーダーも「重要」として読み上げます。
+    -->
+      <div class="catchcopy">
+        <p id="catch-main">こどもも大人も笑顔になる</p>
+        <p id="catch-sub">安心・安全・便利な<strong>iOSアプリ</strong>をつくっています。</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ：言語タブ・アプリ一覧・SNS投稿・お問い合わせを含む
+  <main> タグ：ページのメインコンテンツを示すセマンティックタグ。
+  id="main" を付けることで、上のスキップリンク（href="#main"）の
+  ジャンプ先になっています。
+  1ページにつき <main> は1つだけ使います。
+  -->
+  <main id="main">
+    <!-- 言語タブ：WAI-ARIA の tablist パターンで実装。キーボードの左右矢印でも切り替え可能
+    WAI-ARIA タブパターンとは：
+    視覚的なタブUIをアクセシブル（誰でも使いやすく）にするための属性セットです。
+    - role="tablist"    → タブのコンテナであることを宣言
+    - role="tab"        → 各タブボタンに付ける役割
+    - aria-selected     → 現在選択中かどうか（true / false）
+    - aria-controls     → このタブが制御するコンテンツパネルのid
+    これらがあることでスクリーンリーダーが「タブが2つあり、日本語が選択中」と読み上げます。
+    type="button" は <button> がフォーム送信を起こさないようにする明示的な指定です。
+  -->
+    <div class="lang-tabs" role="tablist" aria-label="言語切り替え / Language">
+      <button class="lang-tab active" role="tab" id="tab-ja" aria-selected="true" aria-controls="lang-ja"
+        type="button">日本語</button>
+      <button class="lang-tab" role="tab" id="tab-en" aria-selected="false" aria-controls="lang-en"
+        type="button">English</button>
+    </div>
+    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される
+    <section> タグ：意味のあるひとまとまりのコンテンツ領域を示すセマンティックタグ。
+    aria-labelledby="apps-heading" → この section の見出しが id="apps-heading" の要素であると宣言。
+    スクリーンリーダーが「アプリ セクション」と読み上げられるようになります。
+    id="app-list" の <div> は中身が空で、JavaScriptが後から動的にカードを生成・挿入します。
+    （apps.js の APPS 配列を編集するだけでカードが追加・変更されます）
+  -->
+    <section aria-labelledby="apps-heading">
+      <div class="section-header fade-up">
+        <!-- <h2> タグ：<h1> の次に重要な見出し。このページでは各セクションの見出しに使っています。
+        id="apps-heading-text" を付けることでJSが言語切り替え時にテキストを書き換えられます。
+        aria-hidden="true" の絵文字はスクリーンリーダーに読ませない装飾です。
+      -->
+        <h2 id="apps-heading" class="section-title">
+          <span aria-hidden="true">📱</span> <span id="apps-heading-text">アプリ</span>
+        </h2>
+      </div>
+      <!-- JSがここにアプリカードを描画する。初期状態は空。 -->
+      <div id="app-list"></div>
+    </section>
+    <!-- ブラウザでゲームを試せるセクション。fade-up はスクロール時のフェインアニメーション用。 -->
+
+    <section class="try-game-section" aria-labelledby="try-heading">
+      <div class="section-header fade-up">
+        <h2 id="try-heading" class="section-title">
+          <span aria-hidden="true">🎮</span> <span id="try-heading-text">ブラウザで遊ぶ</span>
+        </h2>
+      </div>
+
+      <!-- MAKE10 -->
+      <a href="/make10/index.html" class="try-game-card fade-up" aria-label="MAKE10をブラウザでプレイ">
+        <div class="try-game-inner">
+          <div class="try-game-name">MAKE10 / 10をつくろう</div>
+        </div>
+      </a>
+
+      <!-- Cheese Escape -->
+      <a href="/cheese-escape-web/index.html" class="try-game-card fade-up" aria-label="Cheese Escapeをブラウザでプレイ">
+        <div class="try-game-inner">
+          <div class="try-game-name">Cheese Escape / 迷路</div>
+        </div>
+      </a>
+
+      <!-- Whack-a-Mole -->
+      <a href="/whack-a-mole/index.html" class="try-game-card fade-up" aria-label="Whack-a-Moleをブラウザでプレイ">
+        <div class="try-game-inner">
+          <div class="try-game-name">Whack-a-Mole / モグラ叩き</div>
+        </div>
+      </a>
+
+      <!-- Pinball -->
+      <a href="/pinball/index.html" class="try-game-card fade-up" aria-label="Pinballをブラウザでプレイ">
+        <div class="try-game-inner">
+          <div class="try-game-name">Pinball / ピンボール</div>
+        </div>
+      </a>
+
+    </section>
+
+    <!-- ==================== 日本語コンテンツ ====================
+    日本語タブが選択されているときに表示されるコンテンツ領域。
+    - role="tabpanel"          → このdivがタブのコンテンツパネルであることを宣言
+    - aria-labelledby="tab-ja" → 対応するタブボタン（id="tab-ja"）と紐付け
+    - class="active"           → CSSでこのパネルを表示する制御クラス
+                                 JSが言語切り替え時にこのクラスを付け外しします
+    -->
+    <div class="lang-content active" id="lang-ja" role="tabpanel" aria-labelledby="tab-ja">
+
+      <!-- お問い合わせ（日本語） 
+      Google Forms へのリンクボタンを含むお問い合わせセクション。
+      - target="_blank"           → リンクを新しいタブで開く
+      - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策。
+                                    開かれたページが元のページを操作できないようにします。
+      -->
+      <section class="contact-section" aria-labelledby="contact-heading-ja">
+        <div class="section-header fade-up">
+          <h2 id="contact-heading-ja" class="section-title">
+            <span aria-hidden="true">📬</span> お問い合わせ
+          </h2>
+        </div>
+        <!-- contact-wrap：お問い合わせボックスを中央寄せするためのレイアウト用ラッパー。 -->
+        <div class="contact-wrap fade-up">
+          <!-- contact-box-inner：説明文とボタンをまとめるボックスの内側のラッパー。
+          このように「外側ラッパー → 内側ラッパー → コンテンツ」という
+          二重構造にすることで、余白・背景・角丸などを段階的に調整できます。
+          -->
+          <div class="contact-box-inner">
+            <p class="contact-desc">Google
+              Formsが開きます。<br>入力した内容だけが送信される仕組みになっております。<br>それ以外の情報は取得しません。<br>バグの報告や気になることは、遠慮なく教えてくださいね😊</p>
+            <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8" target="_blank" rel="noopener noreferrer" class="contact-btn"
+              aria-label="お問い合わせ・バグ報告はこちら（Google Formsが新しいタブで開きます）">
+              <span aria-hidden="true">📬</span> お問い合わせ・バグ報告はこちら
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SNS投稿埋め込み（日本語）：X（旧Twitter）投稿と Instagram 投稿と Threads 投稿を混在して掲載
+      SNS埋め込みセクション。
+      各投稿は <blockquote> タグで書かれており、ページ下部で読み込む
+      外部スクリプト（widgets.js / embed.js）が実行されたタイミングで
+      リッチなカード表示に変換されます。
+      スクリプトが読み込まれる前はプレーンなテキストリンクとして表示されます。
+    -->
+      <section class="x-embed" aria-labelledby="sns-heading-ja">
+        <div class="section-header fade-up">
+          <h2 id="sns-heading-ja" class="section-title">
+            <span aria-hidden="true">📣</span> 活動状況
+          </h2>
+        </div>
+        <div class="sns-embed-list">
+          <!-- 埋め込み投稿カード（1枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+            <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">MAKE10 / 10をつくろう<br>新しく モグラ叩き・迷路・ピンボール で遊べるようになりました！🎯🌀🕹️ ブラウザ版と少し勝手が違うので、ぜひ試してみてください。<br>プライバシーポリシーページも見やすく整えました。 👉 <a href="https://t.co/Z7ceCnmkex">https://t.co/Z7ceCnmkex</a><a href="https://twitter.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a> <a href="https://twitter.com/hashtag/FlyingDevLab?src=hash&amp;ref_src=twsrc%5Etfw">#FlyingDevLab</a> <a href="https://twitter.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2050040651782430815?ref_src=twsrc%5Etfw">May 1, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+          <!-- 埋め込み投稿カード（2枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+            <blockquote class="twitter-tweet">
+              <p lang="ja" dir="ltr">空飛ぶ研究室、初アプリリリースです✨<br><br>「MAKE10 /
+                10をつくろう」<br>こども向けシンプル足し算知育ゲーム<br><br>広告なし・完全無料・プライバシー保護（情報収集ゼロ）<br>安心してお子さんに遊ばせられるアプリにしました！<br><br>↓ App
+                Storeリンク<a href="https://t.co/bpJbQb3NyC">https://t.co/bpJbQb3NyC</a><a
+                  href="https://twitter.com/hashtag/%E7%9F%A5%E8%82%B2%E3%82%A2%E3%83%97%E3%83%AA?src=hash&amp;ref_src=twsrc%5Etfw">#知育アプリ</a>
+                <a
+                  href="https://twitter.com/hashtag/%E5%AD%90%E4%BE%9B%E5%90%91%E3%81%91?src=hash&amp;ref_src=twsrc%5Etfw">#子供向け</a>
+              </p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a
+                href="https://twitter.com/FlyingDevLab/status/2045030863503794296?ref_src=twsrc%5Etfw">April 17,
+                2026</a>
+            </blockquote>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+          <!-- 埋め込み投稿カード（3枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+            <blockquote class="twitter-tweet">
+              <p lang="ja" dir="ltr">超定番の価格比較アプリ<br>A classic price comparison app<br>複数商品の価格を一括比較<br>Compare multiple
+                products at once<br>履歴を保存できる<br>Save your history<br>過去や他店舗の価格も比較可能<br>Compare past and store
+                prices<br>広告なし<br>No ads <a href="https://t.co/R1y08sng0k">pic.twitter.com/R1y08sng0k</a></p>&mdash;
+              空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a
+                href="https://twitter.com/FlyingDevLab/status/2036974855460184270?ref_src=twsrc%5Etfw">March 26,
+                2026</a>
+            </blockquote>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== English コンテンツ ====================
+    英語タブが選択されているときに表示されるコンテンツ領域。
+    lang="en" を個別に付けることでスクリーンリーダーが
+    このパネル内を英語として読み上げます。
+    初期状態では class="active" がないため CSSで非表示になっています。
+    JSの switchLang() が呼ばれるとクラスが切り替わります。
+  -->
+    <div class="lang-content" id="lang-en" lang="en" role="tabpanel" aria-labelledby="tab-en">
+
+      <!-- Contact（English） 
+     日本語版と構造は同じ。テキストが英語になっています。
+     contact-wrap / contact-box-inner は日本語版と同じ二重ラッパー構造です。
+     -->
+      <section class="contact-section" aria-labelledby="contact-heading-en">
+        <div class="section-header fade-up">
+          <h2 id="contact-heading-en" class="section-title">
+            <span aria-hidden="true">📬</span> Contact
+          </h2>
+        </div>
+        <div class="contact-wrap fade-up">
+          <div class="contact-box-inner">
+            <p class="contact-desc">Opens Google Forms.<br>Only the information you enter will be submitted.<br>We do
+              not collect any other data.<br>Feel free to report bugs or ask questions 😊</p>
+            <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8" target="_blank" rel="noopener noreferrer" class="contact-btn"
+              aria-label="Contact / Bug Report (opens Google Forms in a new tab)">
+              <span aria-hidden="true">📬</span> Contact / Bug Report
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Updates（English）： X（旧Twitter）投稿と Instagram 投稿と Threads 投稿を混在して掲載
+      日本語版の埋め込みをそのまま使うと日本語の投稿が表示されてしまいます。 
+      日本語版と英語版は対応した言語の投稿を別々に埋め込む必要があります。
+      -->
+      <section class="x-embed" aria-labelledby="sns-heading-en">
+        <div class="section-header fade-up">
+          <h2 id="sns-heading-en" class="section-title">
+            <span aria-hidden="true">📣</span> Updates
+          </h2>
+        </div>
+        <div class="sns-embed-list">
+          <!-- 埋め込み投稿カード（1枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">New ways to play — Whac-a-Mole, Maze &amp; Pinball are now available! 🎯🌀🕹️ <br>Note: controls feel a little different from the browser version.<br>We also cleaned up our Privacy Policy page to make it easier to read. 👉 <a href="https://t.co/Z7ceCnmkex">https://t.co/Z7ceCnmkex</a><a href="https://twitter.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a> <a href="https://twitter.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a> <a href="https://twitter.com/hashtag/indiegame?src=hash&amp;ref_src=twsrc%5Etfw">#indiegame</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2050040972244144254?ref_src=twsrc%5Etfw">May 1, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+          <!-- 埋め込み投稿カード（2枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+            <blockquote class="twitter-tweet">
+              <p lang="ja" dir="ltr">Our first app is now available on the App Store! ☁️<br><br>&quot;MAKE10 /
+                10をつくろう&quot; - A simple addition learning game for young kids.<br><br>- No ads<br>- Completely
+                free<br><br>Safe and peaceful app for your children.<a
+                  href="https://t.co/bpJbQb3NyC">https://t.co/bpJbQb3NyC</a><a
+                  href="https://twitter.com/hashtag/KidsApp?src=hash&amp;ref_src=twsrc%5Etfw">#KidsApp</a> <a
+                  href="https://twitter.com/hashtag/EducationalGame?src=hash&amp;ref_src=twsrc%5Etfw">#EducationalGame</a>
+                <a href="https://twitter.com/hashtag/NoAds?src=hash&amp;ref_src=twsrc%5Etfw">#NoAds</a> <a
+                  href="https://twitter.com/hashtag/PrivacyFirst?src=hash&amp;ref_src=twsrc%5Etfw">#PrivacyFirst</a></p>
+              &mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a
+                href="https://twitter.com/FlyingDevLab/status/2045031170820469098?ref_src=twsrc%5Etfw">April 17,
+                2026</a>
+            </blockquote>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+          <!-- 埋め込み投稿カード（3枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+            <blockquote class="twitter-tweet">
+              <p lang="ja" dir="ltr">超定番の価格比較アプリ<br>A classic price comparison app<br>複数商品の価格を一括比較<br>Compare multiple
+                products at once<br>履歴を保存できる<br>Save your history<br>過去や他店舗の価格も比較可能<br>Compare past and store
+                prices<br>広告なし<br>No ads <a href="https://t.co/R1y08sng0k">pic.twitter.com/R1y08sng0k</a></p>&mdash;
+              空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a
+                href="https://twitter.com/FlyingDevLab/status/2036974855460184270?ref_src=twsrc%5Etfw">March 26,
+                2026</a>
+            </blockquote>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- フッター：外部SNSリンク・TOPへ戻るリンク・著作権表記を含む
+ 一般的にフッターへプライバシーポリシーや免責事項を表示します。
+ しかし、大切な事なので一番上の一番目立つ所に表示しました。
+  <footer> タグ：ページ下部のフッター領域を示すセマンティックタグ。
+  - 外部SNSリンクにはすべて target="_blank" と rel="noopener noreferrer" を付けています
+  - aria-label で各リンクの目的をスクリーンリーダーに伝えています
+  - href="#top" は html タグの id="top" へジャンプしてページ先頭に戻ります
+  - © はHTMLエンティティで © （著作権マーク）を表示しています
+-->
+  <footer>
+    <!-- footer-links：SNS外部リンクを横並びで表示するコンテナ。
+    各リンクの共通ルール：
+    - target="_blank"           → 新しいタブで開く
+    - rel="noopener noreferrer" → セキュリティ対策（開いたページが元ページを操作できないようにする）
+    - aria-label                → リンクのテキストだけでは目的が伝わらない場合に補足説明を書く
+    𝕏 や Instagram のような記号・文字はスクリーンリーダーに不要なため
+    aria-hidden="true" で読み上げをスキップし、aria-label で正しく伝えています。
+  -->
+    <div class="footer-links">
+      <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer"
+        aria-label="GitHub（新しいタブで開きます）">GitHub</a>
+      <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer"
+        aria-label="X（旧Twitter）（新しいタブで開きます）">
+        <span class="x-icon" aria-hidden="true">𝕏</span>
+      </a>
+      <a href="https://www.instagram.com/flyingdevlab/" target="_blank" rel="noopener noreferrer"
+        aria-label="Instagram（新しいタブで開きます）">
+        <span class="x-icon" aria-hidden="true">Instagram</span>
+      </a>
+    </div>
+    <!-- ページ先頭へ戻るリンク。href="#top" は <html id="top"> へジャンプします。
+    ページが縦に長くなった場合、有効です。 -->
+    <a href="#top" class="footer-top" aria-label="ページの先頭へ">↑ TOP</a>
+    <!-- legal：プライバシーポリシーと特定商取引法ページへのリンク。
+         法的ページはフッターへの掲載が標準的。
+         id="nav-policy" はJSの言語切り替えで英語テキストに更新される。
+         tokusho.html は日本語専用のため lang="ja" を付けてスクリーンリーダーに伝える。 -->
+    <nav class="footer-legal" aria-label="法的情報">
+      <a href="/privacy-policy.html" id="nav-policy">プライバシーポリシー・免責事項</a>
+      <span class="footer-legal-sep" aria-hidden="true">|</span>
+      <a href="/tokusho.html" lang="ja">特定商取引法に基づく表示</a>
+    </nav>
+    <p class="footer-copy">&copy;&nbsp;2026&nbsp;空飛ぶ研究室&nbsp;/&nbsp;Flying&nbsp;Dev&nbsp;Lab&nbsp;:&nbsp;<a
+        href="/pledge.html" aria-label="誓約（これは自コンテンツ）">Pledge
+        <!-- &copy; コピーライト（著作権）を表示するためのHTMLタグ --></a></p><!-- 一番読んで欲しい部分をあえて控えめに主張する事により、元から関心がある人にだけ向けて発信する。隠れたメッセージとは常にそういうものである。
+       &nbsp; スペースを表示する為のHTMLタグ 
+       SEO的には問題無いから遊んでいるけど、
+       <span>を使ったりcssを使った方が綺麗に簡単に出来上がる。-->
+  </footer>
+  <!-- ===== JavaScript ===== 
+  JavaScriptの読み込みはページ末尾（</body> の直前）に置くのが基本です。
+  理由：HTMLの描画を妨げないため。
+  defer 属性：HTMLの解析が終わってからスクリプトを実行するよう指示します。
+  async 属性：HTMLの解析と並行してダウンロードし、ダウンロード完了次第即実行します。
+-->
+  <!-- apps.js 読み込み・アプリ一覧レンダリング -->
+  <script src="apps.js" defer></script>
+  <script>
+    /**
+     * 言語切り替え＆アプリ一覧レンダリング
+     * apps.js の APPS 配列を編集するだけで自動反映されます
+     */
+    (function () {
+      "use strict";
+
+      /* 切り替え可能な言語コードのホワイトリスト（不正な値の混入を防ぐ） */
+      var VALID_LANGS = ["ja", "en"];
+      /* 現在表示している言語。初期値は日本語 */
+      var currentLang = "ja";
+
+      /* ─── i18n テキスト定義 ───
+      * i18n とは "internationalization"（国際化）の略称で、
+      * 先頭の i と末尾の n の間に18文字あることからこう呼ばれます。
+      * 日本語（ja）と英語（en）のテキストをここに集中管理することで、
+      * 言語切り替え時に一か所を書き換えるだけで全体が更新されます。
+      */
+      var I18N = {
+        ja: {
+          appsHeading: "アプリ",
+          tryHeading: "ブラウザで遊ぶ",
+          badgeLive: "公開中",
+          badgeComing: "COMING SOON",
+          emptyMsg: "アプリは近日公開予定です。",
+          catchMain: "こどもも大人も笑顔になる",
+          catchSub: "安心・安全・便利な<strong>iOSアプリ</strong>をつくっています。",
+          navPolicy: "プライバシーポリシー・免責事項",
+          skipLink: "メインコンテンツへスキップ"
+        },
+        en: {
+          appsHeading: "Apps",
+          tryHeading: "Try in Browser",
+          badgeLive: "LIVE",
+          badgeComing: "COMING SOON",
+          emptyMsg: "Apps coming soon.",
+          catchMain: "Safe, reliable & delightful",
+          catchSub: "We build <strong>iOS apps</strong> for kids and grown-ups alike.",
+          navPolicy: "Privacy Policy & Disclaimer",
+          skipLink: "Skip to main content"
+        }
+      };
+
+      /**
+       * HTML特殊文字をエスケープする（XSS防止）
+       * XSS（クロスサイトスクリプティング）とは：
+       * 外部から受け取った文字列をそのままHTMLに埋め込むと、
+       * 悪意あるスクリプトが実行される危険があります。
+       * この関数は < > & " などの特殊文字を無害な文字列（&lt; &gt; など）に
+       * 変換することで、その危険を防ぎます。
+       * document.createElement("div") を使ってブラウザ自身に変換させるのは、
+       * 自前でルールを書くより安全で確実な方法です。
+       * FlyingDevLab.comでは何よりも安全を優先したいので、
+       * ユーザーの交流を図る為の掲示板などを設置する予定はありません。
+       * 「ある」のがいけない！「ある」のがいけない！ 
+       */
+      function esc(str) {
+        if (typeof str !== "string") return "";
+        var d = document.createElement("div");
+        d.textContent = str;
+        return d.innerHTML;
+      }
+
+      /**
+       * 1枚のアプリカードの内部HTML文字列を生成して返す
+       * @param {Object} app  - APPS配列の1要素
+       * @param {string} lang - 表示言語コード（"ja" または "en"）
+       */
+      function cardContent(app, lang) {
+        var t = I18N[lang];
+        var badgeClass = app.status === "live" ? "badge-live" : "badge-coming";
+        var badgeText = app.status === "live" ? t.badgeLive : t.badgeComing;
+        var appName = lang === "en" ? (app.name_en || app.name) : app.name;
+        var appDesc = lang === "en" ? (app.desc_en || app.desc) : app.desc;
+        var iconHtml = app.iconImg
+          ? "<img src=\"" + esc(app.iconImg) + "\" alt=\"" + esc(appName) + " icon\" class=\"app-icon-img\">"
+          : esc(app.icon);
+        return "<div class=\"app-icon\">" + iconHtml + "</div>"
+          + "<div class=\"app-info\">"
+          + "<div class=\"app-name\">" + esc(appName) + "</div>"
+          + "<div class=\"app-desc\">" + esc(appDesc) + "</div>"
+          + "</div>"
+          + "<span class=\"app-badge " + esc(badgeClass) + "\">" + esc(badgeText) + "</span>";
+      }
+
+      /**
+       * APPS配列をもとにアプリカードを描画する
+       * 公開中（live + url あり）はリンク要素、未公開（coming）はdivのみで出力する
+       * @param {string} lang - 表示言語コード（"ja" または "en"）
+       */
+      function renderApps(lang) {
+        var container = document.getElementById("app-list");
+        if (!container) return;
+
+        var t = I18N[lang];
+
+        // セクション見出し更新
+        var headingText = document.getElementById("apps-heading-text");
+        if (headingText) headingText.textContent = t.appsHeading;
+
+        // カードをクリア
+        container.innerHTML = "";
+
+        if (typeof APPS === "undefined" || !APPS || APPS.length === 0) {
+          var msg = document.createElement("p");
+          msg.style.cssText = "color:var(--muted);text-align:center;padding:32px;";
+          msg.textContent = t.emptyMsg;
+          container.appendChild(msg);
+          return;
+        }
+
+
+        // forEach：配列の各要素を順番に処理するメソッド。
+        // APPS配列の要素数だけ、引数のfunction（コールバック関数）が繰り返し呼ばれます。
+        APPS.forEach(function (app) {
+          /* 公開中（status === "live"）かつApp Store URLが設定されている場合のみリンクにする */
+          var isLive = app.status === "live" && app.url;
+
+          var card = document.createElement("div");
+          card.className = "app-card fade-up";
+
+          if (isLive) {
+            /* 公開中：カード全体をApp StoreへのリンクとしてWrap */
+            var link = document.createElement("a");
+            link.href = app.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.innerHTML = cardContent(app, lang);
+            card.appendChild(link);
+          } else {
+            /* 未公開：リンクなしのdivのみで出力 */
+            card.innerHTML = cardContent(app, lang);
+          }
+
+          container.appendChild(card);
+        });
+      }
+
+      /**
+       * 表示言語を切り替える
+       * html要素のlang属性・タブの選択状態・コンテンツパネル・ヘッダーテキスト・アプリ一覧を一括更新する
+       * @param {string} lang - 切り替え先の言語コード（"ja" または "en"）
+       */
+      function switchLang(lang) {
+        if (VALID_LANGS.indexOf(lang) === -1) return;
+        currentLang = lang;
+
+        // html lang 属性更新（スクリーンリーダーや翻訳ツールへの伝達）
+        document.documentElement.lang = lang;
+
+        // タブ状態更新
+        document.querySelectorAll(".lang-tab").forEach(function (tab) {
+          var isActive = tab.getAttribute("aria-controls") === "lang-" + lang;
+          tab.classList.toggle("active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        // コンテンツパネル更新
+        document.querySelectorAll(".lang-content").forEach(function (panel) {
+          panel.classList.toggle("active", panel.id === "lang-" + lang);
+        });
+
+        // ヘッダーテキスト更新
+        // document.querySelector(".クラス名") → CSSセレクタで最初の1要素を取得。
+        // getElementById より汎用的で、クラス・タグ・属性など様々なセレクタが使えます。
+        var t = I18N[lang];
+        var catchMain = document.getElementById("catch-main");
+        var catchSub = document.getElementById("catch-sub");
+        var navPolicy = document.getElementById("nav-policy");
+        var skipLink = document.querySelector(".skip-link");
+
+        // textContent → 要素のテキストを書き換えます（HTMLタグは無効化される）
+        // innerHTML  → 要素の中身をHTMLごと書き換えます（<strong>などのタグが有効になる）
+        if (catchMain) catchMain.textContent = t.catchMain;
+        if (catchSub) catchSub.innerHTML = t.catchSub;
+        if (navPolicy) navPolicy.textContent = t.navPolicy;
+        if (skipLink) skipLink.textContent = t.skipLink;
+
+        // アプリ一覧を再描画
+        renderApps(lang);
+
+        // 体験セクション見出し更新
+        var tryHeadingText = document.getElementById("try-heading-text");
+        if (tryHeadingText) tryHeadingText.textContent = t.tryHeading;
+      }
+
+      // addEventListener("イベント名", コールバック関数) ：
+      // 指定したイベント（click / keydown など）が発生したときに実行する関数を登録します。
+      // これをイベントリスナーと呼びます。
+      // タブクリック：クリックされたタブの aria-controls からlangコードを取得して切り替える
+      document.querySelectorAll(".lang-tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          // this → イベントが発生した要素（クリックされたタブ）自身を指します
+          var lang = this.getAttribute("aria-controls").replace("lang-", "");
+          switchLang(lang);
+        });
+
+        // キーボード操作：左右矢印キーでタブを移動（WAI-ARIA Tabパターン準拠）
+        // e.key → 押されたキーの名前。"ArrowRight"（→キー）や "ArrowLeft"（←キー）など。
+        // e.preventDefault() → ブラウザのデフォルト動作（スクロールなど）をキャンセルします。
+        // % tabs.length（剰余演算）→ 最後のタブの次は最初のタブに戻る「ループ」処理です。
+        tab.addEventListener("keydown", function (e) {
+          var tabs = Array.from(document.querySelectorAll(".lang-tab"));
+          var index = tabs.indexOf(this);
+          if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+            e.preventDefault();
+            var next = e.key === "ArrowRight"
+              ? tabs[(index + 1) % tabs.length]
+              : tabs[(index - 1 + tabs.length) % tabs.length];
+            next.focus();
+            next.click();
+          }
+        });
+      });
+
+      // 初期描画：DOMが構築済みなら即実行、まだの場合はDOMContentLoadedを待つ
+      // document.readyState === "loading" → HTMLの読み込みがまだ完了していない状態。
+      // DOMContentLoaded イベント：HTMLの解析が完了し、DOMが使える状態になった時点で発火します。
+      // このチェックが必要な理由：<script defer> で読み込んでいるため通常は
+      // DOM構築後に実行されますが、念のため両方のケースに対応しています。
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () { renderApps("ja"); });
+      } else {
+        renderApps("ja");
+      }
+    })();
+  </script>
+
+  <!-- Threads 埋め込みスクリプト
+  crossorigin="anonymous" → 外部サーバーからスクリプトを読み込む際に
+  認証情報（Cookieなど）を送らないよう指示するセキュリティ属性です。
+  async → HTMLの解析をブロックせずに並行してダウンロード・実行します。
+-->
+  <script async src="https://www.threads.com/embed.js" crossorigin="anonymous"></script>
+  <!-- Twitter / X ウィジェット（1回だけ読み込む）
+  このスクリプトがページ内の <blockquote class="twitter-tweet"> を
+  リッチなカード表示に変換します。
+  charset="utf-8" → スクリプトファイルの文字コードを明示しています。
+-->
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" crossorigin="anonymous"></script>
+  <!-- 最後まで読んで頂きありがとうございます。 -->
+</body>
+
+</html>
