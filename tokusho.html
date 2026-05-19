@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ja" prefix="og: https://ogp.me/ns#">
-
 <!--
   特定商取引法に基づく表記
   ============================================================
@@ -48,27 +47,46 @@
   <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
   <meta property="og:locale" content="ja_JP">
 
-  <!-- JSON-LD 構造化データ -->
+  <!-- ===== JSON-LD 構造化データ =====
+       index.html・privacy-policy.html と同じ @graph 方式で統一しています。
+       @graph を使うことで Organization・WebSite・WebPage の3エンティティを
+       1つのスクリプトタグにまとめて定義でき、Googleがサイト構造を把握しやすくなります。
+       noindex ページでも構造化データは有効です。
+       Googleがサイト全体の組織情報を理解するために役立ちます。 -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": "https://flyingdevlab.com/tokusho.html",
-    "url": "https://flyingdevlab.com/tokusho.html",
-    "name": "特定商取引法に基づく表示 | Flying Dev Lab",
-    "description": "空飛ぶ研究室（Flying Dev Lab）の特定商取引法に基づく表示。",
-    "inLanguage": "ja",
-    "isPartOf": {
-      "@type": "WebSite",
-      "url": "https://flyingdevlab.com/",
-      "name": "空飛ぶ研究室（Flying Dev Lab）"
-    },
-    "dateModified": "2026-05-08",
-    "publisher": {
-      "@type": "Organization",
-      "name": "空飛ぶ研究室（Flying Dev Lab）",
-      "url": "https://flyingdevlab.com/"
-    }
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://flyingdevlab.com/#organization",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "url": "https://flyingdevlab.com/",
+        "sameAs": [
+          "https://x.com/FlyingDevLab",
+          "https://www.instagram.com/flyingdevlab/",
+          "https://github.com/FlyingDevLab"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://flyingdevlab.com/#website",
+        "url": "https://flyingdevlab.com/",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "publisher": { "@id": "https://flyingdevlab.com/#organization" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://flyingdevlab.com/tokusho.html",
+        "url": "https://flyingdevlab.com/tokusho.html",
+        "name": "特定商取引法に基づく表示 | Flying Dev Lab",
+        "description": "空飛ぶ研究室（Flying Dev Lab）の特定商取引法に基づく表示。",
+        "inLanguage": "ja",
+        "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
+        "dateModified": "2026-05-19",
+        "publisher": { "@id": "https://flyingdevlab.com/#organization" }
+      }
+    ]
   }
   </script>
 
@@ -98,7 +116,7 @@
       <small class="header-subtitle">Specified Commercial Transactions Act</small>
     </h1>
     <div class="updated">
-      <p>最終更新日 2026年5月8日</p>
+      <p>最終更新日 2026年5月19日</p>
     </div>
   </div>
 </header>
@@ -121,13 +139,16 @@
         <!-- 難読化対象：JSで実行時にレンダリング -->
         <dd><span id="tokusho-name" aria-label="室長名"></span></dd>
       </div>
-      <!-- 所在地：特商法施行規則 第8条により、住所の明示が義務付けられている。バーチャルオフィスで対応可能なので事前に用意しておきましょう。 -->
+      <!-- 所在地：特商法施行規則 第8条により、住所の明示が義務付けられている。
+           バーチャルオフィスで対応可能なので事前に用意しておきましょう。 -->
       <div class="tokusho-dl-row">
         <dt>所在地</dt>
         <!-- 難読化対象：JSで実行時にレンダリング -->
         <dd><span id="tokusho-addr" aria-label="所在地"></span></dd>
       </div>
-      <!-- 電話番号：問い合わせ手段として必須。非公開の場合は請求に応じる旨を記載しています。EU圏向けにサービスを提供する場合DSAトレーダー登録に必要となるので、こちらも事前に用意しておきましょう。 -->
+      <!-- 電話番号：問い合わせ手段として必須。非公開の場合は請求に応じる旨を記載しています。
+           EU圏向けにサービスを提供する場合DSAトレーダー登録に必要となるので、
+           こちらも事前に用意しておきましょう。 -->
       <div class="tokusho-dl-row">
         <dt>電話番号</dt>
         <dd>
@@ -230,10 +251,41 @@
 
 </main>
 
-<!-- フッター -->
+<!-- フッター：index.html・privacy-policy.html と同じ構成に統一しています。
+     SNSリンク・legalリンク・Pledgeリンクを含めることで
+     どのページからでも主要リンクにアクセスできるようにしています。 -->
 <footer>
+  <!-- SNSリンク -->
+  <div class="footer-links">
+    <a href="https://github.com/FlyingDevLab"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="GitHub（新しいタブで開きます）">
+      GitHub
+    </a>
+    <a href="https://x.com/FlyingDevLab"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="X（新しいタブで開きます）">
+      <span class="x-icon" aria-hidden="true">𝕏</span>
+    </a>
+    <a href="https://www.instagram.com/flyingdevlab/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram（新しいタブで開きます）">
+      Instagram
+    </a>
+  </div>
+  <!-- legalリンク -->
+  <nav class="footer-legal" aria-label="法的情報">
+    <a href="/privacy-policy.html">プライバシーポリシー・免責事項</a>
+    <span class="footer-legal-sep" aria-hidden="true">|</span>
+    <a href="/tokusho.html" lang="ja">特定商取引法に基づく表示</a>
+  </nav>
+  <!-- TOPへ戻るリンク -->
   <a href="/" class="footer-top" aria-label="トップページへ戻る">↑ TOP</a>
-  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+  <!-- コピーライトとPledgeリンク -->
+  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab : <a href="/pledge.html">Pledge</a></p>
 </footer>
 
 <!-- ===== JavaScript =====

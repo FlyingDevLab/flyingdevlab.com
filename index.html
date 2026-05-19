@@ -309,31 +309,33 @@
         </h2>
       </div>
 
-      <!-- MAKE10 -->
-      <a href="/make10/index.html" class="try-game-card fade-up" aria-label="MAKE10をブラウザでプレイ">
+      <!-- MAKE10
+           id="game-card-1" → JSが言語切り替え時にaria-labelを更新するためのフック
+           id="game-name-1" → JSが言語切り替え時にゲーム名テキストを更新するためのフック -->
+      <a href="/make10/index.html" class="try-game-card fade-up" id="game-card-1" aria-label="MAKE10をブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name">MAKE10 / 10をつくろう</div>
+          <div class="try-game-name" id="game-name-1">MAKE10 / 10をつくろう</div>
         </div>
       </a>
 
       <!-- Cheese Escape -->
-      <a href="/cheese-escape-web/index.html" class="try-game-card fade-up" aria-label="Cheese Escapeをブラウザでプレイ">
+      <a href="/cheese-escape-web/index.html" class="try-game-card fade-up" id="game-card-2" aria-label="Cheese Escapeをブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name">Cheese Escape / 迷路</div>
+          <div class="try-game-name" id="game-name-2">Cheese Escape / 迷路</div>
         </div>
       </a>
 
       <!-- Whack-a-Mole -->
-      <a href="/whack-a-mole/index.html" class="try-game-card fade-up" aria-label="Whack-a-Moleをブラウザでプレイ">
+      <a href="/whack-a-mole/index.html" class="try-game-card fade-up" id="game-card-3" aria-label="Whack-a-Moleをブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name">Whack-a-Mole / モグラ叩き</div>
+          <div class="try-game-name" id="game-name-3">Whack-a-Mole / モグラ叩き</div>
         </div>
       </a>
 
       <!-- Pinball -->
-      <a href="/pinball/index.html" class="try-game-card fade-up" aria-label="Pinballをブラウザでプレイ">
+      <a href="/pinball/index.html" class="try-game-card fade-up" id="game-card-4" aria-label="Pinballをブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name">Pinball / ピンボール</div>
+          <div class="try-game-name" id="game-name-4">Pinball / ピンボール</div>
         </div>
       </a>
 
@@ -592,7 +594,15 @@
           catchMain: "こどもも大人も笑顔になる",
           catchSub: "安心・安全・便利な<strong>iOSアプリ</strong>をつくっています。",
           navPolicy: "プライバシーポリシー・免責事項",
-          skipLink: "メインコンテンツへスキップ"
+          skipLink: "メインコンテンツへスキップ",
+          /* ─── ブラウザゲームカード名 ───
+           * game1〜4 → カードに表示するゲーム名テキスト
+           * game1Aria〜4Aria → スクリーンリーダー向けのaria-label
+           * 新しいゲームを追加するときはここにも追記してください。 */
+          game1: "MAKE10 / 10をつくろう",   game1Aria: "MAKE10をブラウザでプレイ",
+          game2: "Cheese Escape / 迷路",    game2Aria: "Cheese Escapeをブラウザでプレイ",
+          game3: "Whack-a-Mole / モグラ叩き", game3Aria: "Whack-a-Moleをブラウザでプレイ",
+          game4: "Pinball / ピンボール",    game4Aria: "Pinballをブラウザでプレイ"
         },
         en: {
           appsHeading: "Apps",
@@ -603,7 +613,12 @@
           catchMain: "Safe, reliable & delightful",
           catchSub: "We build <strong>iOS apps</strong> for kids and grown-ups alike.",
           navPolicy: "Privacy Policy & Disclaimer",
-          skipLink: "Skip to main content"
+          skipLink: "Skip to main content",
+          /* ─── Browser game card names ─── */
+          game1: "MAKE10",        game1Aria: "Play MAKE10 in browser",
+          game2: "Cheese Escape", game2Aria: "Play Cheese Escape in browser",
+          game3: "Whack-a-Mole", game3Aria: "Play Whack-a-Mole in browser",
+          game4: "Pinball",       game4Aria: "Play Pinball in browser"
         }
       };
 
@@ -748,6 +763,16 @@
         // 体験セクション見出し更新
         var tryHeadingText = document.getElementById("try-heading-text");
         if (tryHeadingText) tryHeadingText.textContent = t.tryHeading;
+
+        // ブラウザゲームカード名更新
+        // game1〜4 のテキストとaria-labelを言語に合わせて書き換えます。
+        // 新しいゲームを追加したときは I18N のゲーム名と合わせてここも追記してください。
+        [1, 2, 3, 4].forEach(function (n) {
+          var nameEl = document.getElementById("game-name-" + n);
+          var cardEl = document.getElementById("game-card-" + n);
+          if (nameEl) nameEl.textContent = t["game" + n];
+          if (cardEl) cardEl.setAttribute("aria-label", t["game" + n + "Aria"]);
+        });
       }
 
       // addEventListener("イベント名", コールバック関数) ：

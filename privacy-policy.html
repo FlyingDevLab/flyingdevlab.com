@@ -4,447 +4,505 @@
      スクリーンリーダーや翻訳ツールが正しく動作するために重要。 -->
 <html lang="ja" prefix="og: https://ogp.me/ns#">
 <head>
-  <!-- 文字コード宣言：UTF-8は日本語・英語・絵文字をすべて扱える文字コード。
-       これがないと日本語が文字化けすることがある。 -->
-  <meta charset="UTF-8">
-  <!-- ビューポート設定：スマホでPC向けの小さいレイアウトが表示されないようにする必須設定 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- ページタイトル：ブラウザのタブと検索結果に表示される最重要SEOタグ -->
-  <title>プライバシーポリシー・免責事項 | 空飛ぶ研究室（Flying Dev Lab）</title>
-  <!-- description：検索結果のタイトル下に表示される説明文（スニペット） -->
-  <meta name="description" content="空飛ぶ研究室（Flying Dev Lab）のiOSアプリに関するプライバシーポリシーおよび免責事項です。日本語・英語両対応。Privacy Policy & Disclaimer for Flying Dev Lab iOS apps.">
-  <!-- robots：検索エンジンのクローラーへの指示。index=登録OK、follow=リンクをたどってOK -->
-  <meta name="robots" content="index, follow">
-  <!-- canonical：このページの正規URLを検索エンジンに伝える。重複コンテンツ問題を防ぐ -->
-  <link rel="canonical" href="https://flyingdevlab.com/privacy-policy.html">
-  <!-- hreflang: 日英とも同一URLで言語タブ切替のため、同じURLを指定 -->
-  <link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy.html">
-  <link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy.html">
-  <link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy.html">
-
-  <!-- ===== OGP（Open Graph Protocol） =====
-       SNS（X・Facebook・LINEなど）でURLをシェアしたときに表示される
-       カードの見た目（タイトル・説明・画像）を制御するメタタグ群。
-       index.htmlとは異なり、このページはog:image:width/heightを省略しています。 -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://flyingdevlab.com/privacy-policy.html">
-  <meta property="og:title" content="プライバシーポリシー・免責事項 | Flying Dev Lab">
-  <meta property="og:description" content="空飛ぶ研究室（Flying Dev Lab）のiOSアプリに関するプライバシーポリシーおよび免責事項です。">
-  <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
-  <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
-  <meta property="og:locale" content="ja_JP">
-  <meta property="og:locale:alternate" content="en_US">
-
-  <!-- ===== Twitter Card =====
-       X（旧Twitter）専用のカード設定。og: タグと異なり summary（小さい画像）を使用。
-       プライバシーポリシーは大きな画像カードより小さいほうが適切なため summary を選択。 -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@FlyingDevLab">
-  <meta name="twitter:title" content="プライバシーポリシー | Flying Dev Lab">
-  <meta name="twitter:description" content="空飛ぶ研究室（Flying Dev Lab）のiOSアプリに関するプライバシーポリシーおよび免責事項です。">
-
-  <!-- ===== JSON-LD 構造化データ =====
-       Googleなどの検索エンジンに「このページの種類・所属・更新日」を
-       JSON形式で機械的に伝える仕組み。
-       index.htmlと違いこのページは @graph ではなく WebPage 単体で定義しています。
-       dateModified（最終更新日）を明示することで検索結果に更新日が表示されることがあります。 -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": "https://flyingdevlab.com/privacy-policy.html",
-    "url": "https://flyingdevlab.com/privacy-policy.html",
-    "name": "プライバシーポリシー・免責事項 | Flying Dev Lab",
-    "description": "空飛ぶ研究室（Flying Dev Lab）のiOSアプリに関するプライバシーポリシーおよび免責事項。",
-    "inLanguage": ["ja", "en"],
-    "isPartOf": {
-      "@type": "WebSite",
-      "url": "https://flyingdevlab.com/",
-      "name": "空飛ぶ研究室（Flying Dev Lab）"
-    },
-    "dateModified": "2026-03-10",
-    "publisher": {
+<!-- 文字コード宣言：UTF-8は日本語・英語・絵文字をすべて扱える文字コード。
+     これがないと日本語が文字化けすることがある。 -->
+<meta charset="UTF-8">
+<!-- ビューポート設定：スマホでPC向けの小さいレイアウトが表示されないようにする必須設定 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ページタイトル：ブラウザのタブと検索結果に表示される最重要SEOタグ -->
+<title>プライバシーポリシー・免責事項 | 空飛ぶ研究室（Flying Dev Lab）</title>
+<!-- description：検索結果のタイトル下に表示される説明文（スニペット） -->
+<meta name="description" content="空飛ぶ研究室（Flying Dev Lab）のアプリに関するプライバシーポリシーおよび免責事項です。日本語・英語両対応。Privacy Policy & Disclaimer for Flying Dev Lab apps.">
+<!-- robots：検索エンジンのクローラーへの指示。index=登録OK、follow=リンクをたどってOK -->
+<meta name="robots" content="index, follow">
+<!-- canonical：このページの正規URLを検索エンジンに伝える。重複コンテンツ問題を防ぐ -->
+<link rel="canonical" href="https://flyingdevlab.com/privacy-policy.html">
+<!-- hreflang: 日英とも同一URLで言語タブ切替のため、同じURLを指定 -->
+<link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy.html">
+<link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy.html">
+<link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy.html">
+<!-- ===== OGP（Open Graph Protocol） =====
+     SNS（X・Facebook・LINEなど）でURLをシェアしたときに表示される
+     カードの見た目（タイトル・説明・画像）を制御するメタタグ群。
+     index.htmlとは異なり、このページはog:image:width/heightを省略しています。 -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://flyingdevlab.com/privacy-policy.html">
+<meta property="og:title" content="プライバシーポリシー・免責事項 | Flying Dev Lab">
+<meta property="og:description" content="空飛ぶ研究室（Flying Dev Lab）のアプリに関するプライバシーポリシーおよび免責事項です。">
+<meta property="og:image" content="https://flyingdevlab.com/ogp.png">
+<meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<!-- ===== Twitter Card =====
+     X（旧Twitter）専用のカード設定。og: タグと異なり summary（小さい画像）を使用。
+     プライバシーポリシーは大きな画像カードより小さいほうが適切なため summary を選択。
+     index.html が summary_large_image を使っているのとは意図的に使い分けています。 -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@FlyingDevLab">
+<meta name="twitter:title" content="プライバシーポリシー | Flying Dev Lab">
+<meta name="twitter:description" content="空飛ぶ研究室（Flying Dev Lab）のアプリに関するプライバシーポリシーおよび免責事項です。">
+<!-- ===== JSON-LD 構造化データ =====
+     Googleなどの検索エンジンに「このページの種類・所属・更新日」を
+     JSON形式で機械的に伝える仕組み。
+     index.html と同じ @graph 方式で統一しています。
+     @graph を使うことで Organization・WebSite・WebPage の3エンティティを
+     1つのスクリプトタグにまとめて定義でき、Googleがサイト構造を把握しやすくなります。
+     dateModified（最終更新日）を明示することで検索結果に更新日が表示されることがあります。 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
       "@type": "Organization",
+      "@id": "https://flyingdevlab.com/#organization",
       "name": "空飛ぶ研究室（Flying Dev Lab）",
-      "url": "https://flyingdevlab.com/"
+      "url": "https://flyingdevlab.com/",
+      "sameAs": [
+        "https://x.com/FlyingDevLab",
+        "https://www.instagram.com/flyingdevlab/",
+        "https://github.com/FlyingDevLab"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://flyingdevlab.com/#website",
+      "url": "https://flyingdevlab.com/",
+      "name": "空飛ぶ研究室（Flying Dev Lab）",
+      "publisher": { "@id": "https://flyingdevlab.com/#organization" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://flyingdevlab.com/privacy-policy.html",
+      "url": "https://flyingdevlab.com/privacy-policy.html",
+      "name": "プライバシーポリシー・免責事項 | Flying Dev Lab",
+      "description": "空飛ぶ研究室（Flying Dev Lab）のアプリに関するプライバシーポリシーおよび免責事項。",
+      "inLanguage": ["ja", "en"],
+      "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
+      "dateModified": "2026-05-19",
+      "publisher": { "@id": "https://flyingdevlab.com/#organization" }
     }
-  }
-  </script>
-
-  <!-- ===== Favicon =====
-       ブラウザのタブやブックマークに表示される小さなアイコン。
-       apple-touch-icon はiPhoneでホーム画面に追加したときのアイコン。 -->
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-  <!-- Google Fonts: 動的生成のため SRI（改ざん検知ハッシュ）付与不可。
-       preconnect でフォントサーバーへの接続を事前に確立し読み込みを高速化。
-       このページはNoto Sans JP（日本語）とOutfit（英語）を使用。 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- このサイト共通のスタイルシートを読み込む -->
-  <link rel="stylesheet" href="style.css">
+  ]
+}
+</script>
+<!-- ===== Favicon =====
+     ブラウザのタブやブックマークに表示される小さなアイコン。
+     apple-touch-icon はiPhoneでホーム画面に追加したときのアイコン。 -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<!-- Google Fonts: 動的生成のため SRI（改ざん検知ハッシュ）付与不可。
+     preconnect でフォントサーバーへの接続を事前に確立し読み込みを高速化。
+     このページはNoto Sans JP（日本語）とOutfit（英語）を使用。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- このサイト共通のスタイルシートを読み込む -->
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <!-- スキップリンク（キーボード操作・スクリーンリーダー向け）
      通常は画面外に隠れており、Tabキーを押したときだけ表示されます。
      href="#main" で id="main" の要素（メインコンテンツ）へ直接ジャンプできます。 -->
 <a href="#main" class="skip-link">メインコンテンツへスキップ</a>
-
 <!-- <header>：ページ上部のヘッダー領域を示すセマンティックタグ。
      ページタイトルと最終更新日を表示しています。
      index.htmlとは違いここにはナビゲーションリンクがありません。 -->
 <header>
-  <!-- header-inner：コンテンツを中央に固定幅で配置するためのレイアウト用ラッパー -->
-  <div class="header-inner">
-    <!-- <h1>：このページで最も重要な見出し（1ページに1つが基本）。
-         <small>：親要素より小さいフォントサイズで補足テキストを表示するタグ。
-         ここでは日本語タイトルの下に英語タイトルを小さく添えています。
-         &amp; はHTMLエンティティで & を表します。
-         HTML内で & をそのまま書くとタグの一部と誤認されるため、
-         &amp; と書いて安全に表示します。 -->
-    <h1>
-      プライバシーポリシー・免責事項<br>
-      <small class="header-subtitle">Privacy Policy &amp; Disclaimer</small>
-    </h1>
-    <!-- updated：最終更新日を表示するエリア。
-         p[lang="en"] で英語の段落には個別に lang="en" を付け、
-         スクリーンリーダーが正しい言語で読み上げられるようにしています。 -->
-    <div class="updated">
-      <p>最終更新日 2026年3月10日</p>
-      <p lang="en">Last updated: March 10, 2026</p>
-    </div>
-  </div>
+<!-- header-inner：コンテンツを中央に固定幅で配置するためのレイアウト用ラッパー -->
+<div class="header-inner">
+<!-- <h1>：このページで最も重要な見出し（1ページに1つが基本）。
+     <small>：親要素より小さいフォントサイズで補足テキストを表示するタグ。
+     ここでは日本語タイトルの下に英語タイトルを小さく添えています。
+     &amp; はHTMLエンティティで & を表します。
+     HTML内で & をそのまま書くとタグの一部と誤認されるため、
+     &amp; と書いて安全に表示します。 -->
+<h1>
+  プライバシーポリシー・免責事項<br>
+  <small class="header-subtitle">Privacy Policy &amp; Disclaimer</small>
+</h1>
+<!-- updated：最終更新日を表示するエリア。
+     p[lang="en"] で英語の段落には個別に lang="en" を付け、
+     スクリーンリーダーが正しい言語で読み上げられるようにしています。 -->
+<div class="updated">
+  <p>最終更新日 2026年5月19日</p>
+  <p lang="en">Last updated: May 19, 2026</p>
+</div>
+</div>
 </header>
-
 <!-- <main>：ページのメインコンテンツを示すセマンティックタグ。
      id="main" はスキップリンク（href="#main"）のジャンプ先になっています。
      1ページにつき <main> は1つだけ使います。 -->
 <main id="main">
+<!-- 言語タブ：WAI-ARIA tablist パターン。キーボードの左右矢印でも切り替え可能。
+     role="tablist" → タブのコンテナ
+     role="tab"     → 各タブボタン
+     aria-selected  → 選択中かどうか（true/false）
+     aria-controls  → このタブが制御するパネルのid
+     type="button"  → フォーム送信を起こさないための明示的な指定 -->
+<div class="lang-tabs" role="tablist" aria-label="言語切り替え / Language">
+  <button class="lang-tab active"
+    role="tab"
+    id="tab-ja"
+    aria-selected="true"
+    aria-controls="lang-ja"
+    type="button">日本語</button>
+  <button class="lang-tab"
+    role="tab"
+    id="tab-en"
+    aria-selected="false"
+    aria-controls="lang-en"
+    type="button">English</button>
+</div>
 
-  <!-- 言語タブ：WAI-ARIA tablist パターン。キーボードの左右矢印でも切り替え可能。
-       role="tablist" → タブのコンテナ
-       role="tab"     → 各タブボタン
-       aria-selected  → 選択中かどうか（true/false）
-       aria-controls  → このタブが制御するパネルのid
-       type="button"  → フォーム送信を起こさないための明示的な指定 -->
-  <div class="lang-tabs" role="tablist" aria-label="言語切り替え / Language">
-    <button class="lang-tab active"
-            role="tab"
-            id="tab-ja"
-            aria-selected="true"
-            aria-controls="lang-ja"
-            type="button">日本語</button>
-    <button class="lang-tab"
-            role="tab"
-            id="tab-en"
-            aria-selected="false"
-            aria-controls="lang-en"
-            type="button">English</button>
+<!-- ==================== 日本語 ====================
+     日本語タブが選択されているときに表示されるコンテンツパネル。
+     role="tabpanel"          → このdivがタブパネルであることを宣言
+     aria-labelledby="tab-ja" → 対応するタブボタン（id="tab-ja"）と紐付け
+     class="active"           → CSSでこのパネルを表示する制御クラス。
+                                JSがタブ切り替え時にこのクラスを付け外しします。 -->
+<div class="lang-content active"
+  id="lang-ja"
+  role="tabpanel"
+  aria-labelledby="tab-ja">
+
+  <!-- policy-section：各ポリシー項目を囲むカード型のセクション。
+       style.cssで背景・角丸・影・ボーダーが定義されています。 -->
+  <div class="policy-section">
+    <!-- <h2>：このセクションの見出し。aria-hidden="true" の絵文字は装飾のみで読み上げ不要。 -->
+    <h2><span aria-hidden="true">📋</span> はじめに</h2>
+    <p>空飛ぶ研究室（Flying Dev Lab、以下「当開発者」）は、提供するアプリケーション（以下「本アプリ」）において、利用者のプライバシーを尊重し、個人情報の保護に努めます。</p>
+    <p>本ポリシーは、当開発者が運営するすべてのアプリに適用されます。アプリの種別（こども向け／一般向け）によって、収集する情報の範囲が異なります。各セクションに明記しています。</p>
   </div>
 
-  <!-- ==================== 日本語 ====================
-       日本語タブが選択されているときに表示されるコンテンツパネル。
-       role="tabpanel"          → このdivがタブパネルであることを宣言
-       aria-labelledby="tab-ja" → 対応するタブボタン（id="tab-ja"）と紐付け
-       class="active"           → CSSでこのパネルを表示する制御クラス。
-                                  JSがタブ切り替え時にこのクラスを付け外しします。 -->
-  <div class="lang-content active"
-       id="lang-ja"
-       role="tabpanel"
-       aria-labelledby="tab-ja">
-
-    <!-- policy-section：各ポリシー項目を囲むカード型のセクション。
-         style.cssで背景・角丸・影・ボーダーが定義されています。 -->
-    <div class="policy-section">
-      <!-- <h2>：このセクションの見出し。aria-hidden="true" の絵文字は装飾のみで読み上げ不要。 -->
-      <h2><span aria-hidden="true">📋</span> はじめに</h2>
-      <p>空飛ぶ研究室（Flying Dev Lab、以下「当開発者」）は、提供するiOSアプリケーション（以下「本アプリ」）において、利用者のプライバシーを尊重し、個人情報の保護に努めます。</p>
-      <p>本ポリシーは、当開発者が運営するすべてのアプリに適用されます。アプリの種別（こども向け／一般向け）によって、収集する情報の範囲が異なります。各セクションに明記しています。</p>
-    </div>
-
-    <!-- policy-children クラスを追加したセクション。
-         style.cssで左側にアクセントカラーのボーダーが付き、視覚的に強調されます。
-         こども向けアプリの方針を特別に目立たせるための設計です。 -->
-    <div class="policy-section policy-children">
-      <h2><span aria-hidden="true">👶</span> こども向けアプリの方針</h2>
-      <p>当開発者のこども向けアプリは、以下の方針に基づいて設計・運営されています。</p>
-      <!-- <ul>：順序なしリスト（Unordered List）。箇条書きを表すタグ。
-           <li>：リストの各項目（List Item）。ulまたはolの直接の子要素として使います。 -->
-      <ul>
-        <li>広告を一切掲載しない</li>
-        <li>アプリ内課金なし</li>
-        <li>外部へのデータ送信なし</li>
-        <li>スコア・設定は端末内のみに保存</li>
-        <li>外部リンクなし</li>
-        <li>13歳未満のこどもから個人情報を収集しない</li>
-      </ul>
-      <p>これらの方針は、アメリカの子ども向けオンラインプライバシー保護法（COPPA）の理念と一致しており、当開発者はその精神を自主的に支持・実践しています。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">📦</span> 収集する情報</h2>
-      <!-- <strong>：テキストを強調するタグ。視覚的に太字になり、スクリーンリーダーも重要として読み上げます。 -->
-      <p><strong>こども向けアプリ：</strong>個人情報・端末情報・広告識別子を一切収集しません。スコアや設定データは端末内のみに保存されます。</p>
-      <p><strong>一般向けアプリ：</strong>以下の情報を収集する場合があります。</p>
-      <ul>
-        <li>プレイデータ（スコア・ゲーム進行状況など）</li>
-        <li>端末情報（OSバージョン、機種など）</li>
-        <li>アプリ内課金に関する情報</li>
-      </ul>
-      <p>氏名・住所・メールアドレスなどの個人を特定できる情報は、いかなるアプリにおいても収集しておりません。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🎯</span> 情報の利用目的</h2>
-      <ul>
-        <li>アプリの品質向上・不具合の修正</li>
-        <li>ユーザー体験の改善</li>
-        <li>利用状況の統計分析</li>
-      </ul>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🔒</span> 第三者への情報提供</h2>
-      <p>当開発者は、法令に基づく場合を除き、利用者の情報を第三者に提供・販売することはありません。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🗂️</span> データの保持期間</h2>
-      <p>収集したデータは、利用目的に必要な期間のみ保持します。アプリを削除した場合、端末上のデータは削除されます。</p>
-      <p>サードパーティサービスが収集したデータの保持期間については、各サービスのプライバシーポリシーをご確認ください。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🛡️</span> セキュリティ</h2>
-      <p>当開発者は、収集した情報を適切な方法で管理し、不正アクセス・紛失・改ざんを防止するための合理的な措置を講じます。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">⚖️</span> 準拠法・管轄</h2>
-      <p>本ポリシーは日本法に準拠します。本ポリシーに関する紛争については、当開発者の所在地を管轄する裁判所を専属的合意管轄とします。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">⚠️</span> 免責事項</h2>
-      <p>本アプリは、可能な限り正確な情報および安定した動作を提供するよう努めていますが、その完全性・正確性・安全性を保証するものではありません。</p>
-      <p>iOSのアップデートや端末環境の変化により、予告なくアプリの動作に影響が生じる場合があります。これに起因するデータの消失についても、当開発者は責任を負いかねます。</p>
-      <p>当開発者は、事前の予告なくアプリの提供を終了・変更する場合があります。</p>
-      <p>未成年者によるアプリの利用および課金については、保護者の管理・責任のもとで行われるものとします。</p>
-      <p>本アプリから外部サイトへリンクする場合がありますが、リンク先のコンテンツおよびプライバシー対応については当開発者の責任の範囲外です。</p>
-      <p>外部サービス（分析ツール等）の利用に起因する問題についても、各サービス提供者の責任となります。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🔄</span> プライバシーポリシーの変更</h2>
-      <p>本ポリシーは必要に応じて改定することがあります。変更後のポリシーは本ページに掲載した時点で効力を生じます。重要な変更がある場合は、アプリまたはウェブサイト上でお知らせします。</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">📬</span> お問い合わせ</h2>
-      <p><span aria-hidden="true">🌐</span> <a href="https://flyingdevlab.com">flyingdevlab.com</a> のお問い合わせフォームから、匿名でご意見・ご要望をお送りいただけます。</p>
-      <p>メールでのお問い合わせをご希望の方は、以下よりご連絡ください。</p>
-      <!-- contact-box：メールアドレスを薄い青系背景のボックスで視覚的に区別して表示するエリア。
-           style.cssで背景色・角丸・余白が定義されています。 -->
-      <div class="contact-box">
-        <!-- メールアドレス難読化（Email Obfuscation）してスパムボット対策しています。
-         CloudflareのEmail Address Obfuscation機能がオンになっているので平文ですがメールアドレスを自動で難読化してもらってます -->
-        <p><span aria-hidden="true">📧</span> <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a></p>
-      </div>
-    </div>
-
+  <!-- policy-children クラスを追加したセクション。
+       style.cssで左側にアクセントカラーのボーダーが付き、視覚的に強調されます。
+       こども向けアプリの方針を特別に目立たせるための設計です。 -->
+  <div class="policy-section policy-children">
+    <h2><span aria-hidden="true">👶</span> こども向けアプリの方針</h2>
+    <p>当開発者のこども向けアプリは、以下の方針に基づいて設計・運営されています。</p>
+    <!-- <ul>：順序なしリスト（Unordered List）。箇条書きを表すタグ。
+         <li>：リストの各項目（List Item）。ulまたはolの直接の子要素として使います。 -->
+    <ul>
+      <li>広告を一切掲載しない</li>
+      <li>アプリ内課金なし</li>
+      <li>外部へのデータ送信なし</li>
+      <li>スコア・設定は端末内のみに保存</li>
+      <li>外部リンクなし</li>
+      <li>13歳未満のこどもから個人情報を収集しない</li>
+    </ul>
+    <p>これらの方針は、アメリカの子ども向けオンラインプライバシー保護法（COPPA）の理念と一致しており、当開発者はその精神を自主的に支持・実践しています。</p>
   </div>
 
-  <!-- ==================== English ====================
-       英語タブが選択されているときに表示されるコンテンツパネル。
-       lang="en" を個別に付けることでスクリーンリーダーがこのパネル内を英語として読み上げます。
-       初期状態では class="active" がないため CSSで非表示になっています。
-       JSの switchLang() が呼ばれると active クラスが切り替わります。 -->
-  <div class="lang-content"
-       id="lang-en"
-       lang="en"
-       role="tabpanel"
-       aria-labelledby="tab-en">
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">📋</span> Introduction</h2>
-      <p>Flying Dev Lab ("Developer") respects the privacy of users of its iOS applications ("App") and is committed to protecting personal information.</p>
-      <p>This policy applies to all apps operated by the Developer. The scope of information collected varies depending on the app type (children's app / general app), as described in each section below.</p>
-    </div>
-
-    <div class="policy-section policy-children">
-      <h2><span aria-hidden="true">👶</span> Our Policy on Children's Apps</h2>
-      <p>Children's apps developed by Flying Dev Lab are designed and operated based on the following principles:</p>
-      <ul>
-        <li>No advertisements</li>
-        <li>No in-app purchases</li>
-        <li>No data sent to external servers</li>
-        <li>Scores and settings stored on-device only</li>
-        <li>No external links</li>
-        <li>No collection of personal information from children under 13</li>
-      </ul>
-      <p>These practices align with the principles of the Children's Online Privacy Protection Act (COPPA), and the Developer voluntarily supports and upholds its spirit.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">📦</span> Information We Collect</h2>
-      <p><strong>Children's apps:</strong> We do not collect any personal information, device information, or advertising identifiers. Scores and settings are stored on-device only.</p>
-      <p><strong>General apps:</strong> The following information may be collected:</p>
-      <ul>
-        <li>Play data (scores, game progress, etc.)</li>
-        <li>Device information (OS version, device model, etc.)</li>
-        <li>In-app purchase information</li>
-      </ul>
-      <p>We do not collect personally identifiable information such as name, address, or email address in any of our apps.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🎯</span> How We Use Information</h2>
-      <ul>
-        <li>To improve app quality and fix bugs</li>
-        <li>To enhance user experience</li>
-        <li>For statistical analysis of usage</li>
-      </ul>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🔒</span> Sharing of Information</h2>
-      <p>We do not sell or share user information with third parties, except as required by law.</p>
-    </div>
-
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🗂️</span> Data Retention</h2>
-      <p>We retain collected data only as long as necessary for the purposes described in this policy. When you delete the app, data stored on your device is removed.</p>
-      <p>For data retained by third-party services, please refer to their respective privacy policies.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🛡️</span> Security</h2>
-      <p>We take reasonable measures to protect collected information from unauthorized access, loss, or alteration.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">⚖️</span> Governing Law</h2>
-      <p>This policy is governed by the laws of Japan. Any disputes arising from this policy shall be subject to the exclusive jurisdiction of the courts having jurisdiction over the Developer's location.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">⚠️</span> Disclaimer</h2>
-      <p>While we strive to provide accurate information and stable functionality, we do not guarantee the completeness, accuracy, or security of the App.</p>
-      <p>iOS updates or changes in device environment may affect app functionality without prior notice. The Developer shall not be liable for any data loss resulting from such changes.</p>
-      <p>The Developer may terminate or modify the App without prior notice.</p>
-      <p>Use of the App by minors, including any in-app purchases, is the responsibility of the parent or guardian.</p>
-      <p>The App may contain links to external websites. The Developer is not responsible for the content or privacy practices of those sites.</p>
-      <p>Issues arising from third-party services (such as analytics providers) are the responsibility of those respective providers.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">🔄</span> Changes to This Policy</h2>
-      <p>We may update this policy from time to time. Changes take effect when posted on this page. We will notify users of significant changes via the app or website.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2><span aria-hidden="true">📬</span> Contact Us</h2>
-      <p>You can send anonymous feedback or requests via the contact form at <span aria-hidden="true">🌐</span> <a href="https://flyingdevlab.com">flyingdevlab.com</a>.</p>
-      <p>If you would like to contact us by email, please reach out using the address below.</p>
-      <div class="contact-box">
-        <!-- ボット対策の難読化に関しては日本語版と同様です。 -->
-        <p><span aria-hidden="true">📧</span> <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a></p>
-      </div>
-    </div>
-
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📦</span> 収集する情報</h2>
+    <!-- <strong>：テキストを強調するタグ。視覚的に太字になり、スクリーンリーダーも重要として読み上げます。 -->
+    <p><strong>こども向けアプリ：</strong>個人情報・端末情報・広告識別子を一切収集しません。スコアや設定データは端末内のみに保存されます。</p>
+    <p><strong>一般向けアプリ：</strong>以下の情報を収集する場合があります。</p>
+    <ul>
+      <li>プレイデータ（スコア・ゲーム進行状況など）</li>
+      <li>端末情報（OSバージョン、機種など）</li>
+      <li>アプリ内課金に関する情報</li>
+    </ul>
+    <p>氏名・住所・メールアドレスなどの個人を特定できる情報は、いかなるアプリにおいても収集しておりません。</p>
   </div>
 
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🎯</span> 情報の利用目的</h2>
+    <ul>
+      <li>アプリの品質向上・不具合の修正</li>
+      <li>ユーザー体験の改善</li>
+      <li>利用状況の統計分析</li>
+    </ul>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🔒</span> 第三者への情報提供</h2>
+    <p>当開発者は、法令に基づく場合を除き、利用者の情報を第三者に提供・販売することはありません。</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🗂️</span> データの保持期間</h2>
+    <p>収集したデータは、利用目的に必要な期間のみ保持します。アプリを削除した場合、端末上のデータは削除されます。</p>
+    <p>サードパーティサービスが収集したデータの保持期間については、各サービスのプライバシーポリシーをご確認ください。</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🛡️</span> セキュリティ</h2>
+    <p>当開発者は、収集した情報を適切な方法で管理し、不正アクセス・紛失・改ざんを防止するための合理的な措置を講じます。</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">⚖️</span> 準拠法・管轄</h2>
+    <p>本ポリシーは日本法に準拠します。本ポリシーに関する紛争については、当開発者の所在地を管轄する裁判所を専属的合意管轄とします。</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">⚠️</span> 免責事項</h2>
+    <p>本アプリは、可能な限り正確な情報および安定した動作を提供するよう努めていますが、その完全性・正確性・安全性を保証するものではありません。</p>
+    <p>OSのアップデートや端末環境の変化により、予告なくアプリの動作に影響が生じる場合があります。これに起因するデータの消失についても、当開発者は責任を負いかねます。</p>
+    <p>当開発者は、事前の予告なくアプリの提供を終了・変更する場合があります。</p>
+    <p>未成年者によるアプリの利用および課金については、保護者の管理・責任のもとで行われるものとします。</p>
+    <p>本アプリから外部サイトへリンクする場合がありますが、リンク先のコンテンツおよびプライバシー対応については当開発者の責任の範囲外です。</p>
+    <p>外部サービス（分析ツール等）の利用に起因する問題についても、各サービス提供者の責任となります。</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🔄</span> プライバシーポリシーの変更</h2>
+    <p>本ポリシーは必要に応じて改定することがあります。変更後のポリシーは本ページに掲載した時点で効力を生じます。重要な変更がある場合は、アプリまたはウェブサイト上でお知らせします。</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📬</span> お問い合わせ</h2>
+    <p><span aria-hidden="true">🌐</span> <a href="https://flyingdevlab.com">flyingdevlab.com</a> のお問い合わせフォームから、匿名でご意見・ご要望をお送りいただけます。</p>
+    <p>メールでのお問い合わせをご希望の方は、以下よりご連絡ください。</p>
+    <!-- contact-box：メールアドレスを薄い青系背景のボックスで視覚的に区別して表示するエリア。
+         style.cssで背景色・角丸・余白が定義されています。 -->
+    <div class="contact-box">
+      <!-- メールアドレス難読化（Email Obfuscation）
+           Unicodeエスケープ方式でスパムボット対策しています。
+           \uXXXX 形式で文字を格納し、JSが実行時にDOMへ書き込みます。
+           ブラウザには正常に表示されますが、ソースコードをそのまま読むボットには
+           プレーンテキストとして認識されにくくなります。
+           tokusho.html と同じ方式で統一しています。 -->
+      <p><span aria-hidden="true">📧</span> <a id="pp-email-ja" href="#" aria-label="メールアドレス">（読込中）</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== English ====================
+     英語タブが選択されているときに表示されるコンテンツパネル。
+     lang="en" を個別に付けることでスクリーンリーダーがこのパネル内を英語として読み上げます。
+     初期状態では class="active" がないため CSSで非表示になっています。
+     JSの switchLang() が呼ばれると active クラスが切り替わります。 -->
+<div class="lang-content"
+  id="lang-en"
+  lang="en"
+  role="tabpanel"
+  aria-labelledby="tab-en">
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📋</span> Introduction</h2>
+    <p>Flying Dev Lab ("Developer") respects the privacy of users of its applications ("App") and is committed to protecting personal information.</p>
+    <p>This policy applies to all apps operated by the Developer. The scope of information collected varies depending on the app type (children's app / general app), as described in each section below.</p>
+  </div>
+
+  <div class="policy-section policy-children">
+    <h2><span aria-hidden="true">👶</span> Our Policy on Children's Apps</h2>
+    <p>Children's apps developed by Flying Dev Lab are designed and operated based on the following principles:</p>
+    <ul>
+      <li>No advertisements</li>
+      <li>No in-app purchases</li>
+      <li>No data sent to external servers</li>
+      <li>Scores and settings stored on-device only</li>
+      <li>No external links</li>
+      <li>No collection of personal information from children under 13</li>
+    </ul>
+    <p>These practices align with the principles of the Children's Online Privacy Protection Act (COPPA), and the Developer voluntarily supports and upholds its spirit.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📦</span> Information We Collect</h2>
+    <p><strong>Children's apps:</strong> We do not collect any personal information, device information, or advertising identifiers. Scores and settings are stored on-device only.</p>
+    <p><strong>General apps:</strong> The following information may be collected:</p>
+    <ul>
+      <li>Play data (scores, game progress, etc.)</li>
+      <li>Device information (OS version, device model, etc.)</li>
+      <li>In-app purchase information</li>
+    </ul>
+    <p>We do not collect personally identifiable information such as name, address, or email address in any of our apps.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🎯</span> How We Use Information</h2>
+    <ul>
+      <li>To improve app quality and fix bugs</li>
+      <li>To enhance user experience</li>
+      <li>For statistical analysis of usage</li>
+    </ul>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🔒</span> Sharing of Information</h2>
+    <p>We do not sell or share user information with third parties, except as required by law.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🗂️</span> Data Retention</h2>
+    <p>We retain collected data only as long as necessary for the purposes described in this policy. When you delete the app, data stored on your device is removed.</p>
+    <p>For data retained by third-party services, please refer to their respective privacy policies.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🛡️</span> Security</h2>
+    <p>We take reasonable measures to protect collected information from unauthorized access, loss, or alteration.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">⚖️</span> Governing Law</h2>
+    <p>This policy is governed by the laws of Japan. Any disputes arising from this policy shall be subject to the exclusive jurisdiction of the courts having jurisdiction over the Developer's location.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">⚠️</span> Disclaimer</h2>
+    <p>While we strive to provide accurate information and stable functionality, we do not guarantee the completeness, accuracy, or security of the App.</p>
+    <p>OS updates or changes in device environment may affect app functionality without prior notice. The Developer shall not be liable for any data loss resulting from such changes.</p>
+    <p>The Developer may terminate or modify the App without prior notice.</p>
+    <p>Use of the App by minors, including any in-app purchases, is the responsibility of the parent or guardian.</p>
+    <p>The App may contain links to external websites. The Developer is not responsible for the content or privacy practices of those sites.</p>
+    <p>Issues arising from third-party services (such as analytics providers) are the responsibility of those respective providers.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">🔄</span> Changes to This Policy</h2>
+    <p>We may update this policy from time to time. Changes take effect when posted on this page. We will notify users of significant changes via the app or website.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span aria-hidden="true">📬</span> Contact Us</h2>
+    <p>You can send anonymous feedback or requests via the contact form at <span aria-hidden="true">🌐</span> <a href="https://flyingdevlab.com">flyingdevlab.com</a>.</p>
+    <p>If you would like to contact us by email, please reach out using the address below.</p>
+    <div class="contact-box">
+      <!-- Email obfuscation: same Unicode escape method as the Japanese section above. -->
+      <p><span aria-hidden="true">📧</span> <a id="pp-email-en" href="#" aria-label="Email address">（loading）</a></p>
+    </div>
+  </div>
+</div>
 </main>
 
-<!-- <footer>：ページ下部のフッター領域を示すセマンティックタグ。
-     href="/" → サイトのルート（トップページ）へのリンク。
-     indexではページ上部へ移動するが、ここではhomeへ飛んでいく。
-     topとかhomeとかindexとか表現は人それぞれです。
-     少なくとも私の地元ではこうです（嘘
-     / から始まるパスはドメインのルートを指します（https://flyingdevlab.com/ と同等）。
-     aria-label でリンクの目的をスクリーンリーダーに伝えています。
-     © はHTMLエンティティで © （著作権マーク）を表示しています。 -->
+<!-- フッター：index.html と同じ構成に統一しています。
+     SNSリンク・legalリンク・Pledgeリンクを含めることで
+     どのページからでも主要リンクにアクセスできるようにしています。 -->
 <footer>
+  <!-- SNSリンク -->
+  <div class="footer-links">
+    <a href="https://github.com/FlyingDevLab"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="GitHub（新しいタブで開きます）">
+      GitHub
+    </a>
+    <a href="https://x.com/FlyingDevLab"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="X（新しいタブで開きます）">
+      <span class="x-icon" aria-hidden="true">𝕏</span>
+    </a>
+    <a href="https://www.instagram.com/flyingdevlab/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram（新しいタブで開きます）">
+      Instagram
+    </a>
+  </div>
+  <!-- legalリンク -->
+  <nav class="footer-legal" aria-label="法的情報">
+    <a href="/privacy-policy.html">プライバシーポリシー・免責事項</a>
+    <span class="footer-legal-sep" aria-hidden="true">|</span>
+    <a href="/tokusho.html" lang="ja">特定商取引法に基づく表示</a>
+  </nav>
+  <!-- TOPへ戻るリンク -->
   <a href="/" class="footer-top" aria-label="トップページへ戻る">↑ TOP</a>
-  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+  <!-- コピーライトとPledgeリンク -->
+  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab : <a href="/pledge.html">Pledge</a></p>
 </footer>
 
 <!-- ===== JavaScript =====
-     ページ末尾（</body>直前）に置くのが基本です。HTMLの描画を妨げないためです。
-     Cloudflareのメールデコードスクリプトが先に読み込まれ、
-     その後このインラインスクリプトが実行されます。 -->
+     ページ末尾（</body>直前）に置くのが基本です。HTMLの描画を妨げないためです。 -->
 <script>
-  /**
-   * IIFE（即時実行関数式）：(function(){...})() という書き方で、
-   * 定義と同時に即座に実行される関数です。
-   * 内部の変数がグローバルスコープに漏れ出すのを防ぐための定番パターンです。
+/**
+ * IIFE（即時実行関数式）：(function(){...})() という書き方で、
+ * 定義と同時に即座に実行される関数です。
+ * 内部の変数がグローバルスコープに漏れ出すのを防ぐための定番パターンです。
+ */
+(function () {
+  "use strict";
+  /*
+   * "use strict"（厳格モード）：
+   * 宣言していない変数への代入などよくあるバグを
+   * エラーとして検出してくれる、品質向上のための宣言です。
    */
-  (function () {
-    "use strict";
-    /*
-     * "use strict"（厳格モード）：
-     * 宣言していない変数への代入などよくあるバグを
-     * エラーとして検出してくれる、品質向上のための宣言です。
-     */
 
-    /* 有効な言語コードのホワイトリスト。これ以外の値が渡された場合は無視します。 */
-    var VALID_LANGS = ["ja", "en"];
+  /* ───────────────────────────────────────────────────────────
+     メールアドレス難読化（Email Obfuscation）
+     Unicodeエスケープ：\uXXXX 形式で文字を格納。
+     ブラウザは実行時にデコードして表示するが、
+     テキスト検索・スクレイパーの大半はソースの文字列をそのまま読むため
+     プレーンテキストとして認識されにくい。
+     tokusho.html と同じ方式で統一しています。
+  ─────────────────────────────────────────────────────────── */
 
-    /**
-     * 言語タブを切り替える
-     * @param {string} lang - "ja" or "en"
-     * JSDoc形式のコメント：@param はこの関数が受け取る引数の型と名前を説明します。
-     */
-    function switchLang(lang) {
-      /* VALID_LANGSにない値なら即終了（バリデーション） */
-      if (VALID_LANGS.indexOf(lang) === -1) return;
+  /* メールアドレス：support@flyingdevlab.com */
+  var _e = "\u0073\u0075\u0070\u0070\u006f\u0072\u0074"
+         + "\u0040"
+         + "\u0066\u006c\u0079\u0069\u006e\u0067\u0064\u0065\u0076\u006c\u0061\u0062\u002e\u0063\u006f\u006d";
 
-      // querySelectorAll(".クラス名") → 指定クラスを持つ全要素を取得
-      // classList.toggle("クラス名", true/false) → 第2引数がtrueならクラス追加、falseなら削除
-      // タブの状態を更新
-      document.querySelectorAll(".lang-tab").forEach(function (tab) {
-        var isActive = tab.getAttribute("aria-controls") === "lang-" + lang;
-        tab.classList.toggle("active", isActive);
-        // aria-selected：スクリーンリーダーに「このタブが選択中か」を伝えます
-        tab.setAttribute("aria-selected", isActive ? "true" : "false");
-      });
-
-      // パネルの表示を切り替え（active クラスの付け外しでCSSが表示/非表示を制御）
-      document.querySelectorAll(".lang-content").forEach(function (panel) {
-        panel.classList.toggle("active", panel.id === "lang-" + lang);
-      });
+  /* ─── メールアドレスを日英両方のリンクに反映 ─── */
+  function setEmail(id) {
+    var el = document.getElementById(id);
+    if (el) {
+      el.textContent = _e;
+      el.setAttribute("href", "mailto:" + _e);
     }
+  }
+  setEmail("pp-email-ja");
+  setEmail("pp-email-en");
 
-    // addEventListener("イベント名", コールバック関数)：
-    // 指定イベントが発生したときに実行する関数を登録します（イベントリスナー）。
-    // 各タブにイベントリスナーを登録（インラインonclick廃止）
+  /* ─── 言語タブ切り替え ─── */
+
+  /* 有効な言語コードのホワイトリスト。これ以外の値が渡された場合は無視します。 */
+  var VALID_LANGS = ["ja", "en"];
+
+  /**
+   * 言語タブを切り替える
+   * @param {string} lang - "ja" or "en"
+   * JSDoc形式のコメント：@param はこの関数が受け取る引数の型と名前を説明します。
+   */
+  function switchLang(lang) {
+    /* VALID_LANGSにない値なら即終了（バリデーション） */
+    if (VALID_LANGS.indexOf(lang) === -1) return;
+
+    // querySelectorAll(".クラス名") → 指定クラスを持つ全要素を取得
+    // classList.toggle("クラス名", true/false) → 第2引数がtrueならクラス追加、falseなら削除
+    // タブの状態を更新
     document.querySelectorAll(".lang-tab").forEach(function (tab) {
-      tab.addEventListener("click", function () {
-        // this → クリックされたタブ要素自身を指します
-        var lang = this.getAttribute("aria-controls").replace("lang-", "");
-        switchLang(lang);
-      });
-
-      // キーボード操作: 左右矢印でタブ移動（WAI-ARIA Tabパターン準拠）
-      // e.key → 押されたキーの名前。e.preventDefault() でブラウザのデフォルト動作をキャンセル。
-      tab.addEventListener("keydown", function (e) {
-        var tabs = Array.from(document.querySelectorAll(".lang-tab"));
-        var index = tabs.indexOf(this);
-        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-          e.preventDefault();
-          var next = e.key === "ArrowRight"
-            ? tabs[(index + 1) % tabs.length]
-            : tabs[(index - 1 + tabs.length) % tabs.length];
-          next.focus();
-          next.click();
-        }
-      });
+      var isActive = tab.getAttribute("aria-controls") === "lang-" + lang;
+      tab.classList.toggle("active", isActive);
+      // aria-selected：スクリーンリーダーに「このタブが選択中か」を伝えます
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
     });
-  })();
-</script>
 
+    // パネルの表示を切り替え（active クラスの付け外しでCSSが表示/非表示を制御）
+    document.querySelectorAll(".lang-content").forEach(function (panel) {
+      panel.classList.toggle("active", panel.id === "lang-" + lang);
+    });
+  }
+
+  // addEventListener("イベント名", コールバック関数)：
+  // 指定イベントが発生したときに実行する関数を登録します（イベントリスナー）。
+  // 各タブにイベントリスナーを登録（インラインonclick廃止）
+  document.querySelectorAll(".lang-tab").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      // this → クリックされたタブ要素自身を指します
+      var lang = this.getAttribute("aria-controls").replace("lang-", "");
+      switchLang(lang);
+    });
+
+    // キーボード操作: 左右矢印でタブ移動（WAI-ARIA Tabパターン準拠）
+    // e.key → 押されたキーの名前。e.preventDefault() でブラウザのデフォルト動作をキャンセル。
+    tab.addEventListener("keydown", function (e) {
+      var tabs = Array.from(document.querySelectorAll(".lang-tab"));
+      var index = tabs.indexOf(this);
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        var next = e.key === "ArrowRight"
+          ? tabs[(index + 1) % tabs.length]
+          : tabs[(index - 1 + tabs.length) % tabs.length];
+        next.focus();
+        next.click();
+      }
+    });
+  });
+
+})();
+</script>
 </body>
 </html>

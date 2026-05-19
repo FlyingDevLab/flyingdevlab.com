@@ -51,31 +51,45 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@FlyingDevLab">
 
-  <!-- ===== JSON-LD 構造化データ（他ページと統一） =====
-       Googleなどの検索エンジンに「このページの種類・所属・更新日」を
-       JSON形式で機械的に伝える仕組みです（リッチリザルト対応）。
-       privacy-policy.html と同じ WebPage 単体の定義を使っています。
+  <!-- ===== JSON-LD 構造化データ =====
+       index.html・privacy-policy.html・tokusho.html と同じ @graph 方式で統一しています。
+       @graph を使うことで Organization・WebSite・WebPage の3エンティティを
+       1つのスクリプトタグにまとめて定義でき、Googleがサイト構造を把握しやすくなります。
        dateModified（最終更新日）を設定することで検索結果に更新日が表示されることがあります。 -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": "https://flyingdevlab.com/pledge.html",
-    "url": "https://flyingdevlab.com/pledge.html",
-    "name": "こどもたちへの誓い | Flying Dev Lab",
-    "description": "空飛ぶ研究室（Flying Dev Lab）のこどもたちへの誓い。Our Pledge to Children.",
-    "inLanguage": ["ja", "en"],
-    "isPartOf": {
-      "@type": "WebSite",
-      "url": "https://flyingdevlab.com/",
-      "name": "空飛ぶ研究室（Flying Dev Lab）"
-    },
-    "dateModified": "2026-03-13",
-    "publisher": {
-      "@type": "Organization",
-      "name": "空飛ぶ研究室（Flying Dev Lab）",
-      "url": "https://flyingdevlab.com/"
-    }
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://flyingdevlab.com/#organization",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "url": "https://flyingdevlab.com/",
+        "sameAs": [
+          "https://x.com/FlyingDevLab",
+          "https://www.instagram.com/flyingdevlab/",
+          "https://github.com/FlyingDevLab"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://flyingdevlab.com/#website",
+        "url": "https://flyingdevlab.com/",
+        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "publisher": { "@id": "https://flyingdevlab.com/#organization" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://flyingdevlab.com/pledge.html",
+        "url": "https://flyingdevlab.com/pledge.html",
+        "name": "こどもたちへの誓い | Flying Dev Lab",
+        "description": "空飛ぶ研究室（Flying Dev Lab）のこどもたちへの誓い。Our Pledge to Children.",
+        "inLanguage": ["ja", "en"],
+        "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
+        "dateModified": "2026-05-19",
+        "publisher": { "@id": "https://flyingdevlab.com/#organization" }
+      }
+    ]
   }
   </script>
 
@@ -285,14 +299,41 @@
 
 </main>
 
-<!-- <footer>：ページ下部のフッター領域を示すセマンティックタグ。
-     href="/" → サイトのルート（トップページ）へのリンク。
-     / から始まるパスはドメインのルートを指します（https://flyingdevlab.com/ と同等）。
-     aria-label でリンクの目的をスクリーンリーダーに伝えています。
-     © はHTMLエンティティで © （著作権マーク）を表示しています。 -->
+<!-- フッター：index.html・privacy-policy.html・tokusho.html と同じ構成に統一しています。
+     SNSリンク・legalリンク・Pledgeリンクを含めることで
+     どのページからでも主要リンクにアクセスできるようにしています。 -->
 <footer>
+  <!-- SNSリンク -->
+  <div class="footer-links">
+    <a href="https://github.com/FlyingDevLab"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="GitHub（新しいタブで開きます）">
+      GitHub
+    </a>
+    <a href="https://x.com/FlyingDevLab"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="X（新しいタブで開きます）">
+      <span class="x-icon" aria-hidden="true">𝕏</span>
+    </a>
+    <a href="https://www.instagram.com/flyingdevlab/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram（新しいタブで開きます）">
+      Instagram
+    </a>
+  </div>
+  <!-- legalリンク -->
+  <nav class="footer-legal" aria-label="法的情報">
+    <a href="/privacy-policy.html">プライバシーポリシー・免責事項</a>
+    <span class="footer-legal-sep" aria-hidden="true">|</span>
+    <a href="/tokusho.html" lang="ja">特定商取引法に基づく表示</a>
+  </nav>
+  <!-- TOPへ戻るリンク -->
   <a href="/" class="footer-top" aria-label="トップページへ戻る">↑ TOP</a>
-  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+  <!-- コピーライトとPledgeリンク -->
+  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab : <a href="/pledge.html">Pledge</a></p>
 </footer>
 <!-- 多分、ここまで読んでくれる人はいないと思うけど、もし読んでくれたなら、ありがとうございます。-->
 
