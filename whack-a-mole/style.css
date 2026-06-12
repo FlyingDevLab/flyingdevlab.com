@@ -1,4 +1,28 @@
 /* ========================================
+   @font-face（Boogaloo 自己ホスト）
+   Google Fonts への外部リクエストをゼロにするため
+   Boogaloo woff2 をリポジトリに同梱して自己ホストする。
+   出典: @fontsource/boogaloo 5.2.5 — SIL Open Font License 1.1
+   フォントファイルの場所: /fonts/（リポジトリルート）
+
+   Noto Sans JP（日本語本文）は自己ホストせず、
+   OS 標準フォントにフォールバックする設計。
+     iOS/macOS → ヒラギノ角ゴシック
+     Windows   → 游ゴシック / メイリオ
+     Android   → Noto Sans JP（OS 同梱）
+======================================== */
+@font-face {
+  font-family: 'Boogaloo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/boogaloo-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ========================================
    CSS カスタムプロパティ（デザイントークン）
    Design Tokens / Color palette & spacing
 ======================================== */
@@ -24,8 +48,8 @@
   --color-mole-nose:   #e57373;       /* モグラ鼻 */
 
   /* タイポグラフィ / Typography */
-  --font-display:      'Boogaloo', 'Noto Sans JP', sans-serif;
-  --font-body:         'Noto Sans JP', sans-serif;
+  --font-display:      'Boogaloo', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
+  --font-body:         'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
 
   /* スペーシング / Spacing */
   --space-xs:  4px;

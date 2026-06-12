@@ -2,11 +2,12 @@
    ファイル名  : style.css
    プロジェクト: Pinball | Flying Dev Lab
    テーマ      : ダークネオン（深夜の電子基板をイメージした配色）
-   フォント    : Orbitron（英数字・スコア）+ Noto Sans JP（日本語本文）
+   フォント    : Orbitron（英数字・スコア、自己ホスト）
+               + システムフォント（日本語本文）
    © 2026 Flying Dev Lab
 
    【このファイルの構成】
-     1.  Google Fonts @import       … フォントの読み込み
+     1.  @font-face（Orbitron 自己ホスト）
      2.  CSS カスタムプロパティ      … 色・フォント・角丸の一元管理
      3.  リセット                   … ブラウザ間の差異を均一化
      4.  ヘッダー
@@ -24,315 +25,235 @@
 
 
 /* ══════════════════════════════════════════════════════════
-   1. Google Fonts @import
+   1. @font-face（Orbitron 自己ホスト）
    ──────────────────────────────────────────────────────────
-   CSS 側でも @import でフォントを読み込んでいる。
-   HTML の <link> と二重になっているが、
-   CSS 単体で使い回せるよう独立性を持たせるための設計。
-   実運用では <link> による読み込みの方が先に処理されるため
-   パフォーマンス上の問題はほぼ生じない。
+   Google Fonts への外部リクエストをゼロにするため、
+   Orbitron woff2 をリポジトリに同梱して自己ホストする。
+   出典: @fontsource/orbitron 5.2.0 — SIL Open Font License 1.1
+   フォントファイルの場所: /fonts/（リポジトリルート）
+
+   Noto Sans JP（日本語本文）は自己ホストせず、
+   OS 標準フォントにフォールバックする設計。
+     iOS/macOS → ヒラギノ角ゴシック
+     Windows   → 游ゴシック / メイリオ
+     Android   → Noto Sans JP（OS 同梱）
    ══════════════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap');
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/orbitron-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/orbitron-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('../fonts/orbitron-latin-900.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 
 /* ══════════════════════════════════════════════════════════
    2. CSS カスタムプロパティ（CSS 変数）
-   ──────────────────────────────────────────────────────────
-   :root セレクターはドキュメント全体のルート要素（<html>）に相当する。
-   ここに定義した変数は var(--変数名) で全セレクターから参照できる。
-
-   【色の設計思想】
-     --bg / --surface / --surface2 … 3 段階の暗い背景色。
-       レイヤーが深くなるほど少し明るくして奥行きを表現する。
-     --border … パネルの枠線色。背景より少し明るい紫系。
-     --cyan    … メインアクセントカラー。スコア・ハイスコア・リンクに使用。
-     --yellow  … サブアクセント。得点や HUD の数値に使用。
-     --pink    … 警告・ゲームオーバー等の強調色。
-     --orange  … グラデーションのアクセント（新記録バナー等）。
-     --text    … 本文テキスト。純白にせず薄い青みを加えて目に優しくする。
-     --text-dim … 説明文など目立たせたくないテキスト用の暗い色。
-
-   【フォント変数】
-     --font-hd   … Orbitron（等幅・SF 風）。数値やタイトルに使用。
-     --font-body … Noto Sans JP（日本語対応ゴシック）。本文全般に使用。
-
-   【その他】
-     --radius … カード・ボタンの角丸半径。統一することで一貫したデザインに。
    ══════════════════════════════════════════════════════════ */
 :root {
-  --bg:        #07071a;   /* ページ全体の最も暗い背景色（深夜の宇宙をイメージ） */
-  --surface:   #0f0f2e;   /* カード・ヘッダー等の基本パネル背景色 */
-  --surface2:  #14143a;   /* ボタンホバー時・kbd 要素など一段明るいパネル色 */
-  --border:    #252560;   /* 枠線・区切り線に使用する紫がかった暗い色 */
-  --cyan:      #00e5ff;   /* メインアクセント（シアン / 水色）*/
-  --yellow:    #ffd600;   /* サブアクセント（黄色）スコア数値等 */
-  --pink:      #f50057;   /* 強調色（マゼンタ系ピンク）ゲームオーバー等 */
-  --orange:    #ff6d00;   /* グラデーション用オレンジ（新記録バナー等） */
-  --text:      #ddddf5;   /* 本文テキスト（ほぼ白、わずかに青みがかった色） */
-  --text-dim:  #7777aa;   /* 補足テキスト・ラベル等の目立たない色 */
-  --font-hd:   'Orbitron', monospace;       /* 見出し・数値用フォント */
-  --font-body: 'Noto Sans JP', sans-serif;  /* 日本語本文フォント */
-  --radius:    10px;      /* カードや枠の角丸半径（共通値） */
+  --bg:        #07071a;
+  --surface:   #0f0f2e;
+  --surface2:  #14143a;
+  --border:    #252560;
+  --cyan:      #00e5ff;
+  --yellow:    #ffd600;
+  --pink:      #f50057;
+  --orange:    #ff6d00;
+  --text:      #ddddf5;
+  --text-dim:  #7777aa;
+  --font-hd:   'Orbitron', monospace;
+  --font-body: 'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+               'Yu Gothic', 'Meiryo', sans-serif;
+  --radius:    10px;
 }
 
 
 /* ══════════════════════════════════════════════════════════
-   3. リセット（ブラウザデフォルトスタイルの均一化）
-   ──────────────────────────────────────────────────────────
-   ブラウザによって margin / padding / box-sizing の初期値が異なるため、
-   全要素で統一してレイアウトの予期しないズレを防ぐ。
+   3. リセット
    ══════════════════════════════════════════════════════════ */
 *, *::before, *::after {
   box-sizing: border-box;
-  /*
-    box-sizing: border-box;
-    width / height に padding と border を含めて計算する設定。
-    デフォルトの content-box は border・padding を幅に含めないため、
-    幅 100px に padding 10px を加えると実際は 120px になってしまう。
-    border-box にすれば width=100px の中に padding も border も収まる。
-  */
   margin: 0;
   padding: 0;
-  /* 全要素の外側余白・内側余白を 0 にリセットする。 */
 }
 
 html {
   scroll-behavior: smooth;
-  /*
-    アンカーリンク（#id へのジャンプ）をスムーズスクロールにする。
-    このゲームでは画面遷移を JS で行うため直接使われないが、
-    将来の拡張に備えた設定。
-  */
 }
 
 html, body {
   height: 100%;
-  /*
-    html と body の両方に height: 100% を設定することで、
-    子要素が % 指定の高さを正しく継承できるようにする。
-  */
 }
 
 body {
-  font-family: var(--font-body);   /* 全体のデフォルトフォントを Noto Sans JP に設定 */
-  background: var(--bg);           /* ページ背景色（最も暗い紺黒） */
-  color: var(--text);              /* デフォルトテキスト色 */
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
   display: flex;
   flex-direction: column;
-  /*
-    body を縦方向のフレックスコンテナにする。
-    header → main → footer の順で上から下に並べ、
-    main が残りの高さを占有するレイアウトを実現する。
-  */
   min-height: 100dvh;
-  /*
-    dvh（Dynamic Viewport Height）はモバイルブラウザの
-    アドレスバーの表示・非表示に応じて変化するビューポート高さ単位。
-    vh だとアドレスバー込みの高さが基準になりコンテンツが隠れる場合がある。
-  */
   overflow-x: hidden;
-  /* 横スクロールバーが意図せず出ないよう横方向のはみ出しを隠す。 */
 }
 
 
 /* ══════════════════════════════════════════════════════════
    4. ヘッダー
-   ──────────────────────────────────────────────────────────
-   ページ最上部の固定タイトルバー。
-   flex-shrink: 0 は未指定だが、body が flex-direction:column なので
-   header は自動的に高さを縮めずに済む（shrink-to-content）。
    ══════════════════════════════════════════════════════════ */
 header[role="banner"] {
-  background: var(--surface);             /* ヘッダー背景色（少し明るい紺） */
-  border-bottom: 1px solid var(--border); /* ヘッダー下部の区切り線 */
-  padding: 10px 16px;                     /* 上下 10px・左右 16px の内側余白 */
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
   flex-shrink: 0;
-  /*
-    flex-shrink: 0 … flex アイテムが縮まないようにする。
-    main が画面の残り高さを取るとき、ヘッダーが圧縮されないよう保護する。
-  */
 }
 
 .header-inner {
   display: flex;
-  align-items: center;     /* 子要素を縦方向中央揃え */
-  justify-content: center; /* 子要素を水平方向中央揃え */
-  gap: 10px;               /* 子要素間の隙間 */
-  max-width: 520px;        /* 横幅上限。広い画面で中央寄せにするため */
-  margin: 0 auto;          /* 左右の余白を auto にして中央揃え */
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 .header-icon {
-  font-size: 1.3rem; /* 絵文字アイコンのサイズ */
+  font-size: 1.3rem;
 }
 
 h1 {
-  font-family: var(--font-hd);                          /* Orbitron フォント */
+  font-family: var(--font-hd);
   font-size: clamp(1.05rem, 4vw, 1.35rem);
-  /*
-    clamp(最小値, 推奨値, 最大値):
-      最小 1.05rem〜最大 1.35rem の範囲で、
-      画面幅の 4% を基準にフォントサイズを流動的に変化させる。
-      小さい画面でも大きい画面でも読みやすいサイズを自動調整する。
-  */
-  font-weight: 900;         /* 最も太いウェイト */
-  letter-spacing: 0.06em;  /* 文字間隔を少し広げてSF感を演出 */
-  color: var(--cyan);       /* シアン色のテキスト */
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--cyan);
   text-shadow: 0 0 18px var(--cyan), 0 0 40px rgba(0,229,255,0.3);
-  /*
-    text-shadow で「グロー（発光）」効果を作る。
-    1つ目: 近距離の強いグロー（18px）
-    2つ目: 遠距離の拡散グロー（40px、透明度 30%）
-    2重にすることで、ネオンサイン的な光り方を再現する。
-  */
 }
 
 h1 .sep {
-  color: var(--text-dim); /* 区切りスラッシュを暗い色にして目立たせない */
-  margin: 0 6px;          /* スラッシュの左右余白 */
-  font-weight: 400;       /* 細いウェイトにして見出しと差をつける */
+  color: var(--text-dim);
+  margin: 0 6px;
+  font-weight: 400;
 }
 
 
 /* ══════════════════════════════════════════════════════════
-   5. メイン・画面（screen）共通スタイル
-   ──────────────────────────────────────────────────────────
-   <main> と .screen の flex 設定により、
-   「ヘッダーとフッターを除いた残り全ての高さ」を
-   アクティブな画面が占有するレイアウトを実現する。
+   5. メイン・画面共通
    ══════════════════════════════════════════════════════════ */
 main {
   flex: 1;
-  /*
-    flex: 1 は flex-grow:1 / flex-shrink:1 / flex-basis:0 の短縮形。
-    body の flex コンテナ内で、header・footer が取る高さを除いた
-    残りの空間を main が全て占有するようにする。
-  */
   display: flex;
-  flex-direction: column; /* 画面（section）を縦方向に並べる */
+  flex-direction: column;
   min-height: 0;
-  /*
-    flex アイテムの min-height のデフォルトは auto（コンテンツ高さ）。
-    0 にしないと flex:1 の縮小が効かず、子要素の overflow が機能しない場合がある。
-  */
 }
 
 .screen {
   display: none;
-  /*
-    非アクティブな画面は display:none で完全に非表示にする。
-    visibility:hidden や opacity:0 と異なり、領域ごと消えるため
-    レイアウトに影響を与えない。
-  */
-  flex: 1;              /* アクティブ時に main の全高さを占有する */
+  flex: 1;
   flex-direction: column;
-  overflow-y: auto;     /* 画面内容が縦に溢れた場合にスクロール可能にする */
+  overflow-y: auto;
 }
 
 .screen.active {
   display: flex;
-  /*
-    game.js がこのクラスを付け外しすることで画面を切り替える。
-    display:flex にすることで内部の flex レイアウトが有効になる。
-  */
 }
 
 .screen-inner {
-  /*
-    タイトル・リザルト画面のコンテンツを中央に配置するためのラッパー。
-    ゲーム画面（#screen-game）には使用しない。
-  */
   flex: 1;
   display: flex;
-  flex-direction: column; /* 子要素を縦に並べる */
-  align-items: center;    /* 子要素を水平方向中央揃え */
-  gap: 18px;              /* 子要素間の縦の隙間 */
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
   padding: 22px 18px 28px;
-  /*
-    上 22px・左右 18px・下 28px の内側余白。
-    下を多めに取って、フッターとのスペースを確保する。
-  */
   width: 100%;
-  max-width: 520px; /* コンテンツの最大幅。広い画面で横に広がりすぎないよう制限 */
-  margin: 0 auto;   /* 左右 auto で水平中央揃え */
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 
 /* ══════════════════════════════════════════════════════════
-   6. セクションタイトル（h2 共通スタイル）
-   ──────────────────────────────────────────────────────────
-   「遊び方」「得点表」「ゲーム終了！」など各ボックスの見出し。
-   Orbitron フォント＋黄色グロー効果でネオン看板風に演出する。
+   6. セクションタイトル
    ══════════════════════════════════════════════════════════ */
 .section-title {
-  font-family: var(--font-hd);    /* Orbitron フォント（SF・デジタル風） */
+  font-family: var(--font-hd);
   font-size: 0.9rem;
-  font-weight: 700;               /* 太字 */
-  letter-spacing: 0.08em;         /* 文字間隔を広げてタイトル感を演出 */
-  color: var(--yellow);           /* 黄色テキスト */
-  text-shadow: 0 0 12px var(--yellow); /* 黄色のグロー効果 */
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--yellow);
+  text-shadow: 0 0 12px var(--yellow);
   text-align: center;
-  margin-bottom: 12px;            /* タイトル下部の余白（コンテンツとの間隔） */
+  margin-bottom: 12px;
 }
 
 .section-title .sep {
-  color: var(--text-dim); /* 「/」区切り文字は暗くして目立たせない */
+  color: var(--text-dim);
   margin: 0 5px;
   font-weight: 400;
 }
 
 
 /* ══════════════════════════════════════════════════════════
-   7. 遊び方ボックス（.intro-box）
-   ──────────────────────────────────────────────────────────
-   タイトル画面の操作説明パネル。
-   カード型デザイン（背景色・枠線・角丸）で画面から浮き上がる印象にする。
+   7. 遊び方ボックス
    ══════════════════════════════════════════════════════════ */
 .intro-box {
-  width: 100%;                        /* 親要素の横幅いっぱいに広げる */
-  background: var(--surface);         /* カード背景色（暗い紺） */
-  border: 1px solid var(--border);    /* 紫系の枠線 */
-  border-radius: var(--radius);       /* 角丸（10px） */
-  padding: 18px 18px 20px;            /* 上・左右・下の内側余白 */
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 18px 20px;
 }
 
 .intro-list {
-  list-style: none;     /* デフォルトの黒丸（●）を非表示にする */
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;            /* リストアイテム間の縦の隙間 */
+  gap: 10px;
 }
 
 .intro-list li {
   font-size: 0.84rem;
-  line-height: 1.55; /* 行間を広めにして読みやすくする */
+  line-height: 1.55;
   color: var(--text);
 }
 
-.intro-list .emoji { margin-right: 4px; } /* 絵文字とテキストの間隔 */
-.intro-list .sep   { color: var(--text-dim); margin: 0 4px; } /* 区切り文字の色と余白 */
+.intro-list .emoji { margin-right: 4px; }
+.intro-list .sep   { color: var(--text-dim); margin: 0 4px; }
 
 kbd {
-  /*
-    <kbd> タグ: キーボードキーを表す HTML セマンティック要素。
-    視覚的に「キーキャップ」のような見た目にスタイリングする。
-  */
   display: inline-block;
-  padding: 1px 5px;                   /* 上下 1px・左右 5px の内側余白 */
-  background: var(--surface2);        /* キー背景（一段明るい紺） */
-  border: 1px solid var(--border);    /* キーの枠線 */
-  border-radius: 4px;                 /* 角丸でキーキャップ感を出す */
-  font-family: var(--font-hd);        /* Orbitron でデジタル感を演出 */
+  padding: 1px 5px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-hd);
   font-size: 0.75rem;
-  color: var(--cyan);                 /* シアン色でキーを目立たせる */
+  color: var(--cyan);
 }
 
 
 /* ══════════════════════════════════════════════════════════
-   8. 得点表ボックス（.score-table-box）
-   ──────────────────────────────────────────────────────────
-   タイトル画面の「得点表」パネル。
-   intro-box と同じカード型デザイン。
+   8. 得点表ボックス
    ══════════════════════════════════════════════════════════ */
 .score-table-box {
   width: 100%;
@@ -346,12 +267,12 @@ kbd {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px; /* 各行の縦の隙間 */
+  gap: 8px;
 }
 
 .score-table li {
   display: flex;
-  align-items: center; /* アイコン・名前・得点を縦方向中央揃えで横並びに */
+  align-items: center;
   gap: 8px;
   font-size: 0.84rem;
   color: var(--text);
@@ -359,233 +280,168 @@ kbd {
 
 .st-icon {
   font-size: 1rem;
-  flex-shrink: 0; /* アイコンが縮まないよう固定 */
+  flex-shrink: 0;
 }
 
 .st-name {
   flex: 1;
   min-width: 0;
-  /*
-    flex:1 でアイコンと得点の間で残りの幅を全て占有する。
-    これにより得点列が常に右端に揃う。
-    min-width: 0 … flex アイテムはデフォルトでコンテンツ幅より小さく
-    縮まないため、テキストが長い場合にレイアウトが崩れる。
-    0 を指定することで適切に縮小でき、改行・折り返しが正常に機能する。
-  */
 }
 
 .st-name .sep { color: var(--text-dim); margin: 0 3px; }
 
 .st-pts {
-  font-family: var(--font-hd); /* 得点は Orbitron フォントで数値らしく */
+  font-family: var(--font-hd);
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--yellow);        /* 黄色で得点を目立たせる */
+  color: var(--yellow);
   letter-spacing: 0.05em;
-  white-space: nowrap;         /* 「100 pt」などが折り返さないよう固定 */
+  white-space: nowrap;
 }
 
 
 /* ══════════════════════════════════════════════════════════
-   9. ハイスコアボックス（.highscore-box）
-   ──────────────────────────────────────────────────────────
-   タイトル画面のハイスコア表示パネル。
-   枠線をシアン色にして、シアングロー（box-shadow）を加え
-   他のカードより目立つデザインにする。
+   9. ハイスコアボックス
    ══════════════════════════════════════════════════════════ */
 .highscore-box {
   width: 100%;
   background: var(--surface);
-  border: 1px solid var(--cyan);  /* シアン枠線（他カードの --border より目立つ） */
+  border: 1px solid var(--cyan);
   border-radius: var(--radius);
   padding: 16px 20px;
   text-align: center;
   box-shadow:
-    0 0 24px rgba(0,229,255,0.18),       /* 外側のシアングロー（拡散） */
-    inset 0 0 20px rgba(0,229,255,0.04); /* 内側の微弱なグロー（奥行き感） */
+    0 0 24px rgba(0,229,255,0.18),
+    inset 0 0 20px rgba(0,229,255,0.04);
 }
 
 .highscore-label {
   font-size: 0.78rem;
-  color: var(--text-dim); /* ラベルは控えめな色 */
-  margin-bottom: 4px;     /* ラベルと数値の間隔 */
+  color: var(--text-dim);
+  margin-bottom: 4px;
 }
 
 .highscore-label .sep { margin: 0 4px; }
 
 .highscore-value {
   font-family: var(--font-hd);
-  font-size: 2.6rem;            /* 大きく表示してハイスコアを強調 */
+  font-size: 2.6rem;
   font-weight: 900;
   color: var(--cyan);
-  text-shadow: 0 0 20px var(--cyan); /* シアングロー */
+  text-shadow: 0 0 20px var(--cyan);
   letter-spacing: 0.05em;
 }
 
 
 /* ══════════════════════════════════════════════════════════
-   10. ボタン（.btn）
-   ──────────────────────────────────────────────────────────
-   プライマリ（.btn-primary）とセカンダリ（.btn-secondary）の 2 種類。
-   transition で押下時のフィードバックアニメーションを実装する。
+   10. ボタン
    ══════════════════════════════════════════════════════════ */
 .btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center; /* テキストをボタン内で中央揃え */
+  justify-content: center;
   gap: 4px;
-  padding: 13px 24px;      /* 上下 13px・左右 24px の内側余白（タップしやすい大きさ） */
+  padding: 13px 24px;
   border: none;
   border-radius: 8px;
   font-family: var(--font-hd);
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  cursor: pointer;         /* マウスカーソルを指型に変える */
+  cursor: pointer;
   transition: transform 0.1s, box-shadow 0.15s;
-  /*
-    transition: プロパティ名 時間 の書式。
-    transform と box-shadow の変化を滑らかにアニメーションさせる。
-    transform: 0.1s  … 押下時の縮小を素早く（クリック感）
-    box-shadow: 0.15s … ホバー時のグロー変化をやや緩やかに
-  */
   text-align: center;
-  width: 100%;             /* 親要素の幅いっぱいに広げる */
-  max-width: 320px;        /* ただし最大幅は 320px に制限 */
-  line-height: 1.4;        /* 日英 2 行テキストが入る場合の行間 */
+  width: 100%;
+  max-width: 320px;
+  line-height: 1.4;
 }
 
 .btn:active {
   transform: scale(0.96);
-  /*
-    クリック（タップ）時に 4% 縮小させることで、
-    物理的にボタンを押し込むような視覚フィードバックを与える。
-  */
 }
 
-/* プライマリボタン（「ゲームスタート」「もう一度」） */
 .btn-primary {
-  background: var(--cyan);                       /* シアン塗りつぶし背景 */
-  color: #000;                                   /* 黒テキスト（シアン背景上での視認性確保） */
-  box-shadow: 0 0 20px rgba(0,229,255,0.5);      /* 通常時のグロー */
+  background: var(--cyan);
+  color: #000;
+  box-shadow: 0 0 20px rgba(0,229,255,0.5);
 }
 
 .btn-primary:hover {
   box-shadow: 0 0 32px rgba(0,229,255,0.75);
-  /* ホバー時にグローを強くしてインタラクティブ感を演出 */
 }
 
-/* セカンダリボタン（「タイトルへ」） */
 .btn-secondary {
-  background: transparent;             /* 透明背景（アウトラインスタイル） */
+  background: transparent;
   color: var(--text);
-  border: 1px solid var(--border);     /* 紫系の枠線 */
+  border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-  border-color: var(--text-dim);       /* ホバーで枠線を少し明るくする */
-  background: var(--surface2);         /* 背景を微かに明るくして反応を示す */
+  border-color: var(--text-dim);
+  background: var(--surface2);
 }
 
 .btn .sep         { color: rgba(0,0,0,0.35); margin: 0 4px; }
-/* プライマリボタン内の「/」: 黒背景なので透明度で調整 */
-
 .btn-secondary .sep { color: var(--text-dim); }
-/* セカンダリボタン内の「/」: 通常の暗いテキスト色 */
 
 
 /* ══════════════════════════════════════════════════════════
    11. ゲーム画面
-   ──────────────────────────────────────────────────────────
-   【構成】
-     #screen-game    … 画面全体の黒背景コンテナ
-     .game-wrapper   … Canvas・オーバーレイ・タッチヒントのラッパー
-     .game-overlay   … Canvas に重ねるスコア・残機・終了ボタンの透過レイヤー
-     #game-canvas    … ゲーム描画領域
-     .touch-hint     … モバイル向け操作ヒント
    ══════════════════════════════════════════════════════════ */
-
-/* ゲーム画面全体 */
 #screen-game {
-  background: #000;       /* Canvas の周囲を真っ黒にして没入感を高める */
-  align-items: center;    /* game-wrapper を水平中央に配置 */
-  overflow: hidden;       /* 画面外への飛び出しを防ぐ */
+  background: #000;
+  align-items: center;
+  overflow: hidden;
 }
 
-/* Canvas・オーバーレイ・ヒントをまとめるラッパー */
 .game-wrapper {
   display: flex;
-  flex-direction: column; /* 縦方向に並べる（Canvas → ヒント） */
+  flex-direction: column;
   align-items: center;
-  position: relative;     /* .game-overlay の絶対配置の基準点にする */
+  position: relative;
   width: 100%;
-  max-width: 390px;       /* Canvas の幅（390px）に合わせた最大幅 */
-  height: 100%;           /* 画面全高を使う */
-  padding: 4px 0;         /* 上下に極小余白 */
-  gap: 4px;               /* Canvas・ヒント間の隙間 */
+  max-width: 390px;
+  height: 100%;
+  padding: 4px 0;
+  gap: 4px;
 }
 
-/* ── ゲーム中オーバーレイ（スコア・残機・終了ボタン）── */
-
-/*
-  .game-overlay
-  Canvas の真上に重なる透過レイヤー。
-  pointer-events: none にして Canvas のタッチ・クリックを妨げない。
-  終了ボタン（.overlay-quit）だけ pointer-events: auto で操作を受け付ける。
-*/
 .game-overlay {
-  position: absolute;     /* .game-wrapper（position:relative）を基準に配置 */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;   /* タッチ・クリックを Canvas に素通りさせる */
+  pointer-events: none;
   display: flex;
   flex-direction: column;
-  align-items: center;    /* 子要素を水平中央揃え */
-  padding-top: 18px;      /* 上部から少し余白を取る */
-  gap: 4px;               /* スコアと残機の縦の隙間 */
-  z-index: 10;            /* Canvas より手前に重ねる */
+  align-items: center;
+  padding-top: 18px;
+  gap: 4px;
+  z-index: 10;
 }
 
-/* スコア数値のラッパー（水平中央揃えの制御用） */
 .overlay-score-wrap {
   text-align: center;
 }
 
-/*
-  スコア表示本体。
-  最も目立つ要素として画面上部中央に大きく配置する。
-  Orbitron フォント＋黄色グロー＋半透明シャドウで
-  Canvas の映像に重なっても視認できるよう設計する。
-*/
 .overlay-score {
   font-family: var(--font-hd);
   font-size: clamp(2.6rem, 12vw, 3.6rem);
-  /*
-    clamp で最小 2.6rem〜最大 3.6rem の範囲でビューポート幅に応じて可変。
-    小画面でも大画面でも適切なサイズになる。
-  */
   font-weight: 900;
   color: var(--yellow);
   text-shadow:
-    0 0 16px var(--yellow),           /* 近距離の強いグロー */
-    0 0 40px rgba(255,214,0,0.55),    /* 中距離の拡散グロー */
-    0 2px 8px rgba(0,0,0,0.85);       /* 下方向の黒シャドウ（背景が明るくても読める） */
+    0 0 16px var(--yellow),
+    0 0 40px rgba(255,214,0,0.55),
+    0 2px 8px rgba(0,0,0,0.85);
   letter-spacing: 0.06em;
   line-height: 1;
 }
 
-/* 残機数のラッパー（水平中央揃えの制御用） */
 .overlay-balls-wrap {
   text-align: center;
 }
 
-/*
-  残機数（●●●●●）表示。
-  スコアより小さいが中央配置で存在感を保つ。
-  シアン色でスコアの黄色と差別化する。
-*/
 .overlay-balls {
   font-family: var(--font-hd);
   font-size: clamp(1rem, 5vw, 1.35rem);
@@ -594,17 +450,16 @@ kbd {
   text-shadow:
     0 0 10px var(--cyan),
     0 2px 6px rgba(0,0,0,0.8);
-  letter-spacing: 0.2em;   /* ● の間隔を広めに取って見やすくする */
+  letter-spacing: 0.2em;
   line-height: 1;
 }
 
-/* 終了ボタン（✕）: オーバーレイ右上隅に固定 */
 .btn-quit {
-  position: absolute;       /* .game-overlay 内で絶対配置 */
+  position: absolute;
   top: 8px;
   right: 8px;
-  pointer-events: auto;     /* この要素だけクリック・タッチを受け付ける */
-  background: rgba(0,0,0,0.45);  /* 半透明黒背景で Canvas に馴染ませる */
+  pointer-events: auto;
+  background: rgba(0,0,0,0.45);
   border: 1px solid #333355;
   color: #555577;
   font-size: 0.8rem;
@@ -621,115 +476,76 @@ kbd {
 .btn-quit:hover {
   color: var(--pink);
   border-color: var(--pink);
-  background: rgba(245,0,87,0.15); /* ホバー時にピンクの半透明背景 */
+  background: rgba(245,0,87,0.15);
 }
 
-/* ── Canvas ── */
 #game-canvas {
   display: block;
-  /*
-    canvas はデフォルトで inline 要素。
-    inline のままだと下部に謎のすき間（インラインベースライン分）が生じるため
-    block にして回避する。
-  */
   width: 100%;
-  max-width: 390px;   /* Canvas の内部解像度と一致させる（390px） */
-  height: auto;       /* アスペクト比（390:700）を維持したまま縮小 */
-  border: 1px solid #1a1a44;              /* Canvas の枠線（暗い紺） */
-  box-shadow: 0 0 28px rgba(0,229,255,0.12); /* 薄いシアングロー */
+  max-width: 390px;
+  height: auto;
+  border: 1px solid #1a1a44;
+  box-shadow: 0 0 28px rgba(0,229,255,0.12);
   touch-action: none;
-  /*
-    touch-action: none … ブラウザのデフォルトタッチ操作
-    （スクロール・ピンチズームなど）を無効にする。
-    game.js がタッチイベントを全て自前で処理するために必要。
-  */
   user-select: none;
   -webkit-user-select: none;
-  /*
-    Canvas 上でのテキスト選択を無効にする。
-    プレイ中に文字が選択されてしまう誤動作を防ぐ。
-    -webkit- はSafari・旧Chromeへのベンダープレフィックス対応。
-  */
-  flex-shrink: 1;  /* 縦方向に空きが少ない場合は Canvas を縮小して収める */
-  min-height: 0;   /* flex アイテムの min-height をリセット（縮小を許可） */
+  flex-shrink: 1;
+  min-height: 0;
 }
 
-/* ── タッチ操作ヒント ── */
 .touch-hint {
   display: flex;
-  justify-content: space-between; /* 「◀ 左 LEFT」と「右 RIGHT ▶」を左右端に配置 */
+  justify-content: space-between;
   width: 100%;
-  padding: 0 6px;   /* 左右に小さな余白 */
-  flex-shrink: 0;   /* ヒント行が縮まないよう固定 */
+  padding: 0 6px;
+  flex-shrink: 0;
 }
 
 .touch-hint span {
   font-family: var(--font-hd);
-  font-size: 0.58rem;  /* 極小フォント（邪魔にならない程度の補助表示） */
-  color: #2a2a55;      /* 非常に暗い色（プレイの妨げにならないよう控えめに） */
+  font-size: 0.58rem;
+  color: #2a2a55;
   letter-spacing: 0.12em;
 }
 
 
 /* ══════════════════════════════════════════════════════════
    12. リザルト画面
-   ──────────────────────────────────────────────────────────
-   5 ボール消費後に表示される結果画面のスタイル。
-   「ゲーム終了！」見出し・新記録バナー・スコア・ハイスコア・ボタンで構成。
    ══════════════════════════════════════════════════════════ */
-
-/* 「ゲーム終了！」見出し */
 .result-title {
   font-size: 1.2rem;
-  color: var(--pink);                     /* ピンク色でゲームオーバー感を演出 */
-  text-shadow: 0 0 16px var(--pink);      /* ピンクグロー */
+  color: var(--pink);
+  text-shadow: 0 0 16px var(--pink);
   margin-bottom: 2px;
 }
 
-/* 新記録バナー（新記録達成時のみ表示） */
 .new-record {
   width: 100%;
   background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
-  /*
-    135度（右下方向）のグラデーション。
-    黄色（--yellow）からオレンジ（--orange）へ変化させて
-    金色のトロフィー帯のような印象を与える。
-  */
-  color: #000;             /* 明るい背景上での視認性確保のため黒テキスト */
+  color: #000;
   font-family: var(--font-hd);
   font-size: 0.85rem;
-  font-weight: 900;        /* 最大ウェイトで強調 */
+  font-weight: 900;
   padding: 12px 20px;
   border-radius: 8px;
   text-align: center;
   letter-spacing: 0.06em;
   animation: pulse-scale 0.6s ease-in-out infinite alternate;
-  /*
-    pulse-scale アニメーションを無限ループ再生。
-    alternate: 順方向→逆方向を交互に繰り返す（往復アニメーション）。
-    0.6s: 1 往復の時間。これより短いと忙しない、長いと鈍い。
-  */
 }
 
 .new-record .sep { color: rgba(0,0,0,0.4); margin: 0 5px; }
 
-/* 新記録バナーのパルスアニメーション */
 @keyframes pulse-scale {
   from {
-    transform: scale(1);      /* 通常サイズ */
-    box-shadow: 0 0 16px rgba(255,214,0,0.5);  /* 黄色グロー（弱） */
+    transform: scale(1);
+    box-shadow: 0 0 16px rgba(255,214,0,0.5);
   }
   to {
-    transform: scale(1.025);  /* 2.5% 拡大してドキドキ感を演出 */
-    box-shadow: 0 0 28px rgba(255,109,0,0.7);  /* オレンジグロー（強） */
+    transform: scale(1.025);
+    box-shadow: 0 0 28px rgba(255,109,0,0.7);
   }
-  /*
-    @keyframes は CSS アニメーションのキーフレームを定義する。
-    from（0%）と to（100%）の間でブラウザが補間して滑らかに変化させる。
-  */
 }
 
-/* 今回のスコアボックス */
 .result-score-box {
   width: 100%;
   background: var(--surface);
@@ -749,22 +565,21 @@ kbd {
 
 .result-value {
   font-family: var(--font-hd);
-  font-size: 3.2rem;                      /* 今回スコアは特に大きく表示 */
+  font-size: 3.2rem;
   font-weight: 900;
   color: var(--yellow);
-  text-shadow: 0 0 22px var(--yellow);    /* 黄色グロー（強め） */
+  text-shadow: 0 0 22px var(--yellow);
   letter-spacing: 0.05em;
 }
 
-/* ハイスコア表示ボックス */
 .result-hs-box {
   width: 100%;
   background: var(--surface);
-  border: 1px solid var(--cyan);          /* シアン枠線でハイスコアを強調 */
+  border: 1px solid var(--cyan);
   border-radius: var(--radius);
   padding: 14px 20px;
   text-align: center;
-  box-shadow: 0 0 16px rgba(0,229,255,0.12); /* 薄いシアングロー */
+  box-shadow: 0 0 16px rgba(0,229,255,0.12);
 }
 
 .result-hs-label {
@@ -777,70 +592,55 @@ kbd {
 
 .result-hs-value {
   font-family: var(--font-hd);
-  font-size: 2rem;                        /* ハイスコアはスコアより小さく比較させる */
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--cyan);                     /* シアン色でハイスコアを差別化 */
+  color: var(--cyan);
   text-shadow: 0 0 14px var(--cyan);
   letter-spacing: 0.05em;
 }
 
-/* リザルト画面のボタングループ */
 .result-buttons {
   display: flex;
-  flex-direction: column;  /* 「もう一度」と「タイトルへ」を縦に並べる */
+  flex-direction: column;
   align-items: center;
-  gap: 10px;               /* ボタン間の隙間 */
+  gap: 10px;
   width: 100%;
 }
 
 
 /* ══════════════════════════════════════════════════════════
    13. フッター
-   ──────────────────────────────────────────────────────────
-   ページ最下部のコピーライト表示バー。
-   ヘッダーと同じ背景色・枠線で統一感を持たせる。
    ══════════════════════════════════════════════════════════ */
 .site-footer {
   background: var(--surface);
-  border-top: 1px solid var(--border); /* ヘッダーの border-bottom と対称 */
+  border-top: 1px solid var(--border);
   padding: 9px 16px;
   text-align: center;
-  flex-shrink: 0; /* フッターが縮まないよう固定（常に最下部に留まる） */
+  flex-shrink: 0;
 }
 
 .footer-copy {
-  font-size: 0.72rem;   /* 控えめな極小フォントサイズ */
+  font-size: 0.72rem;
   color: var(--text-dim);
 }
 
 .footer-link {
   color: var(--cyan);
-  text-decoration: none; /* デフォルトの下線を非表示 */
+  text-decoration: none;
 }
 
 .footer-link:hover { text-decoration: underline; }
-/* ホバー時のみ下線を表示してリンクとわかるようにする */
 
 
 /* ══════════════════════════════════════════════════════════
-   14. レスポンシブ対応（メディアクエリ）
-   ──────────────────────────────────────────────────────────
-   小さい画面（低身長・狭幅）でのレイアウト調整。
-
-   @media (max-height: 680px)
-     縦方向が狭い端末（小型スマートフォン横向き等）向け。
-     HUD の余白と文字サイズを縮小して Canvas の表示面積を確保する。
-
-   @media (max-width: 400px)
-     横方向が非常に狭い端末向け。
-     画面内側の余白を縮小してコンテンツの横幅を最大限活用する。
+   14. レスポンシブ対応
    ══════════════════════════════════════════════════════════ */
 @media (max-height: 680px) {
-  .overlay-score { font-size: 2.2rem; }  /* 縦が狭い画面ではスコアを少し縮小 */
-  .overlay-balls { font-size: 0.9rem; }  /* 残機も合わせて縮小 */
+  .overlay-score { font-size: 2.2rem; }
+  .overlay-balls { font-size: 0.9rem; }
 }
 
 @media (max-width: 400px) {
-  .screen-inner { padding: 16px 12px 20px; }               /* 内側余白を削減 */
-  .intro-box, .score-table-box { padding: 14px 14px 16px; } /* カード内余白を削減 */
+  .screen-inner { padding: 16px 12px 20px; }
+  .intro-box, .score-table-box { padding: 14px 14px 16px; }
 }
