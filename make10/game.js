@@ -4,7 +4,7 @@
 
 
 // ── 設定定数 ────────────────────────────────────────────────────
-const APP_STORE_URL   = 'https://apps.apple.com/app/id0000000000'; // App Store URL（確定後に更新）
+const APP_STORE_URL   = 'https://apps.apple.com/app/id6760253962'; // App Store URL（MAKE10）
 const TOTAL_TIME      = 30;   // 制限時間（秒）
 const WRONG_PENALTY   = 1;    // 不正解ペナルティ（秒）
 const TILE_COUNT      = 4;    // 選択肢タイル数
