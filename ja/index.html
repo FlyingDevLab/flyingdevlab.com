@@ -4,13 +4,13 @@
   この行がないとブラウザが古い互換モードで描画し、レイアウトが崩れることがあります。
 -->
 <!-- <html> タグ：ページ全体を囲む最外側のタグ
-  - lang="en"       → このページの主要言語が英語であることを宣言。  ← 変更: 英語ページ化（旧 lang="ja"）
+  - lang="ja"       → このページの主要言語が日本語であることを宣言。
                       スクリーンリーダー（視覚障害者向け読み上げソフト）や
                       翻訳ツールが正しく動作するために重要。
   - prefix="og:..." → OGP（SNSシェア時の見た目を制御）タグを使うための宣言。
   - id="top"        → フッターの「↑ TOP」リンクから #top へ戻るためのアンカー。
 -->
-<html lang="en" prefix="og: https://ogp.me/ns#" id="top">
+<html lang="ja" prefix="og: https://ogp.me/ns#" id="top">
 <!-- <head> セクション
   ページの「見えない情報」を書く場所です。
   ブラウザや検索エンジン・SNSへの指示をまとめています。
@@ -35,20 +35,16 @@
     <title> : ブラウザのタブやGoogleの検索結果に表示されるページタイトル。
     SEOで最も重要なタグのひとつです。
   -->
-  <!-- 変更: 英語専用ページのためタイトルを英語に（旧「空飛ぶ研究室（Flying Dev Lab）」） -->
-  <title>Flying Dev Lab</title>
+  <title>空飛ぶ研究室（Flying Dev Lab）</title>
   <!-- description : 検索結果のタイトル下に表示される説明文（スニペット）。
     クリック率に影響するため、内容を簡潔にアピールする文章を入れます。
     Googleが必ずしもこの文章を使うとは限りませんが、設定しておくのがベストプラクティスです。
   -->
-  <!-- 変更: 英語の説明文に差し替え -->
   <meta name="description"
-    content="Flying Dev Lab builds safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including MAKE10, an addition game for preschoolers.">
+    content="空飛ぶ研究室（Flying Dev Lab）は、こどもも大人も笑顔になる安心・安全・便利なアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう(iOS)」など。">
   <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
-  <!-- 変更: 英語キーワードに差し替え -->
-  <meta name="keywords" content="iOS apps, kids apps, educational apps, math games, addition game, Flying Dev Lab, indie developer, indie dev, privacy-friendly apps, ad-free apps">
-  <!-- author : ページの作者・制作者名。SEO直接効果は薄いが明示しておくのがマナー。
-       （屋号は日本語名が正式名称のため、英語ページでもそのまま残しています） -->
+  <meta name="keywords" content="iOSアプリ,アプリ,こども向けアプリ,知育アプリ,足し算ゲーム,Flying Dev Lab,空飛ぶ研究室,個人開発,indeidev,インディーデベロッパー">
+  <!-- author : ページの作者・制作者名。SEO直接効果は薄いが明示しておくのがマナー。 -->
   <meta name="author" content="空飛ぶ研究室（Flying Dev Lab）">
   <!-- robots : 検索エンジンのクローラー（ロボット）への指示。
     - index  → このページを検索インデックスに登録してよい
@@ -59,76 +55,66 @@
   <!--  canonical : このページの「正規URL」を検索エンジンに伝えるタグ。
     http / https、www あり / なし など複数URLが存在するときに
     どれが本物のURLかを示すために使います。重複コンテンツ問題を防ぎます。
-    （このページ＝ルートが英語メイン。URLは元々ルートなので変更なし）
+    この日本語ページの正規URLは /ja/ です。
   -->
-  <link rel="canonical" href="https://flyingdevlab.com/">
+  <link rel="canonical" href="https://flyingdevlab.com/ja/">
 
   <!-- ===== hreflang（言語バリアント） =====
-    変更: 日英を別URLに分離したため、各言語に対応する「実URL」を指すよう修正しました。
-          - en（英語）   = ルート https://flyingdevlab.com/  （このページ＝メイン）
-          - ja（日本語） = https://flyingdevlab.com/ja/       （別ページ・STEP 2で作成）
-          - x-default    = どの言語にも一致しないユーザー向けの既定URL。ここでは英語（ルート）。
-    以前はJavaScriptで同一ページ内を切り替えていたため、ja・en とも同じURLを指していました。
-    今回URLを分離したので、注釈も実URLに合わせています。
-    ※ /ja/ の末尾スラッシュは、STEP 2でCloudflare Pagesの実配信形を確認して最終確定します。
+    日英を別URLに分離しているため、各言語に対応する「実URL」を指しています。
+      - ja（日本語） = https://flyingdevlab.com/ja/  （このページ）
+      - en（英語）   = https://flyingdevlab.com/       （メイン・ルート）
+      - x-default    = どの言語にも一致しないユーザー向けの既定URL。英語（ルート）を指定。
+    ※ /ja/ の末尾スラッシュは、Cloudflare Pages の実配信形に合わせて最終確定してください。
   -->
-  <link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/">      <!-- 変更: 同一URL → /ja/ -->
+  <link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/">
   <link rel="alternate" hreflang="en" href="https://flyingdevlab.com/">
   <link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/">
   <!-- ===== OGP（Open Graph Protocol） =====
     SNSシェア時のタイトル・説明・サムネイル画像などを指定する
-    OGP とは：SNS（X・Facebook・LINEなど）でURLをシェアしたときに
-    表示される「カード」の見た目を制御するためのメタタグ群です。
     og:type     → コンテンツの種類（website = 普通のWebページ）
-    og:url      → このページのURL
+    og:url      → このページのURL（このページは /ja/）
     og:title    → カードに表示されるタイトル
     og:description → カードに表示される説明文
     og:image    → カードに表示されるサムネイル画像のURL
     og:image:width / height → 画像サイズ（1200×630 が推奨サイズ）
     og:image:alt → 画像の代替テキスト（視覚障害者向けアクセシビリティ）
     og:site_name → サイト名
-    og:locale   → 主要言語（en_US = 英語）
-    og:locale:alternate → 対応している他の言語（ja_JP = 日本語）
+    og:locale   → 主要言語（ja_JP = 日本語）
+    og:locale:alternate → 対応している他の言語（en_US = 英語）
   -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://flyingdevlab.com/">                  <!-- 変更なし（ルートのまま） -->
-  <meta property="og:title" content="Flying Dev Lab">                           <!-- 変更: 英語タイトルに -->
-  <meta property="og:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including MAKE10, an addition game for preschoolers.">  <!-- 変更: 英語に -->
+  <meta property="og:url" content="https://flyingdevlab.com/ja/">
+  <meta property="og:title" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta property="og:description" content="こどもも大人も笑顔になる安心・安全・便利なアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう」など。">
   <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
   <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
-  <meta property="og:locale" content="en_US">                                   <!-- 変更: ja_JP → en_US（このページの言語） -->
-  <meta property="og:locale:alternate" content="ja_JP">                         <!-- 変更: en_US → ja_JP（対になる言語） -->
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:locale:alternate" content="en_US">
   <!-- ===== Twitter Card =====
     X（旧Twitter）でシェアされた際のカード表示を制御する
-    Twitter Card は X（旧Twitter）専用の OGP 拡張です。
     twitter:card → カードの種類。summary_large_image = 大きい画像付きカード
     twitter:site → サイト運営者のXアカウント（@から始まる）
     twitter:creator → 投稿者のXアカウント（著者がいる場合）
-    twitter:title / description / image は og: と同様ですが、
-    X専用の上書き設定として機能します。
   -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@FlyingDevLab">
   <meta name="twitter:creator" content="@FlyingDevLab">
-  <meta name="twitter:title" content="Flying Dev Lab">                          <!-- 変更: 英語タイトルに -->
-  <meta name="twitter:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike.">  <!-- 変更: 英語に -->
+  <meta name="twitter:title" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta name="twitter:description" content="こどもも大人も笑顔になる、安心・安全・便利なアプリを開発しています。">
   <meta name="twitter:image" content="https://flyingdevlab.com/ogp.png">
   <meta name="twitter:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
   <!-- ===== JSON-LD 構造化データ ===== 
     検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応） 
-    JSON-LD とは：Googleなどの検索エンジンに
-    「このサイトは〇〇という組織が運営しているWebサイトで、
-    このページは△△です」という関係性をJSON形式で伝える仕組みです。
-    うまく認識されると検索結果に「リッチリザルト」と呼ばれる
-    装飾された表示が出ることがあります。
-    type="application/ld+json" とすることでブラウザはJSとして実行せず、
-    検索エンジンだけが読み取ります。
     @graph の中に Organization（組織）・WebSite・WebPage の3つを定義しています。
-    ※ 今回の変更は inLanguage を "en" にする点のみ（urlは元々ルートなので変更なし）。
-       組織名・ページ名・説明文は指示書のJSON-LD変更項目に含まれないため日本語併記のまま残しています。
+    ※ この日本語ページ向けのポイント：
+       - WebPage の url を /ja/ に、@id も /ja/#webpage にしています。
+         （@id はノードの識別子。ルート（英語）ページの #webpage とは別ページなので、
+          同じ @id を使い回すと「同じページが2つのURLを名乗る」矛盾になるため分けています）
+       - inLanguage は "ja" にしています。
+       - Organization と WebSite はサイト全体で共通の存在なので @id・url はルートのままにしています。
   -->
   <script type="application/ld+json">
   {
@@ -157,29 +143,25 @@
         "url": "https://flyingdevlab.com/",
         "name": "空飛ぶ研究室（Flying Dev Lab）",
         "publisher": { "@id": "https://flyingdevlab.com/#organization" },
-        "inLanguage": "en"
+        "inLanguage": "ja"
       },
       {
         "@type": "WebPage",
-        "@id": "https://flyingdevlab.com/#webpage",
-        "url": "https://flyingdevlab.com/",
+        "@id": "https://flyingdevlab.com/ja/#webpage",
+        "url": "https://flyingdevlab.com/ja/",
         "name": "空飛ぶ研究室（Flying Dev Lab）",
         "description": "こどもも大人も笑顔になる、安心・安全・便利なアプリを開発しています。",
         "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
         "about": { "@id": "https://flyingdevlab.com/#organization" },
-        "inLanguage": "en"
+        "inLanguage": "ja"
       }
     ]
   }
   </script>
 
   <!-- ===== Favicon =====
-    Favicon（ファビコン）とは：ブラウザのタブや
-    ブックマークに表示される小さなアイコンです。
-    - favicon.ico    → 最も古い形式。どのブラウザでも対応している汎用フォールバック。
-    - favicon-512.png → 高解像度ディスプレイ向けのPNG版。
-    - apple-touch-icon → iPhoneでホーム画面に追加したときのアイコン（180×180px推奨）。
-    - theme-color    → Androidのブラウザでアドレスバーの色を変える指定。
+    Favicon（ファビコン）とは：ブラウザのタブやブックマークに表示される小さなアイコンです。
+    すべて / 始まりの絶対パスなので、/ja/ 配下でもそのまま正しく読み込めます。
   -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon-512.png" type="image/png" sizes="512x512">
@@ -189,24 +171,19 @@
   <!-- ===== Web Fonts =====
   Google Fonts は動的に CSS を生成するため SRI (integrity) を付与できません。
   preconnect で接続を高速化しています。 
-  Web Fonts（Webフォント）の読み込み設定。
-  preconnect はフォントサーバーへの接続を事前に確立しておくことで、
-  フォントの読み込みを高速化する最適化テクニックです。
-  - fonts.googleapis.com → フォントのCSS（どのファイルを使うか）を配信するサーバー
-  - fonts.gstatic.com    → フォントの実データ（.woff2 など）を配信するサーバー
-  読み込んでいるフォント：
   - Noto Sans JP（日本語用）：ウェイト 400/500/700/900
   - Outfit（英語・数字用）：ウェイト 400/600/800
   display=swap → フォントが読み込まれるまでシステムフォントで表示し、
                   読み込み完了後に切り替えることで文字が見えない時間をなくす。
-   最後に style.css（このサイト独自のスタイルシート）を読み込んでいます。
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- style.css は絶対パス（/）で読み込む。
+       /ja/ は1階層深いため、相対パス（style.css）だと /ja/style.css を探してしまい読み込めない。 -->
+  <link rel="stylesheet" href="/style.css">
 </head>
 <!-- <body> セクション
   ここからがブラウザに実際に表示される内容です。
@@ -215,89 +192,47 @@
 
 <body>
   <!-- スキップリンク（キーボード操作・スクリーンリーダー向け）
-  スキップリンクとは：キーボードのTabキーだけでナビゲーションする
-  ユーザーや、スクリーンリーダーを使う視覚障害者が、
   ヘッダーを毎回読み飛ばしてメインコンテンツへ直接移動できるリンクです。
   CSSで通常は画面外に隠されており、Tabキーを押したときだけ表示されます。
   href="#main" はページ内の id="main" の要素へジャンプします。
 -->
-  <!-- 変更: JS（switchLang）による文言更新を廃止したため、英語ページの文言を直接記述 -->
-  <a href="#main" class="skip-link">Skip to main content</a>
-  <!-- ヘッダー：ロゴ・サイト名・キャッチコピー・ナビゲーションリンクを含む
-  <header> タグ：ページ上部のヘッダー領域を示すセマンティックタグ。
-  「セマンティック（意味のある）」とは、ブラウザや検索エンジンが
-  このエリアがヘッダーだと理解できる意味を持たせたタグのことです。
-  見た目は <div> と同じですが、役割を正しく伝えられます。
--->
+  <a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+  <!-- ヘッダー：ロゴ・サイト名・キャッチコピー・言語リンクを含む -->
   <header>
     <div class="header-inner">
-      <!-- aria-hidden="true" : スクリーンリーダーにこの要素を読み飛ばすよう指示します。
-      絵文字ロゴは装飾目的のため、読み上げ不要として非表示にしています。
-    -->
+      <!-- aria-hidden="true" : 絵文字ロゴは装飾目的のため、スクリーンリーダーに読ませません。 -->
       <div class="site-logo" aria-hidden="true">
         <span class="logo-cloud">☁️</span>
         <span class="logo-house">🏠</span>
       </div>
-      <!-- <h1> タグ：ページで最も重要な見出し（1ページに1つが基本）。
-      SEOで重視されるタグです。
-      <span> タグ：インライン要素をグループ化して個別にスタイルを当てるために使用。
-    -->
+      <!-- <h1> タグ：ページで最も重要な見出し（1ページに1つが基本）。 -->
       <h1 class="site-name">Flying <span>Dev</span> Lab</h1>
-      <!-- サイト名の日本語サブタイトル。
-      （屋号「空飛ぶ研究室」は正式名称のため、英語ページでもブランド表記として残しています）
-    -->
+      <!-- サイト名の日本語サブタイトル。 -->
       <p class="site-sub">空飛ぶ研究室</p>
-      <!-- キャッチコピー。
-      id は元々JSの言語切り替え用フックでしたが、英語固定化に伴い文言を直接英語で記述しています。
-      - id="catch-main" → メインのキャッチコピー（1行目）
-      - id="catch-sub"  → サブのキャッチコピー（2行目）
-      <strong> タグ：テキストを強調するタグ。視覚的に太字になり、
-      スクリーンリーダーも「重要」として読み上げます。
-    -->
-      <!-- 変更: キャッチコピーを英語に直接記述（旧：日本語＋JSで英語化） -->
+      <!-- キャッチコピー。 -->
       <div class="catchcopy">
-        <p id="catch-main">Safe, reliable &amp; delightful</p>
-        <p id="catch-sub">We build <strong>apps</strong> for kids and grown-ups alike.</p>
+        <p id="catch-main">こどもも大人も笑顔になる</p>
+        <p id="catch-sub">安心・安全・便利な<strong>アプリ</strong>をつくっています。</p>
       </div>
     </div>
   </header>
 
-  <!-- メインコンテンツ：言語リンク・アプリ一覧・ブラウザゲーム・お問い合わせ・SNS投稿を含む
-  <main> タグ：ページのメインコンテンツを示すセマンティックタグ。
-  id="main" を付けることで、上のスキップリンク（href="#main"）の
-  ジャンプ先になっています。
-  1ページにつき <main> は1つだけ使います。
-  -->
+  <!-- メインコンテンツ：言語リンク・アプリ一覧・ブラウザゲーム・お問い合わせ・SNS投稿を含む -->
   <main id="main">
     <!-- 言語切り替え
-    変更: これまでJSで同一ページ内を切り替えるタブ（role="tablist" / button）でしたが、
-          別URL（/ja/）への分離に伴い、「現在地の表示＋別ページへのリンク」に変更しました。
-          - English は現在地なので <span>（リンクではない）
-          - 日本語 は別ページ /ja/ への <a> リンク（リンク文字が日本語なので lang="ja" を付与）
-          これにより、検索エンジンには各URLが固定の言語を返すことになり、
-          ブラウザ言語による自動リダイレクトも不要になります。
+    別URL（/）への分離に伴い、「現在地の表示＋別ページへのリンク」の形にしています。
+      - 日本語 は現在地なので <span>（リンクではない）
+      - English は別ページ（ルート＝英語メイン）への <a> リンク（リンク文字が英語なので lang="en" を付与）
   -->
     <div class="lang-tabs">
-      <a class="lang-tab" href="/ja/" lang="ja">日本語</a>
-      <span class="lang-tab active">English</span>
+      <span class="lang-tab active">日本語</span>
+      <a class="lang-tab" href="/" lang="en">English</a>
     </div>
-    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される
-    <section> タグ：意味のあるひとまとまりのコンテンツ領域を示すセマンティックタグ。
-    aria-labelledby="apps-heading" → この section の見出しが id="apps-heading" の要素であると宣言。
-    スクリーンリーダーが「アプリ セクション」と読み上げられるようになります。
-    id="app-list" の <div> は中身が空で、JavaScriptが後から動的にカードを生成・挿入します。
-    （apps.js の APPS 配列を編集するだけでカードが追加・変更されます）
-  -->
+    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される -->
     <section aria-labelledby="apps-heading">
       <div class="section-header fade-up">
-        <!-- <h2> タグ：<h1> の次に重要な見出し。このページでは各セクションの見出しに使っています。
-        aria-hidden="true" の絵文字はスクリーンリーダーに読ませない装飾です。
-        ※ #apps-heading-text は renderApps("en") が "Apps" に設定しますが、
-          JS無効時やJS実行前でも正しく見えるよう、初期値も英語にしてあります。
-      -->
-        <!-- 変更: 見出し初期テキストを英語に -->
         <h2 id="apps-heading" class="section-title">
-          <span aria-hidden="true">📱</span> <span id="apps-heading-text">Apps</span>
+          <span aria-hidden="true">📱</span> <span id="apps-heading-text">アプリ</span>
         </h2>
       </div>
       <!-- JSがここにアプリカードを描画する。初期状態は空。 -->
@@ -307,125 +242,112 @@
 
     <section class="try-game-section" aria-labelledby="try-heading">
       <div class="section-header fade-up">
-        <!-- 変更: 見出しを英語に直接記述（旧：日本語＋JSで英語化） -->
         <h2 id="try-heading" class="section-title">
-          <span aria-hidden="true">🎮</span> <span id="try-heading-text">Try in Browser</span>
+          <span aria-hidden="true">🎮</span> <span id="try-heading-text">ブラウザで遊ぶ</span>
         </h2>
       </div>
 
-      <!-- MAKE10
-           変更: ゲーム名・aria-label を英語に直接記述（旧：日本語＋JSで英語化） -->
-      <a href="/make10/index.html" class="try-game-card fade-up" id="game-card-1" aria-label="Play MAKE10 in browser">
+      <!-- MAKE10（ゲームへのリンクは元々 / 始まりの絶対パスなので /ja/ 配下でもそのまま動きます） -->
+      <a href="/make10/index.html" class="try-game-card fade-up" id="game-card-1" aria-label="MAKE10をブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-1">MAKE10</div>
+          <div class="try-game-name" id="game-name-1">MAKE10 / 10をつくろう</div>
         </div>
       </a>
 
       <!-- Cheese Escape -->
-      <a href="/cheese-escape-web/index.html" class="try-game-card fade-up" id="game-card-2" aria-label="Play Cheese Escape in browser">
+      <a href="/cheese-escape-web/index.html" class="try-game-card fade-up" id="game-card-2" aria-label="Cheese Escapeをブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-2">Cheese Escape</div>
+          <div class="try-game-name" id="game-name-2">Cheese Escape / 迷路</div>
         </div>
       </a>
 
       <!-- Whack-a-Mole -->
-      <a href="/whack-a-mole/index.html" class="try-game-card fade-up" id="game-card-3" aria-label="Play Whack-a-Mole in browser">
+      <a href="/whack-a-mole/index.html" class="try-game-card fade-up" id="game-card-3" aria-label="Whack-a-Moleをブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-3">Whack-a-Mole</div>
+          <div class="try-game-name" id="game-name-3">Whack-a-Mole / モグラ叩き</div>
         </div>
       </a>
 
       <!-- Pinball -->
-      <a href="/pinball/index.html" class="try-game-card fade-up" id="game-card-4" aria-label="Play Pinball in browser">
+      <a href="/pinball/index.html" class="try-game-card fade-up" id="game-card-4" aria-label="Pinballをブラウザでプレイ">
         <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-4">Pinball</div>
+          <div class="try-game-name" id="game-name-4">Pinball / ピンボール</div>
         </div>
       </a>
 
     </section>
 
-    <!-- 変更: 日本語コンテンツ（旧 #lang-ja ブロック）を丸ごと削除しました。
-              日本語コンテンツは STEP 2 で作成する /ja/index.html に移します。 -->
+    <!-- ==================== 日本語コンテンツ ====================
+    タブUIを廃止したため、消えた tab-ja を参照していた
+    role="tabpanel" / aria-labelledby="tab-ja" は付けていません。
+    このページで唯一表示するパネルなので class に "active" を付与しています。
+    （.lang-content は active が付いた時だけ表示される作りという前提です）
+    -->
+    <div class="lang-content active" id="lang-ja" lang="ja">
 
-    <!-- ==================== English コンテンツ ====================
-    変更: タブUIを廃止したため、消えた tab-en を参照していた
-          role="tabpanel" / aria-labelledby="tab-en" を削除しました。
-          また、このページで唯一表示するパネルになるため class に "active" を付与しています。
-          （.lang-content は active が付いた時だけ表示される作りのため、active は必須です）
-    lang="en" を個別に付けることでスクリーンリーダーが
-    このパネル内を英語として読み上げます（<html lang="en"> と重複しますが無害です）。
-  -->
-    <div class="lang-content active" id="lang-en" lang="en">
-
-      <!-- Contact（English） 
-     contact-wrap / contact-box-inner は二重ラッパー構造です。
-     - target="_blank"           → リンクを新しいタブで開く
-     - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策。
-     -->
-      <section class="contact-section" aria-labelledby="contact-heading-en">
+      <!-- お問い合わせ（日本語） 
+      - target="_blank"           → リンクを新しいタブで開く
+      - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策
+      -->
+      <section class="contact-section" aria-labelledby="contact-heading-ja">
         <div class="section-header fade-up">
-          <h2 id="contact-heading-en" class="section-title">
-            <span aria-hidden="true">📬</span> Contact
+          <h2 id="contact-heading-ja" class="section-title">
+            <span aria-hidden="true">📬</span> お問い合わせ
           </h2>
         </div>
         <div class="contact-wrap fade-up">
           <div class="contact-box-inner">
-            <p class="contact-desc">Opens Google Forms.<br>Only the information you enter will be submitted.<br>We do
-              not collect any other data.<br>Feel free to report bugs or ask questions 😊</p>
+            <p class="contact-desc">Google
+              Formsが開きます。<br>入力した内容だけが送信される仕組みになっております。<br>それ以外の情報は取得しません。<br>バグの報告や気になることは、遠慮なく教えてくださいね😊</p>
             <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8" target="_blank" rel="noopener noreferrer" class="contact-btn"
-              aria-label="Contact / Bug Report (opens Google Forms in a new tab)">
-              <span aria-hidden="true">📬</span> Contact / Bug Report
+              aria-label="お問い合わせ・バグ報告はこちら（Google Formsが新しいタブで開きます）">
+              <span aria-hidden="true">📬</span> お問い合わせ・バグ報告はこちら
             </a>
           </div>
         </div>
       </section>
 
-      <!-- Updates（English）： X（旧Twitter）投稿と Instagram 投稿を混在して掲載
+      <!-- SNS投稿埋め込み（日本語）：X（旧Twitter）投稿と Instagram 投稿を混在して掲載
       各投稿は <blockquote> タグで書かれており、ページ下部で読み込む
       外部スクリプト（widgets.js / embed.js）が実行されたタイミングで
       リッチなカード表示に変換されます。
-      （埋め込みの中身は今回の作業対象外のため、そのまま残しています）
-      -->
-      <section class="x-embed" aria-labelledby="sns-heading-en">
+    -->
+      <section class="x-embed" aria-labelledby="sns-heading-ja">
         <div class="section-header fade-up">
-          <h2 id="sns-heading-en" class="section-title">
-            <span aria-hidden="true">📣</span> Updates
+          <h2 id="sns-heading-ja" class="section-title">
+            <span aria-hidden="true">📣</span> 活動状況
           </h2>
         </div>
         <div class="sns-embed-list">
-          <!-- 埋め込み投稿カード（1-1枚目） -->
-          <div class="app-card sns-embed-card fade-up"> 
-            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">✅ DSA trader registration: approved.<br>🇪🇺 EU App Store: live.<br><br>We&#39;re officially available to users in the European Union. Thanks for waiting — let&#39;s go! 🚀<a href="https://x.com/hashtag/DSA?src=hash&amp;ref_src=twsrc%5Etfw">#DSA</a> <a href="https://x.com/hashtag/AppStore?src=hash&amp;ref_src=twsrc%5Etfw">#AppStore</a> <a href="https://x.com/hashtag/Europe?src=hash&amp;ref_src=twsrc%5Etfw">#Europe</a> <a href="https://x.com/hashtag/EU?src=hash&amp;ref_src=twsrc%5Etfw">#EU</a><a href="https://t.co/bpJbQb3NyC">https://t.co/bpJbQb3NyC</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2069631124679307361?ref_src=twsrc%5Etfw">June 24, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
-          </div>
-          <!-- 埋め込み投稿カード（1-2枚目） -->
-          <div class="app-card sns-embed-card fade-up">
-            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Added several new games to MAKE10.<br>Since it&#39;s grown beyond a math puzzle, the app has been renamed to better reflect its direction as a kids game collection.<br>I also added hydrangeas to the icon, as they&#39;re now in bloom in Japan.<a href="https://x.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a><a href="https://t.co/bpJbQb3NyC">https://t.co/bpJbQb3NyC</a> <a href="https://t.co/RxpTuT01ex">pic.twitter.com/RxpTuT01ex</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2065269344125460615?ref_src=twsrc%5Etfw">June 12, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
-          </div>
           <!-- 埋め込み投稿カード（1枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+            <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">MAKE10に新しいゲームをいくつか追加しました。<br>それに伴い、内容が計算パズルでは無くこども向けゲームコレクションになってきたので名前も変更しました。<br>あと日本では紫陽花の花が見頃なのでアイコンに紫陽花の花を追加しました。<a href="https://x.com/hashtag/%E5%80%8B%E4%BA%BA%E9%96%8B%E7%99%BA?src=hash&amp;ref_src=twsrc%5Etfw">#個人開発</a> <a href="https://x.com/hashtag/buildinpublic?src=hash&amp;ref_src=twsrc%5Etfw">#buildinpublic</a> <a href="https://x.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a><a href="https://t.co/bpJbQb3NyC">https://t.co/bpJbQb3NyC</a> <a href="https://t.co/Kujccda92a">pic.twitter.com/Kujccda92a</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2065267281438134558?ref_src=twsrc%5Etfw">June 12, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+          </div>
+          <!-- 埋め込み投稿カード（2枚目） -->
           <div class="app-card sns-embed-card fade-up">
             <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">今日もタイトルをゴチャゴチャにして遊んでいる。<a href="https://x.com/hashtag/%E5%80%8B%E4%BA%BA%E9%96%8B%E7%99%BA?src=hash&amp;ref_src=twsrc%5Etfw">#個人開発</a> <a href="https://x.com/hashtag/buildinpublic?src=hash&amp;ref_src=twsrc%5Etfw">#buildinpublic</a> <a href="https://x.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a> <a href="https://t.co/KHCPq3KHTz">pic.twitter.com/KHCPq3KHTz</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2062438798093635670?ref_src=twsrc%5Etfw">June 4, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
           </div>
-          <!-- 埋め込み投稿カード（2枚目） -->
+          <!-- 埋め込み投稿カード（3枚目） -->
           <div class="app-card sns-embed-card fade-up">
             <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DZH0x44M8fJ/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DZH0x44M8fJ/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">この投稿をInstagramで見る</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DZH0x44M8fJ/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">Flying Dev Lab🇯🇵空飛ぶ研究室(@flyingdevlab)がシェアした投稿</a></p></div></blockquote>
             <script async src="//www.instagram.com/embed.js"></script>
           </div>
-          <!-- 埋め込み投稿カード（3枚目） -->
+          <!-- 埋め込み投稿カード（4枚目） -->
           <div class="app-card sns-embed-card fade-up">
             <blockquote class="twitter-tweet"><p lang="en" dir="ltr">MAKE10 is now open source. 🐘<br><br>No ads. <br>No tracking. <br>No in-app purchases. <br>No external connections.<br><br>Verify it yourself. <br>Don&#39;t trust blindly — including us.<br><br>👉 <a href="https://t.co/x1fAkwp2Mt">https://t.co/x1fAkwp2Mt</a>🐘<a href="https://x.com/hashtag/OpenSource?src=hash&amp;ref_src=twsrc%5Etfw">#OpenSource</a> <a href="https://x.com/hashtag/Swift?src=hash&amp;ref_src=twsrc%5Etfw">#Swift</a> <a href="https://x.com/hashtag/SwiftUI?src=hash&amp;ref_src=twsrc%5Etfw">#SwiftUI</a> <a href="https://x.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a> <a href="https://x.com/hashtag/FlyingDevLab?src=hash&amp;ref_src=twsrc%5Etfw">#FlyingDevLab</a> <a href="https://x.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2060949114909831607?ref_src=twsrc%5Etfw">May 31, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
           </div>
-          <!-- 埋め込み投稿カード（4枚目） -->
+          <!-- 埋め込み投稿カード（5枚目） -->
           <div class="app-card sns-embed-card fade-up">
             <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DYyPI_aMCee/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DYyPI_aMCee/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">この投稿をInstagramで見る</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DYyPI_aMCee/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">Flying Dev Lab🇯🇵空飛ぶ研究室(@flyingdevlab)がシェアした投稿</a></p></div></blockquote>
             <script async src="//www.instagram.com/embed.js"></script>
             </div>
-          <!-- 埋め込み投稿カード（5枚目） -->
+          <!-- 埋め込み投稿カード（6枚目） -->
           <div class="app-card sns-embed-card fade-up">
             <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">おはようございます。<br><br>誰かの役に立つためにやってきた事が<br>ちゃんと届いていて、<br>叫びたくなるぐらい嬉しいです。<a href="https://twitter.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a> <a href="https://twitter.com/hashtag/FlyingDevLab?src=hash&amp;ref_src=twsrc%5Etfw">#FlyingDevLab</a><a href="https://twitter.com/hashtag/%E5%80%8B%E4%BA%BA%E9%96%8B%E7%99%BA?src=hash&amp;ref_src=twsrc%5Etfw">#個人開発</a> <a href="https://twitter.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a> <a href="https://twitter.com/hashtag/buildinpublic?src=hash&amp;ref_src=twsrc%5Etfw">#buildinpublic</a><a href="https://twitter.com/hashtag/%E3%81%8A%E3%81%AF%E3%82%88%E3%81%86?src=hash&amp;ref_src=twsrc%5Etfw">#おはよう</a> <a href="https://twitter.com/hashtag/GoodMorning?src=hash&amp;ref_src=twsrc%5Etfw">#GoodMorning</a> <a href="https://t.co/YrnQQl5Pjo">https://t.co/YrnQQl5Pjo</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2058247464340324607?ref_src=twsrc%5Etfw">May 23, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
           </div>
-          <!-- 埋め込み投稿カード（6枚目） -->
+          <!-- 埋め込み投稿カード（7枚目） -->
           <div class="app-card sns-embed-card fade-up">
-            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">New ways to play — Whac-a-Mole, Maze &amp; Pinball are now available! 🎯🌀🕹️ <br>Note: controls feel a little different from the browser version.<br>We also cleaned up our Privacy Policy page to make it easier to read. 👉 <a href="https://t.co/Z7ceCnmkex">https://t.co/Z7ceCnmkex</a><a href="https://twitter.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a> <a href="https://twitter.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a> <a href="https://twitter.com/hashtag/indiegame?src=hash&amp;ref_src=twsrc%5Etfw">#indiegame</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2050040972244144254?ref_src=twsrc%5Etfw">May 1, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">MAKE10 / 10をつくろう<br>新しく モグラ叩き・迷路・ピンボール で遊べるようになりました！🎯🌀🕹️ ブラウザ版と少し勝手が違うので、ぜひ試してみてください。<br>プライバシーポリシーページも見やすく整えました。 👉 <a href="https://t.co/Z7ceCnmkex">https://t.co/Z7ceCnmkex</a><a href="https://twitter.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a> <a href="https://twitter.com/hashtag/FlyingDevLab?src=hash&amp;ref_src=twsrc%5Etfw">#FlyingDevLab</a> <a href="https://twitter.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://twitter.com/FlyingDevLab/status/2050040651782430815?ref_src=twsrc%5Etfw">May 1, 2026</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
           </div>
         </div>
       </section>
@@ -433,23 +355,10 @@
   </main>
 
   <!-- フッター：外部SNSリンク・TOPへ戻るリンク・著作権表記を含む
- 一般的にフッターへプライバシーポリシーや免責事項を表示します。
- しかし、大切な事なので一番上の一番目立つ所に表示しました。
-  <footer> タグ：ページ下部のフッター領域を示すセマンティックタグ。
   - 外部SNSリンクにはすべて target="_blank" と rel="noopener noreferrer" を付けています
-  - aria-label で各リンクの目的をスクリーンリーダーに伝えています
   - href="#top" は html タグの id="top" へジャンプしてページ先頭に戻ります
-  - © はHTMLエンティティで © （著作権マーク）を表示しています
-  ※ フッターのSNSリンク等の aria-label は元々ずっと日本語固定だった部分のため、
-    今回（英語化）では手を加えていません（必要なら別途英語化できます）。
 -->
   <footer>
-    <!-- footer-links：SNS外部リンクを横並びで表示するコンテナ。
-    各リンクの共通ルール：
-    - target="_blank"           → 新しいタブで開く
-    - rel="noopener noreferrer" → セキュリティ対策（開いたページが元ページを操作できないようにする）
-    - aria-label                → リンクのテキストだけでは目的が伝わらない場合に補足説明を書く
-  -->
     <div class="footer-links">
       <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer"
         aria-label="GitHub（新しいタブで開きます）">GitHub</a>
@@ -462,71 +371,54 @@
         <span class="x-icon" aria-hidden="true">Instagram</span>
       </a>
     </div>
-    <!-- ページ先頭へ戻るリンク。href="#top" は <html id="top"> へジャンプします。
-    ページが縦に長くなった場合、有効です。 -->
+    <!-- ページ先頭へ戻るリンク。href="#top" は <html id="top"> へジャンプします。 -->
     <a href="#top" class="footer-top" aria-label="ページの先頭へ">↑ TOP</a>
     <!-- legal：プライバシーポリシーと特定商取引法ページへのリンク。
-         法的ページはフッターへの掲載が標準的。
-         tokusho.html は日本語専用のため lang="ja" を付けてスクリーンリーダーに伝える。 -->
+         この日本語ページでは特商法リンクも残しています（日本国内向けのため）。
+         各リンクは / 始まりの絶対パスなので /ja/ 配下でもそのまま動きます。 -->
     <nav class="footer-legal" aria-label="法的情報">
-      <!-- 変更: JSによる文言更新を廃止したため、英語ページの文言を直接記述 -->
-      <a href="/privacy-policy.html" id="nav-policy">Privacy Policy &amp; Disclaimer</a>
+      <a href="/privacy-policy.html" id="nav-policy">プライバシーポリシー・免責事項</a>
       <span class="footer-legal-sep" aria-hidden="true">|</span>
+      <a href="/tokusho.html" lang="ja">特定商取引法に基づく表示</a>
     </nav>
     <p class="footer-copy">&copy;&nbsp;2026&nbsp;空飛ぶ研究室&nbsp;/&nbsp;Flying&nbsp;Dev&nbsp;Lab&nbsp;:&nbsp;<a
-        href="/pledge.html" aria-label="誓約（これは自コンテンツ）">Pledge
-        <!-- &copy; コピーライト（著作権）を表示するためのHTMLタグ --></a></p><!-- 一番読んで欲しい部分をあえて控えめに主張する事により、元から関心がある人にだけ向けて発信する。隠れたメッセージとは常にそういうものである。
-       &nbsp; スペースを表示する為のHTMLタグ 
-       SEO的には問題無いから遊んでいるけど、
-       <span>を使ったりcssを使った方が綺麗に簡単に出来上がる。-->
+        href="/pledge.html" aria-label="誓約（これは自コンテンツ）">Pledge</a></p>
   </footer>
   <!-- ===== JavaScript ===== 
-  JavaScriptの読み込みはページ末尾（</body> の直前）に置くのが基本です。
-  理由：HTMLの描画を妨げないため。
   defer 属性：HTMLの解析が終わってからスクリプトを実行するよう指示します。
   async 属性：HTMLの解析と並行してダウンロードし、ダウンロード完了次第即実行します。
 -->
-  <!-- apps.js 読み込み・アプリ一覧レンダリング -->
-  <script src="apps.js" defer></script>
+  <!-- apps.js 読み込み・アプリ一覧レンダリング
+       /ja/ は1階層深いため、絶対パス（/apps.js）で読み込みます。 -->
+  <script src="/apps.js" defer></script>
   <script>
     /**
-     * アプリ一覧レンダリング（英語固定版）
+     * アプリ一覧レンダリング（日本語固定版）
      *
-     * 変更点（英語専用ページ化に伴う簡素化）:
-     *   - 言語切り替え機能を廃止（switchLang・言語タブのイベントリスナーを削除）
-     *   - VALID_LANGS / currentLang を削除（switchLang専用だったため）
-     *   - I18N は en エントリのみ、かつ renderApps が実際に使う項目だけに削減
-     *   - 初期描画を renderApps("en") に変更
-     * 見出し・キャッチコピー・ゲーム名などのUIテキストは、
-     * 言語切り替えがなくなったためHTML側に英語で直接記述しています。
+     * このページは日本語専用のため、言語切り替え機能は持ちません。
+     * renderApps("ja") を一度呼ぶだけです。
+     * 見出しやゲーム名などのUIテキストはHTMLに日本語で直接書いてあります。
      * apps.js の APPS 配列を編集するだけでアプリカードは自動反映されます。
      */
     (function () {
       "use strict";
 
       /* ─── i18n テキスト定義 ───
-       * 変更: 英語専用ページのため en エントリのみを残しています。
-       *       言語切り替えがなくなり使われなくなった項目（キャッチコピー・ゲーム名・
-       *       スキップリンク等）は削除し、それらのテキストはHTML側に直接書いています。
-       *       ここに残しているのは renderApps が実際に参照する4項目だけです。
-       *       （見出しテキスト・空メッセージ・公開/準備中バッジの文言）
+       * 日本語専用ページのため ja エントリのみ、かつ renderApps が実際に使う4項目だけにしています。
+       * （見出しテキスト・空メッセージ・公開/準備中バッジの文言）
        */
       var I18N = {
-        en: {
-          appsHeading: "Apps",
-          badgeLive: "LIVE",
+        ja: {
+          appsHeading: "アプリ",
+          badgeLive: "公開中",
           badgeComing: "COMING SOON",
-          emptyMsg: "Apps coming soon."
+          emptyMsg: "アプリは近日公開予定です。"
         }
       };
 
       /**
        * HTML特殊文字をエスケープする（XSS防止）
-       * XSS（クロスサイトスクリプティング）とは：
-       * 外部から受け取った文字列をそのままHTMLに埋め込むと、
-       * 悪意あるスクリプトが実行される危険があります。
-       * この関数は < > & " などの特殊文字を無害な文字列（&lt; &gt; など）に
-       * 変換することで、その危険を防ぎます。
+       * < > & " などの特殊文字を無害な文字列（&lt; &gt; など）に変換します。
        * document.createElement("div") を使ってブラウザ自身に変換させるのは、
        * 自前でルールを書くより安全で確実な方法です。
        */
@@ -540,7 +432,7 @@
       /**
        * 1枚のアプリカードの内部HTML文字列を生成して返す
        * @param {Object} app  - APPS配列の1要素
-       * @param {string} lang - 表示言語コード（このページでは常に "en"）
+       * @param {string} lang - 表示言語コード（このページでは常に "ja"）
        */
       function cardContent(app, lang) {
         var t = I18N[lang];
@@ -562,7 +454,7 @@
       /**
        * APPS配列をもとにアプリカードを描画する
        * 公開中（live + url あり）はリンク要素、未公開（coming）はdivのみで出力する
-       * @param {string} lang - 表示言語コード（このページでは常に "en"）
+       * @param {string} lang - 表示言語コード（このページでは常に "ja"）
        */
       function renderApps(lang) {
         var container = document.getElementById("app-list");
@@ -611,17 +503,12 @@
         });
       }
 
-      /* 変更: switchLang() 関数・言語タブのクリック/キーボードのイベントリスナーを削除しました。
-               別URL（/ja/）への分離により、言語の切り替えはページ遷移（hreflang）で行うため不要です。 */
-
       // 初期描画：DOMが構築済みなら即実行、まだの場合はDOMContentLoadedを待つ
-      // document.readyState === "loading" → HTMLの読み込みがまだ完了していない状態。
-      // DOMContentLoaded イベント：HTMLの解析が完了し、DOMが使える状態になった時点で発火します。
-      // 変更: 初期描画の言語を "ja" → "en" に変更（英語専用ページのため）
+      // <script defer> で読み込んでいるため通常はDOM構築後に実行されますが、念のため両方に対応しています。
       if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", function () { renderApps("en"); });
+        document.addEventListener("DOMContentLoaded", function () { renderApps("ja"); });
       } else {
-        renderApps("en");
+        renderApps("ja");
       }
     })();
   </script>
@@ -629,18 +516,12 @@
   <!-- Threads 埋め込みスクリプト
   crossorigin="anonymous" → 外部サーバーからスクリプトを読み込む際に
   認証情報（Cookieなど）を送らないよう指示するセキュリティ属性です。
-  async → HTMLの解析をブロックせずに並行してダウンロード・実行します。
 -->
   <script async src="https://www.threads.com/embed.js" crossorigin="anonymous"></script>
   <!-- Twitter / X ウィジェット（1回だけ読み込む）
-  このスクリプトがページ内の <blockquote class="twitter-tweet"> を
-  リッチなカード表示に変換します。
-  charset="utf-8" → スクリプトファイルの文字コードを明示しています。
+  このスクリプトがページ内の <blockquote class="twitter-tweet"> をリッチなカード表示に変換します。
 -->
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8" crossorigin="anonymous"></script>
-  <!-- 最後まで読んで頂きありがとうございます。 -->
-  <!-- 特に意味のないコメントの修正。 -->
-  <!-- 安全のためには常に”遊び”というものを意識しましょう。 -->
 
 </body>
 

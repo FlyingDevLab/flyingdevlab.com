@@ -25,7 +25,7 @@
 
   <!-- 
     ============================================================
-    TOPページ（サイトの入口。最も重要なページ）
+    TOPページ（英語・メイン）（サイトの入口。最も重要なページ）
     ============================================================
     <url>〜</url> はページ1件分の情報をまとめるブロックです。
     ページが増えるたびにこのブロックを1つ追加します。
@@ -38,7 +38,7 @@
       検索エンジンが「最近更新されたか」を判断する参考にします。
       実際に更新したときは日付を変えましょう。 
     -->
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-06-26</lastmod>                                                    <!-- 変更: 英語ページ化に伴い更新日を本日に -->
     <!-- 
       <changefreq>：このページがどのくらいの頻度で更新されるかの目安。
       選択肢: always / hourly / daily / weekly / monthly / yearly / never
@@ -54,14 +54,30 @@
     <priority>1.0</priority>
     <!--
       <xhtml:link>：多言語対応（hreflang）の設定。
-      「このページは日本語版・英語版・デフォルト版、どれも同じURLだよ」
-      と検索エンジンに伝えます。
-      - hreflang="ja"        → 日本語ユーザー向け
-      - hreflang="en"        → 英語ユーザー向け
-      - hreflang="x-default" → 言語が一致しない場合のフォールバック
-      TOPページは日英共通URLなのですべて同じhrefになっています。 
+      変更: 日英を別URLに分離したため、各言語の実URLを指すよう修正しました。
+      - hreflang="ja"        → 日本語版 /ja/
+      - hreflang="en"        → 英語版（このページ＝ルート）
+      - hreflang="x-default" → 言語が一致しない場合のフォールバック（英語＝ルート）
+      ※ /ja/ の末尾スラッシュは Cloudflare Pages の実配信形に合わせて最終確定してください。
     -->
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/"/>       <!-- 変更: 同一URL → /ja/ -->
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/"/>
+  </url>
+
+  <!-- 
+    ============================================================
+    TOPページ（日本語）  ← 新規追加
+    英語メイン（ルート）と対になる日本語版TOP。重要度・更新頻度はルートと同じ設定。
+    ============================================================
+  -->
+  <url>
+    <loc>https://flyingdevlab.com/ja/</loc>
+    <lastmod>2026-06-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <!-- hreflang はルートと同じ組み合わせを指定（自分自身=ja、対になる英語=ルート、x-default=英語） -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/"/>
   </url>
@@ -69,6 +85,8 @@
   <!-- 
     ============================================================
     プライバシーポリシー（個人情報の取り扱い方針のページ）
+    ※ このページはURLを分離していない（今も日英共通URLの1ページ）ため、
+      今回の作業では変更していません。
     ============================================================ 
   -->
   <url>
@@ -89,6 +107,7 @@
    ============================================================
    こどもたちへの誓い（Flying Dev Lab のポリシー宣言ページ）
    プライバシーポリシーと同じ重要度・更新頻度で設定しています。
+   ※ このページもURLを分離していないため、今回の作業では変更していません。
    ============================================================
   -->
   <url>
