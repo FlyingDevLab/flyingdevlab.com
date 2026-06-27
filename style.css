@@ -450,38 +450,25 @@ main {
   line-height: 1;
 }
 
-/* opacity: 0 が初期値。fadeUpアニメーションで出現するまで非表示にする
- * animation の第3引数 0.1s はアニメーション開始までの遅延時間（animation-delay）です。
+/* clamp(最小値, 推奨値, 最大値)：
+ * 画面幅に応じて値が変動しますが、最小〜最大の範囲に収まります。
+ * clamp(28px, 7vw, 44px) → スマホでは最小28px、PCでは最大44px、
+ * 画面幅の7%（7vw）という推奨値がその間で連続的に変化します。
+ * これによりメディアクエリなしでレスポンシブなフォントサイズになります。* opacity: 0 が初期値。fadeUpアニメーションで出現するまで非表示にする
+ * animation の第3引数 0.2s はアニメーション開始までの遅延時間（animation-delay）です。0.2s遅れてfadeUpで出現します。
  * letter-spacing：文字どうしの間隔。em は現在のフォントサイズに対する倍率の単位です。
  */
 .site-name {
   font-family: 'Outfit', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 800;
+  letter-spacing: 0.05em;
   margin-bottom: 6px;
-  animation: fadeUp 0.5s 0.1s ease forwards;
+  animation: fadeUp 0.5s 0.2s ease forwards;
   opacity: 0;
 }
 
 .site-name span { color: #a8c4ff; }
-
-/* opacity: 0 が初期値。0.2s遅れてfadeUpで出現する
- * clamp(最小値, 推奨値, 最大値)：
- * 画面幅に応じて値が変動しますが、最小〜最大の範囲に収まります。
- * clamp(28px, 7vw, 44px) → スマホでは最小28px、PCでは最大44px、
- * 画面幅の7%（7vw）という推奨値がその間で連続的に変化します。
- * これによりメディアクエリなしでレスポンシブなフォントサイズになります。
- */
-.site-sub {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(28px, 7vw, 44px);
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  margin-bottom: 28px;
-  animation: fadeUp 0.5s 0.2s ease forwards;
-  opacity: 0;
-}
 
 /* キャッチコピーを白カードで囲んで視覚的に際立たせる */
 .catchcopy {

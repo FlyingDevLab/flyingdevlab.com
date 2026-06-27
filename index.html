@@ -4,7 +4,7 @@
   この行がないとブラウザが古い互換モードで描画し、レイアウトが崩れることがあります。
 -->
 <!-- <html> タグ：ページ全体を囲む最外側のタグ
-  - lang="en"       → このページの主要言語が英語であることを宣言。  ← 変更: 英語ページ化（旧 lang="ja"）
+  - lang="en"       → このページの主要言語が英語であることを宣言。
                       スクリーンリーダー（視覚障害者向け読み上げソフト）や
                       翻訳ツールが正しく動作するために重要。
   - prefix="og:..." → OGP（SNSシェア時の見た目を制御）タグを使うための宣言。
@@ -35,21 +35,18 @@
     <title> : ブラウザのタブやGoogleの検索結果に表示されるページタイトル。
     SEOで最も重要なタグのひとつです。
   -->
-  <!-- 変更: 英語専用ページのためタイトルを英語に（旧「空飛ぶ研究室（Flying Dev Lab）」） -->
   <title>Flying Dev Lab</title>
   <!-- description : 検索結果のタイトル下に表示される説明文（スニペット）。
     クリック率に影響するため、内容を簡潔にアピールする文章を入れます。
     Googleが必ずしもこの文章を使うとは限りませんが、設定しておくのがベストプラクティスです。
   -->
-  <!-- 変更: 英語の説明文に差し替え -->
   <meta name="description"
     content="Flying Dev Lab builds safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including MAKE10, an addition game for preschoolers.">
   <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
-  <!-- 変更: 英語キーワードに差し替え -->
   <meta name="keywords" content="iOS apps, kids apps, educational apps, math games, addition game, Flying Dev Lab, indie developer, indie dev, privacy-friendly apps, ad-free apps">
-  <!-- author : ページの作者・制作者名。SEO直接効果は薄いが明示しておくのがマナー。
-       （屋号は日本語名が正式名称のため、英語ページでもそのまま残しています） -->
-  <meta name="author" content="空飛ぶ研究室（Flying Dev Lab）">
+  <!-- author : ページの作者・制作者名。SEO直接効果は薄いが明示しておくのがマナー。 -->
+  <!-- 変更: 英語ページのブランド統一のため Flying Dev Lab に（旧「空飛ぶ研究室（Flying Dev Lab）」） -->
+  <meta name="author" content="Flying Dev Lab">
   <!-- robots : 検索エンジンのクローラー（ロボット）への指示。
     - index  → このページを検索インデックスに登録してよい
     - follow → このページ内のリンクをたどってよい
@@ -64,15 +61,13 @@
   <link rel="canonical" href="https://flyingdevlab.com/">
 
   <!-- ===== hreflang（言語バリアント） =====
-    変更: 日英を別URLに分離したため、各言語に対応する「実URL」を指すよう修正しました。
+    日英を別URLに分離しているため、各言語に対応する「実URL」を指しています。
           - en（英語）   = ルート https://flyingdevlab.com/  （このページ＝メイン）
-          - ja（日本語） = https://flyingdevlab.com/ja/       （別ページ・STEP 2で作成）
+          - ja（日本語） = https://flyingdevlab.com/ja/       （別ページ）
           - x-default    = どの言語にも一致しないユーザー向けの既定URL。ここでは英語（ルート）。
-    以前はJavaScriptで同一ページ内を切り替えていたため、ja・en とも同じURLを指していました。
-    今回URLを分離したので、注釈も実URLに合わせています。
-    ※ /ja/ の末尾スラッシュは、STEP 2でCloudflare Pagesの実配信形を確認して最終確定します。
+    ※ /ja/ の末尾スラッシュは、Cloudflare Pagesの実配信形に合わせて最終確定してください。
   -->
-  <link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/">      <!-- 変更: 同一URL → /ja/ -->
+  <link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/">
   <link rel="alternate" hreflang="en" href="https://flyingdevlab.com/">
   <link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/">
   <!-- ===== OGP（Open Graph Protocol） =====
@@ -91,16 +86,16 @@
     og:locale:alternate → 対応している他の言語（ja_JP = 日本語）
   -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://flyingdevlab.com/">                  <!-- 変更なし（ルートのまま） -->
-  <meta property="og:title" content="Flying Dev Lab">                           <!-- 変更: 英語タイトルに -->
-  <meta property="og:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including MAKE10, an addition game for preschoolers.">  <!-- 変更: 英語に -->
+  <meta property="og:url" content="https://flyingdevlab.com/">
+  <meta property="og:title" content="Flying Dev Lab">
+  <meta property="og:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including MAKE10, an addition game for preschoolers.">
   <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
-  <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
-  <meta property="og:locale" content="en_US">                                   <!-- 変更: ja_JP → en_US（このページの言語） -->
-  <meta property="og:locale:alternate" content="ja_JP">                         <!-- 変更: en_US → ja_JP（対になる言語） -->
+  <meta property="og:image:alt" content="Flying Dev Lab">                        <!-- 変更: 「空飛ぶ研究室 - Flying Dev Lab」→ Flying Dev Lab -->
+  <meta property="og:site_name" content="Flying Dev Lab">                        <!-- 変更: 「空飛ぶ研究室（Flying Dev Lab）」→ Flying Dev Lab -->
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
   <!-- ===== Twitter Card =====
     X（旧Twitter）でシェアされた際のカード表示を制御する
     Twitter Card は X（旧Twitter）専用の OGP 拡張です。
@@ -113,22 +108,20 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@FlyingDevLab">
   <meta name="twitter:creator" content="@FlyingDevLab">
-  <meta name="twitter:title" content="Flying Dev Lab">                          <!-- 変更: 英語タイトルに -->
-  <meta name="twitter:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike.">  <!-- 変更: 英語に -->
+  <meta name="twitter:title" content="Flying Dev Lab">
+  <meta name="twitter:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike.">
   <meta name="twitter:image" content="https://flyingdevlab.com/ogp.png">
-  <meta name="twitter:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
+  <meta name="twitter:image:alt" content="Flying Dev Lab">                        <!-- 変更: 「空飛ぶ研究室 - Flying Dev Lab」→ Flying Dev Lab -->
   <!-- ===== JSON-LD 構造化データ ===== 
     検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応） 
     JSON-LD とは：Googleなどの検索エンジンに
     「このサイトは〇〇という組織が運営しているWebサイトで、
     このページは△△です」という関係性をJSON形式で伝える仕組みです。
-    うまく認識されると検索結果に「リッチリザルト」と呼ばれる
-    装飾された表示が出ることがあります。
-    type="application/ld+json" とすることでブラウザはJSとして実行せず、
-    検索エンジンだけが読み取ります。
     @graph の中に Organization（組織）・WebSite・WebPage の3つを定義しています。
-    ※ 今回の変更は inLanguage を "en" にする点のみ（urlは元々ルートなので変更なし）。
-       組織名・ページ名・説明文は指示書のJSON-LD変更項目に含まれないため日本語併記のまま残しています。
+    ※ 変更: ブランド表記を Flying Dev Lab に統一しました（name・説明文を英語化）。
+       ただし Organization の alternateName には「空飛ぶ研究室」を1つだけ残し、
+       日本語名でも同一組織だと検索エンジンが認識できるようにしています。
+       @id（#organization など）はノードの識別子なので、言語に関係なく全ページ共通で固定します。
   -->
   <script type="application/ld+json">
   {
@@ -137,14 +130,14 @@
       {
         "@type": "Organization",
         "@id": "https://flyingdevlab.com/#organization",
-        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "name": "Flying Dev Lab",
         "alternateName": "空飛ぶ研究室",
         "url": "https://flyingdevlab.com/",
         "logo": {
           "@type": "ImageObject",
           "url": "https://flyingdevlab.com/favicon-512.png"
         },
-        "description": "こどもも大人も笑顔になる、安心・安全・便利なアプリを開発するインディー開発者。",
+        "description": "An indie developer building safe, reliable, and delightful apps that bring smiles to kids and grown-ups alike.",
         "sameAs": [
           "https://x.com/FlyingDevLab",
           "https://www.instagram.com/flyingdevlab/",
@@ -155,7 +148,7 @@
         "@type": "WebSite",
         "@id": "https://flyingdevlab.com/#website",
         "url": "https://flyingdevlab.com/",
-        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "name": "Flying Dev Lab",
         "publisher": { "@id": "https://flyingdevlab.com/#organization" },
         "inLanguage": "en"
       },
@@ -163,8 +156,8 @@
         "@type": "WebPage",
         "@id": "https://flyingdevlab.com/#webpage",
         "url": "https://flyingdevlab.com/",
-        "name": "空飛ぶ研究室（Flying Dev Lab）",
-        "description": "こどもも大人も笑顔になる、安心・安全・便利なアプリを開発しています。",
+        "name": "Flying Dev Lab",
+        "description": "We build safe, reliable, and delightful apps that bring smiles to kids and grown-ups alike.",
         "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
         "about": { "@id": "https://flyingdevlab.com/#organization" },
         "inLanguage": "en"
@@ -221,7 +214,6 @@
   CSSで通常は画面外に隠されており、Tabキーを押したときだけ表示されます。
   href="#main" はページ内の id="main" の要素へジャンプします。
 -->
-  <!-- 変更: JS（switchLang）による文言更新を廃止したため、英語ページの文言を直接記述 -->
   <a href="#main" class="skip-link">Skip to main content</a>
   <!-- ヘッダー：ロゴ・サイト名・キャッチコピー・ナビゲーションリンクを含む
   <header> タグ：ページ上部のヘッダー領域を示すセマンティックタグ。
@@ -243,10 +235,8 @@
       <span> タグ：インライン要素をグループ化して個別にスタイルを当てるために使用。
     -->
       <h1 class="site-name">Flying <span>Dev</span> Lab</h1>
-      <!-- サイト名の日本語サブタイトル。
-      （屋号「空飛ぶ研究室」は正式名称のため、英語ページでもブランド表記として残しています）
-    -->
-      <p class="site-sub">空飛ぶ研究室</p>
+      <!-- 変更: 英語ページのブランド統一のため、日本語サブタイトル「空飛ぶ研究室」を削除しました。
+           （英語ページは Flying Dev Lab 一本に統一） -->
       <!-- キャッチコピー。
       id は元々JSの言語切り替え用フックでしたが、英語固定化に伴い文言を直接英語で記述しています。
       - id="catch-main" → メインのキャッチコピー（1行目）
@@ -254,7 +244,6 @@
       <strong> タグ：テキストを強調するタグ。視覚的に太字になり、
       スクリーンリーダーも「重要」として読み上げます。
     -->
-      <!-- 変更: キャッチコピーを英語に直接記述（旧：日本語＋JSで英語化） -->
       <div class="catchcopy">
         <p id="catch-main">Safe, reliable &amp; delightful</p>
         <p id="catch-sub">We build <strong>apps</strong> for kids and grown-ups alike.</p>
@@ -270,12 +259,9 @@
   -->
   <main id="main">
     <!-- 言語切り替え
-    変更: これまでJSで同一ページ内を切り替えるタブ（role="tablist" / button）でしたが、
-          別URL（/ja/）への分離に伴い、「現在地の表示＋別ページへのリンク」に変更しました。
+    別URL（/ja/）への分離に伴い、「現在地の表示＋別ページへのリンク」にしています。
           - English は現在地なので <span>（リンクではない）
           - 日本語 は別ページ /ja/ への <a> リンク（リンク文字が日本語なので lang="ja" を付与）
-          これにより、検索エンジンには各URLが固定の言語を返すことになり、
-          ブラウザ言語による自動リダイレクトも不要になります。
   -->
     <div class="lang-tabs">
       <a class="lang-tab" href="/ja/" lang="ja">日本語</a>
@@ -295,7 +281,6 @@
         ※ #apps-heading-text は renderApps("en") が "Apps" に設定しますが、
           JS無効時やJS実行前でも正しく見えるよう、初期値も英語にしてあります。
       -->
-        <!-- 変更: 見出し初期テキストを英語に -->
         <h2 id="apps-heading" class="section-title">
           <span aria-hidden="true">📱</span> <span id="apps-heading-text">Apps</span>
         </h2>
@@ -307,14 +292,12 @@
 
     <section class="try-game-section" aria-labelledby="try-heading">
       <div class="section-header fade-up">
-        <!-- 変更: 見出しを英語に直接記述（旧：日本語＋JSで英語化） -->
         <h2 id="try-heading" class="section-title">
           <span aria-hidden="true">🎮</span> <span id="try-heading-text">Try in Browser</span>
         </h2>
       </div>
 
-      <!-- MAKE10
-           変更: ゲーム名・aria-label を英語に直接記述（旧：日本語＋JSで英語化） -->
+      <!-- MAKE10 -->
       <a href="/make10/index.html" class="try-game-card fade-up" id="game-card-1" aria-label="Play MAKE10 in browser">
         <div class="try-game-inner">
           <div class="try-game-name" id="game-name-1">MAKE10</div>
@@ -344,16 +327,13 @@
 
     </section>
 
-    <!-- 変更: 日本語コンテンツ（旧 #lang-ja ブロック）を丸ごと削除しました。
-              日本語コンテンツは STEP 2 で作成する /ja/index.html に移します。 -->
+    <!-- 日本語コンテンツ（旧 #lang-ja ブロック）は /ja/index.html に分離済み。 -->
 
     <!-- ==================== English コンテンツ ====================
-    変更: タブUIを廃止したため、消えた tab-en を参照していた
-          role="tabpanel" / aria-labelledby="tab-en" を削除しました。
-          また、このページで唯一表示するパネルになるため class に "active" を付与しています。
-          （.lang-content は active が付いた時だけ表示される作りのため、active は必須です）
-    lang="en" を個別に付けることでスクリーンリーダーが
-    このパネル内を英語として読み上げます（<html lang="en"> と重複しますが無害です）。
+    タブUIを廃止したため、消えた tab-en を参照していた
+    role="tabpanel" / aria-labelledby="tab-en" は付けていません。
+    このページで唯一表示するパネルなので class に "active" を付与しています。
+    （.lang-content は active が付いた時だけ表示される作りのため、active は必須です）
   -->
     <div class="lang-content active" id="lang-en" lang="en">
 
@@ -384,7 +364,8 @@
       各投稿は <blockquote> タグで書かれており、ページ下部で読み込む
       外部スクリプト（widgets.js / embed.js）が実行されたタイミングで
       リッチなカード表示に変換されます。
-      （埋め込みの中身は今回の作業対象外のため、そのまま残しています）
+      （埋め込みは X / Instagram の実際の投稿をそのまま掲載した第三者コンテンツのため、
+        投稿内のアカウント名「空飛ぶ研究室」等は実投稿どおり残しています。） 
       -->
       <section class="x-embed" aria-labelledby="sns-heading-en">
         <div class="section-header fade-up">
@@ -453,27 +434,26 @@
     <div class="footer-links">
       <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer"
         aria-label="GitHub（新しいタブで開きます）">GitHub</a>
-      <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer"
-        aria-label="X（旧Twitter）（新しいタブで開きます）">
-        <span class="x-icon" aria-hidden="true">𝕏</span>
-      </a>
       <a href="https://www.instagram.com/flyingdevlab/" target="_blank" rel="noopener noreferrer"
         aria-label="Instagram（新しいタブで開きます）">
         <span class="x-icon" aria-hidden="true">Instagram</span>
       </a>
+      <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer"
+        aria-label="X（旧Twitter）（新しいタブで開きます）">
+        <span class="x-icon" aria-hidden="true">𝕏</span>
+      </a>
+    
     </div>
     <!-- ページ先頭へ戻るリンク。href="#top" は <html id="top"> へジャンプします。
     ページが縦に長くなった場合、有効です。 -->
     <a href="#top" class="footer-top" aria-label="ページの先頭へ">↑ TOP</a>
-    <!-- legal：プライバシーポリシーと特定商取引法ページへのリンク。
-         法的ページはフッターへの掲載が標準的。
-         tokusho.html は日本語専用のため lang="ja" を付けてスクリーンリーダーに伝える。 -->
+    <!-- legal：プライバシーポリシーページへのリンク。
+         法的ページはフッターへの掲載が標準的。 -->
     <nav class="footer-legal" aria-label="法的情報">
-      <!-- 変更: JSによる文言更新を廃止したため、英語ページの文言を直接記述 -->
       <a href="/privacy-policy.html" id="nav-policy">Privacy Policy &amp; Disclaimer</a>
-      <span class="footer-legal-sep" aria-hidden="true">|</span>
     </nav>
-    <p class="footer-copy">&copy;&nbsp;2026&nbsp;空飛ぶ研究室&nbsp;/&nbsp;Flying&nbsp;Dev&nbsp;Lab&nbsp;:&nbsp;<a
+    <!-- 変更: 英語ページのブランド統一のため、著作権表記を Flying Dev Lab 一本に（旧「空飛ぶ研究室 / Flying Dev Lab」） -->
+    <p class="footer-copy">&copy;&nbsp;2026&nbsp;Flying&nbsp;Dev&nbsp;Lab&nbsp;:&nbsp;<a
         href="/pledge.html" aria-label="誓約（これは自コンテンツ）">Pledge
         <!-- &copy; コピーライト（著作権）を表示するためのHTMLタグ --></a></p><!-- 一番読んで欲しい部分をあえて控えめに主張する事により、元から関心がある人にだけ向けて発信する。隠れたメッセージとは常にそういうものである。
        &nbsp; スペースを表示する為のHTMLタグ 
@@ -481,7 +461,7 @@
        <span>を使ったりcssを使った方が綺麗に簡単に出来上がる。-->
   </footer>
   <!-- ===== JavaScript ===== 
-  JavaScriptの読み込みはページ末尾（</body> の直前）に置くのが基本です。
+  JavaScriptの読み込みはページ末尾（ body閉じタグ の直前）に置くのが基本です。
   理由：HTMLの描画を妨げないため。
   defer 属性：HTMLの解析が終わってからスクリプトを実行するよう指示します。
   async 属性：HTMLの解析と並行してダウンロードし、ダウンロード完了次第即実行します。
@@ -617,7 +597,6 @@
       // 初期描画：DOMが構築済みなら即実行、まだの場合はDOMContentLoadedを待つ
       // document.readyState === "loading" → HTMLの読み込みがまだ完了していない状態。
       // DOMContentLoaded イベント：HTMLの解析が完了し、DOMが使える状態になった時点で発火します。
-      // 変更: 初期描画の言語を "ja" → "en" に変更（英語専用ページのため）
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function () { renderApps("en"); });
       } else {

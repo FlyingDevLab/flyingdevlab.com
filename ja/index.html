@@ -35,17 +35,21 @@
     <title> : ブラウザのタブやGoogleの検索結果に表示されるページタイトル。
     SEOで最も重要なタグのひとつです。
   -->
-  <title>空飛ぶ研究室（Flying Dev Lab）</title>
+  <!-- 変更: 日本語ページのブランド統一のため「空飛ぶ研究室」一本に（旧「空飛ぶ研究室（Flying Dev Lab）」） -->
+  <title>空飛ぶ研究室</title>
   <!-- description : 検索結果のタイトル下に表示される説明文（スニペット）。
     クリック率に影響するため、内容を簡潔にアピールする文章を入れます。
     Googleが必ずしもこの文章を使うとは限りませんが、設定しておくのがベストプラクティスです。
   -->
+  <!-- 変更: 説明文から「（Flying Dev Lab）」を削除し「空飛ぶ研究室」に統一 -->
   <meta name="description"
-    content="空飛ぶ研究室（Flying Dev Lab）は、こどもも大人も笑顔になる安心・安全・便利なアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう(iOS)」など。">
+    content="空飛ぶ研究室は、こどもも大人も笑顔になる安心・安全・便利なアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう(iOS)」など。">
   <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
-  <meta name="keywords" content="iOSアプリ,アプリ,こども向けアプリ,知育アプリ,足し算ゲーム,Flying Dev Lab,空飛ぶ研究室,個人開発,indeidev,インディーデベロッパー">
+  <!-- 変更: keywords から「Flying Dev Lab」を削除（日本語ページのブランド統一） -->
+  <meta name="keywords" content="iOSアプリ,アプリ,こども向けアプリ,知育アプリ,足し算ゲーム,空飛ぶ研究室,個人開発,indeidev,インディーデベロッパー">
   <!-- author : ページの作者・制作者名。SEO直接効果は薄いが明示しておくのがマナー。 -->
-  <meta name="author" content="空飛ぶ研究室（Flying Dev Lab）">
+  <!-- 変更: 「空飛ぶ研究室」に統一（旧「空飛ぶ研究室（Flying Dev Lab）」） -->
+  <meta name="author" content="空飛ぶ研究室">
   <!-- robots : 検索エンジンのクローラー（ロボット）への指示。
     - index  → このページを検索インデックスに登録してよい
     - follow → このページ内のリンクをたどってよい
@@ -84,13 +88,13 @@
   -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://flyingdevlab.com/ja/">
-  <meta property="og:title" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta property="og:title" content="空飛ぶ研究室">                                <!-- 変更: 「空飛ぶ研究室」に統一 -->
   <meta property="og:description" content="こどもも大人も笑顔になる安心・安全・便利なアプリを開発しています。未就学児向け足し算ゲーム「MAKE10 / 10をつくろう」など。">
   <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
-  <meta property="og:site_name" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta property="og:image:alt" content="空飛ぶ研究室">                             <!-- 変更: 「空飛ぶ研究室 - Flying Dev Lab」→ 空飛ぶ研究室 -->
+  <meta property="og:site_name" content="空飛ぶ研究室">                            <!-- 変更: 「空飛ぶ研究室」に統一 -->
   <meta property="og:locale" content="ja_JP">
   <meta property="og:locale:alternate" content="en_US">
   <!-- ===== Twitter Card =====
@@ -102,10 +106,10 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@FlyingDevLab">
   <meta name="twitter:creator" content="@FlyingDevLab">
-  <meta name="twitter:title" content="空飛ぶ研究室（Flying Dev Lab）">
+  <meta name="twitter:title" content="空飛ぶ研究室">                               <!-- 変更: 「空飛ぶ研究室」に統一 -->
   <meta name="twitter:description" content="こどもも大人も笑顔になる、安心・安全・便利なアプリを開発しています。">
   <meta name="twitter:image" content="https://flyingdevlab.com/ogp.png">
-  <meta name="twitter:image:alt" content="空飛ぶ研究室 - Flying Dev Lab">
+  <meta name="twitter:image:alt" content="空飛ぶ研究室">                           <!-- 変更: 「空飛ぶ研究室 - Flying Dev Lab」→ 空飛ぶ研究室 -->
   <!-- ===== JSON-LD 構造化データ ===== 
     検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応） 
     @graph の中に Organization（組織）・WebSite・WebPage の3つを定義しています。
@@ -115,6 +119,10 @@
           同じ @id を使い回すと「同じページが2つのURLを名乗る」矛盾になるため分けています）
        - inLanguage は "ja" にしています。
        - Organization と WebSite はサイト全体で共通の存在なので @id・url はルートのままにしています。
+       - 変更: ブランド表記を「空飛ぶ研究室」に統一しました（name を日本語名に）。
+         alternateName には "Flying Dev Lab" を1つだけ残し、英語名でも同一組織だと認識されるようにしています。
+         （英語ルートページは name="Flying Dev Lab" / alternateName="空飛ぶ研究室" と左右対称。
+           共有ノードの主名称を言語ごとに出し分けつつ、alternateName で相互に結びつける方針です）
   -->
   <script type="application/ld+json">
   {
@@ -123,8 +131,8 @@
       {
         "@type": "Organization",
         "@id": "https://flyingdevlab.com/#organization",
-        "name": "空飛ぶ研究室（Flying Dev Lab）",
-        "alternateName": "空飛ぶ研究室",
+        "name": "空飛ぶ研究室",
+        "alternateName": "Flying Dev Lab",
         "url": "https://flyingdevlab.com/",
         "logo": {
           "@type": "ImageObject",
@@ -141,7 +149,7 @@
         "@type": "WebSite",
         "@id": "https://flyingdevlab.com/#website",
         "url": "https://flyingdevlab.com/",
-        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "name": "空飛ぶ研究室",
         "publisher": { "@id": "https://flyingdevlab.com/#organization" },
         "inLanguage": "ja"
       },
@@ -149,7 +157,7 @@
         "@type": "WebPage",
         "@id": "https://flyingdevlab.com/ja/#webpage",
         "url": "https://flyingdevlab.com/ja/",
-        "name": "空飛ぶ研究室（Flying Dev Lab）",
+        "name": "空飛ぶ研究室",
         "description": "こどもも大人も笑顔になる、安心・安全・便利なアプリを開発しています。",
         "isPartOf": { "@id": "https://flyingdevlab.com/#website" },
         "about": { "@id": "https://flyingdevlab.com/#organization" },
@@ -206,9 +214,9 @@
         <span class="logo-house">🏠</span>
       </div>
       <!-- <h1> タグ：ページで最も重要な見出し（1ページに1つが基本）。 -->
-      <h1 class="site-name">Flying <span>Dev</span> Lab</h1>
-      <!-- サイト名の日本語サブタイトル。 -->
-      <p class="site-sub">空飛ぶ研究室</p>
+      <!-- 変更: 日本語ページのブランド統一のため、見出しを「空飛ぶ研究室」に（旧「Flying Dev Lab」） -->
+      <h1 class="site-name">空飛ぶ研究室</h1>
+      <!-- 変更: 主表記を h1 に集約したため、日本語サブタイトル（旧 site-sub「空飛ぶ研究室」）を削除しました。 -->
       <!-- キャッチコピー。 -->
       <div class="catchcopy">
         <p id="catch-main">こどもも大人も笑顔になる</p>
@@ -381,7 +389,8 @@
       <span class="footer-legal-sep" aria-hidden="true">|</span>
       <a href="/tokusho.html" lang="ja">特定商取引法に基づく表示</a>
     </nav>
-    <p class="footer-copy">&copy;&nbsp;2026&nbsp;空飛ぶ研究室&nbsp;/&nbsp;Flying&nbsp;Dev&nbsp;Lab&nbsp;:&nbsp;<a
+    <!-- 変更: 著作権表記を「空飛ぶ研究室」一本に（旧「空飛ぶ研究室 / Flying Dev Lab」） -->
+    <p class="footer-copy">&copy;&nbsp;2026&nbsp;空飛ぶ研究室&nbsp;:&nbsp;<a
         href="/pledge.html" aria-label="誓約（これは自コンテンツ）">Pledge</a></p>
   </footer>
   <!-- ===== JavaScript ===== 
