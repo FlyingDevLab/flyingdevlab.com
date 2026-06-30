@@ -3,6 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+  ============================================================
+  【設計メモ: プライバシーポリシー & サポートページ（MAKE10）】
+
+  ■ なぜ1ファイルで完結しているのか
+    このページへのアクセスはほぼ100%アプリ内リンク経由です。
+    検索流入を期待するページではないため、hreflang などの SEO 設定は割り切っています。
+    1ファイルにまとめることで、翻訳の追加・修正・デプロイがすべて1ファイルで完結します。
+
+  ■ 翻訳データの持ち方：「キー型オブジェクト」
+    翻訳テキストを { キー: 文字列 } のフラットなオブジェクトで管理しています（下部の const S を参照）。
+    HTML 側の各要素に data-key="..." 属性を付け、setLang() が innerHTML を差し替える仕組みです。
+    セクションの順番変更や HTML 構造の修正をしても、翻訳データ側は変更不要です。
+
+  ■ なぜ PriceWise（pricewise.html）と翻訳方式が違うのか
+    MAKE10 はプロミスカード・ハイライトボックス・コンタクトボックスなど、
+    セクションごとに HTML の構造が大きく異なります。
+    HTML の構造はファイルに直接書いておき、テキストだけをキーで差し替える方が自然でした。
+
+    一方、PriceWise のページはすべてのセクションが同じカード構造のため、
+    sections[] の配列形式でテキスト＋ HTML を丸ごと持ち、JS で描画する方式を採用しています。
+    → セクションを追加・削除するとき、全言語の配列に要素を1つ追加・削除するだけで済みます。
+
+  ■ 英語フォールバック
+    翻訳キーが欠けているとき（翻訳が未完成の言語など）、setLang() が自動的に
+    英語（"en"）の値で代替します。空欄にならないため、翻訳途中でも安全にデプロイできます。
+    PriceWise の配列方式にはこのフォールバックがないため、欠けると空欄になります。
+
+  ■ ファイルサイズについて
+    15言語分のテキストを JS オブジェクトとして埋め込んでいるため、ファイルサイズは大きめです。
+    ただし画像も動的処理もないテキストページなので、体感速度への影響はほぼゼロです。
+  ============================================================
+  -->
   <title>Privacy Policy & Support – MAKE10</title>
   <meta name="description" content="Privacy Policy and Support for MAKE10 – a free, ad-free, data-free math game for kids by Flying Dev Lab.">
   <link rel="icon" href="https://flyingdevlab.com/favicon.ico" sizes="any">
@@ -190,6 +223,28 @@
 </div>
 
 <script>
+/*
+ * S（翻訳データオブジェクト）
+ * ─────────────────────────────────────────────
+ * 15言語分の翻訳テキストを「キー型オブジェクト」で管理しています。
+ *
+ * 構造: S[言語コード][キー] = "表示する文字列"
+ * 例:   S["ja"]["s1-title"] = "概要"
+ *       S["en"]["s1-title"] = "Overview"
+ *
+ * HTML 側では <span data-key="s1-title"> のように data-key 属性でキーを指定し、
+ * setLang() がすべての [data-key] 要素を走査して innerHTML を差し替えます。
+ *
+ * キーの命名規則:
+ *   s1-title, s1-p1, s1-highlight … セクション番号-要素種別
+ *   p1, p2, p3, p4               … プロミスカードのラベル
+ *   contact-*                    … お問い合わせセクション
+ *   footer-*                     … フッター
+ *
+ * ⚠️ 翻訳を追加・修正するときは全15言語に同じキーを追加してください。
+ *    欠けていても setLang() が英語（"en"）の値にフォールバックしますが、
+ *    翻訳品質のためなるべく全言語を揃えてください。
+ */
 const S = {
   en: {
     badge:'Privacy Policy & Support', title:'Privacy Policy & Support', updated:'Effective: April 28, 2026',
@@ -763,6 +818,27 @@ const S = {
   },
 };
 
+/*
+ * setLang(lang)
+ * ─────────────────────────────────────────────
+ * ページ全体の表示言語を切り替える関数です。
+ * <select> の onchange と、下の自動検出処理の両方から呼ばれます。
+ *
+ * 処理の流れ:
+ *   1. <html lang="..."> 属性を更新（スクリーンリーダー・翻訳ツール向け）
+ *   2. data-key 属性を持つすべての要素を走査して innerHTML を差し替える
+ *   3. <title> を更新
+ *   4. <select> の選択値を同期する
+ *
+ * フォールバック処理:
+ *   d[k] が undefined のとき（翻訳未完成のキー）、S["en"][k] の英語テキストで代替します。
+ *   これにより、翻訳が途中の言語でも空欄が生じません。
+ *
+ * PriceWise の applyLang() との違い:
+ *   こちらは data-key 属性を querySelectorAll で走査して差し替えます。
+ *   applyLang() は sections 配列を map() で処理して innerHTML に一括挿入します。
+ *   また、こちらは localStorage を使わずセッションごとに言語を自動検出します。
+ */
 function setLang(lang) {
   const d = S[lang];
   if (!d) return;
@@ -779,6 +855,23 @@ function setLang(lang) {
   document.getElementById('lang-select').value = lang;
 }
 
+/*
+ * 初期言語の自動検出（即時実行関数）
+ * ─────────────────────────────────────────────
+ * ページ読み込み時にブラウザの言語設定（navigator.language）を参照し、
+ * サポートしている言語コードに変換してから setLang() を呼びます。
+ *
+ * map テーブルは navigator.language の値（例: "zh-CN", "zh-TW"）を
+ * 翻訳データのキー（例: "zh-Hans", "zh-Hant"）に変換するための対応表です。
+ * ブラウザが返す言語コードは OS や地域によって微妙に異なるため、
+ * startsWith() で前方一致させることで "zh-CN"・"zh-SG" などをまとめて処理しています。
+ *
+ * map に一致しない場合のデフォルトは "en"（英語）です。
+ *
+ * PriceWise の detectLang() との違い:
+ *   PriceWise は localStorage に言語選択を保存し、次回アクセス時も同じ言語を表示します。
+ *   こちらは localStorage を使わず、毎回ブラウザの言語設定から判定します。
+ */
 (function () {
   const nav = navigator.language || 'en';
   // BCP47ベースのnabigator.language照合テーブル
