@@ -1519,3 +1519,14 @@ header h1 {
   color: var(--footer-muted);
   font-size: 13px;
 }
+
+/* コピーライト内のリンク（ブランド名・Pledgeリンク）
+   footer-legal a と同系統のトーンで統一し、hover時に白く明るくなる */
+.footer-copy a {
+  color: var(--footer-link);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-copy a:hover {
+  color: var(--white);
+}
