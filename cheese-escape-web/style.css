@@ -1,0 +1,363 @@
+/* ================================================================
+   style.css – Cheese Quest / チーズクエスト
+   ================================================================ */
+
+/* ── 01. リセット & ベース ─────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo,
+               'Noto Sans JP', sans-serif;
+  background: radial-gradient(ellipse at top, #FFB300, #E65100);
+  min-height: 100dvh;
+  color: #FFF8E1;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── 02. CSS カスタムプロパティ ────────────────────────────── */
+:root {
+  --clr-gold:        #FFD600;
+  --clr-gold-light:  #FFE082;
+  --clr-orange:      #FFB300;
+  --clr-orange-dark: #E65100;
+  --clr-brown:       #795548;
+  --clr-brown-dark:  #3E2723;
+  --clr-red:         #EF5350;
+  --clr-green:       #69F0AE;
+  --clr-white-soft:  #FFF8E1;
+
+  --shadow-card: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
+  --radius-card: 20px;
+  --radius-btn:  28px;
+}
+
+/* ── 03. レイアウト ────────────────────────────────────────── */
+#main-content {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+/* ── 04. 画面切り替え ──────────────────────────────────────── */
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 570px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 12px;
+}
+
+.screen--active {
+  display: flex;
+}
+
+/* ── 05. ヘッダー ──────────────────────────────────────────── */
+.site-header {
+  width: 100%;
+  text-align: center;
+  padding: 10px 12px 6px;
+  flex-shrink: 0;
+}
+
+.site-title {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  font-weight: 900;
+  color: var(--clr-gold);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35em;
+  flex-wrap: wrap;
+}
+
+.title-emoji { font-size: 1.15em; }
+
+/* 日本語サブタイトルをスラッシュで区切って英語の後ろに並べる */
+.title-sub {
+  font-size: 0.55em;
+  font-weight: 700;
+  color: var(--clr-gold-light);
+  letter-spacing: 0.08em;
+}
+.title-sub::before {
+  content: '/ ';
+  opacity: 0.6;
+}
+
+/* ── 06. フッター ──────────────────────────────────────────── */
+.site-footer {
+  width: 100%;
+  text-align: center;
+  padding: 6px 12px 10px;
+  flex-shrink: 0;
+}
+
+.footer-copy {
+  font-size: 0.72rem;
+  color: rgba(255,248,225,0.65);
+}
+
+.footer-link {
+  color: rgba(255,248,225,0.85);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+  color: var(--clr-gold);
+  text-decoration: underline;
+  outline: none;
+}
+
+/* ── 07. トップ画面 ────────────────────────────────────────── */
+.top-description {
+  background: rgba(30, 10, 0, 0.55);
+  border: 1px solid rgba(255,220,100,0.25);
+  border-radius: var(--radius-card);
+  padding: 18px 20px 16px;
+  width: 100%;
+  max-width: 500px;
+  backdrop-filter: blur(6px);
+}
+
+/* "How to Play / あそびかた" 見出し */
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--clr-gold-light);
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* 操作説明リスト */
+.how-to-play-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.how-to-play-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: clamp(0.78rem, 3vw, 0.88rem);
+  line-height: 1.5;
+  color: var(--clr-white-soft);
+}
+
+.how-to-play-list .icon {
+  font-size: 1.1em;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* 英語行：標準の白 */
+/* 日本語行：やや落ち着いたトーンで区別 */
+.tip-ja {
+  color: #FFCC80;
+  font-size: 0.95em;
+}
+
+/* ハイスコア */
+.highscore-display {
+  text-align: center;
+  min-height: 2rem;
+}
+
+.no-record {
+  font-size: 0.8rem;
+  color: rgba(255,248,225,0.55);
+}
+
+/* ── 08. ゲーム画面 ────────────────────────────────────────── */
+.screen--game { padding: 0; }
+
+#gameCanvas {
+  width: min(570px, 96vw, 96dvh);
+  height: min(570px, 96vw, 96dvh);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  cursor: grab;
+  display: block;
+  touch-action: none;
+}
+
+#gameCanvas:active { cursor: grabbing; }
+
+/* ── 09. リザルト画面 ──────────────────────────────────────── */
+.result-header { text-align: center; }
+
+.result-gameover-emoji {
+  font-size: clamp(2.5rem, 10vw, 3.5rem);
+  line-height: 1;
+  margin-bottom: 4px;
+  animation: fallIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+.result-title {
+  font-size: clamp(1.6rem, 7vw, 2.4rem);
+  font-weight: 900;
+  color: var(--clr-red);
+  text-shadow: 0 0 18px rgba(255,23,68,0.7);
+  letter-spacing: 0.05em;
+}
+
+/* "You lost! / やられた！" — 英語＋日本語を一行で */
+.result-subtitle {
+  font-size: 0.95rem;
+  color: #FFCDD2;
+  margin-top: 4px;
+}
+
+.result-scores {
+  background: rgba(30,10,0,0.6);
+  border: 1px solid rgba(255,220,100,0.25);
+  border-radius: var(--radius-card);
+  padding: 18px 24px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-score-current {
+  font-size: clamp(1.6rem, 8vw, 2.4rem);
+  font-weight: 900;
+  color: var(--clr-gold);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.result-score-best {
+  font-size: clamp(0.85rem, 3.5vw, 1rem);
+  font-weight: 700;
+  color: #FFCC80;
+  transition: color 0.3s;
+}
+
+.result-score-best.new-record {
+  color: var(--clr-green);
+  animation: blink 0.4s ease 3 alternate;
+}
+
+.result-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── 10. 共通ボタン ────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: inherit;
+  font-weight: 800;
+  font-size: clamp(0.9rem, 3.5vw, 1rem);
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  padding: 0.65em 2em;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255,235,59,0.8);
+}
+
+.btn:hover  { transform: translateY(-2px); filter: brightness(1.1); }
+.btn:active { transform: translateY(0) scale(0.97); filter: brightness(0.95); }
+
+.btn--primary {
+  background: var(--clr-orange);
+  color: var(--clr-brown-dark);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 0 3px #FFF3;
+}
+
+.btn--secondary {
+  background: rgba(255,255,255,0.15);
+  color: var(--clr-white-soft);
+  border: 2px solid rgba(255,255,255,0.35);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+.btn--secondary:hover { background: rgba(255,255,255,0.22); }
+
+.btn--large {
+  font-size: clamp(1rem, 4vw, 1.15rem);
+  padding: 0.75em 3em;
+  min-width: 220px;
+}
+
+/* ハイスコア共通ブロック */
+.highscore-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  font-size: clamp(0.95rem, 4vw, 1.1rem);
+  font-weight: 800;
+  color: var(--clr-gold);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.highscore-block .trophy { font-size: 1.3em; }
+
+/* ── 11. アニメーション ────────────────────────────────────── */
+@keyframes fallIn {
+  from { transform: translateY(-30px) scale(0.7); opacity: 0; }
+  to   { transform: translateY(0) scale(1);       opacity: 1; }
+}
+
+@keyframes blink {
+  from { opacity: 1; }
+  to   { opacity: 0.35; }
+}
+
+@keyframes fadeUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.screen--active      { animation: fadeUp 0.35s ease both; }
+.screen--game.screen--active { animation: none; }
+
+/* ── 12. レスポンシブ ──────────────────────────────────────── */
+@media (min-width: 480px) {
+  .top-description { padding: 22px 28px 20px; }
+  .how-to-play-list li { font-size: 0.92rem; }
+  .result-scores { padding: 22px 32px; }
+}

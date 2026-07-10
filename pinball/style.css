@@ -1,0 +1,646 @@
+/* ═══════════════════════════════════════════════════════════
+   ファイル名  : style.css
+   プロジェクト: Pinball | Flying Dev Lab
+   テーマ      : ダークネオン（深夜の電子基板をイメージした配色）
+   フォント    : Orbitron（英数字・スコア、自己ホスト）
+               + システムフォント（日本語本文）
+   © 2026 Flying Dev Lab
+
+   【このファイルの構成】
+     1.  @font-face（Orbitron 自己ホスト）
+     2.  CSS カスタムプロパティ      … 色・フォント・角丸の一元管理
+     3.  リセット                   … ブラウザ間の差異を均一化
+     4.  ヘッダー
+     5.  メイン・画面共通
+     6.  セクションタイトル
+     7.  遊び方ボックス
+     8.  得点表ボックス
+     9.  ハイスコアボックス
+    10.  ボタン
+    11.  ゲーム画面（オーバーレイ・Canvas・タッチヒント）
+    12.  リザルト画面
+    13.  フッター
+    14.  レスポンシブ（小画面対応）
+   ═══════════════════════════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════════════════════════
+   1. @font-face（Orbitron 自己ホスト）
+   ──────────────────────────────────────────────────────────
+   Google Fonts への外部リクエストをゼロにするため、
+   Orbitron woff2 をリポジトリに同梱して自己ホストする。
+   出典: @fontsource/orbitron 5.2.0 — SIL Open Font License 1.1
+   フォントファイルの場所: /fonts/（リポジトリルート）
+
+   Noto Sans JP（日本語本文）は自己ホストせず、
+   OS 標準フォントにフォールバックする設計。
+     iOS/macOS → ヒラギノ角ゴシック
+     Windows   → 游ゴシック / メイリオ
+     Android   → Noto Sans JP（OS 同梱）
+   ══════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/orbitron-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/orbitron-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('../fonts/orbitron-latin-900.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   2. CSS カスタムプロパティ（CSS 変数）
+   ══════════════════════════════════════════════════════════ */
+:root {
+  --bg:        #07071a;
+  --surface:   #0f0f2e;
+  --surface2:  #14143a;
+  --border:    #252560;
+  --cyan:      #00e5ff;
+  --yellow:    #ffd600;
+  --pink:      #f50057;
+  --orange:    #ff6d00;
+  --text:      #ddddf5;
+  --text-dim:  #7777aa;
+  --font-hd:   'Orbitron', monospace;
+  --font-body: 'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+               'Yu Gothic', 'Meiryo', sans-serif;
+  --radius:    10px;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   3. リセット
+   ══════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   4. ヘッダー
+   ══════════════════════════════════════════════════════════ */
+header[role="banner"] {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  flex-shrink: 0;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.header-icon {
+  font-size: 1.3rem;
+}
+
+h1 {
+  font-family: var(--font-hd);
+  font-size: clamp(1.05rem, 4vw, 1.35rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--cyan);
+  text-shadow: 0 0 18px var(--cyan), 0 0 40px rgba(0,229,255,0.3);
+}
+
+h1 .sep {
+  color: var(--text-dim);
+  margin: 0 6px;
+  font-weight: 400;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   5. メイン・画面共通
+   ══════════════════════════════════════════════════════════ */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.screen {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.screen.active {
+  display: flex;
+}
+
+.screen-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 18px 28px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   6. セクションタイトル
+   ══════════════════════════════════════════════════════════ */
+.section-title {
+  font-family: var(--font-hd);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--yellow);
+  text-shadow: 0 0 12px var(--yellow);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.section-title .sep {
+  color: var(--text-dim);
+  margin: 0 5px;
+  font-weight: 400;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   7. 遊び方ボックス
+   ══════════════════════════════════════════════════════════ */
+.intro-box {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 18px 20px;
+}
+
+.intro-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.intro-list li {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.intro-list .emoji { margin-right: 4px; }
+.intro-list .sep   { color: var(--text-dim); margin: 0 4px; }
+
+kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-hd);
+  font-size: 0.75rem;
+  color: var(--cyan);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   8. 得点表ボックス
+   ══════════════════════════════════════════════════════════ */
+.score-table-box {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+}
+
+.score-table {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.score-table li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--text);
+}
+
+.st-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.st-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.st-name .sep { color: var(--text-dim); margin: 0 3px; }
+
+.st-pts {
+  font-family: var(--font-hd);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--yellow);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   9. ハイスコアボックス
+   ══════════════════════════════════════════════════════════ */
+.highscore-box {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+  box-shadow:
+    0 0 24px rgba(0,229,255,0.18),
+    inset 0 0 20px rgba(0,229,255,0.04);
+}
+
+.highscore-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.highscore-label .sep { margin: 0 4px; }
+
+.highscore-value {
+  font-family: var(--font-hd);
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan);
+  letter-spacing: 0.05em;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   10. ボタン
+   ══════════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 13px 24px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-hd);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s;
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
+  line-height: 1.4;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: var(--cyan);
+  color: #000;
+  box-shadow: 0 0 20px rgba(0,229,255,0.5);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 32px rgba(0,229,255,0.75);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text-dim);
+  background: var(--surface2);
+}
+
+.btn .sep         { color: rgba(0,0,0,0.35); margin: 0 4px; }
+.btn-secondary .sep { color: var(--text-dim); }
+
+
+/* ══════════════════════════════════════════════════════════
+   11. ゲーム画面
+   ══════════════════════════════════════════════════════════ */
+#screen-game {
+  background: #000;
+  align-items: center;
+  overflow: hidden;
+}
+
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  height: 100%;
+  padding: 4px 0;
+  gap: 4px;
+}
+
+.game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 18px;
+  gap: 4px;
+  z-index: 10;
+}
+
+.overlay-score-wrap {
+  text-align: center;
+}
+
+.overlay-score {
+  font-family: var(--font-hd);
+  font-size: clamp(2.6rem, 12vw, 3.6rem);
+  font-weight: 900;
+  color: var(--yellow);
+  text-shadow:
+    0 0 16px var(--yellow),
+    0 0 40px rgba(255,214,0,0.55),
+    0 2px 8px rgba(0,0,0,0.85);
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.overlay-balls-wrap {
+  text-align: center;
+}
+
+.overlay-balls {
+  font-family: var(--font-hd);
+  font-size: clamp(1rem, 5vw, 1.35rem);
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow:
+    0 0 10px var(--cyan),
+    0 2px 6px rgba(0,0,0,0.8);
+  letter-spacing: 0.2em;
+  line-height: 1;
+}
+
+.btn-quit {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  pointer-events: auto;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid #333355;
+  color: #555577;
+  font-size: 0.8rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.btn-quit:hover {
+  color: var(--pink);
+  border-color: var(--pink);
+  background: rgba(245,0,87,0.15);
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  max-width: 390px;
+  height: auto;
+  border: 1px solid #1a1a44;
+  box-shadow: 0 0 28px rgba(0,229,255,0.12);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+.touch-hint {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 6px;
+  flex-shrink: 0;
+}
+
+.touch-hint span {
+  font-family: var(--font-hd);
+  font-size: 0.58rem;
+  color: #2a2a55;
+  letter-spacing: 0.12em;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   12. リザルト画面
+   ══════════════════════════════════════════════════════════ */
+.result-title {
+  font-size: 1.2rem;
+  color: var(--pink);
+  text-shadow: 0 0 16px var(--pink);
+  margin-bottom: 2px;
+}
+
+.new-record {
+  width: 100%;
+  background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 100%);
+  color: #000;
+  font-family: var(--font-hd);
+  font-size: 0.85rem;
+  font-weight: 900;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  letter-spacing: 0.06em;
+  animation: pulse-scale 0.6s ease-in-out infinite alternate;
+}
+
+.new-record .sep { color: rgba(0,0,0,0.4); margin: 0 5px; }
+
+@keyframes pulse-scale {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 16px rgba(255,214,0,0.5);
+  }
+  to {
+    transform: scale(1.025);
+    box-shadow: 0 0 28px rgba(255,109,0,0.7);
+  }
+}
+
+.result-score-box {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  text-align: center;
+}
+
+.result-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.result-label .sep { margin: 0 4px; }
+
+.result-value {
+  font-family: var(--font-hd);
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: var(--yellow);
+  text-shadow: 0 0 22px var(--yellow);
+  letter-spacing: 0.05em;
+}
+
+.result-hs-box {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  text-align: center;
+  box-shadow: 0 0 16px rgba(0,229,255,0.12);
+}
+
+.result-hs-label {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.result-hs-label .sep { margin: 0 4px; }
+
+.result-hs-value {
+  font-family: var(--font-hd);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow: 0 0 14px var(--cyan);
+  letter-spacing: 0.05em;
+}
+
+.result-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   13. フッター
+   ══════════════════════════════════════════════════════════ */
+.site-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 9px 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.footer-copy {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.footer-link {
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.footer-link:hover { text-decoration: underline; }
+
+
+/* ══════════════════════════════════════════════════════════
+   14. レスポンシブ対応
+   ══════════════════════════════════════════════════════════ */
+@media (max-height: 680px) {
+  .overlay-score { font-size: 2.2rem; }
+  .overlay-balls { font-size: 0.9rem; }
+}
+
+@media (max-width: 400px) {
+  .screen-inner { padding: 16px 12px 20px; }
+  .intro-box, .score-table-box { padding: 14px 14px 16px; }
+}
