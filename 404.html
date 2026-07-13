@@ -20,12 +20,13 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <!-- apple-touch-icon：iPhoneでホーム画面に追加したときのアイコン -->
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <!-- preconnect：フォントサーバーへの接続を事前に確立して読み込みを高速化 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Outfit：英数字・見出し用 / Noto Sans JP：日本語テキスト用
-       display=swap → 読み込み完了まではシステムフォントで表示し、文字が見えない時間をなくす -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- フォントについて：
+       以前は Google Fonts から Noto Sans JP と Outfit を読み込んでいたが、
+       外部サーバーへの接続をなくすため、self-host（自己ホスト）に切り替えた。
+       ・英数字（見出し等）… Outfit を /fonts/ から配信（style.css の @font-face）
+       ・日本語テキスト   … OS 標準フォント（ヒラギノ / 游ゴシック等）
+       これにより、このページを開いても外部フォント配信元への接続は発生しない。
+       preconnect（事前接続）も外部接続を伴うため、あわせて削除した。 -->
   <!-- サイト共通スタイル（CSS変数・ヘッダー・フッターなど）を読み込む。
        / から始まるパスはドメインのルートからの絶対パスです。 -->
   <link rel="stylesheet" href="/style.css"></head>

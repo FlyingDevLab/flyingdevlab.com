@@ -62,7 +62,7 @@ Our children's apps are built with **no ads, no in-app purchases, and no externa
 | `cheese-escape-web/` | ブラウザゲーム：Cheese Escape（迷路） |
 | `whack-a-mole/` | ブラウザゲーム：Whack-a-Mole（モグラ叩き） |
 | `pinball/` | ブラウザゲーム：Pinball（ピンボール） |
-| `Privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
+| `privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
 
 ---
 
@@ -72,7 +72,7 @@ Our children's apps are built with **no ads, no in-app purchases, and no externa
 
 - **Languages:** Swift (SwiftUI), HTML5, CSS3, JavaScript
 - **Hosting:** Cloudflare Pages
-- **Typography:** Google Fonts (Noto Sans JP, Outfit)
+- **Typography:** Self-hosted Outfit (latin) + system font stack (Noto Sans JP / Hiragino / Yu Gothic)
 - **Tools:** VS Code, Xcode, M4 MacBook Pro
 
 ### Qualifications

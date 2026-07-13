@@ -175,20 +175,13 @@
   <link rel="icon" href="/favicon-512.png" type="image/png" sizes="512x512">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta name="theme-color" content="#1e3a6e">
-
-  <!-- ===== Web Fonts =====
-  Google Fonts は動的に CSS を生成するため SRI (integrity) を付与できません。
-  preconnect で接続を高速化しています。 
-  - Noto Sans JP（日本語用）：ウェイト 400/500/700/900
-  - Outfit（英語・数字用）：ウェイト 400/600/800
-  display=swap → フォントが読み込まれるまでシステムフォントで表示し、
-                  読み込み完了後に切り替えることで文字が見えない時間をなくす。
-  -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Outfit:wght@400;600;800&display=swap"
-    rel="stylesheet">
+  <!-- フォントについて：
+       以前は Google Fonts から Noto Sans JP と Outfit を読み込んでいたが、
+       外部サーバーへの接続をなくすため、self-host（自己ホスト）に切り替えた。
+       ・英数字（見出し等）… Outfit を /fonts/ から配信（style.css の @font-face）
+       ・日本語テキスト   … OS 標準フォント（ヒラギノ / 游ゴシック等）
+       これにより、このページを開いても外部フォント配信元への接続は発生しない。
+       preconnect（事前接続）も外部接続を伴うため、あわせて削除した。 -->
   <!-- style.css は絶対パス（/）で読み込む。
        /ja/ は1階層深いため、相対パス（style.css）だと /ja/style.css を探してしまい読み込めない。 -->
   <link rel="stylesheet" href="/style.css">
