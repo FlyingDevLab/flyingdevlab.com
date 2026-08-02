@@ -1,0 +1,147 @@
+# ================================================================
+#  _headers  ―  Cloudflare Pages カスタムHTTPヘッダー定義
+# ================================================================
+#
+#  ■ このファイルの役割
+#    Cloudflare Pages は、サイトのルートに置かれた「_headers」という
+#    名前のファイルを読み取り、レスポンスに任意のHTTPヘッダーを付与する。
+#    サーバー側の設定ファイルを触らずに、静的ホスティングのまま
+#    セキュリティヘッダーや CSP を配れるのが利点。
+#
+#  ■ 記法の基本
+#    ・1行目にパスのパターン（例: /*  や  /make10/*）を書く
+#    ・続くインデント行に「ヘッダー名: 値」を並べる
+#
+#  ■ 重要な仕様（実機確認で判明。公式ドキュメントにも明記あり）
+#    Cloudflare Pages は「マッチした全ルールのヘッダーを継承・合算する」。
+#    “より具体的なパスが自動的に勝つ” わけではない。
+#    さらに実機検証の結果、処理は「このファイルに書いた順番」に積み上がる
+#    ことが分かった。つまり：
+#      1. 先に書いたブロックのヘッダーがまず適用され、
+#      2. 後に書いたブロックが同じパスにマッチすると、そのヘッダーが
+#         "追加" される（打ち消し「! 」が無ければ重複する）。
+#    そのため、このファイルでは【緩いルール(/*)を先に書き、
+#    厳格にしたい個別パスを "後" に書いて "! " で打ち消してから
+#    再定義する】という順序を意図的に採用している。
+#    （逆順にすると、後から評価される /* のヘッダーが厳格ルールの
+#      打ち消しをすり抜けて再度足されてしまい、CSP が2本立ちになる
+#      ことを実機で確認済み。）
+#
+#  ■ 重要な前提（今回の方針）
+#    CSP は「壊れて初めて気づく」性質を持つため、いきなり強制せず
+#    まず  Content-Security-Policy  で配信する。
+#    このヘッダーは「違反を検出しても “ブロックせず” に許可する」ため、
+#    SNS 埋め込み等の “動くもの” を一切壊さずに、DevTools Console 上で
+#    違反ログだけを観察できる。数日〜数回の巡回で違反ゼロを確認したら、
+#    ヘッダー名を  Content-Security-Policy  に切り替えて本強制へ移行する。
+#    （切り替えは名前を変えるだけ。値はそのまま流用できる。）
+#
+# ================================================================
+
+
+# ================================================================
+#  ① ルート階層（許可多め） ― SNS 埋め込みを壊さないための緩めCSP
+# ================================================================
+#
+#  トップページ等（index.html / ja/index.html / pledge.html /
+#  tokusho.html / 404.html / privacy-policy.html）に適用。
+#  このうち SNS 埋め込みを持つのは index / ja/index の2枚だが、
+#  _headers はパス単位のため、ルート全体に同じ緩めルールを当てる。
+#
+#  埋め込みは X（旧Twitter）/ Instagram / Threads の3系統。
+#  各ウィジェットの widgets.js / embed.js が、さらに別ドメインの
+#  iframe・画像・API を動的に呼ぶため、以下を許可する。
+#
+#  ・script-src : ウィジェット JS の配信元
+#  ・frame-src  : 埋め込みが生成する iframe（投稿カード本体）
+#  ・img-src    : アイコン・サムネイル（各SNSのCDN。https: で広めに許可）
+#  ・style-src  : ウィジェットが注入するスタイル＋ページ内 style 属性
+#  ・connect-src: ウィジェットが背後で叩く API
+#  ・font-src   : 自己ホスト woff2（Outfit）
+#
+#  'unsafe-inline'（script）は、埋め込みウィジェットが挙動上必要とする
+#  ため許可している。ルート階層は元々“外部埋め込みを載せるハブ”という
+#  位置づけであり、ここは利便性を優先する。厳格ゾーン（下記②③）とは
+#  明確に切り分けることで、子ども向けページの安全性は担保される。
+#
+#  ※ このブロックを意図的にファイルの先頭に置いている（理由は上記参照）。
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://platform.x.com https://platform.twitter.com https://www.instagram.com https://www.threads.com https://*.twitter.com https://*.x.com; style-src 'self' 'unsafe-inline' https://platform.twitter.com https://*.twitter.com https://*.x.com; img-src 'self' data: https:; frame-src https://x.com https://twitter.com https://platform.twitter.com https://platform.x.com https://www.instagram.com https://instagram.com https://www.threads.com https://threads.com; connect-src 'self' https://platform.x.com https://platform.twitter.com https://www.instagram.com https://graph.instagram.com https://www.threads.com; font-src 'self'; base-uri 'none'; form-action 'self' https://forms.gle; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+
+
+# ================================================================
+#  ② ゲームディレクトリ（最も厳格） ― 外部接続を完全に遮断
+# ================================================================
+#
+#  4ゲーム（make10 / cheese-escape-web / whack-a-mole / pinball）は
+#  外部ドメインへの読み込みが「ゼロ」であることを全ファイルで確認済み。
+#  そこで default-src 'none' を土台に、自ドメイン（'self'）の
+#  CSS・JS・画像・フォントだけを個別に開ける。
+#
+#  ゲームごとの差分（確認結果）:
+#    ・make10        : style="..." 属性あり → style-src に 'unsafe-inline'
+#    ・whack-a-mole  : onclick="..." あり   → script-src に 'unsafe-inline'
+#    ・pinball       : onclick="..." あり   → script-src に 'unsafe-inline'
+#    ・cheese-escape : インライン一切なし（本来は unsafe-inline 不要）
+#
+#  運用をシンプルに保つため、4ゲーム共通で同一の厳格ルールを当てる。
+#  （cheese-escape には過剰な許可となるが、閉じ方向の差なので実害はない。
+#    将来キレイにしたければ cheese-escape だけ別ブロックで締められる。）
+#
+#  各ブロック冒頭の「! Content-Security-Policy」は、
+#  上の①（/*）から継承された緩いCSPを打ち消すための行（値は空でよい）。
+#  このファイルでは①より後に書かれているため、打ち消しが最後に効く。
+
+/make10/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+
+/cheese-escape-web/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+
+/whack-a-mole/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+
+/pinball/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+
+
+# ================================================================
+#  ③ アプリ別プライバシーポリシー（厳格・ただし data: 画像を許可）
+# ================================================================
+#
+#  /privacy-policy/*.html は <style> と <script> をインラインで持つ。
+#  外部読み込みは woff2 フォント（/fonts/、'self'）のみ。
+#  pricewise.html は CSS 内で data:image/svg+xml のインライン画像
+#  （プルダウンの矢印アイコン）を使うため、img-src に data: を追加する。
+#  ※ make10.html / pricewise.html 内の github.com・apple.com 等は
+#    すべて <a href> のリンク先であり “読み込み” ではないため、
+#    CSP の許可対象にはならない（リンクは CSP の管轄外）。
+#
+#  ①より後に書くことで、打ち消し行が最後に効く（②と同じ理屈）。
+
+/privacy-policy/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY

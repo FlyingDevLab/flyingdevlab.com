@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- id="top" は、フッターの「↑ TOP」リンク（href="#top"）のジャンプ先 -->
+<html lang="en" id="top">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,6 +35,25 @@
   ■ ファイルサイズについて
     15言語分のテキストを JS オブジェクトとして埋め込んでいるため、ファイルサイズは大きめです。
     ただし画像も動的処理もないテキストページなので、体感速度への影響はほぼゼロです。
+
+  ■ 変更: 英語テキストを HTML 本体にも直書きしている理由（JS 非依存の担保）
+    以前は本文の <p> をすべて空にしておき、setLang() が innerHTML を流し込んでいました。
+    しかしこの方式だと、JavaScript が無効・読み込み失敗・実行前に中断した場合、
+    「見出しだけが並び、本文がまったく無いポリシーページ」が表示されてしまいます。
+
+    このページは App Store のプライバシーポリシー URL / サポート URL として提出しており、
+    審査ボットやテキストベースのクローラが本文ゼロのページを取得する可能性がありました。
+    「何も収集しません」と表明するページ自体が空、という状態は避けなければなりません。
+
+    そこで、HTML には英語（既定言語）のテキストを直書きしています。
+    JS が動く環境では、これまでどおり setLang() が該当言語のテキストで上書きします。
+    JS が動かない環境では、英語版の完全なポリシーとして最後まで読めます。
+
+    ⚠️ 同期ルール（重要）
+      英語テキストが「HTML 本体」と「下部の S.en」の2箇所に存在する状態になりました。
+      正となるのは S.en 側です。英語を修正するときは、必ず両方を同じ文字列に揃えてください。
+      片方だけ直すと、JS の有無で表示内容が食い違う（＝法的文書の内容が二種類ある）
+      という、発見しにくく影響の大きい不整合になります。
   ============================================================
   -->
   <title>Privacy Policy & Support – MAKE10</title>
@@ -132,6 +152,18 @@
     .footer-note { text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 20px; }
     .footer-note a { color: var(--primary); }
 
+    /* ページ先頭へ戻るリンク。ポリシーページは縦に長いため用意している。 */
+    .footer-top-wrap { text-align: center; margin-top: 28px; }
+    .footer-top {
+      display: inline-block; font-size: 13px; font-weight: 800;
+      letter-spacing: .06em; color: var(--text-muted) !important;
+      text-decoration: none; padding: 6px 14px;
+      border: 2px solid var(--border); border-radius: 20px;
+      background: var(--surface); transition: border-color .2s, color .2s;
+    }
+    .footer-top:hover { border-color: var(--primary); color: var(--primary) !important; text-decoration: none; }
+    .footer-top:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
     @media (max-width: 500px) { .section { padding: 20px 18px; } .hero { padding: 40px 18px 36px; } .contact-box { padding: 20px 18px; } }
   </style>
 </head>
@@ -181,73 +213,84 @@
   </div>
 </div>
 
+<!-- 変更: 以下の各セクション・お問い合わせ・フッターの本文に、英語の初期テキストを直書きした。
+     理由: JavaScript が動かない環境で本文が空になるのを防ぐため（詳細は <head> の設計メモを参照）。
+           JS が有効なときは、従来どおり setLang() が表示言語のテキストで上書きする。
+           HTML 構造・CSS・JS のロジックには一切手を加えていない。 -->
 <div class="content" id="main">
 
   <div class="section">
     <h2><span class="section-num">1</span><span data-key="s1-title">Overview</span></h2>
-    <p data-key="s1-p1"></p>
-    <div class="highlight-box" data-key="s1-highlight"></div>
-    <p data-key="s1-p2"></p>
+    <p data-key="s1-p1">MAKE10 (10をつくろう) is a free math puzzle game for children, developed by Flying Dev Lab (空飛ぶ研究室).</p>
+    <div class="highlight-box" data-key="s1-highlight">MAKE10 does not collect, store, or transmit any personal information — from anyone, of any age.</div>
+    <p data-key="s1-p2">This policy describes what data MAKE10 does and does not handle, and confirms our commitment to keeping the app completely safe for children.</p>
   </div>
 
   <div class="section">
     <h2><span class="section-num">2</span><span data-key="s2-title">Information We Collect</span></h2>
-    <p data-key="s2-p1"></p>
-    <p data-key="s2-p2"></p>
-    <p data-key="s2-list"></p>
+    <p data-key="s2-p1">We collect <strong>nothing</strong>.</p>
+    <p data-key="s2-p2">MAKE10 does not collect, request, or store any of the following:</p>
+    <p data-key="s2-list">• Name, email address, or contact information<br>• Device identifiers or advertising IDs<br>• Location data<br>• Usage analytics or behavioral data<br>• Cookies or tracking technologies<br>• Any other personal or non-personal information</p>
   </div>
 
   <div class="section">
     <h2><span class="section-num">3</span><span data-key="s3-title">Network Activity</span></h2>
-    <p data-key="s3-p1"></p>
-    <p data-key="s3-p2"></p>
+    <p data-key="s3-p1">MAKE10 does not connect to the internet during normal use. The app operates entirely offline.</p>
+    <p data-key="s3-p2">No data is sent to Flying Dev Lab, third-party analytics services, advertising networks, or any other external servers.</p>
   </div>
 
   <div class="section">
     <h2><span class="section-num">4</span><span data-key="s4-title">Advertising & In-App Purchases</span></h2>
-    <p data-key="s4-p1"></p>
-    <p data-key="s4-p2"></p>
-    <p data-key="s4-p3"></p>
+    <p data-key="s4-p1">MAKE10 contains <strong>no advertisements</strong> of any kind.</p>
+    <p data-key="s4-p2">MAKE10 contains <strong>no in-app purchases</strong>. The app is completely free.</p>
+    <p data-key="s4-p3">There are no links to external websites, social media, or other apps within MAKE10.</p>
   </div>
 
   <div class="section">
     <h2><span class="section-num">5</span><span data-key="s5-title">Children's Privacy (COPPA)</span></h2>
-    <p data-key="s5-p1"></p>
-    <p data-key="s5-p2"></p>
-    <p data-key="s5-p3"></p>
+    <p data-key="s5-p1">MAKE10 is designed for children and complies fully with the Children's Online Privacy Protection Act (COPPA) and applicable international children's privacy laws.</p>
+    <p data-key="s5-p2">Because we collect no personal information from anyone, there is no data to protect, share, or delete — for children or adults.</p>
+    <p data-key="s5-p3">We do not knowingly collect information from children under 13 (or any age).</p>
   </div>
 
   <div class="section">
     <h2><span class="section-num">6</span><span data-key="s6-title">Open Source</span></h2>
-    <p data-key="s6-p1"></p>
-    <p data-key="s6-p2"></p>
+    <p data-key="s6-p1">MAKE10 is open-sourced on GitHub as a transparency measure. Anyone can inspect the source code to verify our privacy claims.</p>
+    <p data-key="s6-p2">→ <a href="https://github.com/FlyingDevLab">github.com/FlyingDevLab</a></p>
   </div>
 
   <div class="section">
     <h2><span class="section-num">7</span><span data-key="s7-title">Changes to This Policy</span></h2>
-    <p data-key="s7-p1"></p>
+    <p data-key="s7-p1">If this policy is ever updated, the new version will be posted on this page with a revised effective date. Because no data is collected, any changes will not affect stored user data.</p>
   </div>
 
   <div class="section">
     <h2><span class="section-num">8</span><span data-key="s8-title">Disclaimer</span></h2>
-    <p data-key="s8-p1"></p>
-    <p data-key="s8-p2"></p>
-    <p data-key="s8-p3"></p>
+    <p data-key="s8-p1">While we strive to provide accurate content and stable functionality, we do not guarantee the completeness, accuracy, or uninterrupted operation of the App.</p>
+    <p data-key="s8-p2">iOS updates or changes in device environment may affect app behavior without prior notice. The Developer shall not be liable for any data loss resulting from such changes.</p>
+    <p data-key="s8-p3">The Developer may terminate or modify the App without prior notice.</p>
   </div>
 
   <div class="contact-box">
     <h2>📬 <span data-key="contact-title">Support & Contact</span></h2>
-    <p data-key="contact-form-p"></p>
-    <p data-key="contact-email-p"></p>
+    <p data-key="contact-form-p">You can send anonymous feedback or requests via the contact form at our official website.</p>
+    <p data-key="contact-email-p">If you prefer email, please reach out using the address below.</p>
     <div class="contact-inner">
       <p>🌐 <a href="https://flyingdevlab.com" data-key="contact-web-label">flyingdevlab.com</a></p>
       <p>📧 <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a></p>
     </div>
   </div>
 
+  <!-- ページ先頭へ戻るリンク。href="#top" は <html id="top"> へジャンプします。
+       ラベルと aria-label は setLang() 内で表示言語に合わせて設定しています。
+       ※ このページには SNS 等の外部リンクは意図的に置いていません（子ども向けページのため）。 -->
+  <div class="footer-top-wrap">
+    <a href="#top" class="footer-top" id="f-top">↑ TOP</a>
+  </div>
+
   <p class="footer-note">
-    <span data-key="footer-copy"></span><br>
-    <span data-key="footer2"></span>
+    <span data-key="footer-copy">© 2026 <a href="https://flyingdevlab.com">Flying Dev Lab</a> · 空飛ぶ研究室</span><br>
+    <span data-key="footer2">Made with ❤️ for curious kids everywhere.</span>
   </p>
 
 </div>
@@ -883,6 +926,46 @@ function setLang(lang) {
   });
   document.title = d.title + ' – MAKE10';
   document.getElementById('lang-select').value = lang;
+  applyFooter(lang);
+}
+
+/*
+ * F（フッター用の言語別データ）
+ * ─────────────────────────────────────────────
+ * S とは別オブジェクトにしている理由：
+ *   S は15言語あるため、各言語にキーを足すと15箇所の編集になります。
+ *   フッターだけ切り出して英語フォールバックを持たせれば、
+ *   翻訳は用意できた言語だけで済みます（未定義の言語は英語表示）。
+ *
+ * homeHref：著作権表記のリンク先。日本語は日本語トップ、それ以外は英語トップ。
+ * ariaTop / labelTop：ページ先頭へ戻るリンクの読み上げ用説明と表示ラベル。
+ */
+const F = {
+  en: { homeHref: '/', ariaTop: 'Back to top of page',  labelTop: '↑ TOP' },
+  ja: { homeHref: '/ja/', ariaTop: 'ページの先頭へ',     labelTop: '↑ 先頭へ' },
+};
+
+/*
+ * applyFooter(lang)
+ * ─────────────────────────────────────────────
+ * フッターの「↑ TOP」リンクと、著作権表記のリンク先を表示言語に合わせます。
+ *
+ * 著作権表記（footer-copy）は15言語すべてに同じ href が書かれているため、
+ * 翻訳データ側は触らず、描画後にここで href を差し替えています。
+ * こうすることで、言語を追加しても翻訳データの修正が不要になります。
+ */
+function applyFooter(lang) {
+  const f = F[lang] || F.en;
+
+  const top = document.getElementById('f-top');
+  if (top) {
+    top.textContent = f.labelTop;
+    top.setAttribute('aria-label', f.ariaTop);
+  }
+
+  // 著作権表記の中のリンクを、その言語のトップページへ向ける
+  const copy = document.querySelector('[data-key="footer-copy"] a');
+  if (copy) copy.setAttribute('href', f.homeHref);
 }
 
 /*

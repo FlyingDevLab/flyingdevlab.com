@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<!-- id="top" は、フッターの「↑ TOP」リンク（href="#top"）のジャンプ先 -->
+<html lang="en" id="top">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+  ============================================================
+  【設計メモ: プライバシーポリシー & 免責事項（TechRef）】
+
+  ■ 1ファイル完結
+    MAKE10 / PriceWise と同じ方針。アクセスはほぼ100%アプリ内リンク経由のため、
+    hreflang などの SEO 設定は割り切る。翻訳の追加・修正・デプロイが1ファイルで完結する。
+
+    Settings からのリンクは2つだが、ファイルは1つ：
+      Privacy Policy → techref.html
+      Disclaimer     → techref.html#disclaimer
+
+  ■ 翻訳データの持ち方：「id付き配列型」（PriceWise の配列型の改良版）
+    T[言語].sections[] = { id, title, html } の配列。
+    PriceWise の純粋な配列型はインデックス依存のため、ある言語だけセクション数が
+    ずれると表示が崩れる。こちらは id で解決するので崩れない。
+
+    描画は「英語版の配列」を基準にループし、選択言語に同じ id があればそれを使い、
+    無ければ英語版で埋める（＝英語フォールバック）。
+    → 25言語に増やす際、全訳が揃う前でも順次デプロイできる。
+    → セクション番号は配列の並び順から自動採番するので、手で振り直す必要がない。
+
+  ■ デフォルト言語は英語
+    アプリ本体が英語のため、英語をマスターとする。
+    MAKE10 は毎回ブラウザ言語で判定、PriceWise は localStorage に保存。
+    こちらは PriceWise 方式（localStorage: "tr-lang"）を採用。25言語対応時に有用。
+
+  ■ フォント：外部リクエストゼロ
+    MAKE10 は Nunito を自己ホストしているが、TechRef はシステムフォントのみで完結。
+    woff2 ファイルすら不要で、HTTPリクエストは HTML 1本だけになる。
+    多言語化の際も OS 側が適切なフォントを選ぶため、25言語対応にむしろ強い。
+
+  ■ 発効日
+    ページ公開日を記載する。更新のたびに全言語の meta.updatedDate を変更すること。
+  ============================================================
+  -->
+  <title>Privacy Policy &amp; Disclaimer – TechRef</title>
+  <meta name="description" content="Privacy Policy and Disclaimer for TechRef, an offline unit conversion and engineering reference app by Flying Dev Lab.">
+  <link rel="canonical" href="https://flyingdevlab.com/privacy-policy/techref.html">
+
+  <style>
+    :root {
+      --navy-900: #0d1b2a;
+      --navy-800: #142838;
+      --navy-700: #1e3a4f;
+      --accent:   #f07a28;
+      --accent-soft: #fdf0e6;
+      --text:     #16212b;
+      --text-sub: #4d5b68;
+      --bg:       #f2f4f6;
+      --card:     #ffffff;
+      --border:   #dfe4e9;
+      --r:        10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+    a { color: #b8551a; text-decoration: underline; text-underline-offset: 2px; }
+    a:hover { color: var(--accent); }
+
+    .skip-link {
+      position: absolute; top: -48px; left: 0; z-index: 200;
+      background: var(--accent); color: #fff; padding: 8px 16px;
+      text-decoration: none; transition: top .2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ── ヘッダー ───────────────────────────── */
+    header {
+      background: linear-gradient(160deg, var(--navy-900) 0%, var(--navy-700) 100%);
+      color: #fff; padding: 40px 20px 0;
+    }
+    .hd-inner { max-width: 760px; margin: 0 auto; }
+
+    .app-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 4px; padding: 4px 12px;
+      font-size: .75rem; letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: 18px; color: rgba(255,255,255,.9);
+    }
+    .app-badge::before {
+      content: ""; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+    }
+    h1 {
+      font-size: clamp(1.45rem, 4.5vw, 2.05rem);
+      font-weight: 650; line-height: 1.25; letter-spacing: -.01em;
+      margin-bottom: 10px;
+    }
+    .hd-sub { font-size: .95rem; color: rgba(255,255,255,.72); max-width: 52ch; }
+    .updated {
+      font-size: .8rem; color: rgba(255,255,255,.6);
+      margin-top: 16px; font-variant-numeric: tabular-nums;
+    }
+
+    /* 署名要素：ノギスの目盛りをCSSで描いた定規ライン */
+    .scale-rule {
+      height: 22px; margin-top: 26px;
+      border-top: 1px solid rgba(255,255,255,.22);
+      background-image:
+        repeating-linear-gradient(to right,
+          rgba(255,255,255,.42) 0 1px, transparent 1px 10px),
+        repeating-linear-gradient(to right,
+          rgba(240,122,40,.85) 0 1px, transparent 1px 50px);
+      background-size: 100% 7px, 100% 13px;
+      background-position: left top, left top;
+      background-repeat: repeat-x;
+    }
+
+    /* ── 言語バー ───────────────────────────── */
+    .lang-bar {
+      max-width: 760px; margin: 0 auto;
+      padding: 14px 0 18px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .lang-bar label {
+      font-size: .78rem; color: rgba(255,255,255,.72);
+      letter-spacing: .04em; white-space: nowrap;
+    }
+    select#ls {
+      appearance: none; -webkit-appearance: none;
+      background: rgba(255,255,255,.1)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffffff' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")
+        no-repeat right 12px center;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: 6px; color: #fff;
+      font-family: inherit; font-size: .85rem;
+      padding: 6px 34px 6px 12px; cursor: pointer; min-width: 160px;
+    }
+    select#ls:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    select#ls option { background: var(--navy-800); color: #fff; }
+
+    /* ── 本文 ──────────────────────────────── */
+    main { max-width: 760px; margin: 0 auto; padding: 28px 20px 72px; }
+
+    .policy-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 24px 26px; margin-bottom: 14px;
+      scroll-margin-top: 20px;
+    }
+    .policy-section h2 {
+      display: flex; align-items: baseline; gap: 12px;
+      font-size: 1.02rem; font-weight: 650; color: var(--navy-800);
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-num {
+      flex: none;
+      font-size: .78rem; font-weight: 600;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .06em;
+      padding-bottom: 2px;
+      border-bottom: 2px solid var(--accent);
+    }
+    .policy-section p { color: var(--text-sub); font-size: .95rem; margin-bottom: 11px; }
+    .policy-section p:last-child { margin-bottom: 0; }
+    .policy-section ul { margin: 10px 0 12px 20px; color: var(--text-sub); font-size: .95rem; }
+    .policy-section li { margin-bottom: 5px; }
+    .policy-section strong { color: var(--text); font-weight: 650; }
+
+    /* 「端末内で完結」の強調ボックス */
+    .zero-data {
+      background: var(--navy-900);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px; margin: 4px 0 14px;
+    }
+    .zero-data p {
+      color: #fff !important; font-weight: 600;
+      font-size: .97rem !important; margin: 0 !important;
+    }
+
+    /* 免責事項の導入文 */
+    .lead-note {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 13px 18px; margin: 4px 0 16px;
+    }
+    .lead-note p {
+      color: #8a3d0c !important; font-weight: 600;
+      margin: 0 !important; font-size: .95rem !important;
+    }
+
+    /* 免責事項カード自体を少し強調 */
+    #disclaimer { border-color: #f0c9a8; }
+
+    .contact-box {
+      background: #f7f9fa; border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 16px; margin-top: 12px;
+    }
+    .contact-box p { margin: 3px 0 !important; color: var(--text) !important; }
+
+    /* ── フッター ──────────────────────────── */
+    footer {
+      background: var(--navy-900); color: rgba(255,255,255,.62);
+      text-align: center; padding: 30px 20px 34px;
+      font-size: .8rem;
+    }
+    footer a { color: rgba(255,255,255,.82); text-decoration: none; }
+    footer a:hover { color: var(--accent); text-decoration: underline; }
+    footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+    .footer-links {
+      display: flex; justify-content: center; align-items: center;
+      gap: 22px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .footer-links a { font-size: .85rem; }
+    .x-icon { font-style: normal; }
+
+    .footer-top {
+      display: inline-block; font-size: .78rem;
+      letter-spacing: .06em; margin-bottom: 18px;
+      color: rgba(255,255,255,.6) !important;
+    }
+
+    .footer-legal {
+      display: flex; justify-content: center; align-items: center;
+      gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .footer-legal a { font-size: .82rem; }
+    .footer-legal-sep { color: rgba(255,255,255,.28); }
+
+    .footer-copy { font-size: .78rem; color: rgba(255,255,255,.55); }
+
+    @media (max-width: 520px) {
+      body { font-size: 15px; }
+      header { padding: 28px 16px 0; }
+      .policy-section { padding: 18px 16px; }
+      .policy-section h2 { gap: 9px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header>
+  <div class="hd-inner">
+    <div class="app-badge">TechRef</div>
+    <h1 id="hd-title">Privacy Policy &amp; Disclaimer</h1>
+    <p class="hd-sub" id="hd-sub"></p>
+    <p class="updated" id="hd-updated"></p>
+    <div class="scale-rule" aria-hidden="true"></div>
+  </div>
+  <div class="lang-bar hd-inner">
+    <label for="ls" id="lang-label">Language:</label>
+    <!-- 言語を追加するときは、この <option> と下の T オブジェクトに1つずつ足すだけ -->
+    <select id="ls" onchange="applyLang(this.value, true)">
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+    </select>
+  </div>
+</header>
+
+<main id="main"><div id="content"></div></main>
+
+<!-- フッター：外部SNSリンク・TOPへ戻るリンク・法的リンク・著作権表記
+  - 外部SNSリンクにはすべて target="_blank" と rel="noopener noreferrer" を付けています
+  - href="#top" は <html id="top"> へジャンプしてページ先頭に戻ります
+  - aria-label はページの表示言語に追従させるため、applyLang() 内で設定しています
+    （サイト共通フッターでは日本語固定でしたが、このページは英日切替があるため動的化）
+  - このページ自身がポリシーページのため、プライバシーポリシーへのリンクは置いていません
+  - 法的リンクは日本語表示のときのみ特定商取引法の表示が出ます（英語表示では nav ごと非表示）
+  - 著作権表記からサイトのトップページへリンクします（英語ページ→英語トップ / 日本語ページ→日本語トップ）
+-->
+<footer>
+  <div class="footer-links">
+    <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-github">GitHub</a>
+    <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-x">
+      <span class="x-icon" aria-hidden="true">𝕏</span>
+    </a>
+    <a href="https://www.instagram.com/flyingdevlab/" target="_blank" rel="noopener noreferrer" id="f-ig">
+      <span class="x-icon" aria-hidden="true">Instagram</span>
+    </a>
+  </div>
+
+  <!-- ページ先頭へ戻るリンク。ポリシーページは縦に長くなるため有効。 -->
+  <a href="#top" class="footer-top" id="f-top">↑ TOP</a>
+
+  <!-- 法的リンク。日本語表示のときのみ特定商取引法の項目が加わります。 -->
+  <nav class="footer-legal" id="f-legal"></nav>
+
+  <p class="footer-copy" id="f-copy"></p>
+</footer>
+
+<script>
+/*
+ * T（翻訳データオブジェクト）
+ * ─────────────────────────────────────────────
+ * 構造: T[言語コード] = { meta: {...}, sections: [ { id, title, html } ] }
+ *
+ * ★ sections は「id付き配列」。
+ *   描画は必ず T.en.sections の並び順を基準に行い、選択言語に同じ id が
+ *   見つからない場合は英語版で埋める（renderAll() を参照）。
+ *   → 翻訳が未完成の言語でも、セクションが欠けたり順番がずれたりしない。
+ *
+ * ★ セクション番号は配列の並び順から自動採番される。
+ *   セクションを追加・削除しても番号を手で振り直す必要はない。
+ *   ただしアンカー（#disclaimer）は id で固定しているため、
+ *   番号がずれてもアプリ側のリンクは壊れない。
+ *
+ * ⚠️ 言語を追加するときは meta と sections をセットで追加すること。
+ * ⚠️ 内容を更新したら、全言語の meta.updatedDate を必ず変更すること。
+ */
+const T = {
+  en: {
+    meta: {
+      langName: "English",
+      selectLabel: "Language",
+      pageTitle: "Privacy Policy & Disclaimer",
+      subtitle: "TechRef stores everything on your device and sends nothing anywhere. This page explains exactly what that means, and the limits of how the App's output should be used.",
+      updatedLabel: "Effective",
+      updatedDate: "August 2, 2026",
+      /*
+       * footer
+       * ───────────────────────────────────────
+       * aria* はスクリーンリーダー向けの補足説明。
+       * legalHtml：サイト共通フッターにあるプライバシーポリシーへのリンクは、
+       *   このページ自身がポリシーページのため置いていない（自己参照を避ける）。
+       *   日本語版のみ特定商取引法の表示を出す（日本国内向けのため）。
+       *   英語版は空になるので、applyLang() 側で nav ごと非表示にしている。
+       * copyHtml：著作権表記からサイトのトップページへリンクする。
+       *   英語ページ → 英語トップ、日本語ページ → 日本語トップ。
+       */
+      footer: {
+        ariaGithub: "GitHub (opens in a new tab)",
+        ariaX: "X, formerly Twitter (opens in a new tab)",
+        ariaInstagram: "Instagram (opens in a new tab)",
+        ariaTop: "Back to top of page",
+        ariaLegal: "Legal information",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab home page'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "Introduction",
+        html: "<p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion and engineering reference tool for technical professionals. It is built on a simple principle: your data belongs to you, and it stays on your device.</p><p>Please read this page before using the App. Section 10 (Disclaimer) describes important limitations on how the App's output should be used.</p>"
+      },
+      {
+        id: "storage",
+        title: "Data Stored on Your Device",
+        html: "<div class='zero-data'><p>All data you enter stays on your device. TechRef has no server, and nothing is transmitted to the Developer.</p></div><p>TechRef stores the following on your device only:</p><ul><li>Conversion history (values, tolerances, units, labels, memos, timestamps)</li><li>Sheets data (part names, measurement point names, dimensions, memos)</li><li>App settings (decimal places, appearance, unit preferences)</li></ul><p>History and Sheets are saved as files in the App's Application Support directory. Settings are saved in the standard iOS preferences store. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>"
+      },
+      {
+        id: "network",
+        title: "Network Activity",
+        html: "<p>TechRef does not connect to the internet during normal use. It operates entirely offline.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data. The App requires no network permission to function.</p><p>The only network activity that can occur is when you deliberately tap the Support link in Settings, which opens this website in your browser. That is a normal web request handled by your browser, not by the App.</p>"
+      },
+      {
+        id: "icloud",
+        title: "iCloud Backup",
+        html: "<p>TechRef does not use CloudKit and does not synchronize your data with any cloud service.</p><p>However, if you have enabled iCloud Backup in your device settings, iOS may include TechRef's data files in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>This is what allows your history and Sheets to be restored automatically when you set up a new device. If you prefer not to have this data backed up, you can disable iCloud Backup for TechRef in the iOS Settings app.</p><p>Backup handling is governed by <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a>.</p>"
+      },
+      {
+        id: "export",
+        title: "Exporting Your Data",
+        html: "<p>TechRef lets you take your data out of the App in two ways:</p><ul><li><strong>Copy</strong> — conversion results or sheet data are placed on the system clipboard</li><li><strong>Save to Files</strong> — a CSV file is written to a location you choose in the Files app</li></ul><p>Both actions are initiated by you, and the App does not send data anywhere on its own. Once data leaves the App, its handling — including where you paste it, who you send it to, and any cloud storage location you select in the Files app — is outside the App's control and is your responsibility.</p><p>If you work with dimensional data that your organization treats as confidential, please follow your own internal policies when exporting.</p>"
+      },
+      {
+        id: "advertising",
+        title: "Advertising and Tracking",
+        html: "<p>TechRef contains <strong>no advertisements</strong>.</p><p>The App does not use the advertising identifier (IDFA), does not request App Tracking Transparency permission, and does not track you across apps or websites. There is no profiling, no behavioral analysis, and no data broker relationship of any kind.</p><p>This is a design decision, not a temporary state. TechRef is a professional tool, and it will not carry advertising.</p>"
+      },
+      {
+        id: "purchases",
+        title: "In-App Purchases",
+        html: "<p>This version of TechRef contains no in-app purchases and no subscriptions. The App is free to use in full.</p><p>If a purchase option is introduced in a future version, all payment processing will be handled by Apple through the App Store. The Developer will not receive your payment details, card information, or any personal information associated with the transaction. See <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a> for how Apple handles that data.</p><p>Any change of this kind will be reflected on this page before it takes effect.</p>"
+      },
+      {
+        id: "sharing",
+        title: "Sharing of Information",
+        html: "<p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. In the event of a legally binding request from a competent authority, the Developer has no user data that could be produced.</p>"
+      },
+      {
+        id: "children",
+        title: "Children's Privacy",
+        html: "<p>TechRef is a professional engineering tool and is not directed at children.</p><p>Nevertheless, because the App collects no personal information from anyone of any age, it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user.</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "Disclaimer",
+        html: "<div class='lead-note'><p>TechRef is a reference and calculation tool. It is not a substitute for official standards, engineering judgment, or verified measurement.</p></div><p><strong>Reference information only.</strong> Conversion factors, reference tables, and calculated results provided by the App are reference information based on publicly available standards and definitions. They are not certified data and carry no warranty of accuracy, completeness, or fitness for any particular purpose.</p><p><strong>Verification is your responsibility.</strong> Before applying any value from the App to design, machining, inspection, or procurement, you must verify it against the applicable official standard, the controlling drawing, and your organization's internal procedures. The App is intended to assist that process, not to replace it.</p><p><strong>Limits of the tolerance calculation.</strong> The center value and range shown by the App are the result of arithmetic on the values you enter. The calculation does not account for machining method, tooling condition, measurement uncertainty, material properties, thermal expansion, fit class, or any other physical or process factor. A mathematically valid center value is not necessarily an appropriate machine setting.</p><p><strong>Rounding and display precision.</strong> Results are rounded to the number of decimal places selected in Settings. Rounding may introduce error, and displayed values may differ from the full-precision internal result. Choose a precision appropriate to your tolerance band.</p><p><strong>Unit selection.</strong> You are responsible for selecting the correct unit and category for your input. The App cannot detect an incorrect unit assignment.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to defective parts, rework, production delay, equipment damage, personal injury, or economic loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>"
+      },
+      {
+        id: "law",
+        title: "Governing Law",
+        html: "<p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p>"
+      },
+      {
+        id: "changes",
+        title: "Changes to This Policy",
+        html: "<p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, the introduction of in-app purchases — it will be published here before that change reaches users.</p>"
+      },
+      {
+        id: "contact",
+        title: "Contact",
+        html: "<p>Questions, corrections, and feature requests are welcome. If you find an error in a conversion factor or a reference table, please report it — accuracy reports are given priority.</p><div class='contact-box'><p>Website / contact form: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Email: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  ja: {
+    meta: {
+      langName: "日本語",
+      selectLabel: "言語",
+      pageTitle: "プライバシーポリシー・免責事項",
+      subtitle: "TechRef はすべてのデータを端末内に保存し、外部へ送信しません。本ページでは、その具体的な内容と、アプリの出力を扱ううえでの制限について説明します。",
+      updatedLabel: "発効日",
+      updatedDate: "2026年8月2日",
+      footer: {
+        ariaGithub: "GitHub（新しいタブで開きます）",
+        ariaX: "X（旧Twitter）（新しいタブで開きます）",
+        ariaInstagram: "Instagram（新しいタブで開きます）",
+        ariaTop: "ページの先頭へ",
+        ariaLegal: "法的情報",
+        legalHtml: "<a href='/tokusho.html' lang='ja'>特定商取引法に基づく表示</a>",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/ja/' aria-label='空飛ぶ研究室 トップページ'>空飛ぶ研究室</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "はじめに",
+        html: "<p>本ページは、空飛ぶ研究室（Flying Dev Lab）が開発した iOS アプリ <strong>TechRef</strong> のプライバシーポリシーおよび免責事項です。</p><p>TechRef は技術者向けの単位変換・エンジニアリングリファレンスツールです。「データは利用者のものであり、端末内にとどまる」という単純な原則に基づいて設計されています。</p><p>本アプリをご利用の前に本ページをお読みください。第10章（免責事項）には、本アプリの出力の取り扱いに関する重要な制限が記載されています。</p>"
+      },
+      {
+        id: "storage",
+        title: "端末内に保存するデータ",
+        html: "<div class='zero-data'><p>入力されたデータはすべて端末内にとどまります。TechRef はサーバーを持たず、開発者へ送信されるものは一切ありません。</p></div><p>本アプリが端末内にのみ保存するもの：</p><ul><li>変換履歴（値・公差・単位・ラベル・メモ・日時）</li><li>Sheets のデータ（部品名・測定ポイント名・寸法・メモ）</li><li>アプリ設定（小数点桁数・外観・単位設定）</li></ul><p>履歴と Sheets はアプリの Application Support ディレクトリ内にファイルとして保存されます。設定は iOS 標準の設定ストアに保存されます。アプリを削除すると、これらのデータはすべて端末から削除されます。</p><p>当開発者はこれらに一切アクセスできません。</p>"
+      },
+      {
+        id: "network",
+        title: "ネットワーク通信",
+        html: "<p>TechRef は通常の使用においてインターネットに接続しません。完全にオフラインで動作します。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、データを送信するサードパーティライブラリのいずれも使用していません。本アプリの動作にネットワーク権限は不要です。</p><p>唯一発生しうる通信は、設定画面の Support リンクをご自身でタップし、ブラウザで本サイトを開いた場合のみです。これはブラウザによる通常の Web アクセスであり、アプリによる通信ではありません。</p>"
+      },
+      {
+        id: "icloud",
+        title: "iCloud バックアップについて",
+        html: "<p>TechRef は CloudKit を使用せず、いかなるクラウドサービスともデータを同期しません。</p><p>ただし、端末設定で iCloud バックアップを有効にしている場合、iOS が他のアプリのデータとともに TechRef のデータファイルを端末バックアップに含めることがあります。これは Apple が完全に管理する OS 標準の機能です。当開発者がこのバックアップを開始することも、内容にアクセスすることもできません。</p><p>この仕組みにより、機種変更時に履歴や Sheets が自動的に復元されます。バックアップを望まない場合は、iOS の設定アプリから TechRef の iCloud バックアップを個別に無効化できます。</p><p>バックアップの取り扱いは <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple のプライバシーポリシー</a> に従います。</p>"
+      },
+      {
+        id: "export",
+        title: "データの書き出しについて",
+        html: "<p>TechRef では、2つの方法でデータをアプリの外に持ち出せます：</p><ul><li><strong>コピー</strong> — 変換結果やシートのデータをシステムのクリップボードに配置</li><li><strong>Save to Files</strong> — Files アプリで指定した場所に CSV ファイルを書き出し</li></ul><p>いずれもご自身の操作によって開始されるものであり、アプリが自動的にデータを送信することはありません。データがアプリの外に出た後の取り扱い（貼り付け先、送信相手、Files アプリで選択したクラウド保存先を含む）はアプリの管理外であり、ご利用者の責任となります。</p><p>社内で機密として扱われる寸法データを扱う場合は、書き出しに際して所属組織の規定に従ってください。</p>"
+      },
+      {
+        id: "advertising",
+        title: "広告・トラッキング",
+        html: "<p>TechRef に<strong>広告は一切ありません</strong>。</p><p>広告識別子（IDFA）を使用せず、App Tracking Transparency の許可も要求せず、アプリやウェブサイトをまたいだトラッキングも行いません。プロファイリング、行動分析、データブローカーとの関係は一切ありません。</p><p>これは一時的な状態ではなく設計上の決定です。TechRef はプロ向けのツールであり、今後も広告を掲載しません。</p>"
+      },
+      {
+        id: "purchases",
+        title: "アプリ内課金について",
+        html: "<p>本バージョンの TechRef には、アプリ内課金およびサブスクリプションはありません。すべての機能を無料でご利用いただけます。</p><p>将来のバージョンで購入オプションを導入する場合、決済処理はすべて App Store を通じて Apple が行います。当開発者が決済情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple による取り扱いについては <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple のプライバシーポリシー</a> をご参照ください。</p><p>この種の変更が生じる場合は、施行前に本ページに反映します。</p>"
+      },
+      {
+        id: "sharing",
+        title: "第三者への情報提供",
+        html: "<p>当開発者は利用者の情報を第三者に販売・共有・提供することはありません。そもそも利用者の情報を一切収集していないためです。</p><p>広告主・分析事業者・データブローカーに開示できるデータは存在しません。権限を有する当局から法的拘束力のある請求があった場合も、当開発者が提出しうる利用者データは存在しません。</p>"
+      },
+      {
+        id: "children",
+        title: "子どもの利用について",
+        html: "<p>TechRef はプロ向けのエンジニアリングツールであり、子どもを対象としたアプリではありません。</p><p>ただし、年齢を問わずいかなる個人情報も収集していないため、子どものプライバシーに関する懸念は生じません。保護・共有・削除すべきデータは、いかなる利用者についても存在しません。</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "免責事項",
+        html: "<div class='lead-note'><p>TechRef はリファレンス・計算ツールです。正式な規格、技術的判断、検証された測定に代わるものではありません。</p></div><p><strong>参考情報としての位置づけ。</strong>本アプリが提供する変換係数・リファレンステーブル・計算結果は、一般に公開された規格および定義に基づく参考情報です。認証されたデータではなく、正確性・完全性・特定目的への適合性を保証するものではありません。</p><p><strong>検証はご利用者の責任。</strong>本アプリの値を設計・加工・検査・調達に適用する前に、該当する正式規格、支配図面、および貴組織の社内手順に照らして必ず検証してください。本アプリはその工程を支援するものであり、代替するものではありません。</p><p><strong>公差計算の限界。</strong>表示される中央値および範囲は、入力値に対する算術演算の結果です。加工方法、工具状態、測定不確かさ、材料特性、熱膨張、はめあい等級その他一切の物理的・工程的要因を考慮していません。数学的に正しい中央値が、必ずしも適切な機械セット値であるとは限りません。</p><p><strong>丸めと表示桁数。</strong>結果は設定で選択した小数点以下桁数に丸められます。丸めにより誤差が生じ、表示値と内部の完全精度の値が異なる場合があります。公差幅に応じた適切な桁数を選択してください。</p><p><strong>単位の選択。</strong>入力に対する正しい単位・カテゴリの選択はご利用者の責任です。本アプリは単位の取り違えを検知できません。</p><p><strong>責任の制限。</strong>適用法が許す最大限の範囲において、当開発者は本アプリの使用または使用不能に起因する直接的・間接的・付随的・結果的損害（不良品、手直し、生産遅延、設備損傷、人身傷害、経済的損失を含むがこれらに限られない）について一切責任を負いません。</p><p><strong>提供の継続性。</strong>iOS のアップデートや端末環境の変化により、予告なくアプリの動作に影響が生じる場合があります。当開発者は予告なくアプリを変更・提供終了する場合があり、それに起因するデータ消失について責任を負いません。</p>"
+      },
+      {
+        id: "law",
+        title: "準拠法・管轄",
+        html: "<p>本ポリシーは日本法に準拠します。本ポリシーに関連して生じる紛争については、当開発者の所在地を管轄する裁判所を第一審の専属的合意管轄裁判所とします。</p>"
+      },
+      {
+        id: "changes",
+        title: "ポリシーの変更について",
+        html: "<p>本ポリシーはアプリの進化に応じて更新されることがあります。改定後のポリシーは本ページに掲載された時点で効力を生じ、ページ上部の発効日も併せて更新されます。</p><p>データを収集していないため、本ポリシーの変更が既存の利用者データに影響を及ぼすことはありません。アプリの動作に実質的な影響を与える変更（アプリ内課金の導入など）については、その変更が利用者に届く前に本ページで公開します。</p>"
+      },
+      {
+        id: "contact",
+        title: "お問い合わせ",
+        html: "<p>ご質問・訂正のご指摘・機能のご要望をお待ちしています。変換係数やリファレンステーブルに誤りを発見された場合はぜひご報告ください。正確性に関するご報告を優先的に対応します。</p><div class='contact-box'><p>ウェブサイト / お問い合わせフォーム：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>メール：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  }
+};
+
+/*
+ * LANG_MAP
+ * ─────────────────────────────────────────────
+ * navigator.languages が返す値（"en-US", "ja-JP" など）を
+ * 翻訳データのキーに変換する対応表。
+ * 言語を追加するときは、この表にも該当のロケールを追加すること。
+ */
+const LANG_MAP = {
+  "en": "en", "en-US": "en", "en-GB": "en", "en-AU": "en", "en-CA": "en",
+  "ja": "ja"
+};
+const SUPPORTED = Object.keys(T);
+const DEFAULT_LANG = "en";   // ★ アプリ本体が英語のため、英語をデフォルトとする
+const STORAGE_KEY = "tr-lang";
+
+/*
+ * detectLang()
+ * ─────────────────────────────────────────────
+ * 表示言語を自動検出する。優先順位：
+ *   1. localStorage の "tr-lang"（ユーザーが選んだ言語を記憶）
+ *   2. navigator.languages を上から順に LANG_MAP で照合
+ *   3. どれも一致しなければ "en"
+ */
+function detectLang() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && SUPPORTED.includes(saved)) return saved;
+  } catch (e) {
+    // プライベートブラウズ等で localStorage が使えない場合は無視して続行
+  }
+  const navLangs = navigator.languages || [navigator.language || DEFAULT_LANG];
+  for (const l of navLangs) {
+    const code = LANG_MAP[l] || LANG_MAP[l.split("-")[0]];
+    if (code && SUPPORTED.includes(code)) return code;
+  }
+  return DEFAULT_LANG;
+}
+
+/*
+ * renderSection(section, index)
+ * ─────────────────────────────────────────────
+ * セクション1つ分のカード HTML を組み立てて返す。
+ * 番号は配列のインデックスから自動採番（index + 1）。
+ * id は英語版のものを使うため、アンカー（#disclaimer）は言語を切り替えても有効。
+ *
+ * ⚠️ XSS 注意：html を innerHTML で直接挿入している。
+ *    翻訳データは開発者が管理する固定テキストのため問題ないが、
+ *    ユーザー入力を混ぜる場合は必ずエスケープすること。
+ */
+function renderSection(section, index) {
+  const num = String(index + 1);
+  return `<section class="policy-section" id="${section.id}">
+    <h2><span class="sec-num">${num}</span><span>${section.title}</span></h2>
+    ${section.html}
+  </section>`;
+}
+
+/*
+ * renderAll(lang)
+ * ─────────────────────────────────────────────
+ * ★ 英語フォールバックの中核。
+ *
+ * 英語版の sections を「正」としてループし、各 id について
+ * 選択言語に同じ id があればそれを、無ければ英語版を使う。
+ * これにより：
+ *   - 翻訳が未完成の言語でも空欄にならない
+ *   - セクションの数・順序・番号が言語をまたいで常に一致する
+ *   - 25言語に増やす際、全訳を待たずに順次公開できる
+ */
+function renderAll(lang) {
+  const master = T[DEFAULT_LANG].sections;
+  const localized = T[lang] ? T[lang].sections : [];
+  const byId = {};
+  localized.forEach(s => { byId[s.id] = s; });
+
+  return master.map((masterSection, i) => {
+    const s = byId[masterSection.id] || masterSection;
+    // id は必ず英語版（＝マスター）のものを使い、アンカーを固定する
+    return renderSection({ id: masterSection.id, title: s.title, html: s.html }, i);
+  }).join("");
+}
+
+/*
+ * applyLang(code, save)
+ * ─────────────────────────────────────────────
+ * ページ全体の表示言語を切り替える。
+ * @param {string}  code - 言語コード（"en" / "ja" …）
+ * @param {boolean} save - true のとき localStorage に保存する
+ *                         （初回の自動検出時は false、ユーザー操作時は true）
+ */
+function applyLang(code, save) {
+  if (!SUPPORTED.includes(code)) code = DEFAULT_LANG;
+  const meta = T[code].meta;
+
+  document.documentElement.lang = code;
+  document.getElementById("hd-title").textContent   = meta.pageTitle;
+  document.getElementById("hd-sub").textContent     = meta.subtitle;
+  document.getElementById("hd-updated").textContent = meta.updatedLabel + ": " + meta.updatedDate;
+  document.getElementById("lang-label").textContent = meta.selectLabel + ":";
+  document.getElementById("ls").value               = code;
+  document.getElementById("content").innerHTML      = renderAll(code);
+  document.title = meta.pageTitle + " – TechRef";
+
+  // フッター（aria-label と法的リンク・著作権表記を表示言語に追従させる）
+  const f = meta.footer;
+  document.getElementById("f-github").setAttribute("aria-label", f.ariaGithub);
+  document.getElementById("f-x").setAttribute("aria-label", f.ariaX);
+  document.getElementById("f-ig").setAttribute("aria-label", f.ariaInstagram);
+  document.getElementById("f-top").setAttribute("aria-label", f.ariaTop);
+  const legal = document.getElementById("f-legal");
+  legal.setAttribute("aria-label", f.ariaLegal);
+  legal.innerHTML = f.legalHtml;
+  // 法的リンクが無い言語（英語など）では、区切り線ごと非表示にする
+  legal.style.display = f.legalHtml ? "" : "none";
+  document.getElementById("f-copy").innerHTML = f.copyHtml;
+
+  if (save) {
+    try { localStorage.setItem(STORAGE_KEY, code); } catch (e) { /* 保存できなくても続行 */ }
+  }
+
+  // #disclaimer 等のアンカー付きで開かれた場合、描画後に改めてスクロールする
+  if (location.hash) {
+    const target = document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView();
+  }
+}
+
+applyLang(detectLang(), false);
+</script>
+</body>
+</html>
