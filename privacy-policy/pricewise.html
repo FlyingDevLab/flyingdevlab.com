@@ -43,6 +43,8 @@
   <style>
     :root {
       --accent:       #0099CC;
+      /* 変更: #0077aa がフッター背景と <option> 背景の2箇所にベタ書きされていたため変数化 */
+      --accent-dark:  #0077aa;
       --accent-light: #EBF7FF;
       --accent-mid:   #BDEAFF;
       --text:         #1a1a1a;
@@ -91,7 +93,7 @@
       padding: 5px 32px 5px 14px; cursor: pointer; min-width: 170px;
     }
     select#ls:focus { outline: 2px solid rgba(255,255,255,.6); }
-    select#ls option { background: #0077aa; color: #fff; }
+    select#ls option { background: var(--accent-dark); color: #fff; } /* 変更: 変数化 */
 
     /* メイン */
     main { max-width: 720px; margin: 0 auto; padding: 24px 20px 64px; }
@@ -126,9 +128,10 @@
 
     /* ── フッター ──────────────────────────── */
     footer {
-      background: #0077aa; color: rgba(255,255,255,.7);
+      /* 変更: 変数化。border-top: none は初期値と同じ宣言のため削除 */
+      background: var(--accent-dark); color: rgba(255,255,255,.7);
       text-align: center; padding: 30px 20px 34px;
-      font-size: .8rem; border-top: none;
+      font-size: .8rem;
     }
     footer a { color: rgba(255,255,255,.88); text-decoration: none; }
     footer a:hover { color: #fff; text-decoration: underline; }
@@ -152,6 +155,9 @@
       gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
     }
     .footer-legal a { font-size: .82rem; }
+    /* 変更: 現在このページでは未使用（下部 F.legalHtml が1項目のみのため）。
+       法的リンクが2項目以上になったとき <span class="footer-legal-sep">|</span> で使う想定。
+       削除せず残しているのは、他ページのフッターとスタイルを揃えるため。 */
     .footer-legal-sep { color: rgba(255,255,255,.35); }
 
     .footer-copy { font-size: .78rem; color: rgba(255,255,255,.62); }
@@ -201,7 +207,25 @@
   </div>
 </header>
 
-<main id="main"><div id="content"></div></main>
+<!--
+本文（#content）は下部の applyLang() が innerHTML で流し込みます。
+変更: JavaScript が無効・またはスクリプトが読み込めなかった場合、
+      ここが空のままになりページが真っ白に見えるため <noscript> を追加しました。
+      表示言語が判定できない状況なので、日本語と英語を併記しています。
+-->
+<main id="main">
+  <noscript>
+    <div class="policy-section">
+      <h2>⚠️ JavaScript</h2>
+      <p>このページの本文は JavaScript で表示しています。ブラウザの設定で JavaScript を有効にしてから再読み込みしてください。</p>
+      <p>This page renders its content with JavaScript. Please enable JavaScript in your browser and reload.</p>
+      <div class="contact-box">
+        <p>📧 <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a></p>
+      </div>
+    </div>
+  </noscript>
+  <div id="content"></div>
+</main>
 
 <!-- フッター：外部SNSリンク・TOPへ戻るリンク・法的リンク・著作権表記
   - 外部SNSリンクにはすべて target="_blank" と rel="noopener noreferrer" を付けています
@@ -316,6 +340,42 @@ function renderFooter(code) {
   document.getElementById('f-copy').innerHTML = f.copyHtml;
 }
 
+/*
+ * LS_KEY / loadLang() / saveLang(code)  ← 変更: 新規追加（不具合修正）
+ * ─────────────────────────────────────────────
+ * localStorage への読み書きを try/catch で包んだヘルパーです。
+ *
+ * 【なぜ必要か】
+ *   以前は detectLang() と applyLang() が localStorage を直接呼んでいました。
+ *   ところが以下の環境では localStorage へのアクセス「そのもの」が例外を投げます。
+ *     - Safari の「すべての Cookie をブロック」設定
+ *     - アプリ内 WebView でストレージが制限されている場合
+ *     - ストレージ容量超過時の setItem（QuotaExceededError）
+ *   detectLang() の中で例外が出ると最終行の applyLang() まで到達できず、
+ *   #content が空のまま = ページが真っ白になります。
+ *   このページはアプリ内リンクからの流入が中心なので、実害の出やすい経路でした。
+ *
+ * 読み取り失敗は null を返して「保存なし」と同じ扱いに、
+ * 書き込み失敗は握りつぶします（保存できなくても表示自体には影響しないため）。
+ */
+const LS_KEY = 'pw-lang';
+
+function loadLang() {
+  try {
+    return localStorage.getItem(LS_KEY);
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveLang(code) {
+  try {
+    localStorage.setItem(LS_KEY, code);
+  } catch (e) {
+    // 保存できなくても表示には影響しないため、何もしない
+  }
+}
+
 const LANG_MAP = {"ja":"ja","en":"en","en-US":"en","en-GB":"en","en-AU":"en","de":"de","de-AT":"de","de-CH":"de","fr":"fr","fr-CA":"fr","fr-BE":"fr","es":"es","es-MX":"es","es-AR":"es","it":"it","pt-BR":"pt-BR","pt":"pt-BR","pt-PT":"pt-BR","ko":"ko","zh-Hans":"zh-Hans","zh-CN":"zh-Hans","zh-SG":"zh-Hans","zh-Hant":"zh-Hant","zh-TW":"zh-Hant","zh-HK":"zh-Hant","zh":"zh-Hans","da":"da","nb":"nb","no":"nb","sv":"sv","fi":"fi","nl":"nl","nl-BE":"nl","pl":"pl","ru":"ru","tr":"tr","th":"th","id":"id","ms":"ms","vi":"vi","fil":"fil","tl":"fil","el":"el","hi":"hi"};
 const SUPPORTED = Object.keys(T);
 
@@ -329,13 +389,15 @@ const SUPPORTED = Object.keys(T);
  *   2. navigator.languages（ブラウザの優先言語リスト）を上から順に LANG_MAP で照合
  *   3. どれも一致しなければ "ja"（デフォルト）
  *
+ * 変更: localStorage の直接呼び出しをやめ loadLang() 経由にしました（理由は loadLang の説明を参照）。
+ *
  * MAKE10 の自動検出との違い:
  *   MAKE10 は localStorage を使わず navigator.language だけで毎回判定します。
  *   このファイルは localStorage でユーザー選択を永続化しているため、
  *   次回アクセス時も同じ言語が表示されます（ユーザー体験の向上）。
  */
 function detectLang() {
-  const saved = localStorage.getItem('pw-lang');
+  const saved = loadLang(); // 変更: try/catch 付きヘルパー経由に
   if (saved && SUPPORTED.includes(saved)) return saved;
   const nav = (navigator.languages || [navigator.language || 'en']);
   for (const l of nav) {
@@ -364,6 +426,40 @@ function renderSection(s) {
 }
 
 /*
+ * PAGE_TITLES（ページタイトルの各言語表記）  ← 変更: applyLang() の内部から外へ切り出し
+ * ─────────────────────────────────────────────
+ * <h1> と <title> に表示する「プライバシーポリシー」の訳語です。
+ *
+ * 【なぜ関数の外に出したのか】
+ *   以前は applyLang() の中で const titles = {...} と定義していました。
+ *   中身は変化しない固定データなのに、言語を切り替えるたびに
+ *   25要素のオブジェクトを作り直していたためです。
+ *   定数として1回だけ作れば十分で、値の所在も探しやすくなります。
+ *
+ * 【なぜ T の meta に入れないのか】
+ *   T は Python スクリプトで自動生成しているため、
+ *   手で追記する項目は生成対象の外（このファイル側）に置いています。
+ *
+ * ⚠️ T に言語を追加したら、ここにも同じ言語コードを追加してください。
+ *    追加を忘れても英語（Privacy Policy）で表示されるため、ページは壊れません。
+ */
+const PAGE_TITLES = {
+  ja: 'プライバシーポリシー',            en: 'Privacy Policy',
+  de: 'Datenschutzrichtlinie',          fr: 'Politique de confidentialité',
+  es: 'Política de privacidad',         it: 'Informativa sulla privacy',
+  'pt-BR': 'Política de Privacidade',   ko: '개인정보 처리방침',
+  'zh-Hans': '隐私政策',                 'zh-Hant': '隱私權政策',
+  da: 'Privatlivspolitik',              nb: 'Personvernerklæring',
+  sv: 'Integritetspolicy',              fi: 'Tietosuojakäytäntö',
+  nl: 'Privacybeleid',                  pl: 'Polityka prywatności',
+  ru: 'Политика конфиденциальности',    tr: 'Gizlilik Politikası',
+  th: 'นโยบายความเป็นส่วนตัว',            id: 'Kebijakan Privasi',
+  ms: 'Dasar Privasi',                  vi: 'Chính sách Quyền riêng tư',
+  fil: 'Patakaran sa Privacy',          el: 'Πολιτική Απορρήτου',
+  hi: 'गोपनीयता नीति'
+};
+
+/*
  * applyLang(code, save)
  * ─────────────────────────────────────────────
  * ページ全体の表示言語を切り替える関数です。
@@ -386,35 +482,38 @@ function renderSection(s) {
 function applyLang(code, save) {
   if (!SUPPORTED.includes(code)) code = 'ja';
   const d = T[code];
-  document.documentElement.lang = code;
-  document.getElementById('hd-title').textContent = d.sections[0].title !== '📋'
-    ? d.meta.updatedLabel.includes('Last') ? 'Privacy Policy' : 'プライバシーポリシー'
-    : 'プライバシーポリシー';
 
-  // タイトルはセクション0のタイトルではなく言語ごとのキーワードで判定
-  const titles = {
-    en:'Privacy Policy', de:'Datenschutzrichtlinie', fr:'Politique de confidentialité',
-    es:'Política de privacidad', it:'Informativa sulla privacy',
-    'pt-BR':'Política de Privacidade', ko:'개인정보 처리방침',
-    'zh-Hans':'隐私政策', 'zh-Hant':'隱私權政策', da:'Privatlivspolitik',
-    nb:'Personvernerklæring', sv:'Integritetspolicy', fi:'Tietosuojakäytäntö',
-    nl:'Privacybeleid', pl:'Polityka prywatności', ru:'Политика конфиденциальности',
-    tr:'Gizlilik Politikası', th:'นโยบายความเป็นส่วนตัว',
-    id:'Kebijakan Privasi', ms:'Dasar Privasi', vi:'Chính sách Quyền riêng tư',
-    fil:'Patakaran sa Privacy', el:'Πολιτική Απορρήτου', hi:'गोपनीयता नीति', ja:'プライバシーポリシー'
-  };
-  document.getElementById('hd-title').textContent = titles[code] || 'Privacy Policy';
+  // 変更: h1 と <title> で同じ値を使うため一度だけ取り出す。
+  //       以前は <title> 側だけフォールバック（|| 'Privacy Policy'）が抜けており、
+  //       PAGE_TITLES に無い言語では "undefined – PriceWise" になる可能性がありました。
+  const pageTitle = PAGE_TITLES[code] || 'Privacy Policy';
+
+  document.documentElement.lang = code;
+  document.getElementById('hd-title').textContent = pageTitle;
   document.getElementById('hd-updated').textContent =
     d.meta.updatedLabel + ': ' + d.meta.updatedDate;
   document.getElementById('lang-label').textContent = d.meta.selectLabel + ':';
   document.getElementById('ls').value = code;
   document.getElementById('content').innerHTML = d.sections.map(renderSection).join('');
-  document.title = titles[code] + ' – PriceWise';
+  document.title = pageTitle + ' – PriceWise';
   renderFooter(code);
-  if (save) localStorage.setItem('pw-lang', code);
+  if (save) saveLang(code); // 変更: try/catch 付きヘルパー経由に
 }
 
-applyLang(detectLang(), false);
+/*
+ * 初期表示
+ * ─────────────────────────────────────────────
+ * 変更: try/catch で包みました。
+ *   このページは本文をすべて JS で描画するため、ここで例外が出ると
+ *   ヘッダーとフッターだけの真っ白なページになってしまいます。
+ *   万一の場合でも日本語で最低限の表示を試みます。
+ */
+try {
+  applyLang(detectLang(), false);
+} catch (e) {
+  console.error('[PriceWise Privacy] 言語の初期化に失敗しました:', e);
+  applyLang('ja', false);
+}
 </script>
 </body>
 </html>

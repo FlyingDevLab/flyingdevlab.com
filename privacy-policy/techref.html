@@ -57,6 +57,13 @@
       --card:     #ffffff;
       --border:   #dfe4e9;
       --r:        10px;
+      /* 変更: 本文中に直書きされていた色を :root に集約しました。
+         理由: ブランドカラーを見直すとき、この1箇所だけを触れば済むようにするため。
+               （変更前は a / .lead-note p / #disclaimer / .contact-box に散らばっていました） */
+      --link:       #b8551a;  /* 本文リンクの文字色（--accent より暗く、白背景でのコントラストを確保） */
+      --lead-text:  #8a3d0c;  /* .lead-note の文字色（--accent-soft の上で読める濃さ） */
+      --lead-line:  #f0c9a8;  /* 免責事項カードの枠線色 */
+      --box-bg:     #f7f9fa;  /* .contact-box の背景色 */
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -69,7 +76,8 @@
       font-size: 16px;
       -webkit-text-size-adjust: 100%;
     }
-    a { color: #b8551a; text-decoration: underline; text-underline-offset: 2px; }
+    /* 変更: #b8551a → var(--link) */
+    a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
     a:hover { color: var(--accent); }
 
     .skip-link {
@@ -183,9 +191,13 @@
       border-radius: 0 6px 6px 0;
       padding: 14px 18px; margin: 4px 0 14px;
     }
+    /* 変更: !important を3つ削除しました。
+       理由: 打ち消したい相手（.policy-section p）と詳細度が同じ「クラス1つ＋要素1つ」であり、
+             かつこのルールの方が後ろに書かれているため、CSSの後勝ちルールで既に勝っています。
+             !important は本当に必要な場面（下の footer 参照）まで温存するのが安全です。 */
     .zero-data p {
-      color: #fff !important; font-weight: 600;
-      font-size: .97rem !important; margin: 0 !important;
+      color: #fff; font-weight: 600;
+      font-size: .97rem; margin: 0;
     }
 
     /* 免責事項の導入文 */
@@ -195,19 +207,28 @@
       border-radius: 0 6px 6px 0;
       padding: 13px 18px; margin: 4px 0 16px;
     }
+    /* 変更: !important を3つ削除（理由は .zero-data p と同じ）／ #8a3d0c → var(--lead-text) */
     .lead-note p {
-      color: #8a3d0c !important; font-weight: 600;
-      margin: 0 !important; font-size: .95rem !important;
+      color: var(--lead-text); font-weight: 600;
+      margin: 0; font-size: .95rem;
     }
 
     /* 免責事項カード自体を少し強調 */
-    #disclaimer { border-color: #f0c9a8; }
+    /* 変更: #f0c9a8 → var(--lead-line) */
+    #disclaimer { border-color: var(--lead-line); }
 
+    /* 変更: #f7f9fa → var(--box-bg) */
     .contact-box {
-      background: #f7f9fa; border: 1px solid var(--border);
+      background: var(--box-bg); border: 1px solid var(--border);
       border-radius: 6px; padding: 12px 16px; margin-top: 12px;
     }
-    .contact-box p { margin: 3px 0 !important; color: var(--text) !important; }
+    /* 変更: !important を2つ削除。ただしこの1行だけは事情が違います。
+       .contact-box の2つ目の <p> は「親の最後の子」なので .policy-section p:last-child
+       （クラス1＋要素1＋疑似クラス1）にも一致し、そちらの方が詳細度が上でした。
+       そのため単に !important を外すと下マージン3pxが消えてしまいます。
+       セレクタの先頭に .policy-section を足して詳細度を上げることで、
+       !important を使わずに以前とまったく同じ表示を保っています。 */
+    .policy-section .contact-box p { margin: 3px 0; color: var(--text); }
 
     /* ── フッター ──────────────────────────── */
     footer {
@@ -226,10 +247,14 @@
     .footer-links a { font-size: .85rem; }
     .x-icon { font-style: normal; }
 
-    .footer-top {
+    /* 変更: セレクタを .footer-top → footer a.footer-top にして !important を削除しました。
+       ここは上の3箇所とは逆で、打ち消したい相手（footer a）の方が詳細度が上だったため
+       !important が実際に効いていた箇所です。
+       セレクタに footer を足して詳細度を同じにすれば、後勝ちルールで正しく上書きできます。 */
+    footer a.footer-top {
       display: inline-block; font-size: .78rem;
       letter-spacing: .06em; margin-bottom: 18px;
-      color: rgba(255,255,255,.6) !important;
+      color: rgba(255,255,255,.6);
     }
 
     .footer-legal {
@@ -237,7 +262,21 @@
       gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
     }
     .footer-legal a { font-size: .82rem; }
+    /* NOTE: .footer-legal-sep は現在未使用（日本語版の法的リンクが1本だけのため区切りが不要）。
+       リンクが2本以上になったとき使うので残置しています。 */
     .footer-legal-sep { color: rgba(255,255,255,.28); }
+
+    /* 変更: JavaScript が無効な環境向けの案内ボックスを追加しました。
+       このページは本文をすべてJSで描画するため、JS無効だと見出しだけの白紙になります。
+       アプリのポリシーページが読めない状態は避けたいので、最低限の案内と連絡先を出します。 */
+    .noscript-note {
+      background: var(--card); border: 1px solid var(--lead-line);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--r); padding: 20px 22px;
+      color: var(--text-sub); font-size: .95rem;
+    }
+    .noscript-note p { margin-bottom: 10px; }
+    .noscript-note p:last-child { margin-bottom: 0; }
 
     .footer-copy { font-size: .78rem; color: rgba(255,255,255,.55); }
 
@@ -266,15 +305,35 @@
   </div>
   <div class="lang-bar hd-inner">
     <label for="ls" id="lang-label">Language:</label>
-    <!-- 言語を追加するときは、この <option> と下の T オブジェクトに1つずつ足すだけ -->
-    <select id="ls" onchange="applyLang(this.value, true)">
-      <option value="en">English</option>
-      <option value="ja">日本語</option>
-    </select>
+    <!-- 変更1: <option> の直書きをやめ、下の T オブジェクトの meta.langName から自動生成するようにしました。
+           変更前は言語を追加するたびに「T に足す」「<option> に足す」の2箇所を直す必要があり、
+           25言語まで増やすと片方だけ忘れる事故が起きます。
+           これで追記箇所は T の1箇所だけになりました。
+           （meta.langName は変更前は定義されているだけで一度も使われていませんでした）
+         変更2: onchange="..." のインラインイベント指定を削除し、JS側の addEventListener に移しました。
+           理由は2つあります。
+             ・HTML（構造）とJS（振る舞い）を分離するのが定石であること
+             ・インラインの onchange は Content-Security-Policy で script-src に
+               'unsafe-inline' を許可しないと動かないため、将来CSPを締めるときの障害になること -->
+    <select id="ls"></select>
   </div>
 </header>
 
-<main id="main"><div id="content"></div></main>
+<main id="main">
+  <!-- 変更: <noscript> を追加しました。
+       <noscript> の中身は、JavaScript が無効なときだけブラウザが表示します。
+       このページは本文を全文JSで描画するため、JS無効だと完全な白紙になってしまいます。
+       App Store の審査でもポリシーページが読めることは前提なので、
+       最低限「連絡先」と「JSを有効にしてほしい」ことだけは静的HTMLで伝えます。
+       文言は日英併記です（この部分だけは言語切替の対象外になるため）。 -->
+  <noscript>
+    <div class="noscript-note">
+      <p lang="en"><strong>JavaScript is required to display this page.</strong> Please enable JavaScript in your browser, or contact us at <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a> and we will send you the full text of this policy.</p>
+      <p lang="ja"><strong>このページの表示には JavaScript が必要です。</strong>ブラウザの JavaScript を有効にしてください。有効にできない場合は <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a> までご連絡いただければ、本ポリシーの全文をお送りします。</p>
+    </div>
+  </noscript>
+  <div id="content"></div>
+</main>
 
 <!-- フッター：外部SNSリンク・TOPへ戻るリンク・法的リンク・著作権表記
   - 外部SNSリンクにはすべて target="_blank" と rel="noopener noreferrer" を付けています
@@ -287,17 +346,25 @@
 -->
 <footer>
   <div class="footer-links">
-    <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-github">GitHub</a>
-    <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-x">
+    <!-- 変更: 静的な aria-label（英語）を追加しました。
+         中の <span> は aria-hidden="true" なので、aria-label が無いあいだ
+         このリンクはスクリーンリーダーから見て「名前の無いリンク」になります。
+         applyLang() が表示言語に応じて上書きしますが、JS実行前やJS無効時に
+         無名リンクが残らないよう、HTML側にも初期値を持たせておきます。 -->
+    <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-github"
+       aria-label="GitHub (opens in a new tab)">GitHub</a>
+    <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-x"
+       aria-label="X, formerly Twitter (opens in a new tab)">
       <span class="x-icon" aria-hidden="true">𝕏</span>
     </a>
-    <a href="https://www.instagram.com/flyingdevlab/" target="_blank" rel="noopener noreferrer" id="f-ig">
+    <a href="https://www.instagram.com/flyingdevlab/" target="_blank" rel="noopener noreferrer" id="f-ig"
+       aria-label="Instagram (opens in a new tab)">
       <span class="x-icon" aria-hidden="true">Instagram</span>
     </a>
   </div>
 
   <!-- ページ先頭へ戻るリンク。ポリシーページは縦に長くなるため有効。 -->
-  <a href="#top" class="footer-top" id="f-top">↑ TOP</a>
+  <a href="#top" class="footer-top" id="f-top" aria-label="Back to top of page">↑ TOP</a>
 
   <!-- 法的リンク。日本語表示のときのみ特定商取引法の項目が加わります。 -->
   <nav class="footer-legal" id="f-legal"></nav>
@@ -306,6 +373,22 @@
 </footer>
 
 <script>
+/* 変更: スクリプト全体を即時実行関数（IIFE）で包み、"use strict" を付けました。
+   変更前は T / applyLang などがすべて window（グローバル）に置かれていました。
+   これは <select onchange="applyLang(...)"> から呼ぶために必要だったのですが、
+   その onchange を addEventListener に移したので、外へ公開する必要がなくなりました。
+
+   IIFE（Immediately Invoked Function Expression）とは：
+     (function () { ... })();
+   と書くことで「定義した直後に一度だけ実行される関数」を作る書き方です。
+   関数の中で宣言した変数は外から見えないため、他のスクリプトと
+   名前がぶつかる事故を防げます。index.html / ja/index.html と同じ書き方に揃えました。
+
+   "use strict"（厳格モード）とは：
+   うっかりミス（宣言し忘れた変数への代入など）をエラーとして知らせてくれるモードです。 */
+(function () {
+"use strict";
+
 /*
  * T（翻訳データオブジェクト）
  * ─────────────────────────────────────────────
@@ -332,7 +415,7 @@ const T = {
       pageTitle: "Privacy Policy & Disclaimer",
       subtitle: "TechRef stores everything on your device and sends nothing anywhere. This page explains exactly what that means, and the limits of how the App's output should be used.",
       updatedLabel: "Effective",
-      updatedDate: "August 2, 2026",
+      updatedDate: "August 13, 2026",
       /*
        * footer
        * ───────────────────────────────────────
@@ -358,7 +441,14 @@ const T = {
       {
         id: "introduction",
         title: "Introduction",
-        html: "<p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion and engineering reference tool for technical professionals. It is built on a simple principle: your data belongs to you, and it stays on your device.</p><p>Please read this page before using the App. Section 10 (Disclaimer) describes important limitations on how the App's output should be used.</p>"
+        /* 変更: 「Section 10 (Disclaimer)」という章番号の直書きをやめ、
+                 #disclaimer へのアンカーリンクに置き換えました。
+           理由: 章番号は配列の並び順から自動採番される仕組みなので、
+                 このセクションより前に1つ追加した瞬間、この本文の「10」だけが
+                 実際の番号とズレます（法的文書としては致命的です）。
+                 id によるリンクなら、順番が変わっても指し先は壊れません。
+           ※ 表示される文章そのものが変わる唯一の箇所です。文言はご確認ください。 */
+        html: "<p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion and engineering reference tool for technical professionals. It is built on a simple principle: your data belongs to you, and it stays on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section describes important limitations on how the App's output should be used.</p>"
       },
       {
         id: "storage",
@@ -368,7 +458,7 @@ const T = {
       {
         id: "network",
         title: "Network Activity",
-        html: "<p>TechRef does not connect to the internet during normal use. It operates entirely offline.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data. The App requires no network permission to function.</p><p>The only network activity that can occur is when you deliberately tap the Support link in Settings, which opens this website in your browser. That is a normal web request handled by your browser, not by the App.</p>"
+        html: "<p>TechRef does not connect to the internet during normal use. It operates entirely offline.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data. The App requires no network permission to function.</p><p>The only network activity that can occur is when you deliberately tap the Support link in Settings, which opens this website in your browser. That is a normal web request handled by your browser, not by the App.</p><p>Separately, if you have chosen to share diagnostic data with app developers in your iOS settings, Apple may provide the Developer with anonymized, aggregated crash reports and usage statistics. This is a feature of the operating system, managed entirely by Apple. The App itself sends nothing, and this data does not identify you.</p>"
       },
       {
         id: "icloud",
@@ -430,7 +520,7 @@ const T = {
       pageTitle: "プライバシーポリシー・免責事項",
       subtitle: "TechRef はすべてのデータを端末内に保存し、外部へ送信しません。本ページでは、その具体的な内容と、アプリの出力を扱ううえでの制限について説明します。",
       updatedLabel: "発効日",
-      updatedDate: "2026年8月2日",
+      updatedDate: "2026年8月13日",
       footer: {
         ariaGithub: "GitHub（新しいタブで開きます）",
         ariaX: "X（旧Twitter）（新しいタブで開きます）",
@@ -445,7 +535,8 @@ const T = {
       {
         id: "introduction",
         title: "はじめに",
-        html: "<p>本ページは、空飛ぶ研究室（Flying Dev Lab）が開発した iOS アプリ <strong>TechRef</strong> のプライバシーポリシーおよび免責事項です。</p><p>TechRef は技術者向けの単位変換・エンジニアリングリファレンスツールです。「データは利用者のものであり、端末内にとどまる」という単純な原則に基づいて設計されています。</p><p>本アプリをご利用の前に本ページをお読みください。第10章（免責事項）には、本アプリの出力の取り扱いに関する重要な制限が記載されています。</p>"
+        /* 変更: 「第10章（免責事項）」の章番号直書きをアンカーリンクに置換（理由は英語版と同じ） */
+        html: "<p>本ページは、空飛ぶ研究室（Flying Dev Lab）が開発した iOS アプリ <strong>TechRef</strong> のプライバシーポリシーおよび免責事項です。</p><p>TechRef は技術者向けの単位変換・エンジニアリングリファレンスツールです。「データは利用者のものであり、端末内にとどまる」という単純な原則に基づいて設計されています。</p><p>本アプリをご利用の前に本ページをお読みください。<a href='#disclaimer'>免責事項</a>の章には、本アプリの出力の取り扱いに関する重要な制限が記載されています。</p>"
       },
       {
         id: "storage",
@@ -455,7 +546,7 @@ const T = {
       {
         id: "network",
         title: "ネットワーク通信",
-        html: "<p>TechRef は通常の使用においてインターネットに接続しません。完全にオフラインで動作します。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、データを送信するサードパーティライブラリのいずれも使用していません。本アプリの動作にネットワーク権限は不要です。</p><p>唯一発生しうる通信は、設定画面の Support リンクをご自身でタップし、ブラウザで本サイトを開いた場合のみです。これはブラウザによる通常の Web アクセスであり、アプリによる通信ではありません。</p>"
+        html: "<p>TechRef は通常の使用においてインターネットに接続しません。完全にオフラインで動作します。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、データを送信するサードパーティライブラリのいずれも使用していません。本アプリの動作にネットワーク権限は不要です。</p><p>唯一発生しうる通信は、設定画面の Support リンクをご自身でタップし、ブラウザで本サイトを開いた場合のみです。これはブラウザによる通常の Web アクセスであり、アプリによる通信ではありません。</p><p>なお、iOS の設定で診断データの共有を有効にされている場合、Apple が匿名化・集計したクラッシュ情報や利用統計を当開発者に提供することがあります。これは Apple が管理する OS の機能です。アプリ自体は何も送信せず、これらの情報から個人が特定されることはありません。</p>"
       },
       {
         id: "icloud",
@@ -518,8 +609,9 @@ const T = {
  * 翻訳データのキーに変換する対応表。
  * 言語を追加するときは、この表にも該当のロケールを追加すること。
  */
+/* 変更: キーをすべて小文字表記に統一しました（照合側も小文字化しています。detectLang 参照）。 */
 const LANG_MAP = {
-  "en": "en", "en-US": "en", "en-GB": "en", "en-AU": "en", "en-CA": "en",
+  "en": "en", "en-us": "en", "en-gb": "en", "en-au": "en", "en-ca": "en",
   "ja": "ja"
 };
 const SUPPORTED = Object.keys(T);
@@ -543,7 +635,15 @@ function detectLang() {
   }
   const navLangs = navigator.languages || [navigator.language || DEFAULT_LANG];
   for (const l of navLangs) {
-    const code = LANG_MAP[l] || LANG_MAP[l.split("-")[0]];
+    /* 変更: 照合前に小文字化するようにしました。
+       LANG_MAP のキーは "en-us" のような小文字ですが、navigator.languages が返す値は
+       ブラウザによって "en-US" のように大文字が混ざります。
+       変更前は "en-US" が LANG_MAP["en-US"] に一致していた（表に大文字で書いてあった）ため
+       たまたま動いていましたが、25言語へ増やすときに表記ゆれで取りこぼす原因になります。
+       「表のキーは小文字で書く・照合時も小文字にする」と決めておけば事故が起きません。
+       なお地域コード付きが表に無くても、"-" の前（"en"）で再照合するので拾えます。 */
+    const key = String(l).toLowerCase();
+    const code = LANG_MAP[key] || LANG_MAP[key.split("-")[0]];
     if (code && SUPPORTED.includes(code)) return code;
   }
   return DEFAULT_LANG;
@@ -594,14 +694,23 @@ function renderAll(lang) {
 }
 
 /*
- * applyLang(code, save)
+ * applyLang(code, options)
  * ─────────────────────────────────────────────
  * ページ全体の表示言語を切り替える。
- * @param {string}  code - 言語コード（"en" / "ja" …）
- * @param {boolean} save - true のとき localStorage に保存する
- *                         （初回の自動検出時は false、ユーザー操作時は true）
+ * @param {string}  code    - 言語コード（"en" / "ja" …）
+ * @param {Object}  options
+ * @param {boolean} options.save     - true のとき localStorage に保存する
+ * @param {boolean} options.jumpHash - true のとき URL のアンカーへスクロールする
+ *
+ * 変更: 引数を boolean 1個から options オブジェクトに変えました。
+ *   変更前は「保存する＝ユーザー操作」「保存しない＝初回表示」という前提で
+ *   引数1つを2つの意味に使っており、下のスクロール処理と絡んで不具合の原因になっていました。
+ *   （詳細は関数末尾の変更コメントを参照）
+ *   呼び出し側で applyLang("ja", { save: true }) と書けるようにすると、
+ *   true / false が何を指すのかがコードを読むだけで分かります。
  */
-function applyLang(code, save) {
+function applyLang(code, options) {
+  const opts = options || {};
   if (!SUPPORTED.includes(code)) code = DEFAULT_LANG;
   const meta = T[code].meta;
 
@@ -627,18 +736,60 @@ function applyLang(code, save) {
   legal.style.display = f.legalHtml ? "" : "none";
   document.getElementById("f-copy").innerHTML = f.copyHtml;
 
-  if (save) {
+  if (opts.save) {
     try { localStorage.setItem(STORAGE_KEY, code); } catch (e) { /* 保存できなくても続行 */ }
   }
 
-  // #disclaimer 等のアンカー付きで開かれた場合、描画後に改めてスクロールする
-  if (location.hash) {
+  /* #disclaimer 等のアンカー付きで開かれた場合、描画後に改めてスクロールする。
+     変更: 実行条件に opts.jumpHash を追加しました。【今回見つかった不具合の修正】
+       変更前はこの処理が applyLang() を呼ぶたびに走っていました。
+       つまりアプリの Settings から techref.html#disclaimer を開いた読者が、
+       途中で言語を切り替えると、読んでいた位置を無視して免責事項の先頭まで
+       強制的に引き戻されてしまいます。
+       アンカーへのジャンプが必要なのはページを開いた最初の1回だけなので、
+       初期化時のみ true を渡すようにしました。 */
+  if (opts.jumpHash && location.hash) {
     const target = document.getElementById(location.hash.slice(1));
     if (target) target.scrollIntoView();
   }
 }
 
-applyLang(detectLang(), false);
+/*
+ * init()
+ * ─────────────────────────────────────────────
+ * 変更: 初期化処理を関数にまとめました。やっていることは3つです。
+ *   1. <select> の <option> を T の meta.langName から組み立てる
+ *      → 言語追加時に HTML を触らなくてよくなる（HTML側の変更コメントも参照）
+ *   2. <select> の change イベントに applyLang を登録する
+ *      → HTML の onchange="..." を廃止（CSP対策・構造と振る舞いの分離）
+ *   3. 表示言語を決めて初回描画する（このときだけアンカーへジャンプする）
+ */
+function init() {
+  const sel = document.getElementById("ls");
+
+  // 1. <option> を生成する。
+  //    createElement + textContent を使うのは、言語名に < > & 等が含まれても
+  //    HTMLとして解釈されない（＝安全に文字として表示される）ためです。
+  SUPPORTED.forEach(function (code) {
+    const opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = T[code].meta.langName;
+    sel.appendChild(opt);
+  });
+
+  // 2. 言語が選ばれたら保存する。ユーザー操作なので save は true、
+  //    読んでいる位置を動かしたくないので jumpHash は false。
+  sel.addEventListener("change", function () {
+    applyLang(sel.value, { save: true, jumpHash: false });
+  });
+
+  // 3. 初回描画。自動検出結果を保存し直す必要はないので save は false。
+  //    アンカー付きURLで開かれている可能性があるので jumpHash だけ true。
+  applyLang(detectLang(), { save: false, jumpHash: true });
+}
+
+init();
+})();
 </script>
 </body>
 </html>
