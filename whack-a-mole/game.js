@@ -542,10 +542,32 @@ function updateScoreDisplay() {
  * localStorageからハイスコアを読み込む
  * Load high score from localStorage
  * @returns {number} 保存されているハイスコア / Saved high score
+ *
+ * 変更: localStorage へのアクセスを try/catch で包みました。
+ *
+ * 理由: 一部の環境では localStorage を「読む」どころか、
+ * localStorage というプロパティに触れた瞬間に例外が投げられます。
+ *   ・Cookie を完全にブロックする設定のブラウザ
+ *   ・サードパーティ Cookie が禁止された iframe の中
+ *   ・アプリ内ブラウザ（WebView）の一部
+ * 例外を捕まえないと、その時点でスクリプト全体が停止します。
+ * ゲームは起動せず、画面は真っ白のまま何も反応しなくなります。
+ *
+ * ハイスコアは「あれば嬉しい」機能であって、
+ * ゲームが遊べることのほうが大切です。
+ * そこで読み込みに失敗した場合は 0 を返し、
+ * ハイスコアなしの状態で普通に遊べるようにしています。
+ * これを「グレースフルデグラデーション（優雅な劣化）」と呼びます。
+ * 壊れて止まるのではなく、機能を減らして動き続ける設計です。
  */
 function loadHighScore() {
-  const saved = localStorage.getItem(HIGHSCORE_KEY);
-  return saved ? parseInt(saved, 10) : 0;
+  try {
+    const saved = localStorage.getItem(HIGHSCORE_KEY);
+    return saved ? parseInt(saved, 10) : 0;
+  } catch (e) {
+    /* 読めない環境では 0 として扱い、ゲーム本体は動かし続ける */
+    return 0;
+  }
 }
 
 /**
@@ -557,7 +579,25 @@ function loadHighScore() {
 function checkAndSaveHighScore(currentScore) {
   const prev = loadHighScore();
   if (currentScore > prev) {
-    localStorage.setItem(HIGHSCORE_KEY, String(currentScore));
+    /* 変更: 保存を try/catch で包みました。
+     *
+     * 理由その1: 読み込みと同じく、環境によっては setItem 自体が例外を投げます。
+     * 理由その2: Safari のプライベートブラウズなど、
+     *   読み込みはできても書き込みだけが拒否される環境があります
+     *   （保存容量が 0 に設定されているため QuotaExceededError が発生する）。
+     *   読み込み側だけ対策しても、ゲーム終了時にここで落ちます。
+     *   結果、リザルト画面が表示されず遊べないゲームになります。
+     *
+     * 保存に失敗しても return true はそのまま返します。
+     * 「今回のプレイでの最高記録」であることに変わりはなく、
+     * 新記録の演出は見せてあげたいからです。
+     * 次回起動時に記録が残っていないだけで、遊ぶ体験は損なわれません。
+     */
+    try {
+      localStorage.setItem(HIGHSCORE_KEY, String(currentScore));
+    } catch (e) {
+      /* 保存できなくても続行する（記録は今回のセッション限りになる） */
+    }
     return true; // 新記録 / New high score
   }
   return false;

@@ -383,6 +383,70 @@ const staticWalls = [
 
 
 // ╔══════════════════════════════════════════════════════╗
+// ║  4.5 ハイスコアの保存・読み込み（HIGH SCORE I/O）    ║
+// ╚══════════════════════════════════════════════════════╝
+/*
+ * 変更: localStorage への読み書きを、この2つの関数に集約した。
+ *
+ * 【なぜ直接呼んではいけないのか】
+ * 以前は状態変数の宣言でこう書いていた。
+ *
+ *   let hiScore = parseInt(localStorage.getItem('fdl_pinball_hi') || '0', 10);
+ *
+ * 一見すると問題なさそうだが、これは関数の外、
+ * つまり「トップレベル」で実行される。
+ * そして環境によっては、localStorage に触れた瞬間に例外が投げられる。
+ *   ・Cookie を完全にブロックする設定のブラウザ
+ *   ・サードパーティ Cookie が禁止された iframe の中
+ *   ・アプリ内ブラウザ（WebView）の一部
+ *
+ * トップレベルで例外が起きると、そこから下のコードは
+ * 「一行も実行されない」。関数の定義すら行われないため、
+ * ボタンを押しても何も起こらず、画面は真っ白なまま止まる。
+ * ハイスコアという“おまけ”の機能のために、ゲーム全体が死ぬ。
+ *
+ * try/catch で包めば、例外はその場で受け止められ、
+ * 後続の処理はそのまま続く。
+ * 失敗したときは 0 を返し、ハイスコアなしの状態で普通に遊べる。
+ * これを「グレースフルデグラデーション（優雅な劣化）」と呼ぶ。
+ * 壊れて止まるのではなく、機能を減らして動き続ける設計のこと。
+ */
+
+/**
+ * 保存されているハイスコアを読み込む。読めない環境では 0 を返す。
+ * キー: 'fdl_pinball_hi'。存在しない場合は '0' をパースして 0 にする。
+ * @returns {number}
+ */
+function loadHiScore() {
+  try {
+    return parseInt(localStorage.getItem('fdl_pinball_hi') || '0', 10);
+  } catch (e) {
+    return 0;  // 読めない環境ではハイスコアなしとして扱う
+  }
+}
+
+/**
+ * ハイスコアを保存する。保存できない環境では何もせず、そのまま続行する。
+ * localStorage はドメイン単位で保存され、ページを閉じても残る。
+ *
+ * 読み込みと分けて try/catch を書いている理由：
+ * Safari のプライベートブラウズなど、「読めるが書けない」環境がある。
+ * 保存容量が 0 に設定されているため、setItem だけが例外を投げる。
+ * 読み込み側だけ対策しても、ゲーム終了時にここで落ちてしまい、
+ * リザルト画面が表示されないゲームになる。
+ *
+ * @param {number} value - 保存するスコア
+ */
+function saveHiScore(value) {
+  try {
+    localStorage.setItem('fdl_pinball_hi', value);
+  } catch (e) {
+    /* 保存できなくても続行する（記録は今回のセッション限りになる） */
+  }
+}
+
+
+// ╔══════════════════════════════════════════════════════╗
 // ║  5. 状態変数（STATE）                                ║
 // ╚══════════════════════════════════════════════════════╝
 // ゲーム実行中に変化する値（ミュータブルな状態）をここで宣言する。
@@ -397,9 +461,8 @@ let displayScore = 0;          // HUD に表示するスコア（カウントア
 let ballsLeft = MAX_BALLS;  // 残りボール数（0 になるとゲーム終了）
 let running   = false;      // ゲームループが動いているか。false のとき update() をスキップ。
 let draining  = false;      // ボールが消失処理中か。二重処理を防ぐフラグ。
-let hiScore   = parseInt(localStorage.getItem('fdl_pinball_hi') || '0', 10);
-// ハイスコアをブラウザの localStorage から読み込む。
-// キー: 'fdl_pinball_hi'。存在しない場合は '0' をパースして 0 にする。
+let hiScore   = loadHiScore();
+// 変更: 直接呼び出しをやめ、try/catch 付きヘルパー経由に。
 let rafId     = null;  // requestAnimationFrame の ID。cancelAnimationFrame に使う。
 let lastTs    = 0;     // 前フレームのタイムスタンプ（ms）。dt（フレーム間隔）計算に使う。
 
@@ -1240,9 +1303,8 @@ function endGame() {
   const isNew = score > hiScore;
   if (isNew) {
     hiScore = score;
-    localStorage.setItem('fdl_pinball_hi', hiScore);
-    // ブラウザの localStorage に新しいハイスコアを永続保存する。
-    // localStorage はドメイン単位で保存され、ページを閉じても残る。
+    saveHiScore(hiScore);
+    // 変更: 直接呼び出しをやめ、try/catch 付きヘルパー経由に。
   }
 
   // リザルト画面の各要素にスコアを書き込む

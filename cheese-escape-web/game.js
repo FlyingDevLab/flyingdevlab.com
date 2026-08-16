@@ -67,11 +67,72 @@ const btnRetry          = document.getElementById('btn-retry');
 const btnTop            = document.getElementById('btn-top');
 
 // ────────────────────────────────────────────────────────────────
+// ■ ハイスコアの保存・読み込み
+// ────────────────────────────────────────────────────────────────
+/*
+ * 変更: localStorage への読み書きを、この2つの関数に集約しました。
+ *
+ * 【なぜ直接呼んではいけないのか】
+ * 以前はこう書いていました。
+ *
+ *   let highScore = parseInt(localStorage.getItem('cheeseEscape_hi') || '0', 10);
+ *
+ * 一見すると問題なさそうですが、これはファイルの上のほう、
+ * つまり「トップレベル」で実行されます。
+ * そして環境によっては、localStorage に触れた瞬間に例外が投げられます。
+ *   ・Cookie を完全にブロックする設定のブラウザ
+ *   ・サードパーティ Cookie が禁止された iframe の中
+ *   ・アプリ内ブラウザ（WebView）の一部
+ *
+ * トップレベルで例外が起きると、そこから下のコードは
+ * 「一行も実行されません」。関数の定義すら行われないため、
+ * ボタンを押しても何も起こらず、画面は真っ白なまま止まります。
+ * ハイスコアという“おまけ”の機能のために、ゲーム全体が死にます。
+ *
+ * try/catch で包めば、例外はその場で受け止められ、
+ * 後続の処理はそのまま続きます。
+ * 失敗したときは 0 を返し、ハイスコアなしの状態で普通に遊べます。
+ * これを「グレースフルデグラデーション（優雅な劣化）」と呼びます。
+ * 壊れて止まるのではなく、機能を減らして動き続ける設計です。
+ */
+
+/**
+ * 保存されているハイスコアを読み込む。読めない環境では 0 を返す。
+ * @returns {number}
+ */
+function loadHighScore() {
+  try {
+    return parseInt(localStorage.getItem('cheeseEscape_hi') || '0', 10);
+  } catch (e) {
+    return 0;  // 読めない環境ではハイスコアなしとして扱う
+  }
+}
+
+/**
+ * ハイスコアを保存する。保存できない環境では何もせず、そのまま続行する。
+ *
+ * 読み込みと分けて try/catch を書いている理由：
+ * Safari のプライベートブラウズなど、「読めるが書けない」環境があります。
+ * 保存容量が 0 に設定されているため、setItem だけが例外を投げます。
+ * 読み込み側だけ対策しても、ゲームオーバー時にここで落ちてしまい、
+ * リザルト画面が表示されないゲームになります。
+ *
+ * @param {number} value - 保存するスコア
+ */
+function saveHighScore(value) {
+  try {
+    localStorage.setItem('cheeseEscape_hi', value);
+  } catch (e) {
+    /* 保存できなくても続行する（記録は今回のセッション限りになる） */
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
 // ■ ゲーム状態変数
 // ────────────────────────────────────────────────────────────────
 let state          = 'playing';
 let score          = 0;
-let highScore      = parseInt(localStorage.getItem('cheeseEscape_hi') || '0', 10);
+let highScore      = loadHighScore();  // 変更: 直接呼び出しをやめ、try/catch 付きヘルパー経由に
 let isNewRecord    = false;
 let deliveredTimer = 0;
 let grid           = [];
@@ -238,7 +299,7 @@ function triggerGameOver() {
   isNewRecord = score > highScore;
   if (isNewRecord) {
     highScore = score;
-    localStorage.setItem('cheeseEscape_hi', highScore);
+    saveHighScore(highScore);  // 変更: 直接呼び出しをやめ、try/catch 付きヘルパー経由に
   }
   // ゲームオーバー：重く沈む低音 ＋ 3回振動でショックを表現
   playSound('gameover');
