@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- id="top" は、フッターの「↑ TOP」リンク（href="#top"）のジャンプ先 -->
-<html lang="ja" id="top">
+<html lang="en" id="top">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -172,14 +172,14 @@
 <header>
   <div class="hd-inner">
     <div class="app-badge">⚖️ PriceWise / 単価比べ</div>
-    <h1 id="hd-title">プライバシーポリシー</h1>
-    <p class="updated" id="hd-updated"></p>
+    <h1 id="hd-title">Privacy Policy</h1>
+    <p class="updated" id="hd-updated">Last updated: May 15, 2026</p>
   </div>
   <div class="lang-bar hd-inner">
-    <label for="ls" id="lang-label">言語 / Language:</label>
+    <label for="ls" id="lang-label">Language:</label>
     <select id="ls" onchange="applyLang(this.value,true)">
       <option value="ja">日本語</option>
-      <option value="en">English</option>
+      <option value="en" selected>English</option>
       <option value="de">Deutsch</option>
       <option value="fr">Français</option>
       <option value="es">Español</option>
@@ -208,23 +208,85 @@
 </header>
 
 <!--
-本文（#content）は下部の applyLang() が innerHTML で流し込みます。
-変更: JavaScript が無効・またはスクリプトが読み込めなかった場合、
-      ここが空のままになりページが真っ白に見えるため <noscript> を追加しました。
-      表示言語が判定できない状況なので、日本語と英語を併記しています。
+============================================================
+【本文（#content）について】
+
+■ 英語の本文を HTML に直接書いています
+  以前この要素は中身が空で、本文はすべて
+  applyLang() が innerHTML で流し込んでいました。
+  そのため JavaScript が動かない環境では本文が一切存在せず、
+  検索エンジンのクローラーや App Store の審査ボットからは
+  「中身のないページ」に見えていました。
+  プライバシーポリシーは掲載していること自体に意味があるため、
+  最低でも1言語は HTML に実体として置く必要があります。
+
+■ なぜ英語1言語だけなのか
+  25言語すべてを HTML に埋め込めば二重管理はなくなりますが、
+  ファイルが数倍に膨らみます。App Store に登録している URL が
+  参照されるのは主に英語であること、また MAKE10（make10.html）が
+  同じ「英語だけ HTML に書く」方式であることから、揃えました。
+
+■ JavaScript が動く環境での動作は今までと変わりません
+  applyLang() が #content.innerHTML を丸ごと書き換えるため、
+  日本語環境なら日本語に、ドイツ語環境ならドイツ語に置き換わります。
+  下の英語本文は「置き換えられる前の初期値」という位置づけです。
+
+■ ⚠️ 二重管理の注意（重要）
+  英語の本文は「下の HTML」と「T.en.sections」の2箇所に存在します。
+  英語のテキストを変更するときは必ず両方を同時に更新してください。
+  片方だけ直すと、JavaScript の有無で表示内容が食い違います。
+
+  下の HTML は renderSection() の出力と1文字も違わないように
+  生成しています。同期が取れているかは、ブラウザのコンソールで
+  次を実行すれば確認できます（true なら一致）。
+
+    document.getElementById('content').innerHTML
+      === T.en.sections.map(renderSection).join('')
+
+  ※ innerHTML はブラウザが正規化した文字列を返すため、
+     属性の引用符などが元の記述と異なる場合があります。
+     その場合は再代入して比較してください。
+============================================================
 -->
 <main id="main">
   <noscript>
     <div class="policy-section">
       <h2>⚠️ JavaScript</h2>
-      <p>このページの本文は JavaScript で表示しています。ブラウザの設定で JavaScript を有効にしてから再読み込みしてください。</p>
-      <p>This page renders its content with JavaScript. Please enable JavaScript in your browser and reload.</p>
+      <p>This page is displayed in English because JavaScript is disabled. Enable JavaScript to view this policy in other languages.</p>
+      <p>JavaScript が無効のため、このページは英語で表示されています。他の言語で読むには JavaScript を有効にしてください。</p>
       <div class="contact-box">
         <p>📧 <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a></p>
       </div>
     </div>
   </noscript>
-  <div id="content"></div>
+  <div id="content"><div class="policy-section">
+    <h2>📋 Introduction</h2>
+    <p>This is the Privacy Policy for <strong>PriceWise (単価比べ)</strong>, an iOS app developed by Flying Dev Lab.</p><p>Please read this policy before using the App.</p>
+  </div><div class="policy-section">
+    <h2>💾 Data Stored on Your Device</h2>
+    <div class='zero-data'><p>🔒 Your data is stored only on your device and never sent to our servers.</p></div><ul><li>Comparison session data (price, quantity, name, memo)</li><li>Shopping memo list</li><li>Theme preference (selected color scheme)</li></ul><p>Deleting the App removes all data from your device.</p>
+  </div><div class="policy-section">
+    <h2>📢 Advertising (Google AdMob)</h2>
+    <p>The App displays ads via <strong>Google AdMob</strong> (Google LLC) for free users. AdMob may collect:</p><ul><li>Advertising identifier (IDFA) — only if App Tracking Transparency permission is granted</li><li>Approximate location (estimated from IP address)</li><li>Crash logs and performance data</li><li>Ad impression and interaction data</li></ul><p>See <a href='https://policies.google.com/privacy' target='_blank' rel='noopener'>Google's Privacy Policy</a> for details.</p><p>Purchasing <strong>Remove Ads</strong> fully stops all AdMob ad delivery.</p>
+  </div><div class="policy-section">
+    <h2>🛒 In-App Purchases</h2>
+    <p>The App offers a one-time <strong>Remove Ads</strong> purchase.</p><p>All payment processing is handled by Apple (App Store). We do not receive your payment details or personal information. See <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a>.</p>
+  </div><div class="policy-section">
+    <h2>🔒 Sharing of Information</h2>
+    <p>We do not sell or share user information with third parties, except as required by law.</p><p>The App uses Google AdMob SDK for advertising. Data collected by AdMob is transmitted to Google LLC's servers. See the Advertising section above for details.</p>
+  </div><div class="policy-section">
+    <h2>⚖️ Governing Law</h2>
+    <p>This policy is governed by the laws of Japan. Any disputes shall be subject to the exclusive jurisdiction of the courts at the Developer's location.</p>
+  </div><div class="policy-section">
+    <h2>⚠️ Disclaimer</h2>
+    <p>While the App strives to provide accurate calculation results, we do not guarantee their completeness or accuracy. Please treat all results as reference information only.</p><p>iOS updates or changes in device environment may affect app functionality without prior notice.</p><p>The Developer may terminate or modify the App without prior notice.</p>
+  </div><div class="policy-section">
+    <h2>🔄 Changes to This Policy</h2>
+    <p>We may update this policy at any time. Changes take effect when posted on this page. Significant changes will be notified within the App.</p>
+  </div><div class="policy-section">
+    <h2>📬 Contact</h2>
+    <p>You can send anonymous feedback via the contact form at <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a>.</p><div class='contact-box'><p>📧 <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>
+  </div></div>
 </main>
 
 <!-- フッター：外部SNSリンク・TOPへ戻るリンク・法的リンク・著作権表記
