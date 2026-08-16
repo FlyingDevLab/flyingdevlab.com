@@ -299,8 +299,8 @@
   <div class="hd-inner">
     <div class="app-badge">TechRef</div>
     <h1 id="hd-title">Privacy Policy &amp; Disclaimer</h1>
-    <p class="hd-sub" id="hd-sub"></p>
-    <p class="updated" id="hd-updated"></p>
+    <p class="hd-sub" id="hd-sub">TechRef stores everything on your device and sends nothing anywhere. This page explains exactly what that means, and the limits of how the App's output should be used.</p>
+    <p class="updated" id="hd-updated">Effective: August 13, 2026</p>
     <div class="scale-rule" aria-hidden="true"></div>
   </div>
   <div class="lang-bar hd-inner">
@@ -320,19 +320,91 @@
 </header>
 
 <main id="main">
-  <!-- 変更: <noscript> を追加しました。
-       <noscript> の中身は、JavaScript が無効なときだけブラウザが表示します。
-       このページは本文を全文JSで描画するため、JS無効だと完全な白紙になってしまいます。
-       App Store の審査でもポリシーページが読めることは前提なので、
-       最低限「連絡先」と「JSを有効にしてほしい」ことだけは静的HTMLで伝えます。
-       文言は日英併記です（この部分だけは言語切替の対象外になるため）。 -->
+  <!-- 変更: <noscript> の文言を差し替えました。
+       以前は「本文の表示には JavaScript が必要」と案内していましたが、
+       下記のとおり英語の本文を静的 HTML に持たせたため、その説明は正しくなくなりました。
+       JavaScript が無効でもポリシーは全文読める状態になっています。
+       この案内が伝えるべきことは「他の言語で読むには JS が必要」に変わります。
+       文言が日英併記なのは、この部分だけ言語切替の対象外になるためです。 -->
   <noscript>
     <div class="noscript-note">
-      <p lang="en"><strong>JavaScript is required to display this page.</strong> Please enable JavaScript in your browser, or contact us at <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a> and we will send you the full text of this policy.</p>
-      <p lang="ja"><strong>このページの表示には JavaScript が必要です。</strong>ブラウザの JavaScript を有効にしてください。有効にできない場合は <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a> までご連絡いただければ、本ポリシーの全文をお送りします。</p>
+      <p lang="en"><strong>This page is displayed in English because JavaScript is disabled.</strong> The full policy is shown below. Enable JavaScript to read it in other languages, or contact us at <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a>.</p>
+      <p lang="ja"><strong>JavaScript が無効のため、このページは英語で表示されています。</strong>本文は下に全文掲載されています。他の言語で読むには JavaScript を有効にしてください。ご不明な点は <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a> までご連絡ください。</p>
     </div>
   </noscript>
-  <div id="content"></div>
+  <!--
+  ============================================================
+  【本文について】
+
+  ■ 英語の本文を HTML に直接書いています
+    以前この要素は中身が空で、本文はすべて applyLang() が
+    innerHTML で流し込んでいました。そのため JavaScript が動かない
+    環境では本文が一切存在せず、検索エンジンのクローラーや
+    App Store の審査ボットからは「中身のないページ」に見えていました。
+    プライバシーポリシーは掲載していること自体に意味があるため、
+    最低でも1言語は HTML に実体として置く必要があります。
+
+  ■ JavaScript が動く環境での動作は今までと変わりません
+    applyLang() が中身を丸ごと書き換えるため、日本語環境なら
+    日本語に置き換わります。下の英語本文は「置き換えられる前の初期値」です。
+
+  ■ ⚠️ 二重管理の注意（重要）
+    英語の本文は「下の HTML」と「T.en.sections」の2箇所に存在します。
+    英語のテキストを変更するときは必ず両方を同時に更新してください。
+    片方だけ直すと、JavaScript の有無で表示内容が食い違います。
+
+    下の HTML は renderAll("en") の出力と1文字も違わないように
+    生成しています。同期のズレは、この HTML と T.en を突き合わせれば
+    機械的に検出できます。
+
+  ■ セクション番号について
+    番号（1〜13）も静的 HTML に書き込まれています。
+    T.en.sections の並び順を変えたり項目を増減した場合は、
+    番号がずれるため下の HTML も必ず再生成してください。
+    なおアンカー（#disclaimer）は id で固定しているため、
+    番号が変わってもアプリ側のリンクは壊れません。
+  ============================================================
+  -->
+  <div id="content"><section class="policy-section" id="introduction">
+    <h2><span class="sec-num">1</span><span>Introduction</span></h2>
+    <p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion and engineering reference tool for technical professionals. It is built on a simple principle: your data belongs to you, and it stays on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section describes important limitations on how the App's output should be used.</p>
+  </section><section class="policy-section" id="storage">
+    <h2><span class="sec-num">2</span><span>Data Stored on Your Device</span></h2>
+    <div class='zero-data'><p>All data you enter stays on your device. TechRef has no server, and nothing is transmitted to the Developer.</p></div><p>TechRef stores the following on your device only:</p><ul><li>Conversion history (values, tolerances, units, labels, memos, timestamps)</li><li>Sheets data (part names, measurement point names, dimensions, memos)</li><li>App settings (decimal places, appearance, unit preferences)</li></ul><p>History and Sheets are saved as files in the App's Application Support directory. Settings are saved in the standard iOS preferences store. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>
+  </section><section class="policy-section" id="network">
+    <h2><span class="sec-num">3</span><span>Network Activity</span></h2>
+    <p>TechRef does not connect to the internet during normal use. It operates entirely offline.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data. The App requires no network permission to function.</p><p>The only network activity that can occur is when you deliberately tap the Support link in Settings, which opens this website in your browser. That is a normal web request handled by your browser, not by the App.</p><p>Separately, if you have chosen to share diagnostic data with app developers in your iOS settings, Apple may provide the Developer with anonymized, aggregated crash reports and usage statistics. This is a feature of the operating system, managed entirely by Apple. The App itself sends nothing, and this data does not identify you.</p>
+  </section><section class="policy-section" id="icloud">
+    <h2><span class="sec-num">4</span><span>iCloud Backup</span></h2>
+    <p>TechRef does not use CloudKit and does not synchronize your data with any cloud service.</p><p>However, if you have enabled iCloud Backup in your device settings, iOS may include TechRef's data files in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>This is what allows your history and Sheets to be restored automatically when you set up a new device. If you prefer not to have this data backed up, you can disable iCloud Backup for TechRef in the iOS Settings app.</p><p>Backup handling is governed by <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a>.</p>
+  </section><section class="policy-section" id="export">
+    <h2><span class="sec-num">5</span><span>Exporting Your Data</span></h2>
+    <p>TechRef lets you take your data out of the App in two ways:</p><ul><li><strong>Copy</strong> — conversion results or sheet data are placed on the system clipboard</li><li><strong>Save to Files</strong> — a CSV file is written to a location you choose in the Files app</li></ul><p>Both actions are initiated by you, and the App does not send data anywhere on its own. Once data leaves the App, its handling — including where you paste it, who you send it to, and any cloud storage location you select in the Files app — is outside the App's control and is your responsibility.</p><p>If you work with dimensional data that your organization treats as confidential, please follow your own internal policies when exporting.</p>
+  </section><section class="policy-section" id="advertising">
+    <h2><span class="sec-num">6</span><span>Advertising and Tracking</span></h2>
+    <p>TechRef contains <strong>no advertisements</strong>.</p><p>The App does not use the advertising identifier (IDFA), does not request App Tracking Transparency permission, and does not track you across apps or websites. There is no profiling, no behavioral analysis, and no data broker relationship of any kind.</p><p>This is a design decision, not a temporary state. TechRef is a professional tool, and it will not carry advertising.</p>
+  </section><section class="policy-section" id="purchases">
+    <h2><span class="sec-num">7</span><span>In-App Purchases</span></h2>
+    <p>This version of TechRef contains no in-app purchases and no subscriptions. The App is free to use in full.</p><p>If a purchase option is introduced in a future version, all payment processing will be handled by Apple through the App Store. The Developer will not receive your payment details, card information, or any personal information associated with the transaction. See <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a> for how Apple handles that data.</p><p>Any change of this kind will be reflected on this page before it takes effect.</p>
+  </section><section class="policy-section" id="sharing">
+    <h2><span class="sec-num">8</span><span>Sharing of Information</span></h2>
+    <p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. In the event of a legally binding request from a competent authority, the Developer has no user data that could be produced.</p>
+  </section><section class="policy-section" id="children">
+    <h2><span class="sec-num">9</span><span>Children's Privacy</span></h2>
+    <p>TechRef is a professional engineering tool and is not directed at children.</p><p>Nevertheless, because the App collects no personal information from anyone of any age, it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user.</p>
+  </section><section class="policy-section" id="disclaimer">
+    <h2><span class="sec-num">10</span><span>Disclaimer</span></h2>
+    <div class='lead-note'><p>TechRef is a reference and calculation tool. It is not a substitute for official standards, engineering judgment, or verified measurement.</p></div><p><strong>Reference information only.</strong> Conversion factors, reference tables, and calculated results provided by the App are reference information based on publicly available standards and definitions. They are not certified data and carry no warranty of accuracy, completeness, or fitness for any particular purpose.</p><p><strong>Verification is your responsibility.</strong> Before applying any value from the App to design, machining, inspection, or procurement, you must verify it against the applicable official standard, the controlling drawing, and your organization's internal procedures. The App is intended to assist that process, not to replace it.</p><p><strong>Limits of the tolerance calculation.</strong> The center value and range shown by the App are the result of arithmetic on the values you enter. The calculation does not account for machining method, tooling condition, measurement uncertainty, material properties, thermal expansion, fit class, or any other physical or process factor. A mathematically valid center value is not necessarily an appropriate machine setting.</p><p><strong>Rounding and display precision.</strong> Results are rounded to the number of decimal places selected in Settings. Rounding may introduce error, and displayed values may differ from the full-precision internal result. Choose a precision appropriate to your tolerance band.</p><p><strong>Unit selection.</strong> You are responsible for selecting the correct unit and category for your input. The App cannot detect an incorrect unit assignment.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to defective parts, rework, production delay, equipment damage, personal injury, or economic loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>
+  </section><section class="policy-section" id="law">
+    <h2><span class="sec-num">11</span><span>Governing Law</span></h2>
+    <p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p>
+  </section><section class="policy-section" id="changes">
+    <h2><span class="sec-num">12</span><span>Changes to This Policy</span></h2>
+    <p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, the introduction of in-app purchases — it will be published here before that change reaches users.</p>
+  </section><section class="policy-section" id="contact">
+    <h2><span class="sec-num">13</span><span>Contact</span></h2>
+    <p>Questions, corrections, and feature requests are welcome. If you find an error in a conversion factor or a reference table, please report it — accuracy reports are given priority.</p><div class='contact-box'><p>Website / contact form: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Email: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>
+  </section></div>
 </main>
 
 <!-- フッター：外部SNSリンク・TOPへ戻るリンク・法的リンク・著作権表記
