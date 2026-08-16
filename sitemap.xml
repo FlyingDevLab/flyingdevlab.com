@@ -14,6 +14,38 @@
 
   このファイルは robots.txt の Sitemap: 行から参照されており、
   クローラーが自動的に見つけられるようになっています。
+
+  ============================================================
+  ■ URLの書き方について（変更: 拡張子なしに統一）
+
+  変更前は https://flyingdevlab.com/pledge.html のように
+  .html 付きで書いていました。しかし Cloudflare Pages は
+  .html 付きのURLを 308 リダイレクトで拡張子なしへ飛ばします。
+
+    /pledge.html  →（308）→  /pledge
+
+  つまり変更前のサイトマップは「リダイレクトされるURL」を
+  正規URLとして申告している状態でした。壊れてはいませんが、
+  申告と実際の配信が食い違っており、正確ではありません。
+
+  ディレクトリを持つページ（ゲーム）は末尾スラッシュ形にします。
+
+    /make10/index.html  →（308）→  /make10/
+
+  各ページの <link rel="canonical"> も同じ形に揃えてあります。
+  片方だけ直すと矛盾したシグナルになるため、必ずセットで扱ってください。
+
+  ============================================================
+  ■ ここに載せてよいページの条件
+
+  robots.txt に書いたとおり、noindex を指定したページは
+  サイトマップに載せません。「インデックスするな」と
+  「インデックスしてほしい」を同時に送ることになるためです。
+
+  そのため以下は意図的に除外しています。
+    - /tokusho（特定商取引法に基づく表示） … noindex, nofollow
+    - /404.html（エラーページ）             … 誤ってインデックスされるため
+    - /lab/ 配下（非公開の実験ページ）        … noindex, nofollow
   ============================================================
   <urlset> はサイトマップ全体を囲む親タグです。
   xmlns=...      → 「このファイルはサイトマップの標準形式に従っています」という名前空間宣言。変更不要です。
@@ -36,9 +68,12 @@
     <!-- 
       <lastmod>：このページを最後に更新した日付（YYYY-MM-DD形式）。
       検索エンジンが「最近更新されたか」を判断する参考にします。
-      実際に更新したときは日付を変えましょう。 
+      実際に更新したときは日付を変えましょう。
+
+      ⚠️ 内部リンクの書き換えのような表示に影響しない修正では
+         日付を動かさないでください。「更新された」という嘘の信号になります。
     -->
-    <lastmod>2026-06-26</lastmod>                                                    <!-- 変更: 英語ページ化に伴い更新日を本日に -->
+    <lastmod>2026-06-26</lastmod>
     <!-- 
       <changefreq>：このページがどのくらいの頻度で更新されるかの目安。
       選択肢: always / hourly / daily / weekly / monthly / yearly / never
@@ -54,20 +89,20 @@
     <priority>1.0</priority>
     <!--
       <xhtml:link>：多言語対応（hreflang）の設定。
-      変更: 日英を別URLに分離したため、各言語の実URLを指すよう修正しました。
+      日英を別URLに分離しているため、各言語の実URLを指しています。
       - hreflang="ja"        → 日本語版 /ja/
       - hreflang="en"        → 英語版（このページ＝ルート）
       - hreflang="x-default" → 言語が一致しない場合のフォールバック（英語＝ルート）
-      ※ /ja/ の末尾スラッシュは Cloudflare Pages の実配信形に合わせて最終確定してください。
+      変更: 末尾スラッシュ形（/ja/）が実配信形であることを curl で確認済み。
     -->
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/"/>       <!-- 変更: 同一URL → /ja/ -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ja/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/"/>
   </url>
 
   <!-- 
     ============================================================
-    TOPページ（日本語）  ← 新規追加
+    TOPページ（日本語）
     英語メイン（ルート）と対になる日本語版TOP。重要度・更新頻度はルートと同じ設定。
     ============================================================
   -->
@@ -82,15 +117,72 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/"/>
   </url>
 
+  <!--
+    ============================================================
+    こども向けゲーム 4本  ← 新規追加
+    ============================================================
+    無料・広告なし・データ送信なしのブラウザゲームです。
+    サイトの主要コンテンツであるため、法的文書より高い priority を設定しています。
+
+    URLは末尾スラッシュ形（/make10/）です。
+    /make10/index.html は 308 で /make10/ へリダイレクトされるため、
+    index.html を明記すると申告と実配信が食い違います。
+
+    どのゲームも1つのURLで日英を併記しているため、
+    hreflang は ja / en / x-default すべて同じURLを指します。
+
+    lastmod は最後にファイルを更新した日です（localStorage の例外処理を追加した日）。
+  -->
+  <url>
+    <loc>https://flyingdevlab.com/make10/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <!-- ゲーム本体が頻繁に変わることはないため monthly -->
+    <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/make10/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/make10/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/make10/"/>
+  </url>
+
+  <url>
+    <loc>https://flyingdevlab.com/cheese-escape-web/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/cheese-escape-web/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/cheese-escape-web/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/cheese-escape-web/"/>
+  </url>
+
+  <url>
+    <loc>https://flyingdevlab.com/whack-a-mole/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/whack-a-mole/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/whack-a-mole/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/whack-a-mole/"/>
+  </url>
+
+  <url>
+    <loc>https://flyingdevlab.com/pinball/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/pinball/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/pinball/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/pinball/"/>
+  </url>
+
   <!-- 
     ============================================================
-    プライバシーポリシー（個人情報の取り扱い方針のページ）
-    ※ このページはURLを分離していない（今も日英共通URLの1ページ）ため、
-      今回の作業では変更していません。
+    プライバシーポリシー（サイト共通・個人情報の取り扱い方針のページ）
+    ※ このページは日英共通の1URLです（言語切替をJSで行うため）。
     ============================================================ 
   -->
   <url>
-    <loc>https://flyingdevlab.com/privacy-policy.html</loc>
+    <loc>https://flyingdevlab.com/privacy-policy</loc>
     <!-- 法的文書なので変更頻度は低め。更新したときだけ日付を変えましょう。 -->
     <lastmod>2026-03-10</lastmod>
     <!-- 滅多に変わらないので monthly（月1回程度） -->
@@ -98,35 +190,86 @@
     <!-- TOPよりは重要度が低いので 0.6（中程度）に設定 -->
     <priority>0.6</priority>
     <!-- このページも日英共通URLのため、すべて同じhref -->
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy.html"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy"/>
+  </url>
+
+  <!--
+    ============================================================
+    アプリ別プライバシーポリシー 3本  ← 新規追加
+    ============================================================
+    App Store に登録している各アプリのポリシーページです。
+    流入はほぼアプリ内リンク経由ですが、検索での到達も妨げないため
+    各ページに robots="index, follow" を明示し、ここにも掲載します。
+
+    1つのURLで複数言語を切り替えるため、hreflang は同一URLを指します
+    （PriceWise は25言語、TechRef は英日、MAKE10 は英日）。
+
+    lastmod は最後にファイルを更新した日です。
+    MAKE10 は内容に変更がないため、ポリシーの発効日をそのまま使っています。
+  -->
+  <url>
+    <loc>https://flyingdevlab.com/privacy-policy/make10</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <!-- サイト共通ポリシー（0.6）より下、誓い（0.4）より上に位置づけ -->
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy/make10"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy/make10"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy/make10"/>
+  </url>
+
+  <url>
+    <loc>https://flyingdevlab.com/privacy-policy/pricewise</loc>
+    <!-- 英語本文を静的HTMLに追加した日（クローラーから見える内容が変わったため） -->
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy/pricewise"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy/pricewise"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy/pricewise"/>
+  </url>
+
+  <url>
+    <loc>https://flyingdevlab.com/privacy-policy/techref</loc>
+    <!-- 英語本文を静的HTMLに追加した日（クローラーから見える内容が変わったため） -->
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy/techref"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy/techref"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy/techref"/>
   </url>
 
   <!--
    ============================================================
    こどもたちへの誓い（Flying Dev Lab のポリシー宣言ページ）
-   プライバシーポリシーと同じ重要度・更新頻度で設定しています。
-   ※ このページもURLを分離していないため、今回の作業では変更していません。
+   ※ このページも日英共通の1URLです。
    ============================================================
   -->
   <url>
-    <loc>https://flyingdevlab.com/pledge.html</loc>
+    <loc>https://flyingdevlab.com/pledge</loc>
     <lastmod>2026-03-13</lastmod>
     <!-- 誓いの内容が変わることは少ないため monthly に設定 -->
     <changefreq>monthly</changefreq>
     <!-- TOPより重要度は低いため 0.4（中程度）に設定 -->
     <priority>0.4</priority>
     <!-- このページも日英共通URLのため、すべて同じhref -->
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/pledge.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/pledge.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/pledge.html"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/pledge"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/pledge"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/pledge"/>
   </url>
 
   <!--
     ============================================================
     新しいページを追加するときは、上の <url>〜</url> ブロックを
     コピーして loc / lastmod / hreflang の href を書き換えてください。
+
+    追加前に次の3点を確認してください。
+      1. そのページに noindex が付いていないか（付いていれば載せない）
+      2. URLが拡張子なし形になっているか（.html を書かない）
+      3. そのページの <link rel="canonical"> と同じURLを書いているか
 
     ⚠️ 404ページ（404.html）はサイトマップに含めません。
     エラーページを登録すると検索エンジンが誤ってインデックスするためです。
