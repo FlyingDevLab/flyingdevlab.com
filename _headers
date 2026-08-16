@@ -27,14 +27,28 @@
 #      打ち消しをすり抜けて再度足されてしまい、CSP が2本立ちになる
 #      ことを実機で確認済み。）
 #
-#  ■ 重要な前提（今回の方針）
-#    CSP は「壊れて初めて気づく」性質を持つため、いきなり強制せず
-#    まず  Content-Security-Policy  で配信する。
-#    このヘッダーは「違反を検出しても “ブロックせず” に許可する」ため、
-#    SNS 埋め込み等の “動くもの” を一切壊さずに、DevTools Console 上で
-#    違反ログだけを観察できる。数日〜数回の巡回で違反ゼロを確認したら、
-#    ヘッダー名を  Content-Security-Policy  に切り替えて本強制へ移行する。
-#    （切り替えは名前を変えるだけ。値はそのまま流用できる。）
+#  ■ CSP は「強制モード」で配信している
+#    変更: この項目の説明が誤っていたため書き直した。
+#      以前は「まず Content-Security-Policy で配信する。このヘッダーは
+#      違反を検出してもブロックせずに許可する」と書かれていたが、これは誤り。
+#      違反をブロックしないのは  Content-Security-Policy-Report-Only  であり、
+#      Content-Security-Policy  は違反を実際にブロックする。
+#      さらに移行手順の説明が「Content-Security-Policy に切り替える」となっており、
+#      移行前と移行後で同じヘッダー名を指していた（文章として成立していない）。
+#      Report-Only 前提で書かれた文章のヘッダー名だけを置換した名残りと思われる。
+#
+#    現在このファイルが配信しているのは  Content-Security-Policy（強制モード）。
+#    違反したリソースはブラウザによって実際に読み込みが拒否される。
+#    ここに書き漏らしたドメインがあれば、その読み込みは静かに失敗する。
+#
+#    ■ CSP を変更するときの手順
+#      CSP は「壊れて初めて気づく」性質を持つ。段階を踏んで確認すること。
+#        1. まずヘッダー名を  Content-Security-Policy-Report-Only  にして配信する。
+#           このヘッダーは違反を検出してもブロックせず、DevTools の Console に
+#           違反ログだけを出す。“動くもの” を壊さずに影響範囲を観察できる。
+#        2. 数日〜数回の巡回で違反ゼロを確認する。
+#        3. ヘッダー名を  Content-Security-Policy  に戻して本強制へ移行する。
+#           （切り替えは名前を変えるだけ。値はそのまま流用できる。）
 #
 # ================================================================
 
@@ -71,6 +85,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), midi=(), accelerometer=(), gyroscope=(), magnetometer=(), display-capture=()
 
 
 # ================================================================
@@ -92,12 +107,31 @@
 #  （cheese-escape には過剰な許可となるが、閉じ方向の差なので実害はない。
 #    将来キレイにしたければ cheese-escape だけ別ブロックで締められる。）
 #
-#  各ブロック冒頭の「! Content-Security-Policy」は、
-#  上の①（/*）から継承された緩いCSPを打ち消すための行（値は空でよい）。
+#  各ブロック冒頭の「! ヘッダー名」は、上の①（/*）から継承された値を
+#  打ち消すための行（値は空でよい）。
 #  このファイルでは①より後に書かれているため、打ち消しが最後に効く。
+#
+#  変更: 打ち消し行を CSP だけでなく、再定義する4ヘッダー全てに広げた。
+#    理由: 実機（curl -sIL）で確認したところ、打ち消していないヘッダーが
+#          そのまま重複して送られていた。
+#            referrer-policy: strict-origin-when-cross-origin   ← ①から継承
+#            referrer-policy: no-referrer                        ← このブロック
+#            x-frame-options: DENY                               ← ①から継承
+#            x-frame-options: DENY                               ← このブロック
+#          X-Frame-Options と X-Content-Type-Options は値が同じなので実害はないが、
+#          Referrer-Policy は値が異なる。仕様上は最後の有効値が採用されるため
+#          意図した no-referrer が効いてはいたものの、
+#          「たまたま順序で正しくなっている」状態であり、意図が読み取れない。
+#          再定義するヘッダーは必ず打ち消す、という規則に統一した。
+#
+#  ※ Permissions-Policy は各ブロックで再定義しないため、打ち消し行も書かない。
+#     ①の値をサイト全体で継承させるのが意図である（加算方式を利用している）。
 
 /make10/*
   ! Content-Security-Policy
+  ! X-Content-Type-Options
+  ! Referrer-Policy
+  ! X-Frame-Options
   Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
@@ -105,6 +139,9 @@
 
 /cheese-escape-web/*
   ! Content-Security-Policy
+  ! X-Content-Type-Options
+  ! Referrer-Policy
+  ! X-Frame-Options
   Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
@@ -112,6 +149,9 @@
 
 /whack-a-mole/*
   ! Content-Security-Policy
+  ! X-Content-Type-Options
+  ! Referrer-Policy
+  ! X-Frame-Options
   Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
@@ -119,6 +159,9 @@
 
 /pinball/*
   ! Content-Security-Policy
+  ! X-Content-Type-Options
+  ! Referrer-Policy
+  ! X-Frame-Options
   Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
@@ -141,6 +184,9 @@
 
 /privacy-policy/*
   ! Content-Security-Policy
+  ! X-Content-Type-Options
+  ! Referrer-Policy
+  ! X-Frame-Options
   Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
