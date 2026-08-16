@@ -42,7 +42,15 @@
   -->
   <title>Privacy Policy &amp; Disclaimer – TechRef</title>
   <meta name="description" content="Privacy Policy and Disclaimer for TechRef, an offline unit conversion and engineering reference app by Flying Dev Lab.">
-  <link rel="canonical" href="https://flyingdevlab.com/privacy-policy/techref.html">
+  <!-- index：アプリ内リンクからの流入が中心だが、検索での到達も妨げない。
+       他ページと同様に明示することで「書き忘れではなく意図」であることを示す。 -->
+  <meta name="robots" content="index, follow">
+  <!-- canonical：変更: .html を外した。Cloudflare Pages は .html 付きURLを
+       308 で拡張子なしへリダイレクトするため、拡張子付きを正規URLとして
+       宣言するとリダイレクト先を指すことになり、宣言と実配信が食い違う。
+       アプリの Settings から開かれる techref#disclaimer も、
+       フラグメントはリダイレクトを越えて保持されるため影響しない。 -->
+  <link rel="canonical" href="https://flyingdevlab.com/privacy-policy/techref">
 
   <style>
     :root {
