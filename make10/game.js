@@ -10,7 +10,6 @@ const WRONG_PENALTY   = 1;    // 不正解ペナルティ（秒）
 const TILE_COUNT      = 4;    // 選択肢タイル数
 const COMBO_THRESHOLD = 5;    // タイムボーナス発動コンボ数
 const COMBO_EMOJIS    = ['🔥','⚡','💥','🌟','✨','🎯','💫','🚀','🎉','👏'];
-const HOME_URL        = 'https://flyingdevlab.com/';
 
 
 // ── ハイスコアの保存・読み込み ───────────────────────────────────
@@ -491,21 +490,6 @@ function playSound(type) {
 
 
 // ================================================================
-// ナビゲーション
-// ================================================================
-
-/**
- * タイマーを止めて Flying Dev Lab のサイトへ移動する。
- * ゲーム中に呼ばれた場合でもタイマーを確実にキャンセルする。
- */
-function goHome() {
-  isPlaying = false;
-  if (timerInterval) cancelAnimationFrame(timerInterval);
-  window.location.href = HOME_URL;
-}
-
-
-// ================================================================
 // ボタンイベントのバインド
 // ================================================================
 
@@ -521,9 +505,6 @@ document.getElementById('btn-top').addEventListener('click', () => {
   if (timerInterval) cancelAnimationFrame(timerInterval);
   showScreen('top');
 });
-
-/** ホームボタン（ゲーム画面左上）：Flying Dev Lab へ移動 */
-document.getElementById('btn-home').addEventListener('click', goHome);
 
 
 // ================================================================
