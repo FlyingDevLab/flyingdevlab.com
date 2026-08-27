@@ -253,27 +253,9 @@
       <a class="lang-tab" href="/ja/" lang="ja">日本語</a>
       <span class="lang-tab active">English</span>
     </div>
-    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される
-    <section> タグ：意味のあるひとまとまりのコンテンツ領域を示すセマンティックタグ。
-    aria-labelledby="apps-heading" → この section の見出しが id="apps-heading" の要素であると宣言。
-    スクリーンリーダーが「アプリ セクション」と読み上げられるようになります。
-    id="app-list" の <div> は中身が空で、JavaScriptが後から動的にカードを生成・挿入します。
-    （apps.js の APPS 配列を編集するだけでカードが追加・変更されます）
-  -->
-    <section aria-labelledby="apps-heading">
-      <div class="section-header fade-up">
-        <!-- <h2> タグ：<h1> の次に重要な見出し。このページでは各セクションの見出しに使っています。
-        aria-hidden="true" の絵文字はスクリーンリーダーに読ませない装飾です。
-        ※ #apps-heading-text は renderApps("en") が "Apps" に設定しますが、
-          JS無効時やJS実行前でも正しく見えるよう、初期値も英語にしてあります。
-      -->
-        <h2 id="apps-heading" class="section-title">
-          <span aria-hidden="true">📱</span> <span id="apps-heading-text">Apps</span>
-        </h2>
-      </div>
-      <!-- JSがここにアプリカードを描画する。初期状態は空。 -->
-      <div id="app-list"></div>
-    </section>
+    <!-- 変更: ユーザーファースト方針により、インストール不要ですぐ遊べる
+         Try in Browser セクションを Apps セクションより前に移動しました
+         （旧: Apps → Try in Browser の順）。 -->
     <!-- ブラウザでゲームを試せるセクション。fade-up はスクロール時のフェインアニメーション用。 -->
 
     <section class="try-game-section" aria-labelledby="try-heading">
@@ -312,6 +294,29 @@
       </a>
 
     </section>
+    <!-- 変更: ユーザーファースト方針により、Try in Browser セクションの後ろに移動しました
+         （旧: Apps → Try in Browser の順）。 -->
+    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される
+    <section> タグ：意味のあるひとまとまりのコンテンツ領域を示すセマンティックタグ。
+    aria-labelledby="apps-heading" → この section の見出しが id="apps-heading" の要素であると宣言。
+    スクリーンリーダーが「アプリ セクション」と読み上げられるようになります。
+    id="app-list" の <div> は中身が空で、JavaScriptが後から動的にカードを生成・挿入します。
+    （apps.js の APPS 配列を編集するだけでカードが追加・変更されます）
+  -->
+    <section aria-labelledby="apps-heading">
+      <div class="section-header fade-up">
+        <!-- <h2> タグ：<h1> の次に重要な見出し。このページでは各セクションの見出しに使っています。
+        aria-hidden="true" の絵文字はスクリーンリーダーに読ませない装飾です。
+        ※ #apps-heading-text は renderApps("en") が "Apps" に設定しますが、
+          JS無効時やJS実行前でも正しく見えるよう、初期値も英語にしてあります。
+      -->
+        <h2 id="apps-heading" class="section-title">
+          <span aria-hidden="true">📱</span> <span id="apps-heading-text">Apps</span>
+        </h2>
+      </div>
+      <!-- JSがここにアプリカードを描画する。初期状態は空。 -->
+      <div id="app-list"></div>
+    </section>
 
     <!-- 日本語コンテンツ（旧 #lang-ja ブロック）は /ja/index.html に分離済み。 -->
 
@@ -323,29 +328,9 @@
   -->
     <div class="lang-content active" id="lang-en" lang="en">
 
-      <!-- Contact（English） 
-     contact-wrap / contact-box-inner は二重ラッパー構造です。
-     - target="_blank"           → リンクを新しいタブで開く
-     - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策。
-     -->
-      <section class="contact-section" aria-labelledby="contact-heading-en">
-        <div class="section-header fade-up">
-          <h2 id="contact-heading-en" class="section-title">
-            <span aria-hidden="true">📬</span> Contact
-          </h2>
-        </div>
-        <div class="contact-wrap fade-up">
-          <div class="contact-box-inner">
-            <p class="contact-desc">Opens Google Forms.<br>Only the information you enter will be submitted.<br>We do
-              not collect any other data.<br>Feel free to report bugs or ask questions 😊</p>
-            <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8" target="_blank" rel="noopener noreferrer" class="contact-btn"
-              aria-label="Contact / Bug Report (opens Google Forms in a new tab)">
-              <span aria-hidden="true">📬</span> Contact / Bug Report
-            </a>
-          </div>
-        </div>
-      </section>
-
+      <!-- 変更: ユーザーファースト方針により、運営の活動状況を先に見せて信頼を積んでから
+           Contact に導く流れにするため、Contact セクションより前に移動しました
+           （旧: Contact → Updates の順）。 -->
       <!-- Updates（English）： X（旧Twitter）投稿と Instagram 投稿を混在して掲載
       各投稿は <blockquote> タグで書かれており、ページ下部で読み込む
       外部スクリプト（widgets.js / embed.js）が実行されたタイミングで
@@ -389,6 +374,31 @@
           <!-- 埋め込み投稿カード（8枚目） -->
           <div class="app-card sns-embed-card fade-up">
             <blockquote class="twitter-tweet"><p lang="en" dir="ltr">MAKE10 is now open source. 🐘<br><br>No ads. <br>No tracking. <br>No in-app purchases. <br>No external connections.<br><br>Verify it yourself. <br>Don&#39;t trust blindly — including us.<br><br>👉 <a href="https://t.co/x1fAkwp2Mt">https://t.co/x1fAkwp2Mt</a>🐘<a href="https://x.com/hashtag/OpenSource?src=hash&amp;ref_src=twsrc%5Etfw">#OpenSource</a> <a href="https://x.com/hashtag/Swift?src=hash&amp;ref_src=twsrc%5Etfw">#Swift</a> <a href="https://x.com/hashtag/SwiftUI?src=hash&amp;ref_src=twsrc%5Etfw">#SwiftUI</a> <a href="https://x.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a> <a href="https://x.com/hashtag/FlyingDevLab?src=hash&amp;ref_src=twsrc%5Etfw">#FlyingDevLab</a> <a href="https://x.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2060949114909831607?ref_src=twsrc%5Etfw">May 31, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+          </div>
+        </div>
+      </section>
+
+      <!-- 変更: ユーザーファースト方針により、Updates セクションの後ろに移動しました
+           （旧: Contact → Updates の順）。 -->
+      <!-- Contact（English） 
+     contact-wrap / contact-box-inner は二重ラッパー構造です。
+     - target="_blank"           → リンクを新しいタブで開く
+     - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策。
+     -->
+      <section class="contact-section" aria-labelledby="contact-heading-en">
+        <div class="section-header fade-up">
+          <h2 id="contact-heading-en" class="section-title">
+            <span aria-hidden="true">📬</span> Contact
+          </h2>
+        </div>
+        <div class="contact-wrap fade-up">
+          <div class="contact-box-inner">
+            <p class="contact-desc">Opens Google Forms.<br>Only the information you enter will be submitted.<br>We do
+              not collect any other data.<br>Feel free to report bugs or ask questions 😊</p>
+            <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8" target="_blank" rel="noopener noreferrer" class="contact-btn"
+              aria-label="Contact / Bug Report (opens Google Forms in a new tab)">
+              <span aria-hidden="true">📬</span> Contact / Bug Report
+            </a>
           </div>
         </div>
       </section>
