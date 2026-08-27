@@ -209,12 +209,19 @@
 -->
   <header>
     <div class="header-inner">
-      <!-- aria-hidden="true" : スクリーンリーダーにこの要素を読み飛ばすよう指示します。
-      絵文字ロゴは装飾目的のため、読み上げ不要として非表示にしています。
-    -->
-      <div class="site-logo" aria-hidden="true">
-        <span class="logo-cloud">☁️</span>
-        <span class="logo-house">🏠</span>
+      <!-- 変更: 絵文字（☁️🏠）の重ね合わせから、Flying Dev Lab のロゴアニメーションに差し替えました。
+      背景はヘッダー色（--surface-sky / #4a7ac4）を画像に描き込み済みのため、透過処理は不要です。
+
+      ・aria-hidden は付けていません。
+        絵文字のときは装飾扱いでしたが、これはブランドロゴなので意味を持つ画像です。
+        alt にブランド名を入れ、スクリーンリーダーにも伝わるようにしています。
+      ・width / height 属性を HTML 側にも書いているのは、画像の読み込みが終わる前に
+        ブラウザが表示領域を確保できるようにするためです。
+        これがないと画像が読み込まれた瞬間にレイアウトがガタつきます（CLS の悪化）。
+      ・ファイルは表示サイズ 160px に対して 320px の解像度を用意しています。
+        Retina などの高精細ディスプレイでもリングの文字がぼやけないようにするためです。 -->
+      <div class="site-logo">
+        <img src="/images/fdl-logo-anim-320.gif" alt="Flying Dev Lab" width="160" height="160">
       </div>
       <!-- <h1> タグ：ページで最も重要な見出し（1ページに1つが基本）。
       SEOで重視されるタグです。
