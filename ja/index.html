@@ -112,7 +112,6 @@
   <meta name="twitter:image:alt" content="空飛ぶ研究室">                           <!-- 変更: 「空飛ぶ研究室 - Flying Dev Lab」→ 空飛ぶ研究室 -->
   <!-- ===== JSON-LD 構造化データ ===== 
     検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応） 
-    @graph の中に Organization（組織）・WebSite・WebPage の3つを定義しています。
     ※ この日本語ページ向けのポイント：
        - WebPage の url を /ja/ に、@id も /ja/#webpage にしています。
          （@id はノードの識別子。ルート（英語）ページの #webpage とは別ページなので、
@@ -229,16 +228,9 @@
       <span class="lang-tab active">日本語</span>
       <a class="lang-tab" href="/" lang="en">English</a>
     </div>
-    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される -->
-    <section aria-labelledby="apps-heading">
-      <div class="section-header fade-up">
-        <h2 id="apps-heading" class="section-title">
-          <span aria-hidden="true">📱</span> <span id="apps-heading-text">アプリ</span>
-        </h2>
-      </div>
-      <!-- JSがここにアプリカードを描画する。初期状態は空。 -->
-      <div id="app-list"></div>
-    </section>
+    <!-- 変更: ユーザーファースト方針により、インストール不要ですぐ遊べる
+         「ブラウザで遊ぶ」セクションを「アプリ」セクションより前に移動しました
+         （旧: アプリ → ブラウザで遊ぶ の順）。 -->
     <!-- ブラウザでゲームを試せるセクション。fade-up はスクロール時のフェインアニメーション用。 -->
 
     <section class="try-game-section" aria-labelledby="try-heading">
@@ -277,6 +269,19 @@
       </a>
 
     </section>
+    <!-- 変更: ユーザーファースト方針により、「ブラウザで遊ぶ」セクションの後ろに移動しました
+         （旧: アプリ → ブラウザで遊ぶ の順）。 -->
+    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される -->
+    <section aria-labelledby="apps-heading">
+      <div class="section-header fade-up">
+        <!-- <h2> タグ：<h1> の次に重要な見出し。このページでは各セクションの見出しに使っています。 -->
+        <h2 id="apps-heading" class="section-title">
+          <span aria-hidden="true">📱</span> <span id="apps-heading-text">アプリ</span>
+        </h2>
+      </div>
+      <!-- JSがここにアプリカードを描画する。初期状態は空。 -->
+      <div id="app-list"></div>
+    </section>
 
     <!-- ==================== 日本語コンテンツ ====================
     タブUIを廃止したため、消えた tab-ja を参照していた
@@ -286,28 +291,9 @@
     -->
     <div class="lang-content active" id="lang-ja" lang="ja">
 
-      <!-- お問い合わせ（日本語） 
-      - target="_blank"           → リンクを新しいタブで開く
-      - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策
-      -->
-      <section class="contact-section" aria-labelledby="contact-heading-ja">
-        <div class="section-header fade-up">
-          <h2 id="contact-heading-ja" class="section-title">
-            <span aria-hidden="true">📬</span> お問い合わせ
-          </h2>
-        </div>
-        <div class="contact-wrap fade-up">
-          <div class="contact-box-inner">
-            <p class="contact-desc">Google
-              Formsが開きます。<br>入力した内容だけが送信される仕組みになっております。<br>それ以外の情報は取得しません。<br>バグの報告や気になることは、遠慮なく教えてくださいね😊</p>
-            <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8" target="_blank" rel="noopener noreferrer" class="contact-btn"
-              aria-label="お問い合わせ・バグ報告はこちら（Google Formsが新しいタブで開きます）">
-              <span aria-hidden="true">📬</span> お問い合わせ・バグ報告はこちら
-            </a>
-          </div>
-        </div>
-      </section>
-
+      <!-- 変更: ユーザーファースト方針により、運営の活動状況を先に見せて信頼を積んでから
+           お問い合わせに導く流れにするため、お問い合わせセクションより前に移動しました
+           （旧: お問い合わせ → 活動状況 の順）。 -->
       <!-- SNS投稿埋め込み（日本語）：X（旧Twitter）投稿と Instagram 投稿を混在して掲載
       各投稿は <blockquote> タグで書かれており、ページ下部で読み込む
       外部スクリプト（widgets.js / embed.js）が実行されたタイミングで
@@ -345,6 +331,30 @@
           <!-- 埋め込み投稿カード（7枚目） -->
           <div class="app-card sns-embed-card fade-up">
             <blockquote class="twitter-tweet"><p lang="en" dir="ltr">MAKE10 is now open source. 🐘<br><br>No ads. <br>No tracking. <br>No in-app purchases. <br>No external connections.<br><br>Verify it yourself. <br>Don&#39;t trust blindly — including us.<br><br>👉 <a href="https://t.co/x1fAkwp2Mt">https://t.co/x1fAkwp2Mt</a>🐘<a href="https://x.com/hashtag/OpenSource?src=hash&amp;ref_src=twsrc%5Etfw">#OpenSource</a> <a href="https://x.com/hashtag/Swift?src=hash&amp;ref_src=twsrc%5Etfw">#Swift</a> <a href="https://x.com/hashtag/SwiftUI?src=hash&amp;ref_src=twsrc%5Etfw">#SwiftUI</a> <a href="https://x.com/hashtag/MAKE10?src=hash&amp;ref_src=twsrc%5Etfw">#MAKE10</a> <a href="https://x.com/hashtag/FlyingDevLab?src=hash&amp;ref_src=twsrc%5Etfw">#FlyingDevLab</a> <a href="https://x.com/hashtag/%E7%A9%BA%E9%A3%9B%E3%81%B6%E7%A0%94%E7%A9%B6%E5%AE%A4?src=hash&amp;ref_src=twsrc%5Etfw">#空飛ぶ研究室</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2060949114909831607?ref_src=twsrc%5Etfw">May 31, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+          </div>
+        </div>
+      </section>
+
+      <!-- 変更: ユーザーファースト方針により、活動状況セクションの後ろに移動しました
+           （旧: お問い合わせ → 活動状況 の順）。 -->
+      <!-- お問い合わせ（日本語） 
+      - target="_blank"           → リンクを新しいタブで開く
+      - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策
+      -->
+      <section class="contact-section" aria-labelledby="contact-heading-ja">
+        <div class="section-header fade-up">
+          <h2 id="contact-heading-ja" class="section-title">
+            <span aria-hidden="true">📬</span> お問い合わせ
+          </h2>
+        </div>
+        <div class="contact-wrap fade-up">
+          <div class="contact-box-inner">
+            <p class="contact-desc">Google
+              Formsが開きます。<br>入力した内容だけが送信される仕組みになっております。<br>それ以外の情報は取得しません。<br>バグの報告や気になることは、遠慮なく教えてくださいね😊</p>
+            <a href="https://forms.gle/M7Q2zHJ2ouw9H2EZ8" target="_blank" rel="noopener noreferrer" class="contact-btn"
+              aria-label="お問い合わせ・バグ報告はこちら（Google Formsが新しいタブで開きます）">
+              <span aria-hidden="true">📬</span> お問い合わせ・バグ報告はこちら
+            </a>
           </div>
         </div>
       </section>
