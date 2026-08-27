@@ -101,10 +101,26 @@
 
 :root {
   /* ── メインカラー ── */
-  --primary:    #1e3a6e;   /* ヘッダー・ボタン・フッターの濃紺 */
+  --primary:    #1e3a6e;   /* 文字・ボタン・フッターの濃紺 */
   --primary-lt: #2a4d8f;   /* ホバー時などの少し明るい濃紺 */
   --accent:     #e8834a;   /* アクセントカラー（オレンジ） */
   --accent-light: #4a90d9; /* ポリシー等の強調ボーダー */
+
+  /* ── サーフェス（面としての背景色） ──
+     変更: ヘッダー・フッター背景専用の色を新設した。
+     「空飛ぶ研究室」というテーマに合わせ、夜空寄りの濃紺から
+     昼の空に近い明るい青へ変更するため。
+     ヘッダーとフッターは同じ「面」なので、同一の色で統一している。
+
+     【なぜ --primary を直接書き換えないのか】
+     --primary は背景色としてだけでなく「文字色」としても使われている。
+       ・.catchcopy p:first-child （白カード上の見出し）
+       ・.policy-section h2 / .pledge-section h2
+       ・.tokusho-dl dt / .error-code
+     --primary を明るくすると、これら白背景の上に乗る文字まで薄くなり
+     読みにくくなってしまう。そこで「面の色」と「文字の色」を別変数に分け、
+     背景だけを変更できるようにしている。 */
+  --surface-sky: #4a7ac4;  /* ヘッダー・フッター背景の空色 */
 
   /* ── テキスト ── */
   --text:       #1a1a28;   /* メインテキスト */
@@ -127,9 +143,20 @@
   --radius-md:  14px;
   --radius-sm:  8px;
 
-  /* ── フッター（半透明白の統一） ── */
-  --footer-link:    rgba(255, 255, 255, 0.75);
-  --footer-muted:   rgba(255, 255, 255, 0.45);
+  /* ── フッター（半透明白の統一） ──
+     変更: フッター背景をヘッダーと同じ --surface-sky に統一したことに伴い、
+     半透明白の不透明度を引き上げた。
+
+     背景が明るくなると、半透明の白は背景に溶けて読みにくくなる。
+     そのため従来の 0.75 / 0.45 では文字が沈んでしまうので調整している。
+       ・--footer-link  0.75 → 0.95（コントラスト比 約4.1:1）
+         純白（1.0）にしていないのは、リンクの hover で
+         white に変化する演出が効かなくなってしまうため。
+       ・--footer-muted 0.45 → 0.85（コントラスト比 約3.6:1）
+         変更前の濃紺背景での muted も約3.6:1 だったため、
+         見え方の水準は据え置きになっている。 */
+  --footer-link:    rgba(255, 255, 255, 0.95);
+  --footer-muted:   rgba(255, 255, 255, 0.85);
 
   /* ── フォーカスリング ── */
   --focus-ring:  #4a90d9;
@@ -312,7 +339,10 @@ img { max-width: 100%; display: block; }
    共通ヘッダー
    ============================================== */
 header {
-  background: var(--primary);
+  /* 変更: var(--primary) → var(--surface-sky)。
+     「空飛ぶ研究室」のテーマに合わせ、ヘッダーの面を昼の空の色にした。
+     文字色・ボタン用の --primary は従来の濃紺のまま維持している。 */
+  background: var(--surface-sky);
   color: var(--white);
   padding: 56px 24px 64px;
   text-align: center;
@@ -363,7 +393,11 @@ header::after {
    共通フッター
    ============================================== */
 footer {
-  background: var(--primary);
+  /* 変更: var(--primary) → var(--surface-sky)。
+     ヘッダーと同じ「面」の色に統一するため、ヘッダーと同一の変数を参照する。
+     これにより、今後この色を変えたくなったときも --surface-sky の
+     1行を直すだけでヘッダー・フッター両方に反映される。 */
+  background: var(--surface-sky);
   color: var(--footer-muted);
   text-align: center;
   padding: 36px 24px;
@@ -506,33 +540,33 @@ main {
   margin: 0 auto;
 }
 
-/* 雲と家の絵文字を重ねて表示するための固定サイズのコンテナ */
+/* ロゴ画像のコンテナ
+   変更: 雲と家の絵文字（☁️🏠）を絶対配置で重ねる方式から、
+   1枚のロゴアニメーション画像に差し替えたため簡素化しました。
+   絵文字の重ね合わせが不要になったので position: relative も外しています。
+   これに伴い、旧 .logo-cloud / .logo-house の定義は削除しました。 */
 .site-logo {
   display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 70px;
+  width: 160px;
+  height: 160px;
   margin-bottom: 16px;
   animation: fadeUp 0.5s ease forwards;
 }
 
-/* 雲の絵文字：ロゴの土台として絶対配置 */
-.site-logo .logo-cloud {
-  font-size: 99px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  line-height: 1;
+/* コンテナいっぱいにロゴ画像を表示する。
+   画像ファイル自体は 320px（表示サイズの2倍）で、Retina 等の
+   高精細ディスプレイでもリングの文字がぼやけないようにしています。 */
+.site-logo img {
+  width: 100%;
+  height: 100%;
 }
 
-/* 家の絵文字：雲の上に重なるよう絶対配置。z-index: 2 で雲の手前に表示する */
-.site-logo .logo-house {
-  font-size: 52px;
-  position: absolute;
-  bottom: 42px;
-  left: 32px;
-  z-index: 2;
-  line-height: 1;
+/* スマホでは少し小さくして、キャッチコピーが画面内に収まるようにする */
+@media (max-width: 480px) {
+  .site-logo {
+    width: 130px;
+    height: 130px;
+  }
 }
 
 /* clamp(最小値, 推奨値, 最大値)：
