@@ -3,7 +3,13 @@
   「これはHTML5で書かれたWebページです」とブラウザに伝える宣言です。
   この行がないとブラウザが古い互換モードで描画し、レイアウトが崩れることがあります。
 -->
-<!-- <html> タグ：ページ全体を囲む最外側のタグ
+<!-- 変更: コメント内に書いていた生のタグ（山かっこ付き）を、タグ名だけの表記に改めました。
+     理由: 正規表現でHTMLを走査するツール（SNSのリンク展開ボットや一部のSEOクローラー）は
+           コメントを読み飛ばさないため、コメント内のタグを本物と誤認することがあります。
+           ブラウザの解釈には影響しませんが、誤読の芽を残さないための予防措置です。
+           以前ボディ終了タグをコメント内に書いて不具合が出た件と、同じ対処方針です。
+           このコメント自身も同じ轍を踏まないよう、タグは山かっこを使わずに書いています。 -->
+<!-- html タグ：ページ全体を囲む最外側のタグ
   - lang="en"       → このページの主要言語が英語であることを宣言。
                       スクリーンリーダー（視覚障害者向け読み上げソフト）や
                       翻訳ツールが正しく動作するために重要。
@@ -11,7 +17,8 @@
   - id="top"        → フッターの「↑ TOP」リンクから #top へ戻るためのアンカー。
 -->
 <html lang="en" prefix="og: https://ogp.me/ns#" id="top">
-<!-- <head> セクション
+<!-- 変更: 生のタグ表記をタグ名だけに改めました（理由は上のコメントを参照） -->
+<!-- head セクション
   ページの「見えない情報」を書く場所です。
   ブラウザや検索エンジン・SNSへの指示をまとめています。
   ここに書いた内容は画面には表示されません。
@@ -32,7 +39,9 @@
   <!-- ===== 基本SEOタグ =====
     SEO（Search Engine Optimization）＝検索エンジン最適化
     Googleなどの検索結果に正しく表示されるための情報を設定します。
-    <title> : ブラウザのタブやGoogleの検索結果に表示されるページタイトル。
+    変更: ここに生の title タグを書いていたため、正規表現でHTMLを読むツールが
+          本物のタイトルより先にこのコメントを拾ってしまう状態でした。タグ名だけの表記に改めます。
+    title タグ : ブラウザのタブやGoogleの検索結果に表示されるページタイトル。
     SEOで最も重要なタグのひとつです。
   -->
   <title>Flying Dev Lab</title>
@@ -40,10 +49,22 @@
     クリック率に影響するため、内容を簡潔にアピールする文章を入れます。
     Googleが必ずしもこの文章を使うとは限りませんが、設定しておくのがベストプラクティスです。
   -->
+  <!-- 変更: アプリ構成の変化に合わせて説明文を更新しました。
+       旧: 末尾が「MAKE10」という算数ゲーム1本の紹介になっていました。
+       理由: MAKE10 は App Store 上で「MAKE10 - Kids Game Collection」に改称され、
+             算数パズル単体からゲーム集へ性格が変わりました。さらに一般向けの
+             PriceWise が公開され、こども向けアプリ1本という前提が実態と合わなくなったためです。
+       ※ 検索結果でのスニペット切れを避けるため、全体を155文字以内に収めています。 -->
   <meta name="description"
-    content="Flying Dev Lab builds safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including MAKE10, an addition game for preschoolers.">
+    content="Flying Dev Lab builds safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including Kids Game Collection and PriceWise.">
   <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
-  <meta name="keywords" content="iOS apps, kids apps, educational apps, math games, addition game, Flying Dev Lab, indie developer, indie dev, privacy-friendly apps, ad-free apps">
+  <!-- 変更: 算数ゲーム単体を指す語を外し、現在のラインナップに対応する語を追加しました。
+       理由: こども向けの計算ゲーム1本という前提が実態と合わなくなったためです。
+             「kids games」（ゲーム集）、「unit price calculator」（PriceWise）、
+             「engineering reference」（TechRef）を追加しています。
+       ※ 「ad-free apps」は残しています。広告なしの無料アプリが実在するため
+          記述として誤りではなく、また keywords は利用者の目に触れないタグです。 -->
+  <meta name="keywords" content="iOS apps, kids apps, kids games, educational apps, math games, unit price calculator, engineering reference, Flying Dev Lab, indie developer, indie dev, privacy-friendly apps, ad-free apps">
   <!-- author : ページの作者・制作者名。SEO直接効果は薄いが明示しておくのがマナー。 -->
   <!-- 変更: 英語ページのブランド統一のため Flying Dev Lab に（旧「空飛ぶ研究室（Flying Dev Lab）」） -->
   <meta name="author" content="Flying Dev Lab">
@@ -88,7 +109,9 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://flyingdevlab.com/">
   <meta property="og:title" content="Flying Dev Lab">
-  <meta property="og:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including MAKE10, an addition game for preschoolers.">
+  <!-- 変更: description と同じ理由でアプリ名を差し替えました。
+       ※ OGP は検索結果と違い文字数の制約が緩いため、description より具体的に書いています。 -->
+  <meta property="og:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including Kids Game Collection, a free game app for children, and PriceWise, a unit price comparison tool.">
   <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -187,7 +210,8 @@
        preconnect（事前接続）も外部接続を伴うため、あわせて削除した。 -->
   <link rel="stylesheet" href="style.css">
 </head>
-<!-- <body> セクション
+<!-- 変更: 生のタグ表記をタグ名だけに改めました（理由はファイル冒頭のコメントを参照） -->
+<!-- body セクション
   ここからがブラウザに実際に表示される内容です。
   大きく「ヘッダー → メイン → フッター」という構造になっています。
 -->
@@ -443,7 +467,8 @@
       </a>
     
     </div>
-    <!-- ページ先頭へ戻るリンク。href="#top" は <html id="top"> へジャンプします。
+    <!-- 変更: 生のタグ表記をタグ名だけに改めました（理由はファイル冒頭のコメントを参照） -->
+    <!-- ページ先頭へ戻るリンク。href="#top" は html タグの id="top" へジャンプします。
     ページが縦に長くなった場合、有効です。 -->
     <a href="#top" class="footer-top" aria-label="ページの先頭へ">↑ TOP</a>
     <!-- legal：プライバシーポリシーページへのリンク。
