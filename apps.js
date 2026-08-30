@@ -51,32 +51,96 @@
  */
 const APPS = Object.freeze([
 
-  // ─── MAKE10 / 10をつくろう ───
+  /* --------------------------------------------------------------------
+   * 変更: アプリ名から「MAKE10 - 」の接頭辞を外しました。
+   *
+   * 理由:
+   *   同じTOPページの「Try in Browser」セクションに、単体ゲームとしての
+   *   「MAKE10」（/make10/ の30秒チャレンジ）が別に存在します。
+   *   iOSアプリ側を「Kids Game Collection」と呼び分けることで、
+   *   「MAKE10 = ブラウザで遊べる単体ゲーム」
+   *   「Kids Game Collection = iOSアプリ（ゲーム集）」
+   *   という役割の違いが読み手に伝わります。
+   *
+   * 注意:
+   *   App Store 側の表示名は「MAKE10 - Kids Game Collection」のままです。
+   *   カードをタップした先で名前の見え方が変わる点は許容しています。
+   *   App Store 側もリネームする場合は、ここの表記も合わせて見直してください。
+   *
+   * 日本語名について:
+   *   /ja/ ページは「迷路」「モグラ叩き」など日本語表記で統一しているため、
+   *   カタカナの「キッズゲームコレクション」を踏襲しました。
+   *   英語表記に揃えたい場合は下の name: の1行だけを差し替えてください。
+   * -------------------------------------------------------------------- */
+
+  // ─── Kids Game Collection ───
   // 子ども向け・完全無料・広告なし。スタジオのブランド旗艦アプリ。
-  // status: "coming" のため url は null。公開されたら "live" に変え url を設定してください。
   {
     id:      "make-ten",       // 内部ID。他のアプリと重複しないようにしてください。
-    name:    "MAKE10 - キッズゲームコレクション", // 日本語タブで表示されるアプリ名
-    name_en: "MAKE10 - Kids Game Collection", // 英語タブで表示されるアプリ名
+                               // 表示名は変わりましたが、内部IDは変更していません（識別子の安定性を優先）。
+    name:    "キッズゲームコレクション", // 日本語ページで表示されるアプリ名
+    name_en: "Kids Game Collection",     // 英語ページで表示されるアプリ名
     desc:    "完全無料、広告なし、安心安全のこども向けシンプルゲームアプリ。",
     desc_en: "A simple, safe game for kids — completely free, no ads.",
     icon:    "🔢",             // iconImg が読み込めない場合のフォールバック絵文字
     iconImg: "/images/icon-MAKE10.png", // アイコン画像パス。先頭の / が重要（/ja/ などサブページでも正しく読み込むため）。null にすると icon の絵文字が使われます。
-    status:  "live",         // "live" = live バッジ表示・リンクあり
-    url:     "https://apps.apple.com/app/id6760253962"              // 公開中は App Store の URL を入れてください
+    status:  "live",           // "live" = live バッジ表示・リンクあり
+    url:     "https://apps.apple.com/app/id6760253962"
   },
 
-  // ─── 価格比べ（仮）───
-  // 一般向けフリーミアムアプリ。単価を比較するユーティリティ。
-  // アプリ名・説明文は正式決定後に更新してください。
+  /* --------------------------------------------------------------------
+   * 変更: 「価格比べ（仮）」を正式名称「PriceWise / 単価比べ」に更新し、
+   *       status を "coming" から "live" に変更、App Store URL を設定しました。
+   *
+   * 理由:
+   *   App Store Connect 上で 1.0.1 が「配信準備完了」となり公開されたため。
+   *   Apple ID は 6764689863 です。
+   *
+   * 注意:
+   *   id は "kakaku-kurabe" のまま据え置いています（内部IDのみで外部参照がなく、
+   *   今のタイミングで変える必要がないため）。
+   *   iconImg のファイル名も "/images/icon-kakakukurabe.png" のまま据え置きです。
+   *   画像の中身が PriceWise の実アイコンに差し替え済みのため、パス変更は不要です。
+   * -------------------------------------------------------------------- */
+
+  // ─── PriceWise / 単価比べ ───
+  // 一般向けフリーミアムアプリ。内容量あたりの単価を比較するユーティリティ。
   {
-    id:      "kakaku-kurabe",
-    name:    "価格比べ（仮）",
-    name_en: "Unit Price Compare (TBD)",
-    desc:    "数量あたりの単価を計測。",
+    id:      "kakaku-kurabe",  // 内部ID。旧名称「価格比べ（仮）」時代のIDをそのまま使用しています。
+    name:    "単価比べ",
+    name_en: "PriceWise",
+    desc:    "内容量あたりの単価をすばやく比較。買い物の「どっちが得？」に即答。",
     desc_en: "Compare unit prices at a glance.",
     icon:    "🏷️",
     iconImg: "/images/icon-kakakukurabe.png", // 先頭の / で始まる絶対パス（/ja/ などサブページでも正しく読み込むため）
+    status:  "live",           // "live" = live バッジ表示・リンクあり
+    url:     "https://apps.apple.com/app/id6764689863"
+  },
+
+  /* --------------------------------------------------------------------
+   * 追加: TechRef を新規エントリとして追加しました。
+   *
+   * 理由:
+   *   開発中であることをサイト上で告知するため。
+   *
+   * status を "coming" にしている理由:
+   *   App Store Connect 上では 1.0 が「提出準備中」の段階で、まだ審査に
+   *   出していません。Apple ID（6775818457）は採番済みですが、App Store の
+   *   商品ページはまだ存在しないため、URL を入れるとリンク先が404になります。
+   *   審査を通過して公開されたら、status を "live" に変え、
+   *   url に "https://apps.apple.com/app/id6775818457" を設定してください。
+   * -------------------------------------------------------------------- */
+
+  // ─── TechRef ───
+  // 技術者向けリファレンスツール。無料お試し後に購入するモデル。
+  {
+    id:      "techref",
+    name:    "TechRef",
+    name_en: "TechRef",
+    desc:    "インチ・ミリ・はめあい公差を、ひとつのアプリで即計算。",
+    desc_en: "Inch, mm, and tolerance in one.",
+    icon:    "📐",             // iconImg が読み込めない場合のフォールバック絵文字
+    iconImg: "/images/icon-techref.png",
     status:  "coming",         // "coming" = COMING SOON バッジ表示・リンクなし
     url:     null              // 公開後は App Store の URL を入れてください
   },
