@@ -175,6 +175,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/pinball/"/>
   </url>
 
+  <url>
+    <loc>https://flyingdevlab.com/ten-puzzle/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ten-puzzle/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/ten-puzzle/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/ten-puzzle/"/>
+  </url>
+
   <!-- 
     ============================================================
     プライバシーポリシー（サイト共通・個人情報の取り扱い方針のページ）

@@ -219,7 +219,20 @@ main {
   font-weight: 300;
   margin: 0 2px;
 }
-.ja { font-family: var(--font-body); }
+/*
+  英語をメイン、日本語をサブとして表示する。
+  .en は表示用フォント（Boogaloo）、.ja は本文フォント。
+
+  ★ 明度ではなく文字サイズで従属を示している理由 ★
+  従行を --color-text-muted #b39ddb まで落とす手もあるが、
+  遊び方リストなど小さい文字でコントラストが基準ぎりぎりになる。
+  サイズ差だけなら可読性を損なわずに主従を表現できるため、
+  サイト内の他ゲーム（MAKE10 / ピンボール / テンパズル）と手法を揃えている。
+*/
+.ja {
+  font-family: var(--font-body);
+  font-size: 0.9em;
+}
 .en { font-family: var(--font-display); letter-spacing: 0.02em; }
 
 /* ========================================

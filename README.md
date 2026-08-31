@@ -36,7 +36,7 @@ With a mission to "provide simple, honest tools that children can use with peace
 We never treat children as a means to profit.  
 Our children's apps are built with **no ads, no in-app purchases, and no external data transmission**.
 
-📜 [誓いの全文を読む / Read the full pledge](https://flyingdevlab.com/pledge.html)
+📜 [誓いの全文を読む / Read the full pledge](https://flyingdevlab.com/pledge)
 
 ---
 
@@ -44,7 +44,8 @@ Our children's apps are built with **no ads, no in-app purchases, and no externa
 
 | ファイル | 内容 |
 |--------|------|
-| `index.html` | トップページ |
+| `index.html` | トップページ（英語） |
+| `ja/` | トップページ（日本語） |
 | `privacy-policy.html` | プライバシーポリシー・免責事項 |
 | `tokusho.html` | 特定商取引法に基づく表示 |
 | `pledge.html` | こどもたちへの誓い |
@@ -53,6 +54,9 @@ Our children's apps are built with **no ads, no in-app purchases, and no externa
 | `apps.js` | アプリ一覧データ（ここを編集するだけでTOPに反映） |
 | `sitemap.xml` | サイトマップ |
 | `robots.txt` | クローラー設定 |
+| `_headers` | Cloudflare Pages のHTTPヘッダー定義 |
+| `app-ads.txt` | AdMob 用の販売者宣言（PriceWise） |
+| `fonts/` | 自己ホストフォント（woff2 + OFLライセンス） |
 | `images/` | アプリアイコン等の画像アセット |
 | `favicon.ico` | ファビコン |
 | `favicon-512.png` | 高解像度ファビコン（512×512） |
@@ -62,7 +66,11 @@ Our children's apps are built with **no ads, no in-app purchases, and no externa
 | `cheese-escape-web/` | ブラウザゲーム：Cheese Escape（迷路） |
 | `whack-a-mole/` | ブラウザゲーム：Whack-a-Mole（モグラ叩き） |
 | `pinball/` | ブラウザゲーム：Pinball（ピンボール） |
+| `ten-puzzle/` | ブラウザゲーム：Ten Puzzle（テンパズル） |
 | `privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
+
+ブラウザゲームのページは英語をメイン、日本語をサブとして表示しています。
+`html` の `lang` は `en`（`ja/` のみ `ja`）で、日本語の行には個別に `lang="ja"` を付けています。
 
 ---
 
@@ -72,7 +80,7 @@ Our children's apps are built with **no ads, no in-app purchases, and no externa
 
 - **Languages:** Swift (SwiftUI), HTML5, CSS3, JavaScript
 - **Hosting:** Cloudflare Pages
-- **Typography:** Self-hosted Outfit (latin) + system font stack (Noto Sans JP / Hiragino / Yu Gothic)
+- **Typography:** Self-hosted latin webfonts (Outfit / Nunito / Orbitron / Boogaloo) + system font stack for Japanese (Noto Sans JP / Hiragino / Yu Gothic)
 - **Tools:** VS Code, Xcode, M4 MacBook Pro
 
 ### Qualifications

@@ -181,7 +181,7 @@ function buildGrid() {
     const hole = document.createElement('div');
     hole.classList.add('hole');
     hole.setAttribute('role', 'gridcell');
-    hole.setAttribute('aria-label', `穴 ${i + 1} / Hole ${i + 1}`);
+    hole.setAttribute('aria-label', `Hole ${i + 1} / 穴 ${i + 1}`);
     hole.dataset.index = i;
 
     // モグラのクリッピングコンテナ（overflow:hidden でモグラを穴の中に隠す）
@@ -193,7 +193,7 @@ function buildGrid() {
     const mole = document.createElement('div');
     mole.classList.add('mole');
     mole.setAttribute('role', 'button');
-    mole.setAttribute('aria-label', `モグラ ${i + 1} / Mole ${i + 1}`);
+    mole.setAttribute('aria-label', `Mole ${i + 1} / モグラ ${i + 1}`);
     mole.setAttribute('tabindex', '0');
     mole.dataset.index = i;
 
@@ -617,7 +617,7 @@ function showScorePopup(event) {
   popup.classList.add('score-popup');
 
   // 日英併記テキスト / Bilingual text
-  popup.innerHTML = '<span class="ja">+1 ポイント</span><span class="sep">/</span><span class="en">+1 Point</span>';
+  popup.innerHTML = '<span class="en">+1 Point</span><span class="sep">/</span><span class="ja" lang="ja">+1 ポイント</span>';
 
   // クリック位置に表示する / Position near the click point
   let x, y;

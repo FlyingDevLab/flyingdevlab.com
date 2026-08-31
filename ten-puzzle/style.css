@@ -2,6 +2,7 @@
    自己ホスト Nunito（latin, 400 / 700 / 900）
    出典: @fontsource/nunito 5.2.5 — SIL Open Font License 1.1
    フォントファイルの場所: /fonts/ （リポジトリルート）
+   make10/style.css と同じ定義です。外部リクエストは発生しません。
    ================================================================ */
 @font-face {
   font-family: 'Nunito';
@@ -36,7 +37,7 @@
 
 
 /* ================================================================
-   style.css – MAKE10 全スタイル
+   style.css – テンパズル 全スタイル
    構成:
    01. CSS カスタムプロパティ（カラーパレット）
    02. リセット & ベース
@@ -46,23 +47,24 @@
    06. ガラスカード
    07. ヘッダー
    08. フッター
-   09. トップ画面
+   09. トップ画面：ルール文とモード選択
    10. ボタン共通・バリアント
    11. ゲーム画面：ヘッダー行
-   12. ゲーム画面：タイムゲージ
-   13. ゲーム画面：問題カード
-   14. ゲーム画面：選択肢タイル
-   15. フィードバック演出
-   16. リザルト画面
-   17. ハイスコア表示
-   18. アニメーション一覧
-   19. レスポンシブ
+   12. ゲーム画面：数字タイル
+   13. ゲーム画面：式の表示
+   14. ゲーム画面：演算子ボタン・補助ボタン
+   15. リザルト画面
+   16. アニメーション一覧
+   17. レスポンシブ
+
+   ★ 01〜10 と 15 は make10/style.css と同じ設計トークン・
+     同じクラス名を使っています。見た目を揃えるためです。
+     色や角丸を変えるときは両方を直してください。
    ================================================================ */
 
 
 /* ──────────────────────────────────────────────────────────────
    01. CSS カスタムプロパティ
-   ゲーム全体の色・影・ガラス効果を一元管理する CSS 変数
 ────────────────────────────────────────────────────────────── */
 :root {
   --bg:           #f5f0e6;
@@ -109,7 +111,6 @@ body {
 
 /* ──────────────────────────────────────────────────────────────
    03. 背景アニメーション（光球）
-   画面全体に固定した装飾用の光球。ゲーム UI より後ろに配置する。
 ────────────────────────────────────────────────────────────── */
 .bg-orbs {
   position: fixed;
@@ -127,7 +128,6 @@ body {
   animation: orbFloat 12s ease-in-out infinite alternate;
 }
 
-/* 左上：青紫の大きい光球 */
 .bg-orbs .orb:nth-child(1) {
   width: 320px; height: 320px;
   background: var(--primary);
@@ -135,7 +135,6 @@ body {
   animation-duration: 14s;
 }
 
-/* 右下：紫の中くらいの光球 */
 .bg-orbs .orb:nth-child(2) {
   width: 260px; height: 260px;
   background: var(--accent);
@@ -144,7 +143,6 @@ body {
   animation-delay: -4s;
 }
 
-/* 中央：緑の小さい光球 */
 .bg-orbs .orb:nth-child(3) {
   width: 200px; height: 200px;
   background: var(--gauge-full);
@@ -169,7 +167,6 @@ body {
   padding: 0 0 4px;
 }
 
-/* ゲーム本体ラッパー：縦幅の上限を設けてコンテンツが広がりすぎないようにする */
 .game-container {
   position: relative;
   z-index: 1;
@@ -185,7 +182,6 @@ body {
 
 /* ──────────────────────────────────────────────────────────────
    05. 画面切り替え
-   非アクティブな画面は display:none で完全非表示にする。
 ────────────────────────────────────────────────────────────── */
 .screen {
   display: none;
@@ -196,19 +192,19 @@ body {
   animation: fadeIn 0.4s ease;
 }
 
-.screen.active {
-  display: flex;
-}
+.screen.active { display: flex; }
 
-/* ゲーム画面はアイテムを上揃えにする（タイムゲージを上部に固定するため） */
+/* ゲーム画面は上から順に積む。要素が多いので縦スクロールを許可する。 */
 #screen-game {
   justify-content: flex-start;
+  width: 100%;
+  gap: 10px;
+  overflow-y: auto;
 }
 
 
 /* ──────────────────────────────────────────────────────────────
    06. ガラスカード
-   backdrop-filter で背景をぼかし、半透明の境界線でガラス質感を演出する。
 ────────────────────────────────────────────────────────────── */
 .glass-card {
   background: var(--glass);
@@ -224,7 +220,6 @@ body {
 
 /* ──────────────────────────────────────────────────────────────
    07. ヘッダー
-   全画面で常時表示されるゲームタイトルバー。
 ────────────────────────────────────────────────────────────── */
 .site-header {
   position: relative;
@@ -244,7 +239,6 @@ body {
   line-height: 1;
 }
 
-/* [FIX] "10" の部分をグラデーションカラーで強調する（旧: .title-num → 修正: .title-accent） */
 .site-title .title-accent {
   background: linear-gradient(135deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
@@ -252,7 +246,6 @@ body {
   background-clip: text;
 }
 
-/* [FIX] ヘッダーのサブタイトル（30-SECOND CHALLENGE）のスタイル */
 .site-tagline {
   font-size: 10px;
   font-weight: 700;
@@ -264,7 +257,6 @@ body {
 
 /* ──────────────────────────────────────────────────────────────
    08. フッター
-   全画面で常時表示されるコピーライト・外部リンクエリア。
 ────────────────────────────────────────────────────────────── */
 .site-footer {
   position: relative;
@@ -297,11 +289,8 @@ body {
 
 
 /* ──────────────────────────────────────────────────────────────
-   09. トップ画面
+   09. トップ画面：ルール文とモード選択
 ────────────────────────────────────────────────────────────── */
-
-/* ゲームルール見出し */
-/* [FIX] HTML で使用されているが CSS に未定義だったため追加 */
 .rule-heading {
   font-size: 13px;
   font-weight: 700;
@@ -309,34 +298,99 @@ body {
   letter-spacing: 1px;
   margin-bottom: 8px;
   text-transform: uppercase;
+  text-align: center;
 }
 
-/* ゲームルールの説明文 */
 .title-rule {
   font-size: 14px;
   color: var(--muted);
   text-align: center;
   line-height: 1.7;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
-.title-rule strong {
-  color: var(--text);
-}
+.title-rule strong { color: var(--text); }
 
 /*
   日本語の従行（英語メイン・日本語サブ構成）
 
   ★ 明度を落とさず、文字サイズだけで従属を示している理由 ★
   .title-rule の色 var(--muted) #858588 は、背景 var(--bg) #f5f0e6 に対して
-  コントラスト比が約 3.2:1 しかありません。WCAG AA の基準（通常文字で 4.5:1）を
-  すでに下回っています。ここから opacity で薄くすると、日本語の行だけ
-  さらに読みにくくなります。
-  チーズクエストは白地に別色を当てて主従を分けていますが、こちらは
-  背景がクリーム色で使える色域が狭いため、サイズ差だけで表現しています。
+  コントラスト比が約 3.2:1 しかなく、WCAG AA の基準（通常文字 4.5:1）を
+  すでに下回っています。ここから opacity で薄くすると日本語の行だけ
+  さらに読みにくくなるため、サイズ差だけで主従を表現しています。
+  make10/style.css と同じ定義です（両ページで見た目を揃えるため、
+  片方を変えるときはもう片方も直してください）。
 */
 .tip-ja {
   font-size: 0.9em;
+}
+
+/* モード選択ボタンの縦並び */
+.mode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 1つのモードボタン：アイコン＋テキスト＋ハイスコア */
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  background: var(--card);
+  box-shadow: 0 4px 16px var(--shadow);
+  font-family: 'Nunito', sans-serif;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mode-btn:active { transform: scale(0.97); }
+
+.mode-btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.mode-icon {
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 46px;
+}
+
+.mode-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mode-title {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.mode-sub {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* モードごとのベスト記録。記録がないときは空文字なので何も出ない。 */
+.mode-hi {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--accent);
+  flex-shrink: 0;
 }
 
 
@@ -359,14 +413,13 @@ body {
   text-decoration: none;
 }
 
-.btn:active  { transform: scale(0.95); }
+.btn:active { transform: scale(0.95); }
 
 .btn:focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 3px;
 }
 
-/* グラデーション背景のメインボタン */
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #fff;
@@ -375,7 +428,6 @@ body {
 
 .btn-primary:active { box-shadow: 0 2px 12px rgba(77, 128, 209, 0.2); }
 
-/* App Store ダウンロードボタン（現在はコメントアウト中） */
 .btn-appstore {
   background: #000;
   color: #fff;
@@ -386,11 +438,8 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.btn-appstore svg {
-  width: 22px; height: 22px; fill: #fff;
-}
+.btn-appstore svg { width: 22px; height: 22px; fill: #fff; }
 
-/* ガラス素材のセカンダリボタン */
 .btn-secondary {
   background: var(--glass);
   backdrop-filter: blur(12px);
@@ -401,7 +450,6 @@ body {
   padding: 14px 28px;
 }
 
-/* ゲーム画面左上の小さいホームボタン */
 .btn-home {
   width: 36px; height: 36px;
   border-radius: 12px;
@@ -434,219 +482,224 @@ body {
 .play-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   width: 100%;
-  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.progress-display {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--muted);
+  letter-spacing: 0.06em;
 }
 
 .score-display {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--muted);
-}
-
-/* スコア数字だけ大きく目立たせる */
-.score-display span {
-  font-size: 22px;
-  color: var(--text);
-}
-
-/* コンボがないときも高さを確保してレイアウトがずれないようにする */
-.combo-display {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--accent);
-  min-height: 20px;
-  transition: transform 0.2s ease;
-}
-
-/* JS で .pop を付け外しすることでアニメーションを毎回再トリガーする */
-.combo-display.pop {
-  animation: comboPop 0.3s ease;
-}
-
-
-/* ──────────────────────────────────────────────────────────────
-   12. ゲーム画面：タイムゲージ
-────────────────────────────────────────────────────────────── */
-.gauge-wrapper {
-  width: 100%;
-  height: 12px;
-  background: var(--gauge-bg);
-  border-radius: 6px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
-.gauge-bar {
-  height: 100%;
-  border-radius: 6px;
-  background: var(--gauge-full);
-  transition: width 0.08s linear, background-color 0.4s ease;
-  will-change: width;
-}
-
-
-/* ──────────────────────────────────────────────────────────────
-   13. ゲーム画面：問題カード
-────────────────────────────────────────────────────────────── */
-.question-area {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 16px;
-  position: relative;
-}
-
-.question-card {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 32px var(--shadow);
-  position: relative;
-}
-
-/* 「MAKE 10!」ラベル */
-.question-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-  margin-bottom: 4px;
-  letter-spacing: 1px;
-}
-
-/* 問題の数字（大きく中央に表示） */
-.question-number {
-  font-size: 80px;
-  font-weight: 900;
-  line-height: 1;
-  color: var(--primary);
-  transition: transform 0.2s ease;
-}
-
-/* JS が付け外しするクラス。リフロー強制で毎回アニメーションをリセットする */
-.question-number.animate-in {
-  animation: numberIn 0.25s ease;
-}
-
-/* 「? + X = 10」ヒント行 */
-.question-hint {
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 8px;
-  font-weight: 700;
-}
-
-.question-hint span {
-  color: var(--accent);
-  font-size: 15px;
-}
-
-/* カードの右上に「NEXT」ラベルを絶対配置する */
-.next-label {
-  position: absolute;
-  top: 12px; right: 16px;
   font-size: 11px;
   font-weight: 700;
   color: var(--muted);
-  opacity: 0.7;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
 }
 
-/* 次の問題の数字をやや薄く表示してプレビュー感を出す */
-.next-number {
-  position: absolute;
-  top: 24px; right: 16px;
-  font-size: 22px;
+.score-display span {
+  font-size: 18px;
   font-weight: 900;
-  color: var(--accent);
-  opacity: 0.5;
+  color: var(--text);
+  margin-left: 4px;
 }
 
 
 /* ──────────────────────────────────────────────────────────────
-   14. ゲーム画面：選択肢タイル
+   12. ゲーム画面：数字タイル
+   4枚の数字。1枚につき1回だけ使えるので、使用済みは薄く表示する。
 ────────────────────────────────────────────────────────────── */
-.tiles-grid {
+.digits-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
   width: 100%;
-  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
-.tile {
-  aspect-ratio: 1.4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--choice-fill);
-  border: 2px solid var(--glass-border);
+.digit-tile {
+  aspect-ratio: 1;
   border-radius: 18px;
-  font-size: 42px;
+  border: 1px solid var(--glass-border);
+  background: var(--card);
+  box-shadow: 0 4px 16px var(--shadow);
+  font-family: 'Nunito', sans-serif;
+  font-size: 34px;
   font-weight: 900;
   color: var(--text);
   cursor: pointer;
-  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
-  position: relative;
-  overflow: hidden;
+  transition: transform 0.12s ease, opacity 0.2s ease;
+  animation: tileAppear 0.3s ease backwards;
 }
 
-.tile:active { transform: scale(0.93); }
+.digit-tile:active { transform: scale(0.93); }
 
-.tile:focus-visible {
+.digit-tile:focus-visible {
   outline: 3px solid var(--primary);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
-/* 正解タップ時：緑色の背景＋拡大アニメーション */
-.tile.correct {
-  background: rgba(107, 184, 132, 0.2);
-  border-color: var(--gauge-full);
-  animation: tileCorrect 0.35s ease;
-}
-
-/* 誤答タップ時：赤色の背景＋横揺れアニメーション */
-.tile.wrong {
-  background: rgba(204, 117, 102, 0.15);
-  border-color: var(--gauge-warn);
-  animation: tileWrong 0.35s ease;
-}
-
-/* 問題切り替え時のタイル出現アニメーション */
-.tile.appear {
-  animation: tileAppear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* 式の中で使用済みの数字。押せなくなるので見た目でも伝える。 */
+.digit-tile.used {
+  opacity: 0.28;
+  cursor: default;
+  box-shadow: none;
 }
 
 
 /* ──────────────────────────────────────────────────────────────
-   15. フィードバック演出
+   13. ゲーム画面：式の表示
 ────────────────────────────────────────────────────────────── */
-
-/* 正解・不正解時に問題エリア中央に絵文字を表示してフェードアウトさせる */
-.feedback {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 48px;
-  pointer-events: none;
-  animation: feedbackPop 0.5s ease forwards;
-  z-index: 10;
+.expr-area {
+  width: 100%;
+  flex-shrink: 0;
 }
 
-/* コンボ達成時に画面上をランダムな絵文字が舞い上がって消える演出 */
-.combo-emoji {
-  position: fixed;
-  font-size: 36px;
-  pointer-events: none;
-  z-index: 20;
-  animation: emojiRise 1.2s ease forwards;
+.expr-display {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 16px;
+  background: var(--choice-fill);
+  border: 1px solid var(--glass-border);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  word-break: break-all;
+  text-align: center;
+}
+
+/* 式が空のときの案内文 */
+.expr-placeholder {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+
+/* ヒントの式。💡 を押すまで空。 */
+.hint-text {
+  min-height: 18px;
+  margin-top: 6px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* 判定メッセージ（正解・ちがう…など） */
+.judge-text {
+  min-height: 20px;
+  margin-top: 2px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.judge-text.ok   { color: var(--gauge-full); animation: scoreReveal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.judge-text.ng   { color: var(--gauge-warn); animation: shake 0.4s ease; }
+
+
+/* ──────────────────────────────────────────────────────────────
+   14. ゲーム画面：演算子ボタン・補助ボタン
+────────────────────────────────────────────────────────────── */
+.ops-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.op-btn {
+  aspect-ratio: 1;
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.op-btn:active { transform: scale(0.9); }
+
+.op-btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.tool-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.btn-tool {
+  flex: 1;
+  padding: 10px 4px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.btn-tool:active { transform: scale(0.94); }
+
+.btn-tool:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* ヒントを使ったあとは押せなくする（見た目でも伝える） */
+.btn-tool[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.judge-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  flex-shrink: 0;
+  padding-bottom: 4px;
+}
+
+.btn-judge { width: 100%; padding: 14px 20px; }
+
+/* チャレンジモードだけに出る「作れない！」ボタン */
+.btn-impossible {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 15px;
 }
 
 
 /* ──────────────────────────────────────────────────────────────
-   16. リザルト画面
+   15. リザルト画面
 ────────────────────────────────────────────────────────────── */
 .result-score-label {
   font-size: 14px;
@@ -656,7 +709,6 @@ body {
   margin-bottom: 4px;
 }
 
-/* スコア数字：グラデーション＋バウンスで登場 */
 .result-score {
   font-size: 72px;
   font-weight: 900;
@@ -691,22 +743,6 @@ body {
   align-items: center;
 }
 
-
-/* ──────────────────────────────────────────────────────────────
-   17. ハイスコア表示
-────────────────────────────────────────────────────────────── */
-
-/* タイトル画面のハイスコア。スコアがない場合は空（min-height で高さを確保） */
-.title-hi {
-  font-size: 15px;
-  font-weight: 900;
-  color: var(--accent);
-  min-height: 22px;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-}
-
-/* リザルト画面のハイスコア */
 .result-hi {
   font-size: 15px;
   font-weight: 900;
@@ -716,7 +752,6 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* 新記録時：緑色で拡大アニメーション付き */
 .result-hi.new-record {
   color: var(--gauge-full);
   font-size: 18px;
@@ -725,43 +760,30 @@ body {
 
 
 /* ──────────────────────────────────────────────────────────────
-   18. アニメーション一覧
+   16. アニメーション一覧
 ────────────────────────────────────────────────────────────── */
-
-/* 背景光球の浮遊 */
 @keyframes orbFloat {
   0%   { transform: translate(0, 0) scale(1); }
   100% { transform: translate(30px, -40px) scale(1.15); }
 }
 
-/* 画面切り替え時のフェードイン */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 問題数字の切り替えアニメーション */
-@keyframes numberIn {
-  from { transform: scale(0.5) rotate(-8deg); opacity: 0; }
-  to   { transform: scale(1) rotate(0); opacity: 1; }
+@keyframes tileAppear {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
-/* コンボ表示のバウンス */
-@keyframes comboPop {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.3); }
-  100% { transform: scale(1); }
+@keyframes scoreReveal {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
-/* 正解タイルの拡大 */
-@keyframes tileCorrect {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-
-/* 誤答タイルの横揺れ */
-@keyframes tileWrong {
+/* 不正解時の横揺れ */
+@keyframes shake {
   0%   { transform: translateX(0); }
   20%  { transform: translateX(-6px); }
   40%  { transform: translateX(6px); }
@@ -770,45 +792,30 @@ body {
   100% { transform: translateX(0); }
 }
 
-/* タイル出現アニメーション */
-@keyframes tileAppear {
-  from { transform: scale(0.6); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
-}
-
-/* 正解・不正解フィードバック絵文字のポップ＆フェードアウト */
-@keyframes feedbackPop {
-  0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
-  50%  { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-}
-
-/* コンボ達成絵文字の舞い上がり */
-@keyframes emojiRise {
-  0%   { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(-160px) scale(1.2) rotate(20deg); opacity: 0; }
-}
-
-/* リザルトのスコア登場アニメーション */
-@keyframes scoreReveal {
-  from { transform: scale(0.3); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
+/*
+  ★ アニメーションを減らす設定への配慮 ★
+  OS 側で「視差効果を減らす」を有効にしている利用者には、
+  背景の光球やポップの動きが不快になることがあります。
+  prefers-reduced-motion で動きをほぼ止めます。
+*/
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 
 /* ──────────────────────────────────────────────────────────────
-   19. レスポンシブ
+   17. レスポンシブ
 ────────────────────────────────────────────────────────────── */
 
 /* 画面高さ 640px 以下（古いスマートフォン）向けに各要素を縮小する */
 @media (max-height: 640px) {
-  .question-number { font-size: 56px; }
-  .tile            { font-size: 34px; }
-  .question-card   { padding: 14px; }
-  .glass-card      { padding: 20px 18px; }
-}
-
-/* 幅が広い端末ではタイルを少し横長にして余白を活かす */
-@media (min-width: 500px) {
-  .tile { aspect-ratio: 1.6; }
+  .digit-tile   { font-size: 28px; border-radius: 14px; }
+  .expr-display { min-height: 48px; font-size: 22px; }
+  .op-btn       { font-size: 19px; border-radius: 12px; }
+  .glass-card   { padding: 20px 18px; }
+  .mode-sub     { display: none; }  /* 説明文を隠して縦幅を稼ぐ */
 }

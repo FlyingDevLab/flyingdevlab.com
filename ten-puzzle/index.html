@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>Ten Puzzle / テンパズル – Make 10 with + − × ÷</title>
+  <meta name="description" content="Use all four digits and + − × ÷ to make 10. Three modes: Easy/Normal, Hard, and Challenge. 4つの数字と ＋ − × ÷ で10をつくる無料ブラウザパズル。">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="Ten Puzzle / テンパズル – Make 10 with + − × ÷">
+  <meta property="og:description" content="Use all four digits and + − × ÷ to make 10. Three modes to play. 4つの数字で10をつくる数字パズル。">
+  <meta property="og:url"         content="https://flyingdevlab.com/ten-puzzle/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="Ten Puzzle / テンパズル – Make 10 with + − × ÷">
+  <meta name="twitter:description" content="Use all four digits and + − × ÷ to make 10. / 4つの数字で10をつくる数字パズル。">
+
+  <!-- ===== フォント =====
+       make10 と同じ方針です。Google Fonts への外部リンクは張らず、
+       Nunito（400 / 700 / 900）を style.css の @font-face から
+       /fonts/ の woff2 として自己ホストで読み込みます。
+       このページからの外部リクエストはゼロです。 -->
+
+  <!-- ===== スタイルシート ===== -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- アニメーションする背景の光球（装飾のみ・スクリーンリーダーには読み上げさせない） -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <!-- ===== ヘッダー：全画面共通のゲームタイトルバー ===== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <h1 class="site-title">
+        TEN<span class="title-accent">PUZZLE</span>
+      </h1>
+      <p class="site-tagline">MAKE 10 WITH + − × ÷</p>
+    </div>
+  </header>
+
+  <!-- ===== メインコンテンツ：3つの画面を切り替えて表示 ===== -->
+  <main id="main-content" role="main">
+
+    <!-- ゲーム全体のコンテナ（各画面を内包する） -->
+    <div class="game-container" id="gameContainer">
+
+      <!-- ── トップ画面：ルール説明とモード選択 ── -->
+      <section class="screen active" id="screen-top" aria-label="Title Screen / タイトル画面">
+        <div class="glass-card">
+
+          <h2 class="rule-heading" id="rule-heading">How to Play&ensp;/&ensp;<span lang="ja">あそびかた</span></h2>
+
+          <p class="title-rule">
+            Use all 4 digits to make <strong>10</strong>!<br>
+            <span class="tip-ja" lang="ja">4つの数字を全部つかって <strong>10</strong> をつくろう！</span>
+          </p>
+
+          <!-- モード選択ボタン。JS が data-mode を読んでゲームを開始する -->
+          <div class="mode-list" role="group" aria-label="Choose a mode">
+
+            <button class="mode-btn" data-mode="A" aria-label="Start Normal mode">
+              <span class="mode-icon" aria-hidden="true">⭐️</span>
+              <span class="mode-text">
+                <span class="mode-title">Normal</span>
+                <span class="mode-sub">Every puzzle can be solved. Take your time.</span>
+              </span>
+              <!-- ハイスコアは JS が注入する -->
+              <span class="mode-hi" id="hi-A" aria-live="polite"></span>
+            </button>
+
+            <button class="mode-btn" data-mode="B" aria-label="Start Hard mode">
+              <span class="mode-icon" aria-hidden="true">⭐️⭐️</span>
+              <span class="mode-text">
+                <span class="mode-title">Hard</span>
+                <span class="mode-sub">Only a few solutions. Use a hint if you get stuck.</span>
+              </span>
+              <span class="mode-hi" id="hi-B" aria-live="polite"></span>
+            </button>
+
+            <button class="mode-btn" data-mode="C" aria-label="Start Challenge mode">
+              <span class="mode-icon" aria-hidden="true">⭐️⭐️⭐️</span>
+              <span class="mode-text">
+                <span class="mode-title">Challenge</span>
+                <span class="mode-sub">Some puzzles cannot make 10. Spot them to score.</span>
+              </span>
+              <span class="mode-hi" id="hi-C" aria-live="polite"></span>
+            </button>
+
+          </div>
+        </div>
+      </section><!-- /#screen-top -->
+
+      <!-- ── ゲーム画面 ── -->
+      <section class="screen" id="screen-game" aria-label="Game Screen / ゲームプレイ画面">
+
+        <!-- ヘッダー行：ホームボタン・進行状況・スコア -->
+        <div class="play-header">
+          <button class="btn-home" id="btn-home" aria-label="Back to title">🏠</button>
+          <div class="progress-display" aria-label="Progress">
+            <span id="progressValue" aria-live="polite">1 / 10</span>
+          </div>
+          <div class="score-display" aria-label="Score">
+            SCORE <span id="scoreValue" aria-live="polite">0</span>
+          </div>
+        </div>
+
+        <!-- 問題エリア：4枚の数字タイル -->
+        <div class="digits-row" id="digitsRow" role="group" aria-label="The four digits you can use"></div>
+
+        <!-- 式の表示エリア。組み立て中の式がここに出る -->
+        <div class="expr-area">
+          <div class="expr-display" id="exprDisplay" aria-live="polite" aria-label="Your expression">
+            <span class="expr-placeholder">Tap the digits and symbols</span>
+          </div>
+          <!-- ヒントの式（💡 を押したときだけ表示） -->
+          <div class="hint-text" id="hintText" aria-live="polite"></div>
+          <!-- 判定メッセージ -->
+          <div class="judge-text" id="judgeText" aria-live="assertive"></div>
+        </div>
+
+        <!-- 演算子・括弧のボタン -->
+        <div class="ops-grid" id="opsGrid" role="group" aria-label="Operators and brackets"></div>
+
+        <!-- 補助ボタン：もどす・ぜんぶ消す・ヒント -->
+        <div class="tool-row" role="group" aria-label="Editing tools">
+          <button class="btn-tool" id="btn-back" aria-label="Undo one step">⌫ Undo</button>
+          <button class="btn-tool" id="btn-clear" aria-label="Clear the expression">✕ Clear</button>
+          <button class="btn-tool" id="btn-hint" aria-label="Show a hint">💡 Hint</button>
+        </div>
+
+        <!-- 判定ボタン。チャレンジモードでは「作れない！」も並ぶ -->
+        <div class="judge-row">
+          <button class="btn btn-primary btn-judge" id="btn-judge" aria-label="Check your answer">
+            Check&ensp;/&ensp;<span lang="ja">こたえあわせ</span>
+          </button>
+          <button class="btn btn-secondary btn-impossible" id="btn-impossible" hidden
+                  aria-label="Declare that 10 cannot be made">
+            Can&rsquo;t make 10!&ensp;/&ensp;<span lang="ja">作れない！</span>
+          </button>
+        </div>
+
+      </section><!-- /#screen-game -->
+
+      <!-- ── リザルト画面 ── -->
+      <section class="screen" id="screen-result" aria-label="Result Screen / リザルト画面" aria-live="assertive">
+        <div class="glass-card" style="text-align:center;">
+
+          <p class="result-score-label">YOUR SCORE</p>
+          <div class="result-score" id="resultScore" aria-label="Your score">0</div>
+
+          <div class="result-hi" id="resultHi" aria-live="polite"></div>
+
+          <h2 class="result-message" id="resultMessage" aria-live="polite">Try again!</h2>
+
+          <p class="result-combo" id="resultDetail" aria-live="polite"></p>
+
+          <div class="result-buttons" role="group" aria-label="After the game">
+            <button class="btn btn-primary" id="btn-retry" style="width:100%;"
+                    aria-label="Play the same mode again">
+              🔄 Retry&ensp;/&ensp;<span lang="ja">もう一度</span>
+            </button>
+            <!--
+              App Store ボタン：make10 と同じ扱いです。
+              MAKE10 アプリにテンパズルが収録されているため、
+              導線を出す場合はここのコメントアウトを解除してください。
+              <a class="btn btn-appstore" href="https://apps.apple.com/app/id6760253962"
+                 style="width:100%;"
+                 aria-label="Download on the App Store (opens in a new tab)"
+                 target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                Download on the App Store
+              </a>
+            -->
+            <button class="btn btn-secondary" id="btn-top" style="width:100%;"
+                    aria-label="Back to mode select">
+              ← Modes&ensp;/&ensp;<span lang="ja">モード選択へ</span>
+            </button>
+          </div>
+        </div>
+      </section><!-- /#screen-result -->
+
+    </div><!-- /.game-container -->
+  </main><!-- /#main-content -->
+
+  <!-- ===== フッター：全画面共通のコピーライト ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time>
+      <a
+        href="https://flyingdevlab.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-link"
+        aria-label="Flying Dev Lab (opens in a new tab)"
+      >Flying Dev Lab</a>. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- ===== ゲームロジック（body 末尾で読み込み） ===== -->
+  <script src="game.js"></script>
+</body>
+</html>

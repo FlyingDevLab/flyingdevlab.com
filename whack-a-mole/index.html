@@ -1,27 +1,32 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <!-- 文字コード・ビューポート設定 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO: タイトル / Title -->
-  <title>モグラ叩き / Whack-a-Mole | Flying Dev Lab</title>
+  <title>Whack-a-Mole / モグラ叩き | Flying Dev Lab</title>
 
   <!-- SEO: メタディスクリプション / Meta Description -->
-  <meta name="description" content="モグラ叩きブラウザゲーム。30秒でハイスコアを目指せ！/ Browser-based Whack-a-Mole game. Aim for the highest score in 30 seconds!" />
+  <meta name="description" content="Browser-based Whack-a-Mole game. Aim for the highest score in 30 seconds! / モグラ叩きブラウザゲーム。30秒でハイスコアを目指せ！" />
 
   <!-- OGP タグ / OGP Tags -->
-  <meta property="og:title" content="モグラ叩き / Whack-a-Mole | Flying Dev Lab" />
-  <meta property="og:description" content="モグラ叩きブラウザゲーム。30秒でハイスコアを目指せ！/ Browser-based Whack-a-Mole game. Aim for the highest score in 30 seconds!" />
+  <meta property="og:title" content="Whack-a-Mole / モグラ叩き | Flying Dev Lab" />
+  <meta property="og:description" content="Browser-based Whack-a-Mole game. Aim for the highest score in 30 seconds! / モグラ叩きブラウザゲーム。30秒でハイスコアを目指せ！" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://FlyingDevLab.com" />
+  <!--
+    変更: サイトのルート（かつドメインが大文字混じり）を指していたため、
+          このページ自身の URL に修正した。以前の値のままだと
+          SNS でシェアしたときにトップページとして扱われてしまう。
+  -->
+  <meta property="og:url" content="https://flyingdevlab.com/whack-a-mole/" />
   <meta property="og:site_name" content="Flying Dev Lab" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="モグラ叩き / Whack-a-Mole | Flying Dev Lab" />
-  <meta name="twitter:description" content="30秒でハイスコアを目指せ！/ Aim for the highest score in 30 seconds!" />
+  <meta name="twitter:title" content="Whack-a-Mole / モグラ叩き | Flying Dev Lab" />
+  <meta name="twitter:description" content="Aim for the highest score in 30 seconds! / 30秒でハイスコアを目指せ！" />
 
   <!-- スタイルシート読み込み / Stylesheet -->
   <link rel="stylesheet" href="style.css" />
@@ -39,9 +44,9 @@
       <!-- モグラのデコレーション / Mole decoration -->
       <span class="header-mole" aria-hidden="true">🐭</span>
       <h1>
-        <span class="title-ja">モグラ叩き</span>
-        <span class="title-sep" aria-hidden="true">/</span>
         <span class="title-en">Whack-a-Mole</span>
+        <span class="title-sep" aria-hidden="true">/</span>
+        <span class="title-ja" lang="ja">モグラ叩き</span>
       </h1>
       <span class="header-mole" aria-hidden="true">🐭</span>
     </div>
@@ -58,38 +63,38 @@
          ゲーム説明・ハイスコア・スタートボタン
          Game description, high score, start button
     ---------------------------------------- -->
-    <section id="screen-top" class="screen" aria-label="トップ画面 / Top Screen">
+    <section id="screen-top" class="screen" aria-label="Top Screen / トップ画面">
       <div class="screen-inner">
 
         <!-- ゲーム説明 / Game Description -->
         <div class="intro-box" role="region" aria-labelledby="intro-heading">
           <h2 id="intro-heading" class="section-title">
-            <span class="ja">遊び方</span>
-            <span class="sep">/</span>
             <span class="en">How to Play</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">遊び方</span>
           </h2>
-          <ul class="intro-list" aria-label="ゲームの説明 / Game instructions">
+          <ul class="intro-list" aria-label="Game instructions / ゲームの説明">
             <li>
               <span class="emoji" aria-hidden="true">⏱️</span>
-              <span class="ja"> 30秒以内にできるだけ多くのモグラを叩こう！</span>
-              <span class="sep">/</span>
               <span class="en">Whack as many moles as possible within 30 seconds!</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja"> 30秒以内にできるだけ多くのモグラを叩こう！</span>
             </li>
             <li>
               <span class="emoji" aria-hidden="true">👆</span>
-              <span class="ja">穴から出たモグラをタップ・クリックでやっつけよう！</span>
-              <span class="sep">/</span>
               <span class="en">Tap or click moles as they pop out of holes!</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja">穴から出たモグラをタップ・クリックでやっつけよう！</span>
             </li>
           </ul>
         </div>
 
         <!-- ハイスコア表示 / High Score Display -->
-        <div class="highscore-box" role="region" aria-label="ハイスコア / High Score">
+        <div class="highscore-box" role="region" aria-label="High Score / ハイスコア">
           <p class="highscore-label">
-            <span class="ja">ハイスコア</span>
-            <span class="sep">/</span>
             <span class="en">High Score</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">ハイスコア</span>
           </p>
           <p class="highscore-value" id="top-highscore" aria-live="polite">0</p>
         </div>
@@ -98,12 +103,12 @@
         <button
           id="btn-start"
           class="btn btn-primary"
-          aria-label="ゲームスタート / Start Game"
+          aria-label="Start Game / ゲームスタート"
           onclick="startGame()"
         >
-          <span class="ja">ゲームスタート</span>
-          <span class="sep">/</span>
           <span class="en">Start Game</span>
+          <span class="sep">/</span>
+          <span class="ja" lang="ja">ゲームスタート</span>
         </button>
 
       </div>
@@ -114,18 +119,18 @@
          スコア・タイマー・モグラグリッド
          Score, timer, and mole grid
     ---------------------------------------- -->
-    <section id="screen-game" class="screen" aria-label="ゲーム画面 / Game Screen" aria-hidden="true">
+    <section id="screen-game" class="screen" aria-label="Game Screen / ゲーム画面" aria-hidden="true">
       <div class="screen-inner">
 
         <!-- ステータスバー / Status Bar -->
-        <div class="status-bar" role="region" aria-label="ゲーム状態 / Game Status">
+        <div class="status-bar" role="region" aria-label="Game Status / ゲーム状態">
 
           <!-- スコア表示 / Score Display -->
           <div class="status-item" aria-live="polite" aria-atomic="true">
             <span class="status-label">
-              <span class="ja">スコア</span>
-              <span class="sep">/</span>
               <span class="en">Score</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja">スコア</span>
             </span>
             <span class="status-value" id="score-display">0</span>
           </div>
@@ -133,9 +138,9 @@
           <!-- 残り時間表示 / Time Left Display -->
           <div class="status-item" aria-live="assertive" aria-atomic="true">
             <span class="status-label">
-              <span class="ja">残り時間</span>
-              <span class="sep">/</span>
               <span class="en">Time Left</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja">残り時間</span>
             </span>
             <span class="status-value" id="timer-display">30</span>
           </div>
@@ -146,7 +151,7 @@
         <div
           class="grid"
           role="grid"
-          aria-label="モグラ穴グリッド / Mole Hole Grid"
+          aria-label="Mole Hole Grid / モグラ穴グリッド"
           id="mole-grid"
         >
           <!-- 穴はgame.jsで動的生成 / Holes are dynamically generated by game.js -->
@@ -163,38 +168,38 @@
          スコア結果・ハイスコア・再プレイボタン
          Score result, high score, replay buttons
     ---------------------------------------- -->
-    <section id="screen-result" class="screen" aria-label="リザルト画面 / Result Screen" aria-hidden="true">
+    <section id="screen-result" class="screen" aria-label="Result Screen / リザルト画面" aria-hidden="true">
       <div class="screen-inner">
 
         <h2 class="section-title result-title">
-          <span class="ja">ゲーム終了！</span>
-          <span class="sep">/</span>
           <span class="en">Game Over!</span>
+          <span class="sep">/</span>
+          <span class="ja" lang="ja">ゲーム終了！</span>
         </h2>
 
         <!-- ハイスコア更新演出エリア / New High Score Area -->
         <div id="new-record-area" class="new-record" aria-live="assertive" hidden>
-          <span class="ja">🎉 新記録達成！</span>
-          <span class="sep">/</span>
           <span class="en">New High Score!</span>
+          <span class="sep">/</span>
+          <span class="ja" lang="ja">🎉 新記録達成！</span>
         </div>
 
         <!-- 今回のスコア / Your Score -->
-        <div class="result-score-box" role="region" aria-label="今回のスコア / Your Score">
+        <div class="result-score-box" role="region" aria-label="Your Score / 今回のスコア">
           <p class="result-label">
-            <span class="ja">あなたのスコア</span>
-            <span class="sep">/</span>
             <span class="en">Your Score</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">あなたのスコア</span>
           </p>
           <p class="result-value" id="result-score" aria-live="polite">0</p>
         </div>
 
         <!-- ハイスコア / High Score -->
-        <div class="result-highscore-box" role="region" aria-label="ハイスコア / High Score">
+        <div class="result-highscore-box" role="region" aria-label="High Score / ハイスコア">
           <p class="result-hs-label">
-            <span class="ja">ハイスコア</span>
-            <span class="sep">/</span>
             <span class="en">High Score</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">ハイスコア</span>
           </p>
           <p class="result-hs-value" id="result-highscore">0</p>
         </div>
@@ -204,22 +209,22 @@
           <button
             id="btn-retry"
             class="btn btn-primary"
-            aria-label="もう一度遊ぶ / Play Again"
+            aria-label="Play Again / もう一度遊ぶ"
             onclick="startGame()"
           >
-            <span class="ja">もう一度</span>
-            <span class="sep">/</span>
             <span class="en">Play Again</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">もう一度</span>
           </button>
           <button
             id="btn-top"
             class="btn btn-secondary"
-            aria-label="トップへ戻る / Back to Top"
+            aria-label="Back to Top / トップへ戻る"
             onclick="goToTop()"
           >
-            <span class="ja">トップへ</span>
-            <span class="sep">/</span>
             <span class="en">Back to Top</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">トップへ</span>
           </button>
         </div>
 
@@ -241,7 +246,7 @@
         target="_blank"
         rel="noopener noreferrer"
         class="footer-link"
-        aria-label="Flying Dev Lab（新しいタブで開く）"
+        aria-label="Flying Dev Lab (opens in a new tab)"
       >Flying Dev Lab</a>. All rights reserved.
     </p>
   </footer>

@@ -12,10 +12,12 @@
     3. screen-result … リザルト画面（スコア・ハイスコア・ボタン）
   ============================================================
 -->
-<html lang="ja">
+<html lang="en">
 <!--
-  lang="ja" を指定することで、スクリーンリーダーや検索エンジンに
-  「このページは日本語」であることを伝える。
+  変更: lang="ja" → lang="en"。
+  ページの主要言語を英語に切り替えたため、宣言も合わせる。
+  日本語の従行には個別に lang="ja" を付けており、
+  スクリーンリーダーは行ごとに読み上げ言語を切り替える。
 -->
 <head>
   <meta charset="UTF-8" />
@@ -29,10 +31,10 @@
     これがないとスマートフォンでページが縮小表示されてしまう。
   -->
 
-  <title>ピンボール / Pinball | Flying Dev Lab</title>
+  <title>Pinball / ピンボール | Flying Dev Lab</title>
   <!-- ブラウザのタブやブックマークに表示されるページタイトル。 -->
 
-  <meta name="description" content="ブラウザで遊べるピンボールゲーム。3ボールでハイスコアを目指そう！/ Browser pinball game. Go for the high score with 3 balls!" />
+  <meta name="description" content="Browser pinball game. Go for the high score with 3 balls! / ブラウザで遊べるピンボールゲーム。3ボールでハイスコアを目指そう！" />
   <!--
     検索エンジン（Google など）の検索結果に表示される説明文（メタディスクリプション）。
     クリック率に影響するため、ゲームの魅力が伝わる文言にしている。
@@ -42,17 +44,22 @@
        SNS（Twitter / Facebook / LINE など）でリンクを共有したときに
        表示されるカード（タイトル・説明文・画像など）の情報を定義する。
   ──────────────────────────────────────────────────────────── -->
-  <meta property="og:title" content="ピンボール / Pinball | Flying Dev Lab" />
+  <meta property="og:title" content="Pinball / ピンボール | Flying Dev Lab" />
   <!-- SNS カードに表示されるタイトル。 -->
 
-  <meta property="og:description" content="ブラウザで遊べるピンボールゲーム / Browser pinball game" />
+  <meta property="og:description" content="Browser pinball game / ブラウザで遊べるピンボールゲーム" />
   <!-- SNS カードに表示される説明文。 -->
 
   <meta property="og:type" content="website" />
   <!-- コンテンツの種類。一般的な Web ページなので "website" を指定。 -->
 
-  <meta property="og:url" content="https://FlyingDevLab.com" />
-  <!-- このページの正規 URL。シェア時のリンク先として使われる。 -->
+  <meta property="og:url" content="https://flyingdevlab.com/pinball/" />
+  <!--
+    このページの正規 URL。シェア時のリンク先として使われる。
+    変更: サイトのルート（かつドメインが大文字混じり）を指していたため、
+          このページ自身の URL に修正した。以前の値のままだと
+          SNS でシェアしたときにトップページとして扱われてしまう。
+  -->
 
   <meta property="og:site_name" content="Flying Dev Lab" />
   <!-- サイト名。SNS カードの補足情報として表示される場合がある。 -->
@@ -68,10 +75,10 @@
     "summary_large_image" … 大きな画像を全面に出すリッチ形式（og:image が必要）。
   -->
 
-  <meta name="twitter:title" content="ピンボール / Pinball | Flying Dev Lab" />
+  <meta name="twitter:title" content="Pinball / ピンボール | Flying Dev Lab" />
   <!-- Twitter カードに表示されるタイトル。 -->
 
-  <meta name="twitter:description" content="3ボールでハイスコアを目指そう！/ Go for the high score with 3 balls!" />
+  <meta name="twitter:description" content="Go for the high score with 3 balls! / 3ボールでハイスコアを目指そう！" />
   <!-- Twitter カードに表示される説明文。 -->
 
   <!-- ── フォント ──────────────────────────────────────────
@@ -122,8 +129,8 @@
         h1 はページ内で最も重要な見出し。
         SEO・アクセシビリティの観点から 1 ページに 1 つが推奨。
       -->
-        <span class="ja">ピンボール</span>
-        <!-- 日本語タイトル。CSS の .ja クラスでフォントや表示を制御。 -->
+        <span class="en">Pinball</span>
+        <!-- 英語タイトル（主）。 -->
 
         <span class="sep" aria-hidden="true">/</span>
         <!--
@@ -132,8 +139,8 @@
           （「スラッシュ」と読まれると不自然なため）。
         -->
 
-        <span class="en">Pinball</span>
-        <!-- 英語タイトル。CSS の .en クラスで Orbitron フォントを適用。 -->
+        <span class="ja" lang="ja">ピンボール</span>
+        <!-- 日本語タイトル（従）。.ja は style.css で一段小さく表示される。 -->
       </h1>
 
       <span class="header-icon" aria-hidden="true">🎯</span>
@@ -161,7 +168,7 @@
            ④ スタートボタン
          class="active" が付いているため、初期状態でこの画面が表示される。
     ──────────────────────────────────────────────────────── -->
-    <section id="screen-top" class="screen active" aria-label="タイトル画面 / Title Screen">
+    <section id="screen-top" class="screen active" aria-label="Title Screen / タイトル画面">
     <!--
       <section> はテーマでまとまった独立したコンテンツの区画を表す。
       aria-label で画面の名称を付けることで、スクリーンリーダーが
@@ -174,9 +181,9 @@
         <div class="intro-box">
           <h2 class="section-title">
           <!-- h2 はページ内の第 2 レベル見出し。各セクションのタイトルに使用。 -->
-            <span class="ja">遊び方</span>
-            <span class="sep">/</span>
             <span class="en">How to Play</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">遊び方</span>
           </h2>
 
           <ul class="intro-list">
@@ -187,16 +194,16 @@
             <li>
             <!-- 左フリッパーの操作説明（モバイルタップ）。 -->
               <span class="emoji" aria-hidden="true">👈</span>
-              <span class="ja">画面左タップ → 左フリッパー</span>
-              <span class="sep">/</span>
               <span class="en">Tap left → Left flipper</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja">画面左タップ → 左フリッパー</span>
             </li>
             <li>
             <!-- 右フリッパーの操作説明（モバイルタップ）。 -->
               <span class="emoji" aria-hidden="true">👉</span>
-              <span class="ja">画面右タップ → 右フリッパー</span>
-              <span class="sep">/</span>
               <span class="en">Tap right → Right flipper</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja">画面右タップ → 右フリッパー</span>
             </li>
             <li>
             <!--
@@ -205,9 +212,9 @@
               スクリーンリーダーや CSS で視覚的に区別できる。
             -->
               <span class="emoji" aria-hidden="true">⌨️</span>
-              <span class="ja">PC: <kbd>Z</kbd>・<kbd>←</kbd> で左、<kbd>M</kbd>・<kbd>→</kbd> で右</span>
-              <span class="sep">/</span>
               <span class="en">PC: <kbd>Z</kbd>/<kbd>←</kbd> Left &nbsp; <kbd>M</kbd>/<kbd>→</kbd> Right</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja">PC: <kbd>Z</kbd>・<kbd>←</kbd> で左、<kbd>M</kbd>・<kbd>→</kbd> で右</span>
               <!--
                 &nbsp; は「ノーブレークスペース（改行されない空白）」。
                 ここでは Left と Right の間に視覚的な間隔を作るために使用。
@@ -216,9 +223,9 @@
             <li>
             <!-- ゲームのメインルール（3ボール制）の説明。 -->
               <span class="emoji" aria-hidden="true">🎱</span>
-              <span class="ja">3ボールでハイスコアを目指そう！</span>
-              <span class="sep">/</span>
               <span class="en">Beat the high score with 3 balls!</span>
+              <span class="sep">/</span>
+              <span class="ja" lang="ja">3ボールでハイスコアを目指そう！</span>
             </li>
           </ul>
         </div>
@@ -226,9 +233,9 @@
         <!-- ② 得点表ボックス ──────────────────────────────── -->
         <div class="score-table-box">
           <h2 class="section-title">
-            <span class="ja">得点表</span>
-            <span class="sep">/</span>
             <span class="en">Scoring</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">得点表</span>
           </h2>
 
           <ul class="score-table">
@@ -239,31 +246,31 @@
             <li>
             <!-- バンパー: ボールが当たると弾き返す円形障害物。100pt。 -->
               <span class="st-icon" aria-hidden="true">🟡</span>
-              <span class="st-name"><span class="ja">バンパー</span><span class="sep">/</span><span class="en">Bumper</span></span>
+              <span class="st-name"><span class="en">Bumper</span><span class="sep">/</span><span class="ja" lang="ja">バンパー</span></span>
               <span class="st-pts">100 pt</span>
             </li>
             <li>
             <!-- スリングショット: フリッパー上部の三角形の障害物。ボールを加速させる。500pt。 -->
               <span class="st-icon" aria-hidden="true">🟠</span>
-              <span class="st-name"><span class="ja">スリングショット</span><span class="sep">/</span><span class="en">Slingshot</span></span>
+              <span class="st-name"><span class="en">Slingshot</span><span class="sep">/</span><span class="ja" lang="ja">スリングショット</span></span>
               <span class="st-pts">500 pt</span>
             </li>
             <li>
             <!-- サイドターゲット: 盤面左右に配置された固定ターゲット。1000pt。 -->
               <span class="st-icon" aria-hidden="true">🔵</span>
-              <span class="st-name"><span class="ja">サイドターゲット</span><span class="sep">/</span><span class="en">Side Target</span></span>
+              <span class="st-name"><span class="en">Side Target</span><span class="sep">/</span><span class="ja" lang="ja">サイドターゲット</span></span>
               <span class="st-pts">1000 pt</span>
             </li>
             <li>
             <!-- センターターゲット: 高得点の中央ターゲット。2500pt。 -->
               <span class="st-icon" aria-hidden="true">🔵</span>
-              <span class="st-name"><span class="ja">センターターゲット</span><span class="sep">/</span><span class="en">Center Target</span></span>
+              <span class="st-name"><span class="en">Center Target</span><span class="sep">/</span><span class="ja" lang="ja">センターターゲット</span></span>
               <span class="st-pts">2500 pt</span>
             </li>
             <!-- トップターゲット: 最も高得点のターゲット。10000pt。 -->
             <li>
               <span class="st-icon" aria-hidden="true">🔵</span>
-              <span class="st-name"><span class="ja">トップターゲット</span><span class="sep">/</span><span class="en">Top Target</span></span>
+              <span class="st-name"><span class="en">Top Target</span><span class="sep">/</span><span class="ja" lang="ja">トップターゲット</span></span>
               <span class="st-pts">Multi Balls +10000 pt</span>
             </li>
           </ul>
@@ -276,9 +283,9 @@
         ──────────────────────────────────────────────────── -->
         <div class="highscore-box">
           <p class="highscore-label">
-            <span class="ja">ハイスコア</span>
-            <span class="sep">/</span>
             <span class="en">High Score</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">ハイスコア</span>
           </p>
           <p class="highscore-value" id="top-highscore">0</p>
           <!--
@@ -296,9 +303,9 @@
                3. Canvas へのゲームループ描画を開始する
         ──────────────────────────────────────────────────── -->
         <button class="btn btn-primary" onclick="startGame()">
-          <span class="ja">ゲームスタート</span>
-          <span class="sep">/</span>
           <span class="en">Start Game</span>
+          <span class="sep">/</span>
+          <span class="ja" lang="ja">ゲームスタート</span>
         </button>
 
       </div>
@@ -314,7 +321,7 @@
          初期状態では aria-hidden="true" で非表示。
          startGame() 呼び出し時に "active" クラスが付いて表示される。
     ──────────────────────────────────────────────────────── -->
-    <section id="screen-game" class="screen" aria-label="ゲーム画面 / Game Screen" aria-hidden="true">
+    <section id="screen-game" class="screen" aria-label="Game Screen / ゲーム画面" aria-hidden="true">
     <!--
       aria-hidden="true" … スクリーンリーダーに非表示であることを伝える。
       game.js が画面切り替え時にこの属性を動的に変更する。
@@ -351,7 +358,7 @@
           </div>
 
           <!-- 終了ボタン: 右上隅に小さく配置。HUD 廃止後もタイトルへ戻る手段を確保する。 -->
-          <button class="btn-quit overlay-quit" onclick="goToTop()" title="タイトルへ / Go to Title">✕</button>
+          <button class="btn-quit overlay-quit" onclick="goToTop()" title="Go to Title / タイトルへ">✕</button>
           <!--
             goToTop() は game.js で定義された関数。
             ゲームループを停止し、screen-game → screen-top へ画面を切り替える。
@@ -366,7 +373,7 @@
              実際の描画は game.js の requestAnimationFrame ループで行われる。
         ──────────────────────────────────────────────────── -->
         <canvas id="game-canvas" width="390" height="700"
-          aria-label="ピンボールゲーム / Pinball Game"></canvas>
+          aria-label="Pinball Game / ピンボールゲーム"></canvas>
         <!--
           id="game-canvas"
           game.js で document.getElementById("game-canvas") により取得され、
@@ -384,9 +391,9 @@
              aria-hidden="true" … 視覚的補助であるためスクリーンリーダーには不要。
         ──────────────────────────────────────────────────── -->
         <div class="touch-hint" aria-hidden="true">
-          <span class="hint-left">◀ <span class="ja">左</span> <span class="en">LEFT</span></span>
+          <span class="hint-left">◀ <span class="en">LEFT</span> <span class="ja" lang="ja">左</span></span>
           <!-- 左フリッパーのタップ位置を示す矢印と文字。 -->
-          <span class="hint-right"><span class="ja">右</span> <span class="en">RIGHT</span> ▶</span>
+          <span class="hint-right"><span class="ja" lang="ja">右</span> <span class="en">RIGHT</span> ▶</span>
           <!-- 右フリッパーのタップ位置を示す文字と矢印。 -->
         </div>
 
@@ -405,14 +412,14 @@
          game.js の showResult() 関数がスコアを書き込んだあとで
          この画面をアクティブにする。
     ──────────────────────────────────────────────────────── -->
-    <section id="screen-result" class="screen" aria-label="リザルト画面 / Result Screen" aria-hidden="true">
+    <section id="screen-result" class="screen" aria-label="Result Screen / リザルト画面" aria-hidden="true">
       <div class="screen-inner">
 
         <!-- ① ゲーム終了見出し ──────────────────────────── -->
         <h2 class="section-title result-title">
-          <span class="ja">ゲーム終了！</span>
-          <span class="sep">/</span>
           <span class="en">Game Over!</span>
+          <span class="sep">/</span>
+          <span class="ja" lang="ja">ゲーム終了！</span>
         </h2>
 
         <!-- ② 新記録バナー ─────────────────────────────────
@@ -424,9 +431,9 @@
         ──────────────────────────────────────────────────── -->
         <div id="new-record-area" class="new-record" hidden aria-live="polite">
           <span aria-hidden="true">🎉</span>
-          <span class="ja">新記録達成！</span>
-          <span class="sep">/</span>
           <span class="en">New High Score!</span>
+          <span class="sep">/</span>
+          <span class="ja" lang="ja">新記録達成！</span>
           <span aria-hidden="true">🎉</span>
         </div>
 
@@ -436,9 +443,9 @@
         ──────────────────────────────────────────────────── -->
         <div class="result-score-box">
           <p class="result-label">
-            <span class="ja">あなたのスコア</span>
-            <span class="sep">/</span>
             <span class="en">Your Score</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">あなたのスコア</span>
           </p>
           <p class="result-value" id="result-score">0</p>
           <!-- id="result-score": game.js が今回プレイのスコアを書き込む。 -->
@@ -451,9 +458,9 @@
         ──────────────────────────────────────────────────── -->
         <div class="result-hs-box">
           <p class="result-hs-label">
-            <span class="ja">ハイスコア</span>
-            <span class="sep">/</span>
             <span class="en">High Score</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">ハイスコア</span>
           </p>
           <p class="result-hs-value" id="result-highscore">0</p>
           <!-- id="result-highscore": 保存済み（または更新後の）ハイスコアを表示。 -->
@@ -465,14 +472,14 @@
         ──────────────────────────────────────────────────── -->
         <div class="result-buttons">
           <button class="btn btn-primary" onclick="startGame()">
-            <span class="ja">もう一度</span>
-            <span class="sep">/</span>
             <span class="en">Play Again</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">もう一度</span>
           </button>
           <button class="btn btn-secondary" onclick="goToTop()">
-            <span class="ja">タイトルへ</span>
-            <span class="sep">/</span>
             <span class="en">Back to Top</span>
+            <span class="sep">/</span>
+            <span class="ja" lang="ja">タイトルへ</span>
           </button>
         </div>
 
