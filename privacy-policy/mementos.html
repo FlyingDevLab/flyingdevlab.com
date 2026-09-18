@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<!-- id="top" は、フッターの「↑ TOP」リンク（href="#top"）のジャンプ先 -->
+<html lang="en" id="top">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+  ============================================================
+  【設計メモ: プライバシーポリシー & 免責事項（Mementos）】
+  ※ TechRef 版（2026-08）をテンプレートとして複製し、本文・メタ情報を Mementos 用に差し替えたもの。
+     構造・CSS・JS は TechRef 版と同一。以下のメモも TechRef 版から引き継いでいる。
+
+  ■ 1ファイル完結
+    MAKE10 / PriceWise と同じ方針。アクセスはほぼ100%アプリ内リンク経由のため、
+    hreflang などの SEO 設定は割り切る。翻訳の追加・修正・デプロイが1ファイルで完結する。
+
+    Settings からのリンクは3つだが、ファイルは1つ：
+      Support Page   → techref#contact
+      Privacy Policy → techref
+      Disclaimer     → techref#disclaimer
+
+    ※ .html は付けない。Cloudflare Pages が 308 で拡張子なしへ飛ばすため、
+      アプリ側も canonical と同じ拡張子なしURLを持たせてリダイレクトを避けている。
+
+  ■ 翻訳データの持ち方：「id付き配列型」（PriceWise の配列型の改良版）
+    T[言語].sections[] = { id, title, html } の配列。
+    PriceWise の純粋な配列型はインデックス依存のため、ある言語だけセクション数が
+    ずれると表示が崩れる。こちらは id で解決するので崩れない。
+
+    描画は「英語版の配列」を基準にループし、選択言語に同じ id があればそれを使い、
+    無ければ英語版で埋める（＝英語フォールバック）。
+    → 25言語に増やす際、全訳が揃う前でも順次デプロイできる。
+    → セクション番号は配列の並び順から自動採番するので、手で振り直す必要がない。
+
+  ■ デフォルト言語は英語
+    アプリ本体が英語のため、英語をマスターとする。
+    MAKE10 は毎回ブラウザ言語で判定、PriceWise は localStorage に保存。
+    こちらは PriceWise 方式（localStorage: "tr-lang"）を採用。25言語対応時に有用。
+
+  ■ フォント：外部リクエストゼロ
+    MAKE10 は Nunito を自己ホストしているが、TechRef はシステムフォントのみで完結。
+    woff2 ファイルすら不要で、HTTPリクエストは HTML 1本だけになる。
+    多言語化の際も OS 側が適切なフォントを選ぶため、25言語対応にむしろ強い。
+
+  ■ 発効日
+    ページ公開日を記載する。更新のたびに全言語の meta.updatedDate を変更すること。
+
+  ■ 改訂履歴（Mementos）
+    2026-09-17  TechRef 版（2026-08-25）をテンプレートに初版作成。
+                本文・メタ情報・CSS（空と写真カードの世界観）を Mementos 用に差し替え。
+    2026-09-18  「こどもの利用について」を改訂。Mementos を「こども専用」ではなく
+                「家族向け一般アプリ」と明示し、広告なし・任意の Pro 拡張という設計と
+                一般ポリシー／Pledge の整合を記載。広告の章末にも家族文脈を1文追加。
+                表記は文部科学省に合わせ「こども」で統一。
+                あわせて「ネットワーク通信」の章に、アプリ内 About 画面のリンクから
+                本サイトをブラウザで開く場合を2つ目の通信として追記（Guideline 5.1.1 (i) 対応）。
+  ============================================================
+  -->
+  <title>Privacy Policy &amp; Disclaimer – Mementos</title>
+  <meta name="description" content="Privacy Policy and Disclaimer for Mementos, a photo memory-matching game by Flying Dev Lab. Your photos stay on your device and are never transmitted.">
+  <!-- index：アプリ内リンクからの流入が中心だが、検索での到達も妨げない。
+       他ページと同様に明示することで「書き忘れではなく意図」であることを示す。 -->
+  <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#eaf5ff">
+  <!-- canonical：.html を外している。Cloudflare Pages は .html 付きURLを
+       308 で拡張子なしへリダイレクトするため、拡張子付きを正規URLとして
+       宣言するとリダイレクト先を指すことになり、宣言と実配信が食い違う。
+       アプリの Settings から開かれる techref#disclaimer も、
+       フラグメントはリダイレクトを越えて保持されるため影響しない。 -->
+  <link rel="canonical" href="https://flyingdevlab.com/privacy-policy/mementos">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       Mementos — Turn your memories into play. 思い出を、遊びに。
+       明るく爽やかな空に、写真カードがふわっと浮かんでいる世界。
+       基調は Sky Blue / Cyan / White。Lavender / Pink / Yellow は
+       「きらめき」と注記にだけ少量。原色の多用はしない。
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      --sky-50:   #f5faff;   /* ページ背景（空の最も明るい部分） */
+      --sky-100:  #e6f3ff;
+      --sky-200:  #c9e6ff;
+      --sky-400:  #6cc4ff;   /* シアン寄りの空色 */
+      --sky-500:  #3aa8ff;
+      --blue-600: #2f6df6;   /* ワードマークの青 */
+      --blue-700: #1f4fc9;   /* 本文リンク（白地でのコントラスト確保） */
+      --lavender: #c9b8ff;
+      --lavender-ink: #4a3a9a;
+      --lavender-soft: #f3efff;
+      --pink:     #ffb8d9;
+      --yellow:   #ffe28a;
+      --ink:      #1b2a41;   /* 本文の濃い文字（紺だが空の延長） */
+      --ink-sub:  #4a5b73;
+      --card:     #ffffff;
+      --border:   rgba(47,109,246,.12);
+      --shadow:   0 8px 24px rgba(58,168,255,.12), 0 1px 2px rgba(27,42,65,.04);
+      --r:        14px;
+      --link:     var(--blue-700);
+      --focus:    var(--blue-600);
+      --zero-a:   #3aa8ff;   /* 「端末内で完結」ボックスのグラデーション */
+      --zero-b:   #2f6df6;
+      --head-a:   #ffffff;   /* ヘッダー背景のグラデーション */
+      --head-b:   #eaf5ff;
+      --head-c:   #cfe9ff;
+      --foot-a:   #2f6df6;   /* フッター（深い空） */
+      --foot-b:   #1f4fc9;
+      --lead-line: var(--lavender);
+      --box-bg:   var(--sky-50);
+      --cloud:    rgba(255,255,255,.9);   /* ヘッダー右上の雲のような光 */
+      --font-round: ui-rounded, -apple-system, BlinkMacSystemFont,
+                    "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    }
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: var(--sky-50);
+      color: var(--ink);
+      line-height: 1.8;
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+    a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+    a:hover { color: var(--sky-500); }
+
+    .skip-link {
+      position: absolute; top: -48px; left: 0; z-index: 200;
+      background: var(--blue-600); color: #fff; padding: 8px 16px;
+      text-decoration: none; transition: top .2s; border-radius: 0 0 10px 0;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ── ヘッダー：明るい空ときらめき ─────────────── */
+    header {
+      position: relative; overflow: hidden;
+      color: var(--ink); padding: 44px 20px 0;
+      background:
+        /* きらめき（ラベンダー・ピンク・イエローを少量） */
+        radial-gradient(circle at 12% 22%, var(--lavender) 0 3px, transparent 4px),
+        radial-gradient(circle at 88% 18%, var(--pink) 0 3px, transparent 4px),
+        radial-gradient(circle at 78% 62%, var(--yellow) 0 2.5px, transparent 3.5px),
+        radial-gradient(circle at 24% 74%, var(--sky-400) 0 2px, transparent 3px),
+        /* 雲のような柔らかい光 */
+        radial-gradient(ellipse 60% 40% at 80% 0%, var(--cloud), transparent 70%),
+        radial-gradient(ellipse 50% 45% at 10% 100%, rgba(201,184,255,.35), transparent 70%),
+        linear-gradient(180deg, var(--head-a) 0%, var(--head-b) 55%, var(--head-c) 100%);
+    }
+    .hd-inner { max-width: 760px; margin: 0 auto; position: relative; }
+
+    .app-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(58,168,255,.14);
+      border-radius: 999px; padding: 5px 14px 5px 11px;
+      font-family: var(--font-round);
+      font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: 18px; color: var(--blue-600);
+    }
+    /* 小さな四芒星（きらめき）。ピンクを一粒だけ。 */
+    .app-badge::before {
+      content: ""; width: 9px; height: 9px;
+      background: var(--pink);
+      clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    }
+    h1 {
+      font-family: var(--font-round);
+      font-size: clamp(1.55rem, 4.8vw, 2.2rem);
+      font-weight: 800; line-height: 1.22; letter-spacing: -.01em;
+      margin-bottom: 12px;
+      color: var(--blue-600);
+    }
+    /* ワードマークと同じ青のグラデーション文字。非対応環境は単色の青で読める。 */
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+      h1 {
+        background: linear-gradient(92deg, var(--blue-600) 0%, var(--sky-500) 100%);
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+      }
+    }
+    .hd-sub { font-size: .96rem; color: var(--ink-sub); max-width: 54ch; }
+    .updated {
+      font-size: .8rem; color: var(--ink-sub); opacity: .85;
+      margin-top: 16px; font-variant-numeric: tabular-nums;
+    }
+
+    /* ── 署名要素：ふわっと浮かぶ3枚の写真カード（CSSのみ）────
+       要素本体が1枚目、::before / ::after が2・3枚目。
+       3枚とも白いフチは box-shadow のスプレッドで描き、影を重ねて浮かせる。
+       行の高さは本体の margin で確保する。 */
+    .scale-rule {
+      position: relative; width: 74px; height: 58px;
+      margin: 36px 0 20px 18px;
+      border-radius: 8px;
+      pointer-events: none;
+      /* 1枚目：空と雲 */
+      background:
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,.95) 0 9px, transparent 10px),
+        radial-gradient(circle at 44% 66%, rgba(255,255,255,.95) 0 12px, transparent 13px),
+        radial-gradient(circle at 58% 72%, rgba(255,255,255,.95) 0 8px, transparent 9px),
+        linear-gradient(180deg, #4fb2ff 0%, #8fd0ff 100%);
+      box-shadow: 0 0 0 5px #fff, 0 10px 22px rgba(47,109,246,.18);
+      transform: rotate(-3deg);
+      animation: float-b 7s ease-in-out infinite;
+    }
+    .scale-rule::before, .scale-rule::after {
+      content: ""; position: absolute; width: 74px; height: 58px;
+      border-radius: 8px;
+      box-shadow: 0 0 0 5px #fff, 0 10px 22px rgba(47,109,246,.18);
+      animation: float-b 7s ease-in-out infinite;
+    }
+    /* 2枚目：夕焼け（ピンク→イエロー）。右へずらして逆に傾ける */
+    .scale-rule::before {
+      left: 60px; top: 10px; transform: rotate(-6deg);
+      background: linear-gradient(160deg, var(--pink) 0%, var(--yellow) 100%);
+      animation-delay: -2.5s;
+    }
+    /* 3枚目：ラベンダー。さらに右、上へ、右に傾ける */
+    .scale-rule::after {
+      left: 128px; top: -10px; transform: rotate(8deg);
+      background: linear-gradient(160deg, var(--lavender) 0%, #b4e2ff 100%);
+      animation-delay: -5s;
+    }
+    @keyframes float-b {
+      0%, 100% { translate: 0 0; }
+      50%      { translate: 0 -4px; }
+    }
+
+    /* ── 言語バー ───────────────────────────── */
+    .lang-bar {
+      max-width: 760px; margin: 0 auto;
+      padding: 14px 0 20px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .lang-bar label {
+      font-size: .78rem; color: var(--ink-sub);
+      letter-spacing: .04em; white-space: nowrap;
+    }
+    select#ls {
+      appearance: none; -webkit-appearance: none;
+      background: var(--card)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232f6df6' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")
+        no-repeat right 12px center;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(58,168,255,.10);
+      border-radius: 999px; color: var(--ink);
+      font-family: inherit; font-size: .85rem;
+      padding: 7px 34px 7px 14px; cursor: pointer; min-width: 160px;
+    }
+    select#ls:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+    select#ls option { background: var(--card); color: var(--ink); }
+
+    /* ── 本文：白いカードが空に浮かぶ ─────────────── */
+    main { max-width: 760px; margin: 0 auto; padding: 26px 20px 72px; }
+
+    .policy-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 24px 26px; margin-bottom: 16px;
+      scroll-margin-top: 20px;
+    }
+    .policy-section h2 {
+      display: flex; align-items: center; gap: 12px;
+      font-family: var(--font-round);
+      font-size: 1.08rem; font-weight: 800; color: var(--ink);
+      margin-bottom: 14px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--sky-100);
+    }
+    /* 章番号は小さなカード（ピル）にして、カードゲームの札を思わせる */
+    .sec-num {
+      flex: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 28px; height: 28px; padding: 0 8px;
+      border-radius: 8px;
+      background: linear-gradient(160deg, var(--sky-400), var(--blue-600));
+      color: #fff;
+      font-size: .78rem; font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      box-shadow: 0 2px 6px rgba(47,109,246,.25);
+    }
+    .policy-section p { color: var(--ink-sub); font-size: .95rem; margin-bottom: 11px; }
+    .policy-section p:last-child { margin-bottom: 0; }
+    .policy-section ul { margin: 10px 0 12px 20px; color: var(--ink-sub); font-size: .95rem; }
+    .policy-section li { margin-bottom: 5px; }
+    .policy-section li::marker { color: var(--sky-500); }
+    .policy-section strong { color: var(--ink); font-weight: 700; }
+
+    /* 「端末内で完結」の強調ボックス：空色のカード */
+    .zero-data {
+      background: linear-gradient(135deg, var(--zero-a) 0%, var(--zero-b) 100%);
+      border-radius: 10px;
+      padding: 15px 18px; margin: 4px 0 14px;
+      box-shadow: 0 6px 18px rgba(47,109,246,.22);
+    }
+    .zero-data p {
+      color: #fff; font-weight: 700;
+      font-size: .97rem; margin: 0;
+    }
+
+    /* 免責事項の導入文：ラベンダーの注記 */
+    .lead-note {
+      background: var(--lavender-soft);
+      border-left: 3px solid var(--lavender);
+      border-radius: 0 10px 10px 0;
+      padding: 13px 18px; margin: 4px 0 16px;
+    }
+    .lead-note p {
+      color: var(--lavender-ink); font-weight: 700;
+      margin: 0; font-size: .95rem;
+    }
+    #disclaimer { border-color: var(--lead-line); }
+
+    .contact-box {
+      background: var(--box-bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 16px; margin-top: 12px;
+    }
+    /* 詳細度メモは TechRef 版と同じ：.policy-section を足して p:last-child に勝つ */
+    .policy-section .contact-box p { margin: 3px 0; color: var(--ink); }
+
+    /* ── フッター：深い空 ──────────────────────── */
+    footer {
+      background: linear-gradient(180deg, var(--foot-a) 0%, var(--foot-b) 100%);
+      color: rgba(255,255,255,.72);
+      text-align: center; padding: 32px 20px 36px;
+      font-size: .8rem;
+    }
+    footer a { color: rgba(255,255,255,.9); text-decoration: none; }
+    footer a:hover { color: var(--yellow); text-decoration: underline; }
+    footer a:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; border-radius: 3px; }
+
+    .footer-links {
+      display: flex; justify-content: center; align-items: center;
+      gap: 22px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .footer-links a { font-size: .85rem; }
+    .x-icon { font-style: normal; }
+
+    footer a.footer-top {
+      display: inline-block; font-size: .78rem;
+      letter-spacing: .06em; margin-bottom: 18px;
+      color: rgba(255,255,255,.7);
+    }
+
+    .footer-legal {
+      display: flex; justify-content: center; align-items: center;
+      gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .footer-legal a { font-size: .82rem; }
+    .footer-legal-sep { color: rgba(255,255,255,.35); }
+
+    .noscript-note {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--sky-500);
+      border-radius: var(--r); padding: 20px 22px;
+      color: var(--ink-sub); font-size: .95rem;
+      box-shadow: var(--shadow);
+    }
+    .noscript-note p { margin-bottom: 10px; }
+    .noscript-note p:last-child { margin-bottom: 0; }
+
+    .footer-copy { font-size: .78rem; color: rgba(255,255,255,.65); }
+
+    @media (max-width: 520px) {
+      body { font-size: 15px; }
+      header { padding: 30px 16px 0; }
+      .policy-section { padding: 18px 16px; }
+      .policy-section h2 { gap: 9px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header>
+  <div class="hd-inner">
+    <div class="app-badge">Mementos</div>
+    <h1 id="hd-title">Privacy Policy &amp; Disclaimer</h1>
+    <p class="hd-sub" id="hd-sub">Mementos turns your photos into cards, and keeps every one of them on your device. Nothing is ever transmitted off it. This page explains exactly what that means, and what the App does and does not do with your photos.</p>
+    <p class="updated" id="hd-updated">Effective: September 18, 2026</p>
+    <div class="scale-rule" aria-hidden="true"></div>
+  </div>
+  <div class="lang-bar hd-inner">
+    <label for="ls" id="lang-label">Language:</label>
+    <!-- <option> は下の T オブジェクトの meta.langName から自動生成される。
+         言語を追加するときに触るのは T の1箇所だけでよい。
+         onchange="..." のインラインイベント指定は使わず addEventListener に寄せている
+         （構造と振る舞いの分離／将来 CSP を締めるときの障害を避けるため）。 -->
+    <select id="ls"></select>
+  </div>
+</header>
+
+<main id="main">
+  <!-- JavaScript 無効時の案内。
+       英語の本文は静的 HTML に持たせてあるので、JS が無くても全文読める。
+       この案内が伝えるべきことは「他の言語で読むには JS が必要」。
+       日英併記なのは、この部分だけ言語切替の対象外になるため。 -->
+  <noscript>
+    <div class="noscript-note">
+      <p lang="en"><strong>This page is displayed in English because JavaScript is disabled.</strong> The full policy is shown below. Enable JavaScript to read it in other languages, or contact us at <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a>.</p>
+      <p lang="ja"><strong>JavaScript が無効のため、このページは英語で表示されています。</strong>本文は下に全文掲載されています。他の言語で読むには JavaScript を有効にしてください。ご不明な点は <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a> までご連絡ください。</p>
+    </div>
+  </noscript>
+  <!--
+  ============================================================
+  【本文について】
+
+  ■ 英語の本文を HTML に直接書いている
+    JavaScript が動かない環境でも本文が存在するようにするため。
+    検索エンジンのクローラーや App Store の審査ボットから
+    「中身のないページ」に見えるのを避ける。
+
+  ■ JavaScript が動く環境での動作
+    applyLang() が中身を丸ごと書き換えるため、日本語環境なら
+    日本語に置き換わる。下の英語本文は「置き換えられる前の初期値」。
+
+  ■ ⚠️ 二重管理の注意（重要）
+    英語の本文は「下の HTML」と「T.en.sections」の2箇所に存在する。
+    英語のテキストを変更するときは必ず両方を同時に更新すること。
+    片方だけ直すと、JavaScript の有無で表示内容が食い違う。
+
+    下の HTML は renderAll("en") の出力と1文字も違わないように
+    生成している。同期のズレは、この HTML と T.en を突き合わせれば
+    機械的に検出できる。
+
+  ■ セクション番号について
+    番号（1〜13）も静的 HTML に書き込まれている。
+    T.en.sections の並び順を変えたり項目を増減した場合は、
+    番号がずれるため下の HTML も必ず再生成すること。
+    なおアンカー（#disclaimer / #contact）は id で固定しているため、
+    番号が変わってもアプリ側のリンクは壊れない。
+  ============================================================
+  -->
+  <div id="content"><section class="policy-section" id="introduction">
+    <h2><span class="sec-num">1</span><span>Introduction</span></h2>
+    <p>This is the Privacy Policy and Disclaimer for <strong>Mementos</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>Mementos is a memory-matching card game that uses your own photos as the cards. It is built on a simple principle: your photos belong to you, and they stay on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section explains what the App does and does not do with your photos, including what happens when you delete it.</p>
+  </section><section class="policy-section" id="storage">
+    <h2><span class="sec-num">2</span><span>Photos and Data Stored on Your Device</span></h2>
+    <div class='zero-data'><p>Everything the App keeps stays on your device. Mementos has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>Mementos stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>
+  </section><section class="policy-section" id="access">
+    <h2><span class="sec-num">3</span><span>Photo Library and Camera Access</span></h2>
+    <p>Mementos gets photos in two ways, and both are designed so the App sees only what you choose to show it.</p><p><strong>Choosing from your library.</strong> The App uses the iOS system photo picker. The picker runs outside the App, and only the photos you tap are handed over. The App is never granted access to your photo library — which is why iOS shows no permission prompt: there is no permission to ask for. The App cannot see, list, or read any photo you did not pick.</p><p><strong>Taking new photos.</strong> The camera path asks for camera permission, because iOS requires it to show a live preview and capture. Photos taken this way go directly into the App as cards. They are <strong>not</strong> written to your camera roll, and the App still has no access to photos already in your library.</p><p>The App never requests microphone, location, contacts, or any other permission.</p>
+  </section><section class="policy-section" id="network">
+    <h2><span class="sec-num">4</span><span>Network Activity</span></h2>
+    <p>Every feature of Mementos — choosing or taking photos, playing, and saving decks — works entirely offline. No network connection is required.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries of any kind in the App.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring Mementos Pro</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link on the About screen</strong> (Privacy Policy, Disclaimer, Support) — this website opens in your browser</li></ul><p><strong>In neither case is any photo, card image, or deck transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains nothing from your photos. Opening this website is an ordinary page load in your browser, unconnected to anything in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> your photos, the cards made from them, deck names, or anything about what is in your decks. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you played with.</p><p>The only way your card images leave the device is iCloud Backup, described next — and only if you have turned it on.</p>
+  </section><section class="policy-section" id="icloud">
+    <h2><span class="sec-num">5</span><span>iCloud Backup</span></h2>
+    <p>Mementos does not use CloudKit and does not synchronize your decks with any cloud service.</p><p>However, if you have enabled iCloud Backup in your device settings, iOS may include the App's saved decks — <strong>including the card images</strong> — in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>This is what allows your decks to be restored automatically when you set up a new device. If you prefer that your card images not be included, you can disable iCloud Backup for Mementos in the iOS Settings app.</p><p>Backup handling is governed by Apple's Privacy Policy.</p>
+  </section><section class="policy-section" id="advertising">
+    <h2><span class="sec-num">6</span><span>Advertising and Tracking</span></h2>
+    <p>Mementos contains <strong>no advertisements</strong>.</p><p>The App does not use the advertising identifier (IDFA), does not request App Tracking Transparency permission, and does not track you across apps or websites. There is no profiling, no behavioral analysis, and no data broker relationship of any kind.</p><p>This is a design decision, not a temporary state. A game built around your personal photos — and one that families may play with children — will not carry advertising.</p>
+  </section><section class="policy-section" id="purchases">
+    <h2><span class="sec-num">7</span><span>In-App Purchases</span></h2>
+    <p>Mementos is free to download. You can choose or take photos, play the 4-pair board, and keep one saved deck — named automatically by date — without purchasing anything.</p><p>A one-time (non-consumable) in-app purchase, <strong>Mementos Pro</strong>, unlocks the larger 6-pair and 7-pair boards, removes the one-deck limit on saving, and lets you name and rename your decks. The exact contents and the price are shown on the App Store product page and on the purchase screen inside the App.</p><p>All payment processing is handled by Apple through the App Store. The Developer never receives your payment details, card information, or any personal information associated with the transaction. See Apple's Privacy Policy for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. "Restore Purchase" on the Pro screen asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore Pro after changing devices or reinstalling the App.</p><p>Any change to what is free and what is paid will be reflected on this page before it takes effect.</p>
+  </section><section class="policy-section" id="sharing">
+    <h2><span class="sec-num">8</span><span>Sharing of Information</span></h2>
+    <p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. In the event of a legally binding request from a competent authority, the Developer has no user data — and no photos — that could be produced.</p>
+  </section><section class="policy-section" id="children">
+    <h2><span class="sec-num">9</span><span>Children's Privacy</span></h2>
+    <p>Mementos is a family game, not a children's app. It is made for families: adults and children can play together using family photos, and many families will do exactly that.</p><p>Because personal photos may be on the screen and a child may be playing, the App carries <strong>no advertisements</strong>. Mementos Pro is an optional add-on aimed at the adults in the family — larger boards, more saved decks, and named decks. The free version is fully playable, and nothing a child needs in order to enjoy the game sits behind a purchase.</p><p>The App collects no personal information from anyone of any age, so it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user. Photos chosen or taken during play stay on the device exactly as described above, regardless of who is playing.</p>
+  </section><section class="policy-section" id="disclaimer">
+    <h2><span class="sec-num">10</span><span>Disclaimer</span></h2>
+    <div class='lead-note'><p>Mementos is a game. It is not a photo backup, an archive, or a photo-management tool. Please keep your original photos where you normally keep them.</p></div><p><strong>Card images are derived copies.</strong> The App makes square, downscaled copies of your photos for use as cards. These copies are lower in resolution than the originals and carry no metadata. They are not a substitute for the original photos.</p><p><strong>Photos taken in the App are not saved to your camera roll.</strong> If you take a photo in Mementos that you want to keep as a photo, take it again with the Camera app. The App is not designed to preserve camera captures beyond their use as cards.</p><p><strong>Deleting the App deletes your decks.</strong> Saved decks live only inside the App. Uninstalling it removes them, unless a device backup restores them later. The Developer cannot recover deleted decks.</p><p><strong>The free version keeps one deck.</strong> Saving a new deck replaces the existing one. The App warns you before it does so, but once replaced, the previous deck is gone.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to loss of decks, loss of photos taken within the App, or any other data loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>
+  </section><section class="policy-section" id="law">
+    <h2><span class="sec-num">11</span><span>Governing Law</span></h2>
+    <p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p>
+  </section><section class="policy-section" id="changes">
+    <h2><span class="sec-num">12</span><span>Changes to This Policy</span></h2>
+    <p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, a change to what Mementos Pro includes — it will be published here before that change reaches users.</p>
+  </section><section class="policy-section" id="contact">
+    <h2><span class="sec-num">13</span><span>Contact</span></h2>
+    <p>Questions, corrections, and feature requests are welcome. This page also serves as the support page for Mementos.</p><div class='contact-box'><p>Website / contact form: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Email: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>
+  </section></div>
+</main>
+
+<!-- フッター：外部SNSリンク・TOPへ戻るリンク・法的リンク・著作権表記
+  - 外部SNSリンクにはすべて target="_blank" と rel="noopener noreferrer" を付けている
+  - href="#top" は <html id="top"> へジャンプしてページ先頭に戻る
+  - aria-label はページの表示言語に追従させるため、applyLang() 内で設定している
+  - このページ自身がポリシーページのため、プライバシーポリシーへのリンクは置いていない
+  - 法的リンクは日本語表示のときのみ特定商取引法の表示が出る（英語表示では nav ごと非表示）
+  - 著作権表記からサイトのトップページへリンクする（英語ページ→英語トップ / 日本語ページ→日本語トップ）
+-->
+<footer>
+  <div class="footer-links">
+    <!-- 静的な aria-label（英語）を持たせている。
+         中の <span> は aria-hidden="true" なので、aria-label が無いあいだ
+         このリンクはスクリーンリーダーから見て「名前の無いリンク」になる。
+         applyLang() が表示言語に応じて上書きするが、JS実行前やJS無効時に
+         無名リンクが残らないよう初期値を置いている。 -->
+    <a href="https://github.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-github"
+       aria-label="GitHub (opens in a new tab)">GitHub</a>
+    <a href="https://x.com/FlyingDevLab" target="_blank" rel="noopener noreferrer" id="f-x"
+       aria-label="X, formerly Twitter (opens in a new tab)">
+      <span class="x-icon" aria-hidden="true">𝕏</span>
+    </a>
+    <a href="https://www.instagram.com/flyingdevlab/" target="_blank" rel="noopener noreferrer" id="f-ig"
+       aria-label="Instagram (opens in a new tab)">
+      <span class="x-icon" aria-hidden="true">Instagram</span>
+    </a>
+  </div>
+
+  <!-- ページ先頭へ戻るリンク。ポリシーページは縦に長くなるため有効。 -->
+  <a href="#top" class="footer-top" id="f-top" aria-label="Back to top of page">↑ TOP</a>
+
+  <!-- 法的リンク。日本語表示のときのみ特定商取引法の項目が加わる。 -->
+  <nav class="footer-legal" id="f-legal"></nav>
+
+  <p class="footer-copy" id="f-copy"></p>
+</footer>
+
+<script>
+/* スクリプト全体を即時実行関数（IIFE）で包み、"use strict" を付けている。
+
+   IIFE（Immediately Invoked Function Expression）とは：
+     (function () { ... })();
+   と書くことで「定義した直後に一度だけ実行される関数」を作る書き方。
+   関数の中で宣言した変数は外から見えないため、他のスクリプトと
+   名前がぶつかる事故を防げる。index.html / ja/index.html と同じ書き方に揃えている。
+
+   "use strict"（厳格モード）とは：
+   うっかりミス（宣言し忘れた変数への代入など）をエラーとして知らせてくれるモード。 */
+(function () {
+"use strict";
+
+/*
+ * T（翻訳データオブジェクト）
+ * ─────────────────────────────────────────────
+ * 構造: T[言語コード] = { meta: {...}, sections: [ { id, title, html } ] }
+ *
+ * ★ sections は「id付き配列」。
+ *   描画は必ず T.en.sections の並び順を基準に行い、選択言語に同じ id が
+ *   見つからない場合は英語版で埋める（renderAll() を参照）。
+ *   → 翻訳が未完成の言語でも、セクションが欠けたり順番がずれたりしない。
+ *
+ * ★ セクション番号は配列の並び順から自動採番される。
+ *   セクションを追加・削除しても番号を手で振り直す必要はない。
+ *   ただしアンカー（#disclaimer / #contact）は id で固定しているため、
+ *   番号がずれてもアプリ側のリンクは壊れない。
+ *
+ * ⚠️ 言語を追加するときは meta と sections をセットで追加すること。
+ * ⚠️ 内容を更新したら、全言語の meta.updatedDate を必ず変更すること。
+ */
+const T = {
+  "en": {
+    "meta": {
+      "langName": "English",
+      "selectLabel": "Language",
+      "pageTitle": "Privacy Policy & Disclaimer",
+      "subtitle": "Mementos turns your photos into cards, and keeps every one of them on your device. Nothing is ever transmitted off it. This page explains exactly what that means, and what the App does and does not do with your photos.",
+      "updatedLabel": "Effective",
+      "updatedDate": "September 18, 2026",
+      "footer": {
+        "ariaGithub": "GitHub (opens in a new tab)",
+        "ariaX": "X, formerly Twitter (opens in a new tab)",
+        "ariaInstagram": "Instagram (opens in a new tab)",
+        "ariaTop": "Back to top of page",
+        "ariaLegal": "Legal information",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab home page'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introduction",
+        "html": "<p>This is the Privacy Policy and Disclaimer for <strong>Mementos</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>Mementos is a memory-matching card game that uses your own photos as the cards. It is built on a simple principle: your photos belong to you, and they stay on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section explains what the App does and does not do with your photos, including what happens when you delete it.</p>"
+      },
+      {
+        "id": "storage",
+        "title": "Photos and Data Stored on Your Device",
+        "html": "<div class='zero-data'><p>Everything the App keeps stays on your device. Mementos has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>Mementos stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>"
+      },
+      {
+        "id": "access",
+        "title": "Photo Library and Camera Access",
+        "html": "<p>Mementos gets photos in two ways, and both are designed so the App sees only what you choose to show it.</p><p><strong>Choosing from your library.</strong> The App uses the iOS system photo picker. The picker runs outside the App, and only the photos you tap are handed over. The App is never granted access to your photo library — which is why iOS shows no permission prompt: there is no permission to ask for. The App cannot see, list, or read any photo you did not pick.</p><p><strong>Taking new photos.</strong> The camera path asks for camera permission, because iOS requires it to show a live preview and capture. Photos taken this way go directly into the App as cards. They are <strong>not</strong> written to your camera roll, and the App still has no access to photos already in your library.</p><p>The App never requests microphone, location, contacts, or any other permission.</p>"
+      },
+      {
+        "id": "network",
+        "title": "Network Activity",
+        "html": "<p>Every feature of Mementos — choosing or taking photos, playing, and saving decks — works entirely offline. No network connection is required.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries of any kind in the App.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring Mementos Pro</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link on the About screen</strong> (Privacy Policy, Disclaimer, Support) — this website opens in your browser</li></ul><p><strong>In neither case is any photo, card image, or deck transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains nothing from your photos. Opening this website is an ordinary page load in your browser, unconnected to anything in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> your photos, the cards made from them, deck names, or anything about what is in your decks. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you played with.</p><p>The only way your card images leave the device is iCloud Backup, described next — and only if you have turned it on.</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "iCloud Backup",
+        "html": "<p>Mementos does not use CloudKit and does not synchronize your decks with any cloud service.</p><p>However, if you have enabled iCloud Backup in your device settings, iOS may include the App's saved decks — <strong>including the card images</strong> — in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>This is what allows your decks to be restored automatically when you set up a new device. If you prefer that your card images not be included, you can disable iCloud Backup for Mementos in the iOS Settings app.</p><p>Backup handling is governed by Apple's Privacy Policy.</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "Advertising and Tracking",
+        "html": "<p>Mementos contains <strong>no advertisements</strong>.</p><p>The App does not use the advertising identifier (IDFA), does not request App Tracking Transparency permission, and does not track you across apps or websites. There is no profiling, no behavioral analysis, and no data broker relationship of any kind.</p><p>This is a design decision, not a temporary state. A game built around your personal photos — and one that families may play with children — will not carry advertising.</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "In-App Purchases",
+        "html": "<p>Mementos is free to download. You can choose or take photos, play the 4-pair board, and keep one saved deck — named automatically by date — without purchasing anything.</p><p>A one-time (non-consumable) in-app purchase, <strong>Mementos Pro</strong>, unlocks the larger 6-pair and 7-pair boards, removes the one-deck limit on saving, and lets you name and rename your decks. The exact contents and the price are shown on the App Store product page and on the purchase screen inside the App.</p><p>All payment processing is handled by Apple through the App Store. The Developer never receives your payment details, card information, or any personal information associated with the transaction. See Apple's Privacy Policy for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. \"Restore Purchase\" on the Pro screen asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore Pro after changing devices or reinstalling the App.</p><p>Any change to what is free and what is paid will be reflected on this page before it takes effect.</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "Sharing of Information",
+        "html": "<p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. In the event of a legally binding request from a competent authority, the Developer has no user data — and no photos — that could be produced.</p>"
+      },
+      {
+        "id": "children",
+        "title": "Children's Privacy",
+        "html": "<p>Mementos is a family game, not a children's app. It is made for families: adults and children can play together using family photos, and many families will do exactly that.</p><p>Because personal photos may be on the screen and a child may be playing, the App carries <strong>no advertisements</strong>. Mementos Pro is an optional add-on aimed at the adults in the family — larger boards, more saved decks, and named decks. The free version is fully playable, and nothing a child needs in order to enjoy the game sits behind a purchase.</p><p>The App collects no personal information from anyone of any age, so it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user. Photos chosen or taken during play stay on the device exactly as described above, regardless of who is playing.</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "Disclaimer",
+        "html": "<div class='lead-note'><p>Mementos is a game. It is not a photo backup, an archive, or a photo-management tool. Please keep your original photos where you normally keep them.</p></div><p><strong>Card images are derived copies.</strong> The App makes square, downscaled copies of your photos for use as cards. These copies are lower in resolution than the originals and carry no metadata. They are not a substitute for the original photos.</p><p><strong>Photos taken in the App are not saved to your camera roll.</strong> If you take a photo in Mementos that you want to keep as a photo, take it again with the Camera app. The App is not designed to preserve camera captures beyond their use as cards.</p><p><strong>Deleting the App deletes your decks.</strong> Saved decks live only inside the App. Uninstalling it removes them, unless a device backup restores them later. The Developer cannot recover deleted decks.</p><p><strong>The free version keeps one deck.</strong> Saving a new deck replaces the existing one. The App warns you before it does so, but once replaced, the previous deck is gone.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to loss of decks, loss of photos taken within the App, or any other data loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>"
+      },
+      {
+        "id": "law",
+        "title": "Governing Law",
+        "html": "<p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p>"
+      },
+      {
+        "id": "changes",
+        "title": "Changes to This Policy",
+        "html": "<p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, a change to what Mementos Pro includes — it will be published here before that change reaches users.</p>"
+      },
+      {
+        "id": "contact",
+        "title": "Contact",
+        "html": "<p>Questions, corrections, and feature requests are welcome. This page also serves as the support page for Mementos.</p><div class='contact-box'><p>Website / contact form: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Email: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "ja": {
+    "meta": {
+      "langName": "日本語",
+      "selectLabel": "言語",
+      "pageTitle": "プライバシーポリシー・免責事項",
+      "subtitle": "Mementos はお手持ちの写真をカードにして遊ぶアプリです。写真はすべて端末内にとどまり、外部へ送信されることはありません。本ページでは、その具体的な内容と、写真の取り扱いについて説明します。",
+      "updatedLabel": "発効日",
+      "updatedDate": "2026年9月18日",
+      "footer": {
+        "ariaGithub": "GitHub（新しいタブで開きます）",
+        "ariaX": "X（旧Twitter）（新しいタブで開きます）",
+        "ariaInstagram": "Instagram（新しいタブで開きます）",
+        "ariaTop": "ページの先頭へ",
+        "ariaLegal": "法的情報",
+        "legalHtml": "<a href='/tokusho.html' lang='ja'>特定商取引法に基づく表示</a>",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/ja/' aria-label='Flying Dev Lab トップページ'>Flying Dev Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "はじめに",
+        "html": "<p>本ページは、Flying Dev Lab（空飛ぶ研究室）が開発した iOS アプリ <strong>Mementos</strong> のプライバシーポリシーおよび免責事項です。</p><p>Mementos は、お手持ちの写真をカードにして遊ぶ神経衰弱ゲームです。「写真は利用者のものであり、端末内にとどまる」という単純な原則に基づいて設計されています。</p><p>本アプリをご利用の前に本ページをお読みください。<a href='#disclaimer'>免責事項</a>の章では、本アプリが写真に対して行うこと・行わないこと、およびアプリを削除した場合の扱いを説明しています。</p>"
+      },
+      {
+        "id": "storage",
+        "title": "端末内に保存する写真とデータ",
+        "html": "<div class='zero-data'><p>本アプリが保持するものはすべて端末内にとどまります。Mementos はサーバーを持たず、写真もその他のデータも、当開発者へ送信されることは一切ありません。</p></div><p>本アプリが端末内にのみ保存するもの：</p><ul><li><strong>保存したデッキ</strong> — 選択または撮影した写真から作られたカード画像、デッキ名、作成日時と最終更新日時</li><li><strong>Pro の購入状態</strong> — 端末上で App Store から読み取ります（<a href='#purchases'>アプリ内課金について</a>を参照）</li></ul><p>カード画像は元の写真そのものではありません。写真を選択または撮影すると、本アプリはそれを正方形に切り出し、縮小したうえで、新しい JPEG として再エンコードします。この処理ではピクセルを一から描き直すため、保存されるカードには<strong>元の写真のメタデータが一切残りません</strong>——位置情報、撮影日時、カメラの機種、その他の埋め込み情報のいずれも含まれません。「写真」アプリ内の元の写真が変更されることもありません。</p><p>デッキはアプリの Application Support ディレクトリ内にファイルとして保存されます。選択または撮影したもののデッキとして保存しなかった写真は、プレイ中のみメモリ上に存在し、その後破棄されます。アプリを削除すると、これらのデータはすべて端末から削除されます。</p><p>当開発者はこれらに一切アクセスできません。</p>"
+      },
+      {
+        "id": "access",
+        "title": "写真ライブラリとカメラへのアクセス",
+        "html": "<p>Mementos が写真を受け取る方法は2つあり、いずれも「利用者が見せると決めたものだけをアプリが受け取る」設計になっています。</p><p><strong>ライブラリから選ぶ場合。</strong>本アプリは iOS 標準の写真ピッカーを使用します。ピッカーはアプリの外側で動作し、タップした写真だけがアプリに渡されます。本アプリが写真ライブラリへのアクセス権を与えられることはありません。iOS が許可ダイアログを表示しないのはそのためで、求める権限自体が存在しません。選ばれなかった写真を本アプリが見たり、一覧したり、読み取ったりすることはできません。</p><p><strong>新しく撮影する場合。</strong>撮影機能はカメラの許可を求めます。iOS がライブプレビューの表示と撮影に許可を必要とするためです。この方法で撮影した写真はカードとして直接アプリに取り込まれます。<strong>カメラロールには書き込まれず</strong>、ライブラリ内の既存の写真へのアクセス権も引き続き持ちません。</p><p>本アプリがマイク、位置情報、連絡先、その他の権限を求めることはありません。</p>"
+      },
+      {
+        "id": "network",
+        "title": "ネットワーク通信",
+        "html": "<p>Mementos のすべての機能——写真の選択・撮影、プレイ、デッキの保存——は、オフラインで完結します。ネットワーク接続は不要です。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、その他いかなるサードパーティライブラリも本アプリには含まれていません。</p><p><strong>アプリ自身が通信を行うのは、ご自身の操作による次の2つの場合のみです：</strong></p><ul><li><strong>Mementos Pro の購入および復元</strong> — App Store を通じて Apple が処理します（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>「このアプリについて」画面のリンク（プライバシーポリシー・免責事項・サポート）をタップした場合</strong> — ブラウザで本サイトが開きます</li></ul><p><strong>いずれの場合も、写真、カード画像、デッキが送信されることはありません。</strong>購入処理の通信相手は Apple のみであり、写真に由来する情報は一切含まれません。本サイトを開く操作は、ブラウザでの通常のページ読み込みであり、アプリ内の情報とは結びつきません。</p><p><strong>Apple による利用統計について。</strong>App Store でアプリを配信する以上、Apple はプラットフォームの運営者として、インストール数・起動回数・利用時間・購入数といった統計情報を集計し、匿名化・集計された形で当開発者に提供します。また、iOS の設定で診断データの共有を有効にされている場合は、クラッシュレポートも同様の形で提供されます。これらはすべて Apple が管理しており、当開発者が有効・無効を切り替えることはできません。</p><p><strong>これらの統計に決して含まれないもの：</strong>写真、写真から作られたカード、デッキ名、デッキの内容に関する情報。本アプリはこれらを一切送信しないため、Apple も当開発者も取得できません。Apple が知り得るのは「アプリが使われたこと」であって、「何で遊んだか」ではありません。</p><p>カード画像が端末の外に出る唯一の経路は、次章で説明する iCloud バックアップです——それも、ご自身で有効にされている場合に限ります。</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "iCloud バックアップについて",
+        "html": "<p>Mementos は CloudKit を使用せず、デッキをクラウドサービスと同期することもありません。</p><p>ただし、端末の設定で iCloud バックアップを有効にされている場合、iOS は他のアプリのデータとともに、本アプリの保存済みデッキ——<strong>カード画像を含む</strong>——を端末のバックアップに含めることがあります。これは Apple が管理する OS の標準機能です。当開発者がバックアップを開始することも、アクセスすることもありません。</p><p>この仕組みにより、新しい端末をセットアップした際にデッキが自動的に復元されます。カード画像をバックアップに含めたくない場合は、iOS の設定アプリで Mementos の iCloud バックアップを無効にできます。</p><p>バックアップの取り扱いは Apple のプライバシーポリシーに従います。</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "広告・トラッキング",
+        "html": "<p>Mementos に<strong>広告はありません</strong>。</p><p>本アプリは広告識別子（IDFA）を使用せず、App Tracking Transparency の許可を求めず、アプリやウェブサイトをまたいだトラッキングを行いません。プロファイリング、行動分析、データブローカーとの関係は一切ありません。</p><p>これは一時的な状態ではなく、設計上の決定です。個人の写真を中心に据えたゲームであり、家族がこどもと一緒に遊ぶ可能性もあるため、広告を載せることはありません。</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "アプリ内課金について",
+        "html": "<p>Mementos は無料でダウンロードできます。写真の選択・撮影、4ペアの盤面でのプレイ、デッキ1件の保存（名前は日付が自動で付きます）は、購入なしで利用できます。</p><p>買い切り型（非消耗型）のアプリ内課金 <strong>Mementos Pro</strong> を購入すると、より大きな6ペア・7ペアの盤面が解放され、保存できるデッキが1件という制限がなくなり、デッキに名前を付けたり変更したりできるようになります。具体的な内容と価格は、App Store の製品ページおよびアプリ内の購入画面に表示されます。</p><p>決済処理はすべて App Store を通じて Apple が行います。当開発者が支払い情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple によるこれらのデータの取り扱いについては、Apple のプライバシーポリシーをご確認ください。</p><p><strong>購入の復元について。</strong>購入は特定の端末ではなく Apple アカウントに紐づきます。Pro 画面の「購入を復元」は、そのアカウントが購入済みかどうかを Apple に問い合わせます。この問い合わせは端末と Apple の間で完結し、当開発者が Apple アカウントを保存・受信することはありません。機種変更やアプリの再インストール後に Pro を復元する際にご利用ください。</p><p>無料の範囲と有料の範囲に変更がある場合は、施行前に本ページに反映します。</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "第三者への情報提供",
+        "html": "<p>当開発者が利用者の情報を第三者に販売・共有・譲渡することはありません。そもそも利用者の情報を収集していないためです。</p><p>広告事業者、分析事業者、データブローカーに開示できるデータは存在しません。権限ある機関から法的拘束力のある要請があった場合でも、当開発者が提出できる利用者データ——写真を含め——は存在しません。</p>"
+      },
+      {
+        "id": "children",
+        "title": "こどもの利用について",
+        "html": "<p>Mementos はこども専用のアプリではなく、家族向けのゲームです。家族のために作ったもので、大人とこどもが家族写真を使って一緒に遊べます。実際にそのように遊ばれることも多いでしょう。</p><p>個人の写真が画面に出ること、またこどもが遊ぶ可能性があることから、本アプリに<strong>広告はありません</strong>。Mementos Pro は家族の中の大人に向けた任意の拡張で、より大きな盤面、複数デッキの保存、デッキへの名前付けができるようになります。無料の範囲だけで十分に遊べる設計で、こどもが遊ぶうえで必要な機能が課金の向こう側に置かれることはありません。</p><p>本アプリは年齢を問わず誰からも個人情報を収集しないため、こどものプライバシーに関する懸念は生じません。保護・共有・削除すべきデータは、いかなる利用者についても存在しません。プレイ中に選択または撮影された写真は、誰が遊んでいるかにかかわらず、上記のとおり端末内にとどまります。</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "免責事項",
+        "html": "<div class='lead-note'><p>Mementos はゲームです。写真のバックアップ、アーカイブ、写真管理ツールではありません。元の写真は普段の保管場所に保管してください。</p></div><p><strong>カード画像は派生的な複製です。</strong>本アプリはカードとして使うために、写真の正方形・縮小版の複製を作成します。この複製は元の写真より解像度が低く、メタデータを持ちません。元の写真の代わりにはなりません。</p><p><strong>アプリ内で撮影した写真はカメラロールに保存されません。</strong>Mementos で撮影した写真を写真として残したい場合は、カメラアプリで撮り直してください。本アプリは、カードとしての用途を超えて撮影画像を保存するようには設計されていません。</p><p><strong>アプリを削除するとデッキも削除されます。</strong>保存したデッキはアプリの内部にのみ存在します。アンインストールすると、後に端末のバックアップから復元されない限り、デッキは失われます。当開発者が削除されたデッキを復旧することはできません。</p><p><strong>無料版で保存できるデッキは1件です。</strong>新しいデッキを保存すると既存のデッキが置き換えられます。置き換えの前にアプリが警告を表示しますが、置き換え後に以前のデッキを取り戻すことはできません。</p><p><strong>責任の制限。</strong>適用法令が許容する最大限の範囲において、当開発者は、本アプリの利用または利用不能から生じる直接的・間接的・付随的・結果的な損害——デッキの喪失、アプリ内で撮影した写真の喪失、その他のデータ喪失を含むがこれに限らない——について責任を負いません。</p><p><strong>提供の継続について。</strong>iOS のアップデートや端末環境の変化により、予告なく本アプリの動作が影響を受けることがあります。当開発者は予告なく本アプリを変更または提供終了することがあり、それに伴うデータ喪失について責任を負いません。</p>"
+      },
+      {
+        "id": "law",
+        "title": "準拠法・管轄",
+        "html": "<p>本ポリシーは日本法に準拠します。本ポリシーに関連して生じる紛争については、当開発者の所在地を管轄する裁判所を第一審の専属的合意管轄裁判所とします。</p>"
+      },
+      {
+        "id": "changes",
+        "title": "ポリシーの変更について",
+        "html": "<p>本ポリシーは、アプリの進化に合わせて更新されることがあります。改訂版は本ページに掲載された時点で効力を生じ、ページ上部の発効日もあわせて更新されます。</p><p>データを収集していないため、本ポリシーの変更が既に保持されている利用者データに影響することはありません。アプリの動作に重要な影響を及ぼす変更——たとえば Mementos Pro の内容の変更——がある場合は、利用者に届く前に本ページで公表します。</p>"
+      },
+      {
+        "id": "contact",
+        "title": "お問い合わせ",
+        "html": "<p>ご質問・訂正のご指摘・機能のご要望をお待ちしています。本ページは Mementos のサポートページも兼ねています。</p><div class='contact-box'><p>ウェブサイト / お問い合わせフォーム：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>メール：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  }
+};
+
+/*
+ * LANG_MAP
+ * ─────────────────────────────────────────────
+ * navigator.languages が返す値（"en-US", "ja-JP" など）を
+ * 翻訳データのキーに変換する対応表。
+ * 言語を追加するときは、この表にも該当のロケールを追加すること。
+ * キーはすべて小文字表記に統一している（照合側も小文字化。detectLang 参照）。
+ */
+const LANG_MAP = {
+  "en": "en", "en-us": "en", "en-gb": "en", "en-au": "en", "en-ca": "en",
+  "ja": "ja"
+};
+const SUPPORTED = Object.keys(T);
+const DEFAULT_LANG = "en";   // ★ アプリ本体が英語のため、英語をデフォルトとする
+const STORAGE_KEY = "mm-lang";
+
+/*
+ * detectLang()
+ * ─────────────────────────────────────────────
+ * 表示言語を自動検出する。優先順位：
+ *   1. localStorage の "tr-lang"（ユーザーが選んだ言語を記憶）
+ *   2. navigator.languages を上から順に LANG_MAP で照合
+ *   3. どれも一致しなければ "en"
+ */
+function detectLang() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && SUPPORTED.includes(saved)) return saved;
+  } catch (e) {
+    // プライベートブラウズ等で localStorage が使えない場合は無視して続行
+  }
+  const navLangs = navigator.languages || [navigator.language || DEFAULT_LANG];
+  for (const l of navLangs) {
+    /* 照合前に小文字化する。
+       LANG_MAP のキーは "en-us" のような小文字だが、navigator.languages が返す値は
+       ブラウザによって "en-US" のように大文字が混ざる。
+       「表のキーは小文字で書く・照合時も小文字にする」と決めておけば表記ゆれで取りこぼさない。
+       なお地域コード付きが表に無くても、"-" の前（"en"）で再照合するので拾える。 */
+    const key = String(l).toLowerCase();
+    const code = LANG_MAP[key] || LANG_MAP[key.split("-")[0]];
+    if (code && SUPPORTED.includes(code)) return code;
+  }
+  return DEFAULT_LANG;
+}
+
+/*
+ * renderSection(section, index)
+ * ─────────────────────────────────────────────
+ * セクション1つ分のカード HTML を組み立てて返す。
+ * 番号は配列のインデックスから自動採番（index + 1）。
+ * id は英語版のものを使うため、アンカー（#disclaimer）は言語を切り替えても有効。
+ *
+ * ⚠️ XSS 注意：html を innerHTML で直接挿入している。
+ *    翻訳データは開発者が管理する固定テキストのため問題ないが、
+ *    ユーザー入力を混ぜる場合は必ずエスケープすること。
+ */
+function renderSection(section, index) {
+  const num = String(index + 1);
+  return `<section class="policy-section" id="${section.id}">
+    <h2><span class="sec-num">${num}</span><span>${section.title}</span></h2>
+    ${section.html}
+  </section>`;
+}
+
+/*
+ * renderAll(lang)
+ * ─────────────────────────────────────────────
+ * ★ 英語フォールバックの中核。
+ *
+ * 英語版の sections を「正」としてループし、各 id について
+ * 選択言語に同じ id があればそれを、無ければ英語版を使う。
+ * これにより：
+ *   - 翻訳が未完成の言語でも空欄にならない
+ *   - セクションの数・順序・番号が言語をまたいで常に一致する
+ *   - 25言語に増やす際、全訳を待たずに順次公開できる
+ */
+function renderAll(lang) {
+  const master = T[DEFAULT_LANG].sections;
+  const localized = T[lang] ? T[lang].sections : [];
+  const byId = {};
+  localized.forEach(s => { byId[s.id] = s; });
+
+  return master.map((masterSection, i) => {
+    const s = byId[masterSection.id] || masterSection;
+    // id は必ず英語版（＝マスター）のものを使い、アンカーを固定する
+    return renderSection({ id: masterSection.id, title: s.title, html: s.html }, i);
+  }).join("");
+}
+
+/*
+ * applyLang(code, options)
+ * ─────────────────────────────────────────────
+ * ページ全体の表示言語を切り替える。
+ * @param {string}  code    - 言語コード（"en" / "ja" …）
+ * @param {Object}  options
+ * @param {boolean} options.save     - true のとき localStorage に保存する
+ * @param {boolean} options.jumpHash - true のとき URL のアンカーへスクロールする
+ */
+function applyLang(code, options) {
+  const opts = options || {};
+  if (!SUPPORTED.includes(code)) code = DEFAULT_LANG;
+  const meta = T[code].meta;
+
+  document.documentElement.lang = code;
+  document.getElementById("hd-title").textContent   = meta.pageTitle;
+  document.getElementById("hd-sub").textContent     = meta.subtitle;
+  document.getElementById("hd-updated").textContent = meta.updatedLabel + ": " + meta.updatedDate;
+  document.getElementById("lang-label").textContent = meta.selectLabel + ":";
+  document.getElementById("ls").value               = code;
+  document.getElementById("content").innerHTML      = renderAll(code);
+  document.title = meta.pageTitle + " – Mementos";
+
+  // フッター（aria-label と法的リンク・著作権表記を表示言語に追従させる）
+  const f = meta.footer;
+  document.getElementById("f-github").setAttribute("aria-label", f.ariaGithub);
+  document.getElementById("f-x").setAttribute("aria-label", f.ariaX);
+  document.getElementById("f-ig").setAttribute("aria-label", f.ariaInstagram);
+  document.getElementById("f-top").setAttribute("aria-label", f.ariaTop);
+  const legal = document.getElementById("f-legal");
+  legal.setAttribute("aria-label", f.ariaLegal);
+  legal.innerHTML = f.legalHtml;
+  // 法的リンクが無い言語（英語など）では、区切り線ごと非表示にする
+  legal.style.display = f.legalHtml ? "" : "none";
+  document.getElementById("f-copy").innerHTML = f.copyHtml;
+
+  if (opts.save) {
+    try { localStorage.setItem(STORAGE_KEY, code); } catch (e) { /* 保存できなくても続行 */ }
+  }
+
+  /* #disclaimer 等のアンカー付きで開かれた場合、描画後に改めてスクロールする。
+     アンカーへのジャンプが必要なのはページを開いた最初の1回だけ。
+     applyLang() を呼ぶたびに走らせると、途中で言語を切り替えた読者が
+     読んでいた位置を無視して引き戻されてしまう。 */
+  if (opts.jumpHash && location.hash) {
+    const target = document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView();
+  }
+}
+
+/*
+ * init()
+ * ─────────────────────────────────────────────
+ * 初期化処理。やっていることは3つ。
+ *   1. <select> の <option> を T の meta.langName から組み立てる
+ *   2. <select> の change イベントに applyLang を登録する
+ *   3. 表示言語を決めて初回描画する（このときだけアンカーへジャンプする）
+ */
+function init() {
+  const sel = document.getElementById("ls");
+
+  // 1. <option> を生成する。
+  //    createElement + textContent を使うのは、言語名に < > & 等が含まれても
+  //    HTMLとして解釈されない（＝安全に文字として表示される）ため。
+  SUPPORTED.forEach(function (code) {
+    const opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = T[code].meta.langName;
+    sel.appendChild(opt);
+  });
+
+  // 2. 言語が選ばれたら保存する。ユーザー操作なので save は true、
+  //    読んでいる位置を動かしたくないので jumpHash は false。
+  sel.addEventListener("change", function () {
+    applyLang(sel.value, { save: true, jumpHash: false });
+  });
+
+  // 3. 初回描画。自動検出結果を保存し直す必要はないので save は false。
+  //    アンカー付きURLで開かれている可能性があるので jumpHash だけ true。
+  applyLang(detectLang(), { save: false, jumpHash: true });
+}
+
+init();
+})();
+</script>
+</body>
+</html>
