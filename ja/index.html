@@ -56,7 +56,7 @@
        理由: 該当アプリは App Store 上で「MAKE10 - Kids Game Collection」に改称され、
              算数パズル単体からゲーム集へ性格が変わりました。さらに一般向けの
              PriceWise が公開され、こども向けアプリ1本という前提が実態と合わなくなったためです。
-       ※ アプリ名は apps.js の表記（キッズゲームコレクション / PriceWise / 単価比べ）に揃えています。 -->
+       ※ アプリ名は元 apps.js の表記（キッズゲームコレクション / PriceWise / 単価比べ）に揃えています。 -->
   <meta name="description"
     content="空飛ぶ研究室は、こどもも大人も笑顔になる安心・安全・便利なアプリを開発しています。こども向けの「キッズゲームコレクション」、単価比較の「PriceWise / 単価比べ」など。">
   <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
@@ -129,8 +129,8 @@
   <meta name="twitter:description" content="こどもも大人も笑顔になる、安心・安全・便利なアプリを開発しています。">
   <meta name="twitter:image" content="https://flyingdevlab.com/ogp.png">
   <meta name="twitter:image:alt" content="空飛ぶ研究室">                           <!-- 変更: 「空飛ぶ研究室 - Flying Dev Lab」→ 空飛ぶ研究室 -->
-  <!-- ===== JSON-LD 構造化データ ===== 
-    検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応） 
+  <!-- ===== JSON-LD 構造化データ =====
+    検索エンジンにサイト・組織・ページの関係を機械可読な形で伝える（リッチリザルト対応）
     ※ この日本語ページ向けのポイント：
        - WebPage の url を /ja/ に、@id も /ja/#webpage にしています。
          （@id はノードの識別子。ルート（英語）ページの #webpage とは別ページなので、
@@ -307,7 +307,10 @@
     </section>
     <!-- 変更: ユーザーファースト方針により、「ブラウザで遊ぶ」セクションの後ろに移動しました
          （旧: アプリ → ブラウザで遊ぶ の順）。 -->
-    <!-- アプリ一覧：#app-list の中身は apps.js の APPS 配列をもとにJSで描画される -->
+    <!-- アプリ一覧：静的HTML直書き（旧: apps.js の APPS 配列からJSで描画していたが、
+         JS無効環境で空白になる問題があったため静的HTMLに変更。apps.js は _old/ に退避済み。
+         アプリの追加・status変更時は、このsection内のカードを直接編集すること。
+         対になる index.html（英語版）側の同セクションも忘れずに更新すること。 -->
     <section aria-labelledby="apps-heading">
       <div class="section-header fade-up">
         <!-- <h2> タグ：<h1> の次に重要な見出し。このページでは各セクションの見出しに使っています。 -->
@@ -315,8 +318,54 @@
           <span aria-hidden="true">📱</span> <span id="apps-heading-text">アプリ</span>
         </h2>
       </div>
-      <!-- JSがここにアプリカードを描画する。初期状態は空。 -->
-      <div id="app-list"></div>
+      <div id="app-list">
+        <!-- キッズゲームコレクション -->
+        <div class="app-card fade-up">
+          <a href="https://apps.apple.com/app/id6760253962" target="_blank" rel="noopener noreferrer">
+            <div class="app-icon"><img src="/images/icon-MAKE10.png" alt="キッズゲームコレクションのアイコン" class="app-icon-img"></div>
+            <div class="app-info">
+              <div class="app-name">キッズゲームコレクション</div>
+              <div class="app-desc">完全無料、広告なし、安心安全のこども向けシンプルゲームアプリ。</div>
+            </div>
+            <span class="app-badge badge-live">公開中</span>
+          </a>
+        </div>
+        <!-- 単価比べ -->
+        <div class="app-card fade-up">
+          <a href="https://apps.apple.com/app/id6764689863" target="_blank" rel="noopener noreferrer">
+            <div class="app-icon"><img src="/images/icon-kakakukurabe.png" alt="単価比べのアイコン" class="app-icon-img"></div>
+            <div class="app-info">
+              <div class="app-name">単価比べ</div>
+              <div class="app-desc">内容量あたりの単価をすばやく比較。買い物の「どっちが得？」に即答。</div>
+            </div>
+            <span class="app-badge badge-live">公開中</span>
+          </a>
+        </div>
+        <!-- TechRef -->
+        <div class="app-card fade-up">
+          <a href="https://apps.apple.com/app/id6775818457" target="_blank" rel="noopener noreferrer">
+            <div class="app-icon"><img src="/images/icon-techref.png" alt="TechRefのアイコン" class="app-icon-img"></div>
+            <div class="app-info">
+              <div class="app-name">TechRef</div>
+              <div class="app-desc">インチ・ミリ・はめあい公差を、ひとつのアプリで即計算。</div>
+            </div>
+            <span class="app-badge badge-live">公開中</span>
+          </a>
+        </div>
+        <!-- Mementos
+             App Store の Apple ID（6810569599）は採番済みだが、商品ページはまだ存在しないため
+             リンクは付けていない（coming のため未リンク）。公開後、公開中のカードと同じ形式で
+             <a href="https://apps.apple.com/app/id6810569599" target="_blank" rel="noopener noreferrer"> で
+             ラップし、badge-live / 公開中 に変更すること。 -->
+        <div class="app-card fade-up">
+          <div class="app-icon"><img src="/images/icon-Mementos.png" alt="Mementosのアイコン" class="app-icon-img"></div>
+          <div class="app-info">
+            <div class="app-name">Mementos</div>
+            <div class="app-desc">好きな風景など、自分で撮影した写真で遊べる神経衰弱ゲーム。</div>
+          </div>
+          <span class="app-badge badge-coming">準備中</span>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== 日本語コンテンツ ====================
@@ -342,6 +391,18 @@
           </h2>
         </div>
         <div class="sns-embed-list">
+          <!-- 埋め込み投稿カード（1枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+           <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">MAKE10 - Kids Game Collection更新しました。<br>新しく神経衰弱を追加しました。<br>ついでに幾つかの不具合と操作性の悪さを自分好みに改善しました。<br>アプリのアイコンも変えました。<br>その他に必要のない機能もブラッシュアップしました。<br>内容は自分の目で確かめて下さい。<a href="https://t.co/bpJbQb3NyC">https://t.co/bpJbQb3NyC</a> <a href="https://t.co/nHCn6PFCmw">pic.twitter.com/nHCn6PFCmw</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2100815737250283626?ref_src=twsrc%5Etfw">September 18, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+          </div>
+          <!-- 埋め込み投稿カード（2枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+           <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">Price Wise公開中です。<br><br>買い物する際に単価を比較する計算アプリです。<br><br>メモ機能もあるので日々のお買い物のお供にどうぞ。<a href="https://t.co/sWnuNF9lSJ">https://t.co/sWnuNF9lSJ</a> <a href="https://t.co/47e9N9EXJW">pic.twitter.com/47e9N9EXJW</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2100816831959404962?ref_src=twsrc%5Etfw">September 18, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+          </div>
+          <!-- 埋め込み投稿カード（3枚目） -->
+          <div class="app-card sns-embed-card fade-up">
+           <blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ヤード・ポンド法の寸法をSI単位に素早く変換。<br>非対称公差や公差内中央の数値を出力。<br>レタードリルとナンバードリルの数値もすぐに検索して呼び出せます。<br>生産技術のちょっと痒いところに手が届くアプリです。<br>近々分数ドリルにも対応する予定です。<a href="https://t.co/zY7U4NiSqg">https://t.co/zY7U4NiSqg</a> <a href="https://t.co/hjfwJ2A4Hl">pic.twitter.com/hjfwJ2A4Hl</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2100818923889565995?ref_src=twsrc%5Etfw">September 18, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
+          </div>
           <!-- 埋め込み投稿カード（1枚目） -->
           <div class="app-card sns-embed-card fade-up">
            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Major update to the site is live!<a href="https://t.co/rFfPLdcTSh">https://t.co/rFfPLdcTSh</a> got a big refresh + one more browser game 🎮<br><br>Come take a look → <a href="https://t.co/rFfPLdcTSh">https://t.co/rFfPLdcTSh</a><a href="https://x.com/hashtag/indiedev?src=hash&amp;ref_src=twsrc%5Etfw">#indiedev</a> <a href="https://x.com/hashtag/buildinpublic?src=hash&amp;ref_src=twsrc%5Etfw">#buildinpublic</a> <a href="https://x.com/hashtag/gamedev?src=hash&amp;ref_src=twsrc%5Etfw">#gamedev</a></p>&mdash; 空飛ぶ研究室/アプリ作ってるひと (@FlyingDevLab) <a href="https://x.com/FlyingDevLab/status/2094234631935799633?ref_src=twsrc%5Etfw">August 31, 2026</a></blockquote> <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
@@ -378,7 +439,7 @@
 
       <!-- 変更: ユーザーファースト方針により、活動状況セクションの後ろに移動しました
            （旧: お問い合わせ → 活動状況 の順）。 -->
-      <!-- お問い合わせ（日本語） 
+      <!-- お問い合わせ（日本語）
       - target="_blank"           → リンクを新しいタブで開く
       - rel="noopener noreferrer" → 新しいタブで開く際のセキュリティ対策
       -->
@@ -434,135 +495,12 @@
     <p class="footer-copy">&copy;&nbsp;2026&nbsp;空飛ぶ研究室&nbsp;:&nbsp;<a
         href="/pledge" aria-label="誓約（これは自コンテンツ）">Pledge</a></p>
   </footer>
-  <!-- ===== JavaScript ===== 
+  <!-- ===== JavaScript =====
   defer 属性：HTMLの解析が終わってからスクリプトを実行するよう指示します。
   async 属性：HTMLの解析と並行してダウンロードし、ダウンロード完了次第即実行します。
+  変更: apps.js の読み込みタグと、アプリ一覧を描画していたインラインスクリプトを削除しました
+       （静的HTML化に伴い不要になったため。apps.js 自体は _old/ に退避済み）。
 -->
-  <!-- apps.js 読み込み・アプリ一覧レンダリング
-       /ja/ は1階層深いため、絶対パス（/apps.js）で読み込みます。 -->
-  <script src="/apps.js" defer></script>
-  <script>
-    /**
-     * アプリ一覧レンダリング（日本語固定版）
-     *
-     * このページは日本語専用のため、言語切り替え機能は持ちません。
-     * renderApps("ja") を一度呼ぶだけです。
-     * 見出しやゲーム名などのUIテキストはHTMLに日本語で直接書いてあります。
-     * apps.js の APPS 配列を編集するだけでアプリカードは自動反映されます。
-     */
-    (function () {
-      "use strict";
-
-      /* ─── i18n テキスト定義 ───
-       * 日本語専用ページのため ja エントリのみ、かつ renderApps が実際に使う4項目だけにしています。
-       * （見出しテキスト・空メッセージ・公開/準備中バッジの文言）
-       */
-      var I18N = {
-        ja: {
-          appsHeading: "アプリ",
-          badgeLive: "公開中",
-          badgeComing: "COMING SOON",
-          emptyMsg: "アプリは近日公開予定です。"
-        }
-      };
-
-      /**
-       * HTML特殊文字をエスケープする（XSS防止）
-       * < > & " などの特殊文字を無害な文字列（&lt; &gt; など）に変換します。
-       * document.createElement("div") を使ってブラウザ自身に変換させるのは、
-       * 自前でルールを書くより安全で確実な方法です。
-       */
-      function esc(str) {
-        if (typeof str !== "string") return "";
-        var d = document.createElement("div");
-        d.textContent = str;
-        return d.innerHTML;
-      }
-
-      /**
-       * 1枚のアプリカードの内部HTML文字列を生成して返す
-       * @param {Object} app  - APPS配列の1要素
-       * @param {string} lang - 表示言語コード（このページでは常に "ja"）
-       */
-      function cardContent(app, lang) {
-        var t = I18N[lang];
-        var badgeClass = app.status === "live" ? "badge-live" : "badge-coming";
-        var badgeText = app.status === "live" ? t.badgeLive : t.badgeComing;
-        var appName = lang === "en" ? (app.name_en || app.name) : app.name;
-        var appDesc = lang === "en" ? (app.desc_en || app.desc) : app.desc;
-        var iconHtml = app.iconImg
-          ? "<img src=\"" + esc(app.iconImg) + "\" alt=\"" + esc(appName) + " icon\" class=\"app-icon-img\">"
-          : esc(app.icon);
-        return "<div class=\"app-icon\">" + iconHtml + "</div>"
-          + "<div class=\"app-info\">"
-          + "<div class=\"app-name\">" + esc(appName) + "</div>"
-          + "<div class=\"app-desc\">" + esc(appDesc) + "</div>"
-          + "</div>"
-          + "<span class=\"app-badge " + esc(badgeClass) + "\">" + esc(badgeText) + "</span>";
-      }
-
-      /**
-       * APPS配列をもとにアプリカードを描画する
-       * 公開中（live + url あり）はリンク要素、未公開（coming）はdivのみで出力する
-       * @param {string} lang - 表示言語コード（このページでは常に "ja"）
-       */
-      function renderApps(lang) {
-        var container = document.getElementById("app-list");
-        if (!container) return;
-
-        var t = I18N[lang];
-
-        // セクション見出し更新
-        var headingText = document.getElementById("apps-heading-text");
-        if (headingText) headingText.textContent = t.appsHeading;
-
-        // カードをクリア
-        container.innerHTML = "";
-
-        if (typeof APPS === "undefined" || !APPS || APPS.length === 0) {
-          var msg = document.createElement("p");
-          msg.style.cssText = "color:var(--muted);text-align:center;padding:32px;";
-          msg.textContent = t.emptyMsg;
-          container.appendChild(msg);
-          return;
-        }
-
-        // forEach：配列の各要素を順番に処理するメソッド。
-        // APPS配列の要素数だけ、引数のfunction（コールバック関数）が繰り返し呼ばれます。
-        APPS.forEach(function (app) {
-          /* 公開中（status === "live"）かつApp Store URLが設定されている場合のみリンクにする */
-          var isLive = app.status === "live" && app.url;
-
-          var card = document.createElement("div");
-          card.className = "app-card fade-up";
-
-          if (isLive) {
-            /* 公開中：カード全体をApp StoreへのリンクとしてWrap */
-            var link = document.createElement("a");
-            link.href = app.url;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            link.innerHTML = cardContent(app, lang);
-            card.appendChild(link);
-          } else {
-            /* 未公開：リンクなしのdivのみで出力 */
-            card.innerHTML = cardContent(app, lang);
-          }
-
-          container.appendChild(card);
-        });
-      }
-
-      // 初期描画：DOMが構築済みなら即実行、まだの場合はDOMContentLoadedを待つ
-      // <script defer> で読み込んでいるため通常はDOM構築後に実行されますが、念のため両方に対応しています。
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", function () { renderApps("ja"); });
-      } else {
-        renderApps("ja");
-      }
-    })();
-  </script>
-
   <!-- Threads 埋め込みスクリプト
   crossorigin="anonymous" → 外部サーバーからスクリプトを読み込む際に
   認証情報（Cookieなど）を送らないよう指示するセキュリティ属性です。
