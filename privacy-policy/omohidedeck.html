@@ -54,6 +54,12 @@
                 表記は文部科学省に合わせ「こども」で統一。
                 あわせて「ネットワーク通信」の章に、アプリ内 About 画面のリンクから
                 本サイトをブラウザで開く場合を2つ目の通信として追記（Guideline 5.1.1 (i) 対応）。
+    2026-09-23  「端末内に保存する写真とデータ」に「同意の記録」を追記（アプリが初回起動時に
+                本ページへの同意を求め、同意した版を端末内に記録するようになったため）。
+                日本語本文の製品名を「思ひ出デッキ」に変更（英語は OMOHIDE DECK のまま）。
+                ヘッダーのバッジとタブのタイトルも表示言語の製品名に切り替えるようにした
+                （meta.appName）。発効日を 2026-09-23 に更新。
+                旧名からの一括置換で壊れていた canonical の URL（スペース入り）を修正。
   ============================================================
   -->
   <title>Privacy Policy &amp; Disclaimer – OMOHIDE DECK</title>
@@ -67,7 +73,7 @@
        宣言するとリダイレクト先を指すことになり、宣言と実配信が食い違う。
        アプリの Settings から開かれる techref#disclaimer も、
        フラグメントはリダイレクトを越えて保持されるため影響しない。 -->
-  <link rel="canonical" href="https://flyingdevlab.com/privacy-policy/OMOHIDE DECK">
+  <link rel="canonical" href="https://flyingdevlab.com/privacy-policy/omohidedeck">
 
   <style>
     /* ═══════════════════════════════════════════════════════════
@@ -380,10 +386,10 @@
 
 <header>
   <div class="hd-inner">
-    <div class="app-badge">OMOHIDE DECK</div>
+    <div class="app-badge" id="hd-app">OMOHIDE DECK</div>
     <h1 id="hd-title">Privacy Policy &amp; Disclaimer</h1>
     <p class="hd-sub" id="hd-sub">OMOHIDE DECK turns your photos into cards, and keeps every one of them on your device. Nothing is ever transmitted off it. This page explains exactly what that means, and what the App does and does not do with your photos.</p>
-    <p class="updated" id="hd-updated">Effective: September 18, 2026</p>
+    <p class="updated" id="hd-updated">Effective: September 23, 2026</p>
     <div class="scale-rule" aria-hidden="true"></div>
   </div>
   <div class="lang-bar hd-inner">
@@ -442,7 +448,7 @@
     <p>This is the Privacy Policy and Disclaimer for <strong>OMOHIDE DECK</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>OMOHIDE DECK is a memory-matching card game that uses your own photos as the cards. It is built on a simple principle: your photos belong to you, and they stay on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section explains what the App does and does not do with your photos, including what happens when you delete it.</p>
   </section><section class="policy-section" id="storage">
     <h2><span class="sec-num">2</span><span>Photos and Data Stored on Your Device</span></h2>
-    <div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>
+    <div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Your consent record</strong> — the version (effective date) of this page (Privacy Policy and Disclaimer) you agreed to when you first opened the App, used only to show the agreement screen again if this page is revised</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>
   </section><section class="policy-section" id="access">
     <h2><span class="sec-num">3</span><span>Photo Library and Camera Access</span></h2>
     <p>OMOHIDE DECK gets photos in two ways, and both are designed so the App sees only what you choose to show it.</p><p><strong>Choosing from your library.</strong> The App uses the iOS system photo picker. The picker runs outside the App, and only the photos you tap are handed over. The App is never granted access to your photo library — which is why iOS shows no permission prompt: there is no permission to ask for. The App cannot see, list, or read any photo you did not pick.</p><p><strong>Taking new photos.</strong> The camera path asks for camera permission, because iOS requires it to show a live preview and capture. Photos taken this way go directly into the App as cards. They are <strong>not</strong> written to your camera roll, and the App still has no access to photos already in your library.</p><p>The App never requests microphone, location, contacts, or any other permission.</p>
@@ -552,10 +558,11 @@ const T = {
     "meta": {
       "langName": "English",
       "selectLabel": "Language",
+      "appName": "OMOHIDE DECK",
       "pageTitle": "Privacy Policy & Disclaimer",
       "subtitle": "OMOHIDE DECK turns your photos into cards, and keeps every one of them on your device. Nothing is ever transmitted off it. This page explains exactly what that means, and what the App does and does not do with your photos.",
       "updatedLabel": "Effective",
-      "updatedDate": "September 18, 2026",
+      "updatedDate": "September 23, 2026",
       "footer": {
         "ariaGithub": "GitHub (opens in a new tab)",
         "ariaX": "X, formerly Twitter (opens in a new tab)",
@@ -575,7 +582,7 @@ const T = {
       {
         "id": "storage",
         "title": "Photos and Data Stored on Your Device",
-        "html": "<div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>"
+        "html": "<div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Your consent record</strong> — the version (effective date) of this page (Privacy Policy and Disclaimer) you agreed to when you first opened the App, used only to show the agreement screen again if this page is revised</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>"
       },
       {
         "id": "access",
@@ -638,10 +645,11 @@ const T = {
     "meta": {
       "langName": "日本語",
       "selectLabel": "言語",
+      "appName": "思ひ出デッキ",
       "pageTitle": "プライバシーポリシー・免責事項",
-      "subtitle": "OMOHIDE DECK はお手持ちの写真をカードにして遊ぶアプリです。写真はすべて端末内にとどまり、外部へ送信されることはありません。本ページでは、その具体的な内容と、写真の取り扱いについて説明します。",
+      "subtitle": "思ひ出デッキはお手持ちの写真をカードにして遊ぶアプリです。写真はすべて端末内にとどまり、外部へ送信されることはありません。本ページでは、その具体的な内容と、写真の取り扱いについて説明します。",
       "updatedLabel": "発効日",
-      "updatedDate": "2026年9月18日",
+      "updatedDate": "2026年9月23日",
       "footer": {
         "ariaGithub": "GitHub（新しいタブで開きます）",
         "ariaX": "X（旧Twitter）（新しいタブで開きます）",
@@ -656,37 +664,37 @@ const T = {
       {
         "id": "introduction",
         "title": "はじめに",
-        "html": "<p>本ページは、Flying Dev Lab（空飛ぶ研究室）が開発した iOS アプリ <strong>OMOHIDE DECK</strong> のプライバシーポリシーおよび免責事項です。</p><p>OMOHIDE DECK は、お手持ちの写真をカードにして遊ぶ神経衰弱ゲームです。「写真は利用者のものであり、端末内にとどまる」という単純な原則に基づいて設計されています。</p><p>本アプリをご利用の前に本ページをお読みください。<a href='#disclaimer'>免責事項</a>の章では、本アプリが写真に対して行うこと・行わないこと、およびアプリを削除した場合の扱いを説明しています。</p>"
+        "html": "<p>本ページは、Flying Dev Lab（空飛ぶ研究室）が開発した iOS アプリ「<strong>思ひ出デッキ</strong>」のプライバシーポリシーおよび免責事項です。</p><p>思ひ出デッキは、お手持ちの写真をカードにして遊ぶ神経衰弱ゲームです。「写真は利用者のものであり、端末内にとどまる」という単純な原則に基づいて設計されています。</p><p>本アプリをご利用の前に本ページをお読みください。<a href='#disclaimer'>免責事項</a>の章では、本アプリが写真に対して行うこと・行わないこと、およびアプリを削除した場合の扱いを説明しています。</p>"
       },
       {
         "id": "storage",
         "title": "端末内に保存する写真とデータ",
-        "html": "<div class='zero-data'><p>本アプリが保持するものはすべて端末内にとどまります。OMOHIDE DECK はサーバーを持たず、写真もその他のデータも、当開発者へ送信されることは一切ありません。</p></div><p>本アプリが端末内にのみ保存するもの：</p><ul><li><strong>保存したデッキ</strong> — 選択または撮影した写真から作られたカード画像、デッキ名、作成日時と最終更新日時</li><li><strong>Pro の購入状態</strong> — 端末上で App Store から読み取ります（<a href='#purchases'>アプリ内課金について</a>を参照）</li></ul><p>カード画像は元の写真そのものではありません。写真を選択または撮影すると、本アプリはそれを正方形に切り出し、縮小したうえで、新しい JPEG として再エンコードします。この処理ではピクセルを一から描き直すため、保存されるカードには<strong>元の写真のメタデータが一切残りません</strong>——位置情報、撮影日時、カメラの機種、その他の埋め込み情報のいずれも含まれません。「写真」アプリ内の元の写真が変更されることもありません。</p><p>デッキはアプリの Application Support ディレクトリ内にファイルとして保存されます。選択または撮影したもののデッキとして保存しなかった写真は、プレイ中のみメモリ上に存在し、その後破棄されます。アプリを削除すると、これらのデータはすべて端末から削除されます。</p><p>当開発者はこれらに一切アクセスできません。</p>"
+        "html": "<div class='zero-data'><p>本アプリが保持するものはすべて端末内にとどまります。思ひ出デッキはサーバーを持たず、写真もその他のデータも、当開発者へ送信されることは一切ありません。</p></div><p>本アプリが端末内にのみ保存するもの：</p><ul><li><strong>保存したデッキ</strong> — 選択または撮影した写真から作られたカード画像、デッキ名、作成日時と最終更新日時</li><li><strong>Pro の購入状態</strong> — 端末上で App Store から読み取ります（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>同意の記録</strong> — 初回起動時に同意した本ページ（プライバシーポリシー・免責事項）の版（発効日）。本ページが改訂されたときに同意画面を出し直すためだけに使います</li></ul><p>カード画像は元の写真そのものではありません。写真を選択または撮影すると、本アプリはそれを正方形に切り出し、縮小したうえで、新しい JPEG として再エンコードします。この処理ではピクセルを一から描き直すため、保存されるカードには<strong>元の写真のメタデータが一切残りません</strong>——位置情報、撮影日時、カメラの機種、その他の埋め込み情報のいずれも含まれません。「写真」アプリ内の元の写真が変更されることもありません。</p><p>デッキはアプリの Application Support ディレクトリ内にファイルとして保存されます。選択または撮影したもののデッキとして保存しなかった写真は、プレイ中のみメモリ上に存在し、その後破棄されます。アプリを削除すると、これらのデータはすべて端末から削除されます。</p><p>当開発者はこれらに一切アクセスできません。</p>"
       },
       {
         "id": "access",
         "title": "写真ライブラリとカメラへのアクセス",
-        "html": "<p>OMOHIDE DECK が写真を受け取る方法は2つあり、いずれも「利用者が見せると決めたものだけをアプリが受け取る」設計になっています。</p><p><strong>ライブラリから選ぶ場合。</strong>本アプリは iOS 標準の写真ピッカーを使用します。ピッカーはアプリの外側で動作し、タップした写真だけがアプリに渡されます。本アプリが写真ライブラリへのアクセス権を与えられることはありません。iOS が許可ダイアログを表示しないのはそのためで、求める権限自体が存在しません。選ばれなかった写真を本アプリが見たり、一覧したり、読み取ったりすることはできません。</p><p><strong>新しく撮影する場合。</strong>撮影機能はカメラの許可を求めます。iOS がライブプレビューの表示と撮影に許可を必要とするためです。この方法で撮影した写真はカードとして直接アプリに取り込まれます。<strong>カメラロールには書き込まれず</strong>、ライブラリ内の既存の写真へのアクセス権も引き続き持ちません。</p><p>本アプリがマイク、位置情報、連絡先、その他の権限を求めることはありません。</p>"
+        "html": "<p>思ひ出デッキが写真を受け取る方法は2つあり、いずれも「利用者が見せると決めたものだけをアプリが受け取る」設計になっています。</p><p><strong>ライブラリから選ぶ場合。</strong>本アプリは iOS 標準の写真ピッカーを使用します。ピッカーはアプリの外側で動作し、タップした写真だけがアプリに渡されます。本アプリが写真ライブラリへのアクセス権を与えられることはありません。iOS が許可ダイアログを表示しないのはそのためで、求める権限自体が存在しません。選ばれなかった写真を本アプリが見たり、一覧したり、読み取ったりすることはできません。</p><p><strong>新しく撮影する場合。</strong>撮影機能はカメラの許可を求めます。iOS がライブプレビューの表示と撮影に許可を必要とするためです。この方法で撮影した写真はカードとして直接アプリに取り込まれます。<strong>カメラロールには書き込まれず</strong>、ライブラリ内の既存の写真へのアクセス権も引き続き持ちません。</p><p>本アプリがマイク、位置情報、連絡先、その他の権限を求めることはありません。</p>"
       },
       {
         "id": "network",
         "title": "ネットワーク通信",
-        "html": "<p>OMOHIDE DECK のすべての機能——写真の選択・撮影、プレイ、デッキの保存——は、オフラインで完結します。ネットワーク接続は不要です。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、その他いかなるサードパーティライブラリも本アプリには含まれていません。</p><p><strong>アプリ自身が通信を行うのは、ご自身の操作による次の2つの場合のみです：</strong></p><ul><li><strong>OMOHIDE DECK Pro の購入および復元</strong> — App Store を通じて Apple が処理します（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>「このアプリについて」画面のリンク（プライバシーポリシー・免責事項・サポート）をタップした場合</strong> — ブラウザで本サイトが開きます</li></ul><p><strong>いずれの場合も、写真、カード画像、デッキが送信されることはありません。</strong>購入処理の通信相手は Apple のみであり、写真に由来する情報は一切含まれません。本サイトを開く操作は、ブラウザでの通常のページ読み込みであり、アプリ内の情報とは結びつきません。</p><p><strong>Apple による利用統計について。</strong>App Store でアプリを配信する以上、Apple はプラットフォームの運営者として、インストール数・起動回数・利用時間・購入数といった統計情報を集計し、匿名化・集計された形で当開発者に提供します。また、iOS の設定で診断データの共有を有効にされている場合は、クラッシュレポートも同様の形で提供されます。これらはすべて Apple が管理しており、当開発者が有効・無効を切り替えることはできません。</p><p><strong>これらの統計に決して含まれないもの：</strong>写真、写真から作られたカード、デッキ名、デッキの内容に関する情報。本アプリはこれらを一切送信しないため、Apple も当開発者も取得できません。Apple が知り得るのは「アプリが使われたこと」であって、「何で遊んだか」ではありません。</p><p>カード画像が端末の外に出る唯一の経路は、次章で説明する iCloud バックアップです——それも、ご自身で有効にされている場合に限ります。</p>"
+        "html": "<p>思ひ出デッキのすべての機能——写真の選択・撮影、プレイ、デッキの保存——は、オフラインで完結します。ネットワーク接続は不要です。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、その他いかなるサードパーティライブラリも本アプリには含まれていません。</p><p><strong>アプリ自身が通信を行うのは、ご自身の操作による次の2つの場合のみです：</strong></p><ul><li><strong>思ひ出デッキ Pro の購入および復元</strong> — App Store を通じて Apple が処理します（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>「このアプリについて」画面のリンク（プライバシーポリシー・免責事項・サポート）をタップした場合</strong> — ブラウザで本サイトが開きます</li></ul><p><strong>いずれの場合も、写真、カード画像、デッキが送信されることはありません。</strong>購入処理の通信相手は Apple のみであり、写真に由来する情報は一切含まれません。本サイトを開く操作は、ブラウザでの通常のページ読み込みであり、アプリ内の情報とは結びつきません。</p><p><strong>Apple による利用統計について。</strong>App Store でアプリを配信する以上、Apple はプラットフォームの運営者として、インストール数・起動回数・利用時間・購入数といった統計情報を集計し、匿名化・集計された形で当開発者に提供します。また、iOS の設定で診断データの共有を有効にされている場合は、クラッシュレポートも同様の形で提供されます。これらはすべて Apple が管理しており、当開発者が有効・無効を切り替えることはできません。</p><p><strong>これらの統計に決して含まれないもの：</strong>写真、写真から作られたカード、デッキ名、デッキの内容に関する情報。本アプリはこれらを一切送信しないため、Apple も当開発者も取得できません。Apple が知り得るのは「アプリが使われたこと」であって、「何で遊んだか」ではありません。</p><p>カード画像が端末の外に出る唯一の経路は、次章で説明する iCloud バックアップです——それも、ご自身で有効にされている場合に限ります。</p>"
       },
       {
         "id": "icloud",
         "title": "iCloud バックアップについて",
-        "html": "<p>OMOHIDE DECK は CloudKit を使用せず、デッキをクラウドサービスと同期することもありません。</p><p>ただし、端末の設定で iCloud バックアップを有効にされている場合、iOS は他のアプリのデータとともに、本アプリの保存済みデッキ——<strong>カード画像を含む</strong>——を端末のバックアップに含めることがあります。これは Apple が管理する OS の標準機能です。当開発者がバックアップを開始することも、アクセスすることもありません。</p><p>この仕組みにより、新しい端末をセットアップした際にデッキが自動的に復元されます。カード画像をバックアップに含めたくない場合は、iOS の設定アプリで OMOHIDE DECK の iCloud バックアップを無効にできます。</p><p>バックアップの取り扱いは Apple のプライバシーポリシーに従います。</p>"
+        "html": "<p>思ひ出デッキは CloudKit を使用せず、デッキをクラウドサービスと同期することもありません。</p><p>ただし、端末の設定で iCloud バックアップを有効にされている場合、iOS は他のアプリのデータとともに、本アプリの保存済みデッキ——<strong>カード画像を含む</strong>——を端末のバックアップに含めることがあります。これは Apple が管理する OS の標準機能です。当開発者がバックアップを開始することも、アクセスすることもありません。</p><p>この仕組みにより、新しい端末をセットアップした際にデッキが自動的に復元されます。カード画像をバックアップに含めたくない場合は、iOS の設定アプリで思ひ出デッキの iCloud バックアップを無効にできます。</p><p>バックアップの取り扱いは Apple のプライバシーポリシーに従います。</p>"
       },
       {
         "id": "advertising",
         "title": "広告・トラッキング",
-        "html": "<p>OMOHIDE DECK に<strong>広告はありません</strong>。</p><p>本アプリは広告識別子（IDFA）を使用せず、App Tracking Transparency の許可を求めず、アプリやウェブサイトをまたいだトラッキングを行いません。プロファイリング、行動分析、データブローカーとの関係は一切ありません。</p><p>これは一時的な状態ではなく、設計上の決定です。個人の写真を中心に据えたゲームであり、家族がこどもと一緒に遊ぶ可能性もあるため、広告を載せることはありません。</p>"
+        "html": "<p>思ひ出デッキに<strong>広告はありません</strong>。</p><p>本アプリは広告識別子（IDFA）を使用せず、App Tracking Transparency の許可を求めず、アプリやウェブサイトをまたいだトラッキングを行いません。プロファイリング、行動分析、データブローカーとの関係は一切ありません。</p><p>これは一時的な状態ではなく、設計上の決定です。個人の写真を中心に据えたゲームであり、家族がこどもと一緒に遊ぶ可能性もあるため、広告を載せることはありません。</p>"
       },
       {
         "id": "purchases",
         "title": "アプリ内課金について",
-        "html": "<p>OMOHIDE DECK は無料でダウンロードできます。写真の選択・撮影、4ペアの盤面でのプレイ、デッキ1件の保存（名前は日付が自動で付きます）は、購入なしで利用できます。</p><p>買い切り型（非消耗型）のアプリ内課金 <strong>OMOHIDE DECK Pro</strong> を購入すると、より大きな6ペア・7ペアの盤面が解放され、保存できるデッキが1件という制限がなくなり、デッキに名前を付けたり変更したりできるようになります。具体的な内容と価格は、App Store の製品ページおよびアプリ内の購入画面に表示されます。</p><p>決済処理はすべて App Store を通じて Apple が行います。当開発者が支払い情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple によるこれらのデータの取り扱いについては、Apple のプライバシーポリシーをご確認ください。</p><p><strong>購入の復元について。</strong>購入は特定の端末ではなく Apple アカウントに紐づきます。Pro 画面の「購入を復元」は、そのアカウントが購入済みかどうかを Apple に問い合わせます。この問い合わせは端末と Apple の間で完結し、当開発者が Apple アカウントを保存・受信することはありません。機種変更やアプリの再インストール後に Pro を復元する際にご利用ください。</p><p>無料の範囲と有料の範囲に変更がある場合は、施行前に本ページに反映します。</p>"
+        "html": "<p>思ひ出デッキは無料でダウンロードできます。写真の選択・撮影、4ペアの盤面でのプレイ、デッキ1件の保存（名前は日付が自動で付きます）は、購入なしで利用できます。</p><p>買い切り型（非消耗型）のアプリ内課金「<strong>思ひ出デッキ Pro</strong>」を購入すると、より大きな6ペア・7ペアの盤面が解放され、保存できるデッキが1件という制限がなくなり、デッキに名前を付けたり変更したりできるようになります。具体的な内容と価格は、App Store の製品ページおよびアプリ内の購入画面に表示されます。</p><p>決済処理はすべて App Store を通じて Apple が行います。当開発者が支払い情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple によるこれらのデータの取り扱いについては、Apple のプライバシーポリシーをご確認ください。</p><p><strong>購入の復元について。</strong>購入は特定の端末ではなく Apple アカウントに紐づきます。Pro 画面の「購入を復元」は、そのアカウントが購入済みかどうかを Apple に問い合わせます。この問い合わせは端末と Apple の間で完結し、当開発者が Apple アカウントを保存・受信することはありません。機種変更やアプリの再インストール後に Pro を復元する際にご利用ください。</p><p>無料の範囲と有料の範囲に変更がある場合は、施行前に本ページに反映します。</p>"
       },
       {
         "id": "sharing",
@@ -696,12 +704,12 @@ const T = {
       {
         "id": "children",
         "title": "こどもの利用について",
-        "html": "<p>OMOHIDE DECK はこども専用のアプリではなく、家族向けのゲームです。家族のために作ったもので、大人とこどもが家族写真を使って一緒に遊べます。実際にそのように遊ばれることも多いでしょう。</p><p>個人の写真が画面に出ること、またこどもが遊ぶ可能性があることから、本アプリに<strong>広告はありません</strong>。OMOHIDE DECK Pro は家族の中の大人に向けた任意の拡張で、より大きな盤面、複数デッキの保存、デッキへの名前付けができるようになります。無料の範囲だけで十分に遊べる設計で、こどもが遊ぶうえで必要な機能が課金の向こう側に置かれることはありません。</p><p>本アプリは年齢を問わず誰からも個人情報を収集しないため、こどものプライバシーに関する懸念は生じません。保護・共有・削除すべきデータは、いかなる利用者についても存在しません。プレイ中に選択または撮影された写真は、誰が遊んでいるかにかかわらず、上記のとおり端末内にとどまります。</p>"
+        "html": "<p>思ひ出デッキはこども専用のアプリではなく、家族向けのゲームです。家族のために作ったもので、大人とこどもが家族写真を使って一緒に遊べます。実際にそのように遊ばれることも多いでしょう。</p><p>個人の写真が画面に出ること、またこどもが遊ぶ可能性があることから、本アプリに<strong>広告はありません</strong>。思ひ出デッキ Pro は家族の中の大人に向けた任意の拡張で、より大きな盤面、複数デッキの保存、デッキへの名前付けができるようになります。無料の範囲だけで十分に遊べる設計で、こどもが遊ぶうえで必要な機能が課金の向こう側に置かれることはありません。</p><p>本アプリは年齢を問わず誰からも個人情報を収集しないため、こどものプライバシーに関する懸念は生じません。保護・共有・削除すべきデータは、いかなる利用者についても存在しません。プレイ中に選択または撮影された写真は、誰が遊んでいるかにかかわらず、上記のとおり端末内にとどまります。</p>"
       },
       {
         "id": "disclaimer",
         "title": "免責事項",
-        "html": "<div class='lead-note'><p>OMOHIDE DECK はゲームです。写真のバックアップ、アーカイブ、写真管理ツールではありません。元の写真は普段の保管場所に保管してください。</p></div><p><strong>カード画像は派生的な複製です。</strong>本アプリはカードとして使うために、写真の正方形・縮小版の複製を作成します。この複製は元の写真より解像度が低く、メタデータを持ちません。元の写真の代わりにはなりません。</p><p><strong>アプリ内で撮影した写真はカメラロールに保存されません。</strong>OMOHIDE DECK で撮影した写真を写真として残したい場合は、カメラアプリで撮り直してください。本アプリは、カードとしての用途を超えて撮影画像を保存するようには設計されていません。</p><p><strong>アプリを削除するとデッキも削除されます。</strong>保存したデッキはアプリの内部にのみ存在します。アンインストールすると、後に端末のバックアップから復元されない限り、デッキは失われます。当開発者が削除されたデッキを復旧することはできません。</p><p><strong>無料版で保存できるデッキは1件です。</strong>新しいデッキを保存すると既存のデッキが置き換えられます。置き換えの前にアプリが警告を表示しますが、置き換え後に以前のデッキを取り戻すことはできません。</p><p><strong>責任の制限。</strong>適用法令が許容する最大限の範囲において、当開発者は、本アプリの利用または利用不能から生じる直接的・間接的・付随的・結果的な損害——デッキの喪失、アプリ内で撮影した写真の喪失、その他のデータ喪失を含むがこれに限らない——について責任を負いません。</p><p><strong>提供の継続について。</strong>iOS のアップデートや端末環境の変化により、予告なく本アプリの動作が影響を受けることがあります。当開発者は予告なく本アプリを変更または提供終了することがあり、それに伴うデータ喪失について責任を負いません。</p>"
+        "html": "<div class='lead-note'><p>思ひ出デッキはゲームです。写真のバックアップ、アーカイブ、写真管理ツールではありません。元の写真は普段の保管場所に保管してください。</p></div><p><strong>カード画像は派生的な複製です。</strong>本アプリはカードとして使うために、写真の正方形・縮小版の複製を作成します。この複製は元の写真より解像度が低く、メタデータを持ちません。元の写真の代わりにはなりません。</p><p><strong>アプリ内で撮影した写真はカメラロールに保存されません。</strong>思ひ出デッキで撮影した写真を写真として残したい場合は、カメラアプリで撮り直してください。本アプリは、カードとしての用途を超えて撮影画像を保存するようには設計されていません。</p><p><strong>アプリを削除するとデッキも削除されます。</strong>保存したデッキはアプリの内部にのみ存在します。アンインストールすると、後に端末のバックアップから復元されない限り、デッキは失われます。当開発者が削除されたデッキを復旧することはできません。</p><p><strong>無料版で保存できるデッキは1件です。</strong>新しいデッキを保存すると既存のデッキが置き換えられます。置き換えの前にアプリが警告を表示しますが、置き換え後に以前のデッキを取り戻すことはできません。</p><p><strong>責任の制限。</strong>適用法令が許容する最大限の範囲において、当開発者は、本アプリの利用または利用不能から生じる直接的・間接的・付随的・結果的な損害——デッキの喪失、アプリ内で撮影した写真の喪失、その他のデータ喪失を含むがこれに限らない——について責任を負いません。</p><p><strong>提供の継続について。</strong>iOS のアップデートや端末環境の変化により、予告なく本アプリの動作が影響を受けることがあります。当開発者は予告なく本アプリを変更または提供終了することがあり、それに伴うデータ喪失について責任を負いません。</p>"
       },
       {
         "id": "law",
@@ -711,12 +719,12 @@ const T = {
       {
         "id": "changes",
         "title": "ポリシーの変更について",
-        "html": "<p>本ポリシーは、アプリの進化に合わせて更新されることがあります。改訂版は本ページに掲載された時点で効力を生じ、ページ上部の発効日もあわせて更新されます。</p><p>データを収集していないため、本ポリシーの変更が既に保持されている利用者データに影響することはありません。アプリの動作に重要な影響を及ぼす変更——たとえば OMOHIDE DECK Pro の内容の変更——がある場合は、利用者に届く前に本ページで公表します。</p>"
+        "html": "<p>本ポリシーは、アプリの進化に合わせて更新されることがあります。改訂版は本ページに掲載された時点で効力を生じ、ページ上部の発効日もあわせて更新されます。</p><p>データを収集していないため、本ポリシーの変更が既に保持されている利用者データに影響することはありません。アプリの動作に重要な影響を及ぼす変更——たとえば思ひ出デッキ Pro の内容の変更——がある場合は、利用者に届く前に本ページで公表します。</p>"
       },
       {
         "id": "contact",
         "title": "お問い合わせ",
-        "html": "<p>ご質問・訂正のご指摘・機能のご要望をお待ちしています。本ページは OMOHIDE DECK のサポートページも兼ねています。</p><div class='contact-box'><p>ウェブサイト / お問い合わせフォーム：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>メール：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+        "html": "<p>ご質問・訂正のご指摘・機能のご要望をお待ちしています。本ページは思ひ出デッキのサポートページも兼ねています。</p><div class='contact-box'><p>ウェブサイト / お問い合わせフォーム：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>メール：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
       }
     ]
   }
@@ -826,13 +834,15 @@ function applyLang(code, options) {
   const meta = T[code].meta;
 
   document.documentElement.lang = code;
+  // 製品名は言語ごとに違う（日本語では「思ひ出デッキ」）
+  document.getElementById("hd-app").textContent     = meta.appName;
   document.getElementById("hd-title").textContent   = meta.pageTitle;
   document.getElementById("hd-sub").textContent     = meta.subtitle;
   document.getElementById("hd-updated").textContent = meta.updatedLabel + ": " + meta.updatedDate;
   document.getElementById("lang-label").textContent = meta.selectLabel + ":";
   document.getElementById("ls").value               = code;
   document.getElementById("content").innerHTML      = renderAll(code);
-  document.title = meta.pageTitle + " – OMOHIDE DECK";
+  document.title = meta.pageTitle + " – " + meta.appName;
 
   // フッター（aria-label と法的リンク・著作権表記を表示言語に追従させる）
   const f = meta.footer;
