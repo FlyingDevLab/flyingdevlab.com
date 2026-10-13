@@ -30,14 +30,22 @@
     → 25言語に増やす際、全訳が揃う前でも順次デプロイできる。
     → セクション番号は配列の並び順から自動採番するので、手で振り直す必要がない。
 
+  ■ 対応言語（2026-10-13 に10言語へ）
+    アプリ（v2.0.0〜）と同じ10言語。言語メニューの並びは
+    英語・イタリア語・スペイン語・ドイツ語・フランス語・ポルトガル語・韓国語・簡体字・繁体字・日本語。
+    T のキーの順がそのままメニューの順になる（SUPPORTED = Object.keys(T)）。
+    ポルトガル語はアプリと同じブラジルの表記（Ajustes・Salvar）。
+    Apple のプライバシーポリシーへのリンクは、各言語の地域版のページ（/it/・/br/・/kr/・/cn/・/tw/ など）にしている。
+
   ■ デフォルト言語は英語
     アプリ本体が英語のため、英語をマスターとする。
     MAKE10 は毎回ブラウザ言語で判定、PriceWise は localStorage に保存。
     こちらは PriceWise 方式（localStorage: "tr-lang"）を採用。25言語対応時に有用。
 
-  ■ フォント：外部リクエストゼロ
+  ■ フォント：外部リクエストなし
     MAKE10 は Nunito を自己ホストしているが、TechRef はシステムフォントのみで完結。
-    woff2 ファイルすら不要で、HTTPリクエストは HTML 1本だけになる。
+    woff2 ファイルすら不要。読み込むのは HTML と、サイト共通のアイコン画像
+    （/images/icon-techref.png）の2本だけ（2026-10-13 にアイコンを追加）。
     多言語化の際も OS 側が適切なフォントを選ぶため、25言語対応にむしろ強い。
 
   ■ 発効日
@@ -49,10 +57,19 @@
                 サブタイトル・第3章（ネットワーク通信）・第7章（アプリ内課金）を改訂。
                 第3章には Apple による利用統計の説明と、
                 「統計に含まれないもの」の列挙を追加した。
+    2026-10-13  v2.1.0 に合わせて改訂。
+                ・iCloud バックアップ（CloudKit のプライベートデータベース）を導入したため、
+                  サブタイトル・第1〜5章・第8章を改訂。第4章は全面的に書き直した
+                ・TechRef Pro の内容（追加の表・計算ツール）に合わせ、第7章の無料の範囲を改めた
+                ・免責事項に、計算ツールの限界と材料のデータの扱いを追加した
+                ・値の出どころを「公式に公開されている規格の情報を参考にまとめた」に統一した
+                ・配色をアプリのアイコンの青に変え、ヘッダーにアイコンを載せた
+                ・イタリア語・スペイン語・ドイツ語・フランス語・ポルトガル語・韓国語・
+                  簡体字・繁体字を追加し、10言語にした
   ============================================================
   -->
   <title>Privacy Policy &amp; Disclaimer – TechRef</title>
-  <meta name="description" content="Privacy Policy and Disclaimer for TechRef, an offline unit conversion and engineering reference app by Flying Dev Lab.">
+  <meta name="description" content="Privacy Policy and Disclaimer for TechRef, a unit conversion and engineering reference app by Flying Dev Lab.">
   <!-- index：アプリ内リンクからの流入が中心だが、検索での到達も妨げない。
        他ページと同様に明示することで「書き忘れではなく意図」であることを示す。 -->
   <meta name="robots" content="index, follow">
@@ -65,23 +82,32 @@
 
   <style>
     :root {
-      --navy-900: #0d1b2a;
-      --navy-800: #142838;
-      --navy-700: #1e3a4f;
-      --accent:   #f07a28;
-      --accent-soft: #fdf0e6;
+      /* アプリのアイコンの色（2026-10-13 にアイコンから採取）。
+         背景の青 #117CF5・地球の青 #1187FC・ノギスの白 #F6FAFD・ノギスの影 #C6D1E1。
+         白い小さな文字を #117CF5 の上に置くとコントラストが 4.5:1 に届かないため、
+         ヘッダーと文字に使う青は、同じ色相で少し暗くしている（--blue-700 / --blue-800）。 */
+      --blue-500: #117CF5;  /* アイコンの背景 */
+      --blue-400: #1187FC;  /* アイコンの地球 */
+      --blue-700: #0B62CC;  /* ヘッダーのグラデーションの終わり・強調の箱 */
+      --blue-800: #0A4FA6;  /* 見出しの文字 */
+      --caliper:  #F6FAFD;  /* ノギスの白 */
+      --caliper-shade: #C6D1E1;  /* ノギスの影 */
+      --accent:   var(--blue-500);
+      --accent-soft: #EAF3FE;
       --text:     #16212b;
       --text-sub: #4d5b68;
-      --bg:       #f2f4f6;
+      --bg:       #f2f6fb;
       --card:     #ffffff;
-      --border:   #dfe4e9;
+      --border:   #dbe4ef;
       --r:        10px;
-      /* 本文中に直書きされていた色を :root に集約している。
-         ブランドカラーを見直すとき、この1箇所だけを触れば済むようにするため。 */
-      --link:       #b8551a;  /* 本文リンクの文字色（--accent より暗く、白背景でのコントラストを確保） */
-      --lead-text:  #8a3d0c;  /* .lead-note の文字色（--accent-soft の上で読める濃さ） */
-      --lead-line:  #f0c9a8;  /* 免責事項カードの枠線色 */
-      --box-bg:     #f7f9fa;  /* .contact-box の背景色 */
+      --link:       #0B5FC4;  /* 本文リンク（白背景でのコントラスト 5.6:1） */
+      --lead-text:  #0A4FA6;  /* .lead-note の文字色 */
+      --lead-line:  #B9D5F7;  /* 免責事項カードの枠線色 */
+      --box-bg:     #f5f8fc;  /* .contact-box の背景色 */
+      /* 旧ネイビー（フッター・言語の選択肢）の置き換え */
+      --navy-900: #0A4FA6;
+      --navy-800: #0B62CC;
+      --navy-700: #117CF5;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -95,7 +121,7 @@
       -webkit-text-size-adjust: 100%;
     }
     a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
-    a:hover { color: var(--accent); }
+    a:hover { color: var(--blue-500); }
 
     .skip-link {
       position: absolute; top: -48px; left: 0; z-index: 200;
@@ -106,28 +132,40 @@
 
     /* ── ヘッダー ───────────────────────────── */
     header {
-      background: linear-gradient(160deg, var(--navy-900) 0%, var(--navy-700) 100%);
+      background: linear-gradient(160deg, var(--blue-500) 0%, var(--blue-700) 100%);
       color: #fff; padding: 40px 20px 0;
     }
     .hd-inner { max-width: 760px; margin: 0 auto; }
 
+    /* ヘッダーのアイコンと「TechRef」の並び */
+    .hd-brand {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 18px;
+    }
+    /* アイコンは背景と同じ青なので、白い縁取りと影で浮かせる。
+       角の丸みは iOS のアイコンに近い 22.5%。 */
+    .hd-icon {
+      width: 64px; height: 64px; flex: none;
+      border-radius: 22.5%;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.45), 0 8px 22px rgba(4,32,84,.35);
+    }
     .app-badge {
       display: inline-flex; align-items: center; gap: 8px;
       border: 1px solid rgba(255,255,255,.28);
       border-radius: 4px; padding: 4px 12px;
       font-size: .75rem; letter-spacing: .08em; text-transform: uppercase;
-      margin-bottom: 18px; color: rgba(255,255,255,.9);
+      color: rgba(255,255,255,.9);
     }
     .app-badge::before {
       content: ""; width: 8px; height: 8px; border-radius: 50%;
-      background: var(--accent);
+      background: var(--caliper);
     }
     h1 {
       font-size: clamp(1.45rem, 4.5vw, 2.05rem);
       font-weight: 650; line-height: 1.25; letter-spacing: -.01em;
       margin-bottom: 10px;
     }
-    .hd-sub { font-size: .95rem; color: rgba(255,255,255,.72); max-width: 52ch; }
+    .hd-sub { font-size: .95rem; color: rgba(255,255,255,.9); max-width: 52ch; }
     .updated {
       font-size: .8rem; color: rgba(255,255,255,.6);
       margin-top: 16px; font-variant-numeric: tabular-nums;
@@ -141,7 +179,7 @@
         repeating-linear-gradient(to right,
           rgba(255,255,255,.42) 0 1px, transparent 1px 10px),
         repeating-linear-gradient(to right,
-          rgba(240,122,40,.85) 0 1px, transparent 1px 50px);
+          rgba(198,209,225,.95) 0 2px, transparent 2px 50px);
       background-size: 100% 7px, 100% 13px;
       background-position: left top, left top;
       background-repeat: repeat-x;
@@ -182,18 +220,18 @@
     }
     .policy-section h2 {
       display: flex; align-items: baseline; gap: 12px;
-      font-size: 1.02rem; font-weight: 650; color: var(--navy-800);
+      font-size: 1.02rem; font-weight: 650; color: var(--blue-800);
       margin-bottom: 14px; padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
     }
     .sec-num {
       flex: none;
       font-size: .78rem; font-weight: 600;
-      color: var(--accent);
+      color: var(--blue-700);
       font-variant-numeric: tabular-nums;
       letter-spacing: .06em;
       padding-bottom: 2px;
-      border-bottom: 2px solid var(--accent);
+      border-bottom: 2px solid var(--blue-500);
     }
     .policy-section p { color: var(--text-sub); font-size: .95rem; margin-bottom: 11px; }
     .policy-section p:last-child { margin-bottom: 0; }
@@ -203,8 +241,8 @@
 
     /* 「端末内で完結」の強調ボックス */
     .zero-data {
-      background: var(--navy-900);
-      border-left: 3px solid var(--accent);
+      background: var(--blue-700);
+      border-left: 3px solid var(--caliper-shade);
       border-radius: 0 6px 6px 0;
       padding: 14px 18px; margin: 4px 0 14px;
     }
@@ -286,6 +324,7 @@
 
     @media (max-width: 520px) {
       body { font-size: 15px; }
+      .hd-icon { width: 52px; height: 52px; }
       header { padding: 28px 16px 0; }
       .policy-section { padding: 18px 16px; }
       .policy-section h2 { gap: 9px; }
@@ -301,10 +340,15 @@
 
 <header>
   <div class="hd-inner">
-    <div class="app-badge">TechRef</div>
+    <!-- アプリのアイコン。名前は隣の「TechRef」で読み上げるので、画像は飾り（alt=""）。
+         サイト共通の /images/icon-techref.png（1024px）を 64px に縮めて出す。 -->
+    <div class="hd-brand">
+      <img class="hd-icon" src="/images/icon-techref.png" width="64" height="64" alt="" decoding="async">
+      <div class="app-badge">TechRef</div>
+    </div>
     <h1 id="hd-title">Privacy Policy &amp; Disclaimer</h1>
-    <p class="hd-sub" id="hd-sub">TechRef stores everything on your device. Nothing you enter is ever transmitted off it. This page explains exactly what that means, and the limits of how the App's output should be used.</p>
-    <p class="updated" id="hd-updated">Effective: August 25, 2026</p>
+    <p class="hd-sub" id="hd-sub">TechRef keeps your data on your device and backs it up only to your own iCloud account. Nothing you enter is ever sent to the Developer or to anyone else. This page explains exactly what that means, and the limits of how the App's output should be used.</p>
+    <p class="updated" id="hd-updated">Effective: October 13, 2026</p>
     <div class="scale-rule" aria-hidden="true"></div>
   </div>
   <div class="lang-bar hd-inner">
@@ -324,7 +368,7 @@
        日英併記なのは、この部分だけ言語切替の対象外になるため。 -->
   <noscript>
     <div class="noscript-note">
-      <p lang="en"><strong>This page is displayed in English because JavaScript is disabled.</strong> The full policy is shown below. Enable JavaScript to read it in other languages, or contact us at <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a>.</p>
+      <p lang="en"><strong>This page is displayed in English because JavaScript is disabled.</strong> The full policy is shown below. Enable JavaScript to read it in other languages (Italiano, Español, Deutsch, Français, Português, 한국어, 简体中文, 繁體中文, 日本語), or contact us at <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a>.</p>
       <p lang="ja"><strong>JavaScript が無効のため、このページは英語で表示されています。</strong>本文は下に全文掲載されています。他の言語で読むには JavaScript を有効にしてください。ご不明な点は <a href="mailto:support@flyingdevlab.com">support@flyingdevlab.com</a> までご連絡ください。</p>
     </div>
   </noscript>
@@ -360,40 +404,40 @@
   -->
   <div id="content"><section class="policy-section" id="introduction">
     <h2><span class="sec-num">1</span><span>Introduction</span></h2>
-    <p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion and engineering reference tool for technical professionals. It is built on a simple principle: your data belongs to you, and it stays on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section describes important limitations on how the App's output should be used.</p>
+    <p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion, engineering reference and calculation tool for technical professionals. It is built on a simple principle: your data belongs to you. It stays on your device and in your own iCloud account, and the Developer never receives it.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section describes important limitations on how the App's output should be used.</p>
   </section><section class="policy-section" id="storage">
     <h2><span class="sec-num">2</span><span>Data Stored on Your Device</span></h2>
-    <div class='zero-data'><p>All data you enter stays on your device. TechRef has no server, and nothing is transmitted to the Developer.</p></div><p>TechRef stores the following on your device only:</p><ul><li>Conversion history (values, tolerances, units, labels, memos, timestamps)</li><li>Sheets data (part names, measurement point names, dimensions, memos)</li><li>App settings (decimal places, appearance, unit preferences)</li></ul><p>History and Sheets are saved as files in the App's Application Support directory. Settings are saved in the standard iOS preferences store. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>
+    <div class='zero-data'><p>All data you enter stays on your device and in your own iCloud account. TechRef has no server of its own, and nothing is transmitted to the Developer.</p></div><p>TechRef stores the following on your device:</p><ul><li>Conversion history (values, tolerances, units, labels, memos, timestamps)</li><li>Sheets data (part names, measurement point names, dimensions, measured values, memos)</li><li>App settings (decimal places, appearance, language, the units, tables, materials and other items you choose to show, and the units used in the calculators)</li><li>Information the App needs to work correctly (the number of free saves used, whether you have agreed to the terms, and which in-app tips have been shown)</li></ul><p>Values entered in the calculators are kept only while the calculator is open and are not saved.</p><p>History and Sheets are saved as files in the App's Application Support directory. Settings are saved in the standard iOS preferences store. Deleting the App removes all of this data from your device. A backup in your iCloud account is not deleted with the App; see <a href='#icloud'>iCloud Backup</a>.</p><p>The Developer has no access to any of it.</p>
   </section><section class="policy-section" id="network">
     <h2><span class="sec-num">3</span><span>Network Activity</span></h2>
-    <p>TechRef's core features — unit conversion, tolerance calculation, the reference tables, and saving your data — work entirely offline. No network connection is required to use them.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring the in-app purchase</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping the Support link in Settings</strong> — this website opens in your browser</li></ul><p><strong>In neither case is any dimensional data you entered transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains none of the values you entered in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> the dimensions, tolerances, part names, measurement point names, labels, memos, conversion history, or Sheets content you enter. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you calculated.</p><p>The only way your data leaves the device is the clipboard copy and CSV export described in <a href='#export'>Exporting Your Data</a>, and both happen only when you choose to do it.</p>
+    <p>TechRef's core features — unit conversion, tolerance calculation, the reference tables, the calculators, and saving your data — work entirely offline. No network connection is required to use them.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data.</p><p><strong>The App itself connects to the network only in the following cases:</strong></p><ul><li><strong>iCloud backup and restore</strong> — your Sheets, history and settings are sent to your own iCloud account, and read back from it when you restore (see <a href='#icloud'>iCloud Backup</a>). Automatic backup is on by default and can be turned off in Settings.</li><li><strong>Purchasing or restoring the in-app purchase</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link in the App</strong> — such as the Support page, this policy, or an official standards website listed in Settings — which opens in your browser</li></ul><p><strong>In none of these cases is your data sent to the Developer.</strong> iCloud backups go only to your own iCloud account. Purchase traffic goes to Apple and contains none of the values you entered in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> the dimensions, tolerances, part names, measurement point names, measured values, labels, memos, conversion history, or Sheets content you enter. The only copy of your data that leaves your device is the backup in your own iCloud account, which the Developer cannot access. Apple's statistics tell the Developer that the App was used — not what you calculated.</p><p>Apart from the iCloud backup, your data leaves the device only through the clipboard copy and CSV export described in <a href='#export'>Exporting Your Data</a>, and both happen only when you choose to do it.</p>
   </section><section class="policy-section" id="icloud">
     <h2><span class="sec-num">4</span><span>iCloud Backup</span></h2>
-    <p>TechRef does not use CloudKit and does not synchronize your data with any cloud service.</p><p>However, if you have enabled iCloud Backup in your device settings, iOS may include TechRef's data files in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>This is what allows your history and Sheets to be restored automatically when you set up a new device. If you prefer not to have this data backed up, you can disable iCloud Backup for TechRef in the iOS Settings app.</p><p>Backup handling is governed by <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a>.</p>
+    <p>TechRef backs up your Sheets (including measured values), history and settings to your own iCloud account, using the private database of Apple's CloudKit. This lets you restore your data after reinstalling the App or moving to a new device. iCloud backup is free.</p><ul><li><strong>Where it is stored</strong> — in the private database of your iCloud account. It can be read only when you are signed in with your Apple Account. The Developer cannot see, access, or delete it.</li><li><strong>When it is sent</strong> — with Back Up Automatically on (the default), shortly after you save and when you close the App. Back Up Now in Settings &gt; iCloud backs up straight away. If you are not signed in to iCloud, nothing is backed up.</li><li><strong>What is not backed up</strong> — the number of free saves used, your agreement to the terms, in-app tips, and your purchase. A purchase is restored from Apple separately (see <a href='#purchases'>In-App Purchases</a>).</li><li><strong>Restoring</strong> — after reinstalling the App or on a new device, the App asks whether to restore the backup. Restore from iCloud in Settings &gt; iCloud replaces the data on the device with the backup.</li></ul><p><strong>Turning it off and deleting it.</strong> You can turn off Back Up Automatically in Settings &gt; iCloud in the App. The backup uses your iCloud storage. To delete it, open Settings &gt; [your name] &gt; iCloud &gt; Manage Account Storage on your device and choose TechRef.</p><p><strong>Device backups.</strong> Separately from the above, if iCloud Backup is enabled in your device settings, iOS may include TechRef's data files in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>Data stored in iCloud is handled under <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a>.</p>
   </section><section class="policy-section" id="export">
     <h2><span class="sec-num">5</span><span>Exporting Your Data</span></h2>
-    <p>TechRef lets you take your data out of the App in two ways:</p><ul><li><strong>Copy</strong> — conversion results or sheet data are placed on the system clipboard</li><li><strong>Save to Files</strong> — a CSV file is written to a location you choose in the Files app</li></ul><p>Both actions are initiated by you, and the App does not send data anywhere on its own. Once data leaves the App, its handling — including where you paste it, who you send it to, and any cloud storage location you select in the Files app — is outside the App's control and is your responsibility.</p><p>If you work with dimensional data that your organization treats as confidential, please follow your own internal policies when exporting.</p>
+    <p>TechRef lets you take your data out of the App in two ways:</p><ul><li><strong>Copy</strong> — conversion results, sheet data or measured values are placed on the system clipboard</li><li><strong>Save to Files</strong> — a CSV file is written to a location you choose in the Files app</li></ul><p>Both actions are initiated by you, and the App does not send data anywhere on its own. Once data leaves the App, its handling — including where you paste it, who you send it to, and any cloud storage location you select in the Files app — is outside the App's control and is your responsibility.</p><p>If you work with dimensional data that your organization treats as confidential, please follow your own internal policies when exporting, and when deciding whether to use iCloud backup.</p>
   </section><section class="policy-section" id="advertising">
     <h2><span class="sec-num">6</span><span>Advertising and Tracking</span></h2>
     <p>TechRef contains <strong>no advertisements</strong>.</p><p>The App does not use the advertising identifier (IDFA), does not request App Tracking Transparency permission, and does not track you across apps or websites. There is no profiling, no behavioral analysis, and no data broker relationship of any kind.</p><p>This is a design decision, not a temporary state. TechRef is a professional tool, and it will not carry advertising.</p>
   </section><section class="policy-section" id="purchases">
     <h2><span class="sec-num">7</span><span>In-App Purchases</span></h2>
-    <p>TechRef is free to download. Unit conversion, tolerance calculation, and the reference tables can be used without any usage limit, whether or not you purchase.</p><p>Saving to History and Sheets is free up to a certain number of saves. Beyond that, the frequency of saving is limited. A one-time (non-consumable) in-app purchase removes that limit permanently. <strong>The specific number, the nature of the limit, and the price are shown on the App Store product page and on the purchase screen inside the App.</strong></p><p>All payment processing is handled by Apple through the App Store. The Developer will not receive your payment details, card information, or any personal information associated with the transaction. See <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a> for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. "Restore Purchases" in Settings asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore your purchase after changing devices or reinstalling the App.</p><p>Any change of this kind will be reflected on this page before it takes effect.</p>
+    <p>TechRef is free to download. Unit conversion, tolerance calculation, the drill size tables, the cutting speed and feed calculator, measured values and iCloud backup can be used without any usage limit, whether or not you purchase.</p><p>Saving new dimensions to History and Sheets is free up to a certain number of saves. Beyond that, the frequency of saving is limited. A one-time (non-consumable) in-app purchase, TechRef Pro, removes that limit permanently and unlocks additional features such as further reference tables and the engineering calculators. <strong>The specific number, the nature of the limit, the features included, and the price are shown on the App Store product page and on the purchase screen inside the App.</strong></p><p>All payment processing is handled by Apple through the App Store. The Developer will not receive your payment details, card information, or any personal information associated with the transaction. See <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a> for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device, and it is not part of the iCloud backup. "Restore Purchases" in Settings asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore your purchase after changing devices or reinstalling the App.</p><p>Any change of this kind will be reflected on this page before it takes effect.</p>
   </section><section class="policy-section" id="sharing">
     <h2><span class="sec-num">8</span><span>Sharing of Information</span></h2>
-    <p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. In the event of a legally binding request from a competent authority, the Developer has no user data that could be produced.</p>
+    <p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. Your iCloud backup is stored by Apple in your own iCloud account, and the Developer cannot access it. In the event of a legally binding request from a competent authority, the Developer has no user data that could be produced.</p>
   </section><section class="policy-section" id="children">
     <h2><span class="sec-num">9</span><span>Children's Privacy</span></h2>
     <p>TechRef is a professional engineering tool and is not directed at children.</p><p>Nevertheless, because the App collects no personal information from anyone of any age, it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user.</p>
   </section><section class="policy-section" id="disclaimer">
     <h2><span class="sec-num">10</span><span>Disclaimer</span></h2>
-    <div class='lead-note'><p>TechRef is a reference and calculation tool. It is not a substitute for official standards, engineering judgment, or verified measurement.</p></div><p><strong>Reference information only.</strong> Conversion factors, reference tables, and calculated results provided by the App are reference information based on publicly available standards and definitions. They are not certified data and carry no warranty of accuracy, completeness, or fitness for any particular purpose.</p><p><strong>Verification is your responsibility.</strong> Before applying any value from the App to design, machining, inspection, or procurement, you must verify it against the applicable official standard, the controlling drawing, and your organization's internal procedures. The App is intended to assist that process, not to replace it.</p><p><strong>Limits of the tolerance calculation.</strong> The center value and range shown by the App are the result of arithmetic on the values you enter. The calculation does not account for machining method, tooling condition, measurement uncertainty, material properties, thermal expansion, fit class, or any other physical or process factor. A mathematically valid center value is not necessarily an appropriate machine setting.</p><p><strong>Rounding and display precision.</strong> Results are rounded to the number of decimal places selected in Settings. Rounding may introduce error, and displayed values may differ from the full-precision internal result. Choose a precision appropriate to your tolerance band.</p><p><strong>Unit selection.</strong> You are responsible for selecting the correct unit and category for your input. The App cannot detect an incorrect unit assignment.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to defective parts, rework, production delay, equipment damage, personal injury, or economic loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>
+    <div class='lead-note'><p>TechRef is a reference and calculation tool. It is not a substitute for official standards, engineering judgment, or verified measurement.</p></div><p><strong>Reference information only.</strong> Conversion factors, reference tables, material data, and calculated results provided by the App are reference information compiled with reference to officially published standards information and definitions. They are not certified data and carry no warranty of accuracy, completeness, or fitness for any particular purpose.</p><p><strong>Verification is your responsibility.</strong> Before applying any value from the App to design, machining, inspection, or procurement, you must verify it against the applicable official standard, the controlling drawing, and your organization's internal procedures. The App is intended to assist that process, not to replace it.</p><p><strong>Limits of the tolerance calculation.</strong> The center value and range shown by the App are the result of arithmetic on the values you enter. The calculation does not account for machining method, tooling condition, measurement uncertainty, material properties, thermal expansion, fit class, or any other physical or process factor. A mathematically valid center value is not necessarily an appropriate machine setting.</p><p><strong>Limits of the engineering calculators.</strong> The calculators use simple textbook formulas under idealized conditions, such as a uniform section, linear elastic behavior, and the support and load conditions shown. They do not check buckling, fatigue, stress concentration, or other failure modes. Their results do not replace a strength check by a qualified person or an appropriate safety factor.</p><p><strong>Material data.</strong> In the material tables, values marked with ≥ or ≤ are limits compiled with reference to officially published standards information. All other values, including density, Young's modulus, and thermal expansion, are representative values and are not guaranteed. Corrosion and chemical resistance ratings are TechRef's own relative ratings. Actual properties depend on the grade, condition, form, size, and supplier; check the mill certificate, the maker's data sheet, or the applicable standard.</p><p><strong>Rounding and display precision.</strong> Results are rounded to the number of decimal places selected in Settings. Rounding may introduce error, and displayed values may differ from the full-precision internal result. Choose a precision appropriate to your tolerance band.</p><p><strong>Unit selection.</strong> You are responsible for selecting the correct unit and category for your input. The App cannot detect an incorrect unit assignment.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to defective parts, rework, production delay, equipment damage, personal injury, or economic loss.</p><p><strong>Availability.</strong> iOS updates, changes in the device environment, or the availability of iCloud may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes, including data in iCloud backups. Keep your own copies of important data, for example by CSV export.</p>
   </section><section class="policy-section" id="law">
     <h2><span class="sec-num">11</span><span>Governing Law</span></h2>
     <p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p>
   </section><section class="policy-section" id="changes">
     <h2><span class="sec-num">12</span><span>Changes to This Policy</span></h2>
-    <p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, the introduction of in-app purchases — it will be published here before that change reaches users.</p>
+    <p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, the introduction of in-app purchases or iCloud backup — it will be published here before that change reaches users.</p>
   </section><section class="policy-section" id="contact">
     <h2><span class="sec-num">13</span><span>Contact</span></h2>
     <p>Questions, corrections, and feature requests are welcome. If you find an error in a conversion factor or a reference table, please report it — accuracy reports are given priority.</p><div class='contact-box'><p>Website / contact form: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Email: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>
@@ -478,9 +522,12 @@ const T = {
          購入処理で Apple との通信が発生する以上、言い過ぎになる。
          主語を「入力されたデータ」に絞ることで、正確さを保ちつつ
          訴求の強さは落とさない。 */
-      subtitle: "TechRef stores everything on your device. Nothing you enter is ever transmitted off it. This page explains exactly what that means, and the limits of how the App's output should be used.",
+      /* 改訂（2026-10-13）: v2.1.0 の iCloud バックアップに合わせ、
+         「端末内だけ」を「端末内と、ご自身の iCloud だけ」に改めた。
+         開発者へは何も送らない点は変わらないので、そこを主語にしている。 */
+      subtitle: "TechRef keeps your data on your device and backs it up only to your own iCloud account. Nothing you enter is ever sent to the Developer or to anyone else. This page explains exactly what that means, and the limits of how the App's output should be used.",
       updatedLabel: "Effective",
-      updatedDate: "August 25, 2026",
+      updatedDate: "October 13, 2026",
       /*
        * footer
        * ───────────────────────────────────────
@@ -511,12 +558,12 @@ const T = {
            章番号は配列の並び順から自動採番されるため、
            前にセクションを1つ足した瞬間に本文中の番号だけがずれる。
            id によるリンクなら、順番が変わっても指し先は壊れない。 */
-        html: "<p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion and engineering reference tool for technical professionals. It is built on a simple principle: your data belongs to you, and it stays on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section describes important limitations on how the App's output should be used.</p>"
+        html: "<p>This is the Privacy Policy and Disclaimer for <strong>TechRef</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef is a unit conversion, engineering reference and calculation tool for technical professionals. It is built on a simple principle: your data belongs to you. It stays on your device and in your own iCloud account, and the Developer never receives it.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section describes important limitations on how the App's output should be used.</p>"
       },
       {
         id: "storage",
         title: "Data Stored on Your Device",
-        html: "<div class='zero-data'><p>All data you enter stays on your device. TechRef has no server, and nothing is transmitted to the Developer.</p></div><p>TechRef stores the following on your device only:</p><ul><li>Conversion history (values, tolerances, units, labels, memos, timestamps)</li><li>Sheets data (part names, measurement point names, dimensions, memos)</li><li>App settings (decimal places, appearance, unit preferences)</li></ul><p>History and Sheets are saved as files in the App's Application Support directory. Settings are saved in the standard iOS preferences store. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>"
+        html: "<div class='zero-data'><p>All data you enter stays on your device and in your own iCloud account. TechRef has no server of its own, and nothing is transmitted to the Developer.</p></div><p>TechRef stores the following on your device:</p><ul><li>Conversion history (values, tolerances, units, labels, memos, timestamps)</li><li>Sheets data (part names, measurement point names, dimensions, measured values, memos)</li><li>App settings (decimal places, appearance, language, the units, tables, materials and other items you choose to show, and the units used in the calculators)</li><li>Information the App needs to work correctly (the number of free saves used, whether you have agreed to the terms, and which in-app tips have been shown)</li></ul><p>Values entered in the calculators are kept only while the calculator is open and are not saved.</p><p>History and Sheets are saved as files in the App's Application Support directory. Settings are saved in the standard iOS preferences store. Deleting the App removes all of this data from your device. A backup in your iCloud account is not deleted with the App; see <a href='#icloud'>iCloud Backup</a>.</p><p>The Developer has no access to any of it.</p>"
       },
       {
         id: "network",
@@ -530,17 +577,17 @@ const T = {
              書かないと「使用状況って何を見られるのか」という不安が残る
            ・データを外に出す唯一の手段が手動の CSV / コピーであることを
              第5章へのリンク付きで示した */
-        html: "<p>TechRef's core features — unit conversion, tolerance calculation, the reference tables, and saving your data — work entirely offline. No network connection is required to use them.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring the in-app purchase</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping the Support link in Settings</strong> — this website opens in your browser</li></ul><p><strong>In neither case is any dimensional data you entered transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains none of the values you entered in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> the dimensions, tolerances, part names, measurement point names, labels, memos, conversion history, or Sheets content you enter. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you calculated.</p><p>The only way your data leaves the device is the clipboard copy and CSV export described in <a href='#export'>Exporting Your Data</a>, and both happen only when you choose to do it.</p>"
+        html: "<p>TechRef's core features — unit conversion, tolerance calculation, the reference tables, the calculators, and saving your data — work entirely offline. No network connection is required to use them.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries that transmit data.</p><p><strong>The App itself connects to the network only in the following cases:</strong></p><ul><li><strong>iCloud backup and restore</strong> — your Sheets, history and settings are sent to your own iCloud account, and read back from it when you restore (see <a href='#icloud'>iCloud Backup</a>). Automatic backup is on by default and can be turned off in Settings.</li><li><strong>Purchasing or restoring the in-app purchase</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link in the App</strong> — such as the Support page, this policy, or an official standards website listed in Settings — which opens in your browser</li></ul><p><strong>In none of these cases is your data sent to the Developer.</strong> iCloud backups go only to your own iCloud account. Purchase traffic goes to Apple and contains none of the values you entered in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> the dimensions, tolerances, part names, measurement point names, measured values, labels, memos, conversion history, or Sheets content you enter. The only copy of your data that leaves your device is the backup in your own iCloud account, which the Developer cannot access. Apple's statistics tell the Developer that the App was used — not what you calculated.</p><p>Apart from the iCloud backup, your data leaves the device only through the clipboard copy and CSV export described in <a href='#export'>Exporting Your Data</a>, and both happen only when you choose to do it.</p>"
       },
       {
         id: "icloud",
         title: "iCloud Backup",
-        html: "<p>TechRef does not use CloudKit and does not synchronize your data with any cloud service.</p><p>However, if you have enabled iCloud Backup in your device settings, iOS may include TechRef's data files in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>This is what allows your history and Sheets to be restored automatically when you set up a new device. If you prefer not to have this data backed up, you can disable iCloud Backup for TechRef in the iOS Settings app.</p><p>Backup handling is governed by <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a>.</p>"
+        html: "<p>TechRef backs up your Sheets (including measured values), history and settings to your own iCloud account, using the private database of Apple's CloudKit. This lets you restore your data after reinstalling the App or moving to a new device. iCloud backup is free.</p><ul><li><strong>Where it is stored</strong> — in the private database of your iCloud account. It can be read only when you are signed in with your Apple Account. The Developer cannot see, access, or delete it.</li><li><strong>When it is sent</strong> — with Back Up Automatically on (the default), shortly after you save and when you close the App. Back Up Now in Settings &gt; iCloud backs up straight away. If you are not signed in to iCloud, nothing is backed up.</li><li><strong>What is not backed up</strong> — the number of free saves used, your agreement to the terms, in-app tips, and your purchase. A purchase is restored from Apple separately (see <a href='#purchases'>In-App Purchases</a>).</li><li><strong>Restoring</strong> — after reinstalling the App or on a new device, the App asks whether to restore the backup. Restore from iCloud in Settings &gt; iCloud replaces the data on the device with the backup.</li></ul><p><strong>Turning it off and deleting it.</strong> You can turn off Back Up Automatically in Settings &gt; iCloud in the App. The backup uses your iCloud storage. To delete it, open Settings &gt; [your name] &gt; iCloud &gt; Manage Account Storage on your device and choose TechRef.</p><p><strong>Device backups.</strong> Separately from the above, if iCloud Backup is enabled in your device settings, iOS may include TechRef's data files in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>Data stored in iCloud is handled under <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a>.</p>"
       },
       {
         id: "export",
         title: "Exporting Your Data",
-        html: "<p>TechRef lets you take your data out of the App in two ways:</p><ul><li><strong>Copy</strong> — conversion results or sheet data are placed on the system clipboard</li><li><strong>Save to Files</strong> — a CSV file is written to a location you choose in the Files app</li></ul><p>Both actions are initiated by you, and the App does not send data anywhere on its own. Once data leaves the App, its handling — including where you paste it, who you send it to, and any cloud storage location you select in the Files app — is outside the App's control and is your responsibility.</p><p>If you work with dimensional data that your organization treats as confidential, please follow your own internal policies when exporting.</p>"
+        html: "<p>TechRef lets you take your data out of the App in two ways:</p><ul><li><strong>Copy</strong> — conversion results, sheet data or measured values are placed on the system clipboard</li><li><strong>Save to Files</strong> — a CSV file is written to a location you choose in the Files app</li></ul><p>Both actions are initiated by you, and the App does not send data anywhere on its own. Once data leaves the App, its handling — including where you paste it, who you send it to, and any cloud storage location you select in the Files app — is outside the App's control and is your responsibility.</p><p>If you work with dimensional data that your organization treats as confidential, please follow your own internal policies when exporting, and when deciding whether to use iCloud backup.</p>"
       },
       {
         id: "advertising",
@@ -558,12 +605,12 @@ const T = {
              商品仕様は App Store の製品ページと購入画面の役割。
              数字を書くと、調整のたびに法的文書の改訂が必要になる
            ・購入の復元（Restore Purchases）を1段落として追加した */
-        html: "<p>TechRef is free to download. Unit conversion, tolerance calculation, and the reference tables can be used without any usage limit, whether or not you purchase.</p><p>Saving to History and Sheets is free up to a certain number of saves. Beyond that, the frequency of saving is limited. A one-time (non-consumable) in-app purchase removes that limit permanently. <strong>The specific number, the nature of the limit, and the price are shown on the App Store product page and on the purchase screen inside the App.</strong></p><p>All payment processing is handled by Apple through the App Store. The Developer will not receive your payment details, card information, or any personal information associated with the transaction. See <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a> for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. \"Restore Purchases\" in Settings asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore your purchase after changing devices or reinstalling the App.</p><p>Any change of this kind will be reflected on this page before it takes effect.</p>"
+        html: "<p>TechRef is free to download. Unit conversion, tolerance calculation, the drill size tables, the cutting speed and feed calculator, measured values and iCloud backup can be used without any usage limit, whether or not you purchase.</p><p>Saving new dimensions to History and Sheets is free up to a certain number of saves. Beyond that, the frequency of saving is limited. A one-time (non-consumable) in-app purchase, TechRef Pro, removes that limit permanently and unlocks additional features such as further reference tables and the engineering calculators. <strong>The specific number, the nature of the limit, the features included, and the price are shown on the App Store product page and on the purchase screen inside the App.</strong></p><p>All payment processing is handled by Apple through the App Store. The Developer will not receive your payment details, card information, or any personal information associated with the transaction. See <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple's Privacy Policy</a> for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device, and it is not part of the iCloud backup. \"Restore Purchases\" in Settings asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore your purchase after changing devices or reinstalling the App.</p><p>Any change of this kind will be reflected on this page before it takes effect.</p>"
       },
       {
         id: "sharing",
         title: "Sharing of Information",
-        html: "<p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. In the event of a legally binding request from a competent authority, the Developer has no user data that could be produced.</p>"
+        html: "<p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. Your iCloud backup is stored by Apple in your own iCloud account, and the Developer cannot access it. In the event of a legally binding request from a competent authority, the Developer has no user data that could be produced.</p>"
       },
       {
         id: "children",
@@ -573,7 +620,7 @@ const T = {
       {
         id: "disclaimer",
         title: "Disclaimer",
-        html: "<div class='lead-note'><p>TechRef is a reference and calculation tool. It is not a substitute for official standards, engineering judgment, or verified measurement.</p></div><p><strong>Reference information only.</strong> Conversion factors, reference tables, and calculated results provided by the App are reference information based on publicly available standards and definitions. They are not certified data and carry no warranty of accuracy, completeness, or fitness for any particular purpose.</p><p><strong>Verification is your responsibility.</strong> Before applying any value from the App to design, machining, inspection, or procurement, you must verify it against the applicable official standard, the controlling drawing, and your organization's internal procedures. The App is intended to assist that process, not to replace it.</p><p><strong>Limits of the tolerance calculation.</strong> The center value and range shown by the App are the result of arithmetic on the values you enter. The calculation does not account for machining method, tooling condition, measurement uncertainty, material properties, thermal expansion, fit class, or any other physical or process factor. A mathematically valid center value is not necessarily an appropriate machine setting.</p><p><strong>Rounding and display precision.</strong> Results are rounded to the number of decimal places selected in Settings. Rounding may introduce error, and displayed values may differ from the full-precision internal result. Choose a precision appropriate to your tolerance band.</p><p><strong>Unit selection.</strong> You are responsible for selecting the correct unit and category for your input. The App cannot detect an incorrect unit assignment.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to defective parts, rework, production delay, equipment damage, personal injury, or economic loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>"
+        html: "<div class='lead-note'><p>TechRef is a reference and calculation tool. It is not a substitute for official standards, engineering judgment, or verified measurement.</p></div><p><strong>Reference information only.</strong> Conversion factors, reference tables, material data, and calculated results provided by the App are reference information compiled with reference to officially published standards information and definitions. They are not certified data and carry no warranty of accuracy, completeness, or fitness for any particular purpose.</p><p><strong>Verification is your responsibility.</strong> Before applying any value from the App to design, machining, inspection, or procurement, you must verify it against the applicable official standard, the controlling drawing, and your organization's internal procedures. The App is intended to assist that process, not to replace it.</p><p><strong>Limits of the tolerance calculation.</strong> The center value and range shown by the App are the result of arithmetic on the values you enter. The calculation does not account for machining method, tooling condition, measurement uncertainty, material properties, thermal expansion, fit class, or any other physical or process factor. A mathematically valid center value is not necessarily an appropriate machine setting.</p><p><strong>Limits of the engineering calculators.</strong> The calculators use simple textbook formulas under idealized conditions, such as a uniform section, linear elastic behavior, and the support and load conditions shown. They do not check buckling, fatigue, stress concentration, or other failure modes. Their results do not replace a strength check by a qualified person or an appropriate safety factor.</p><p><strong>Material data.</strong> In the material tables, values marked with ≥ or ≤ are limits compiled with reference to officially published standards information. All other values, including density, Young's modulus, and thermal expansion, are representative values and are not guaranteed. Corrosion and chemical resistance ratings are TechRef's own relative ratings. Actual properties depend on the grade, condition, form, size, and supplier; check the mill certificate, the maker's data sheet, or the applicable standard.</p><p><strong>Rounding and display precision.</strong> Results are rounded to the number of decimal places selected in Settings. Rounding may introduce error, and displayed values may differ from the full-precision internal result. Choose a precision appropriate to your tolerance band.</p><p><strong>Unit selection.</strong> You are responsible for selecting the correct unit and category for your input. The App cannot detect an incorrect unit assignment.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to defective parts, rework, production delay, equipment damage, personal injury, or economic loss.</p><p><strong>Availability.</strong> iOS updates, changes in the device environment, or the availability of iCloud may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes, including data in iCloud backups. Keep your own copies of important data, for example by CSV export.</p>"
       },
       {
         id: "law",
@@ -583,12 +630,708 @@ const T = {
       {
         id: "changes",
         title: "Changes to This Policy",
-        html: "<p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, the introduction of in-app purchases — it will be published here before that change reaches users.</p>"
+        html: "<p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, the introduction of in-app purchases or iCloud backup — it will be published here before that change reaches users.</p>"
       },
       {
         id: "contact",
         title: "Contact",
         html: "<p>Questions, corrections, and feature requests are welcome. If you find an error in a conversion factor or a reference table, please report it — accuracy reports are given priority.</p><div class='contact-box'><p>Website / contact form: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Email: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "it": {
+    meta: {
+      langName: "Italiano",
+      selectLabel: "Lingua",
+      pageTitle: "Informativa sulla privacy e note legali",
+      subtitle: "TechRef conserva i tuoi dati sul dispositivo e ne esegue il backup solo nel tuo account iCloud. Nulla di ciò che inserisci viene mai inviato allo sviluppatore o ad altri. Questa pagina spiega esattamente cosa significa e i limiti con cui vanno usati i risultati dell’app.",
+      updatedLabel: "In vigore dal",
+      updatedDate: "13 ottobre 2026",
+      footer: {
+        ariaGithub: "GitHub (si apre in una nuova scheda)",
+        ariaX: "X, già Twitter (si apre in una nuova scheda)",
+        ariaInstagram: "Instagram (si apre in una nuova scheda)",
+        ariaTop: "Torna all’inizio della pagina",
+        ariaLegal: "Informazioni legali",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Home page di Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "Introduzione",
+        html: "<p>Questa è l’informativa sulla privacy e le note legali di <strong>TechRef</strong>, un’app iOS sviluppata da Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef è uno strumento di conversione di unità, consultazione tecnica e calcolo per professionisti del settore. Si basa su un principio semplice: i tuoi dati appartengono a te. Restano sul tuo dispositivo e nel tuo account iCloud, e lo sviluppatore non li riceve mai.</p><p>Leggi questa pagina prima di usare l’app. La sezione <a href='#disclaimer'>Note legali</a> descrive limiti importanti nell’uso dei risultati dell’app.</p>"
+      },
+      {
+        id: "storage",
+        title: "Dati conservati sul dispositivo",
+        html: "<div class='zero-data'><p>Tutti i dati che inserisci restano sul tuo dispositivo e nel tuo account iCloud. TechRef non ha un proprio server e nulla viene trasmesso allo sviluppatore.</p></div><p>TechRef conserva sul dispositivo:</p><ul><li>Cronologia delle conversioni (valori, tolleranze, unità, etichette, note, data e ora)</li><li>Dati dei fogli (nomi dei pezzi, nomi dei punti di misura, quote, valori misurati, note)</li><li>Impostazioni dell’app (cifre decimali, aspetto, lingua, unità, tabelle, materiali e altri elementi che scegli di mostrare, unità usate nei calcolatori)</li><li>Informazioni necessarie al corretto funzionamento (numero di salvataggi gratuiti usati, accettazione dei termini, suggerimenti già mostrati)</li></ul><p>I valori inseriti nei calcolatori restano solo finché il calcolatore è aperto e non vengono salvati.</p><p>Cronologia e fogli sono salvati come file nella cartella Application Support dell’app. Le impostazioni sono salvate nell’archivio standard delle preferenze di iOS. Eliminando l’app, tutti questi dati vengono rimossi dal dispositivo. Il backup nel tuo account iCloud non viene eliminato con l’app; vedi <a href='#icloud'>Backup su iCloud</a>.</p><p>Lo sviluppatore non ha accesso a nessuno di questi dati.</p>"
+      },
+      {
+        id: "network",
+        title: "Attività di rete",
+        html: "<p>Le funzioni principali di TechRef — conversione di unità, calcolo delle tolleranze, tabelle di riferimento, calcolatori e salvataggio dei dati — funzionano completamente offline. Per usarle non serve alcuna connessione.</p><p>Non ci sono SDK di analisi, servizi di segnalazione degli arresti anomali, SDK pubblicitari né librerie di terze parti che trasmettono dati.</p><p><strong>L’app si collega alla rete solo nei casi seguenti:</strong></p><ul><li><strong>Backup e ripristino su iCloud</strong> — fogli, cronologia e impostazioni vengono inviati al tuo account iCloud e riletti da lì quando ripristini (vedi <a href='#icloud'>Backup su iCloud</a>). Il backup automatico è attivo per impostazione predefinita e si può disattivare nelle Impostazioni.</li><li><strong>Acquisto o ripristino dell’acquisto in-app</strong> — gestiti da Apple tramite l’App Store (vedi <a href='#purchases'>Acquisti in-app</a>)</li><li><strong>Tocco di un link nell’app</strong> — ad esempio la pagina di supporto, questa informativa o un sito ufficiale di normative indicato nelle Impostazioni — che si apre nel browser</li></ul><p><strong>In nessuno di questi casi i tuoi dati vengono inviati allo sviluppatore.</strong> I backup su iCloud vanno solo nel tuo account iCloud. Il traffico degli acquisti va ad Apple e non contiene alcun valore inserito nell’app.</p><p><strong>Statistiche d’uso raccolte da Apple.</strong> Poiché l’app è distribuita tramite l’App Store, Apple, in qualità di gestore della piattaforma, aggrega statistiche come installazioni, avvii, durata delle sessioni e acquisti, e le fornisce allo sviluppatore in forma anonima e aggregata. Se hai attivato la condivisione dei dati di diagnostica nelle impostazioni di iOS, anche i rapporti sugli arresti anomali vengono forniti allo stesso modo. Tutto questo è gestito da Apple e lo sviluppatore non può attivarlo né disattivarlo.</p><p><strong>Cosa queste statistiche non includono mai:</strong> le quote, le tolleranze, i nomi dei pezzi e dei punti di misura, i valori misurati, le etichette, le note, la cronologia delle conversioni o il contenuto dei fogli che inserisci. L’unica copia dei tuoi dati che lascia il dispositivo è il backup nel tuo account iCloud, a cui lo sviluppatore non può accedere. Le statistiche di Apple dicono allo sviluppatore che l’app è stata usata, non cosa hai calcolato.</p><p>Oltre al backup su iCloud, i tuoi dati lasciano il dispositivo solo tramite la copia negli appunti e l’esportazione CSV descritte in <a href='#export'>Esportazione dei dati</a>, ed entrambe avvengono solo quando lo decidi tu.</p>"
+      },
+      {
+        id: "icloud",
+        title: "Backup su iCloud",
+        html: "<p>TechRef esegue il backup dei fogli (compresi i valori misurati), della cronologia e delle impostazioni nel tuo account iCloud, usando il database privato di CloudKit di Apple. In questo modo puoi recuperare i dati dopo aver reinstallato l’app o cambiato dispositivo. Il backup su iCloud è gratuito.</p><ul><li><strong>Dove viene conservato</strong> — nel database privato del tuo account iCloud. Può essere letto solo quando hai eseguito l’accesso con il tuo Apple Account. Lo sviluppatore non può vederlo, accedervi né eliminarlo.</li><li><strong>Quando viene inviato</strong> — con «Backup automatico» attivo (impostazione predefinita), poco dopo ogni salvataggio e quando chiudi l’app. «Esegui backup ora» in Impostazioni &gt; iCloud esegue subito il backup. Se non hai eseguito l’accesso a iCloud, non viene eseguito alcun backup.</li><li><strong>Cosa non viene salvato</strong> — il numero di salvataggi gratuiti usati, l’accettazione dei termini, i suggerimenti e il tuo acquisto. L’acquisto si ripristina separatamente da Apple (vedi <a href='#purchases'>Acquisti in-app</a>).</li><li><strong>Ripristino</strong> — dopo aver reinstallato l’app o su un nuovo dispositivo, l’app chiede se ripristinare il backup. «Ripristina da iCloud» in Impostazioni &gt; iCloud sostituisce i dati del dispositivo con il backup.</li></ul><p><strong>Disattivarlo ed eliminarlo.</strong> Puoi disattivare «Backup automatico» in Impostazioni &gt; iCloud nell’app. Il backup occupa spazio del tuo iCloud. Per eliminarlo, apri Impostazioni &gt; [il tuo nome] &gt; iCloud &gt; Gestisci spazio dell’account sul dispositivo e scegli TechRef.</p><p><strong>Backup del dispositivo.</strong> Indipendentemente da quanto sopra, se il backup di iCloud è attivo nelle impostazioni del dispositivo, iOS può includere i file di dati di TechRef nel backup del dispositivo insieme ai dati delle altre app. Si tratta di una funzione standard del sistema operativo gestita interamente da Apple. Lo sviluppatore non avvia questi backup e non vi ha accesso.</p><p>I dati conservati su iCloud sono trattati secondo l’<a href='https://www.apple.com/it/legal/privacy/' target='_blank' rel='noopener'>Informativa sulla privacy di Apple</a>.</p>"
+      },
+      {
+        id: "export",
+        title: "Esportazione dei dati",
+        html: "<p>TechRef ti permette di portare i dati fuori dall’app in due modi:</p><ul><li><strong>Copia</strong> — risultati delle conversioni, dati dei fogli o valori misurati vengono copiati negli appunti di sistema</li><li><strong>Salva su File</strong> — un file CSV viene scritto nella posizione che scegli nell’app File</li></ul><p>Entrambe le azioni sono avviate da te e l’app non invia dati da nessuna parte di sua iniziativa. Una volta usciti dall’app, il trattamento dei dati — compreso dove li incolli, a chi li invii e l’eventuale archivio cloud scelto nell’app File — è al di fuori del controllo dell’app ed è sotto la tua responsabilità.</p><p>Se lavori con dati dimensionali che la tua organizzazione considera riservati, segui le procedure interne per l’esportazione e per decidere se usare il backup su iCloud.</p>"
+      },
+      {
+        id: "advertising",
+        title: "Pubblicità e tracciamento",
+        html: "<p>TechRef <strong>non contiene pubblicità</strong>.</p><p>L’app non usa l’identificatore pubblicitario (IDFA), non richiede l’autorizzazione App Tracking Transparency e non ti traccia tra app o siti web. Non c’è profilazione, analisi del comportamento né alcun rapporto con data broker.</p><p>È una scelta di progetto, non una condizione temporanea. TechRef è uno strumento professionale e non conterrà pubblicità.</p>"
+      },
+      {
+        id: "purchases",
+        title: "Acquisti in-app",
+        html: "<p>TechRef si scarica gratuitamente. Conversione di unità, calcolo delle tolleranze, tabelle delle punte, calcolatore di velocità di taglio e avanzamento, valori misurati e backup su iCloud si possono usare senza limiti, con o senza acquisto.</p><p>Il salvataggio di nuove quote nella cronologia e nei fogli è gratuito fino a un certo numero di salvataggi. Oltre questo numero, la frequenza dei salvataggi è limitata. Un acquisto in-app una tantum (non consumabile), TechRef Pro, rimuove questo limite per sempre e sblocca funzioni aggiuntive come altre tabelle di riferimento e i calcolatori di meccanica. <strong>Il numero preciso, il tipo di limite, le funzioni incluse e il prezzo sono indicati nella pagina del prodotto sull’App Store e nella schermata di acquisto all’interno dell’app.</strong></p><p>Tutti i pagamenti sono gestiti da Apple tramite l’App Store. Lo sviluppatore non riceve i dati di pagamento, i dati della carta né alcuna informazione personale legata alla transazione. Consulta l’<a href='https://www.apple.com/it/legal/privacy/' target='_blank' rel='noopener'>Informativa sulla privacy di Apple</a> per sapere come Apple tratta questi dati.</p><p><strong>Ripristino di un acquisto.</strong> L’acquisto è legato al tuo Apple Account, non a un dispositivo specifico, e non fa parte del backup su iCloud. «Ripristina acquisti» nelle Impostazioni chiede ad Apple se il tuo account possiede l’acquisto. La verifica avviene tra il dispositivo e Apple; lo sviluppatore non conserva né riceve il tuo Apple Account. Usalo per ripristinare l’acquisto dopo aver cambiato dispositivo o reinstallato l’app.</p><p>Qualsiasi modifica di questo tipo sarà riportata in questa pagina prima di entrare in vigore.</p>"
+      },
+      {
+        id: "sharing",
+        title: "Condivisione delle informazioni",
+        html: "<p>Lo sviluppatore non vende, condivide né trasferisce informazioni degli utenti a terzi, per il semplice motivo che non ne raccoglie alcuna.</p><p>Non esistono dati da comunicare a inserzionisti, fornitori di analisi o data broker. Il backup su iCloud è conservato da Apple nel tuo account iCloud e lo sviluppatore non può accedervi. In caso di richiesta legalmente vincolante da parte di un’autorità competente, lo sviluppatore non dispone di dati degli utenti da fornire.</p>"
+      },
+      {
+        id: "children",
+        title: "Privacy dei minori",
+        html: "<p>TechRef è uno strumento tecnico professionale e non è rivolto ai minori.</p><p>In ogni caso, poiché l’app non raccoglie informazioni personali da nessuno, a nessuna età, non pone problemi di privacy dei minori. Non esistono dati da proteggere, condividere o eliminare, per nessun utente.</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "Note legali",
+        html: "<div class='lead-note'><p>TechRef è uno strumento di consultazione e calcolo. Non sostituisce le norme ufficiali, il giudizio tecnico o misurazioni verificate.</p></div><p><strong>Solo informazioni di riferimento.</strong> Fattori di conversione, tabelle di riferimento, dati dei materiali e risultati dei calcoli forniti dall’app sono informazioni di riferimento compilate sulla base delle informazioni sulle norme pubblicate ufficialmente e delle relative definizioni. Non sono dati certificati e non sono garantiti in termini di accuratezza, completezza o idoneità a uno scopo particolare.</p><p><strong>La verifica è tua responsabilità.</strong> Prima di applicare un valore dell’app a progettazione, lavorazione, collaudo o acquisti, devi verificarlo rispetto alla norma ufficiale applicabile, al disegno di riferimento e alle procedure interne della tua organizzazione. L’app serve a supportare questo processo, non a sostituirlo.</p><p><strong>Limiti del calcolo delle tolleranze.</strong> Il valore centrale e l’intervallo mostrati dall’app sono il risultato di operazioni aritmetiche sui valori inseriti. Il calcolo non tiene conto del metodo di lavorazione, dello stato degli utensili, dell’incertezza di misura, delle proprietà del materiale, della dilatazione termica, della classe di accoppiamento né di altri fattori fisici o di processo. Un valore centrale matematicamente corretto non è necessariamente un’impostazione adatta della macchina.</p><p><strong>Limiti dei calcolatori di meccanica.</strong> I calcolatori usano semplici formule da manuale in condizioni ideali, come sezione uniforme, comportamento elastico lineare e le condizioni di vincolo e carico indicate. Non verificano instabilità, fatica, concentrazione delle tensioni né altri modi di rottura. I risultati non sostituiscono una verifica di resistenza eseguita da una persona qualificata né un adeguato coefficiente di sicurezza.</p><p><strong>Dati dei materiali.</strong> Nelle tabelle dei materiali, i valori con ≥ o ≤ sono limiti compilati sulla base delle informazioni sulle norme pubblicate ufficialmente. Tutti gli altri valori, compresi densità, modulo di Young e dilatazione termica, sono valori rappresentativi e non garantiti. Le valutazioni di resistenza alla corrosione e agli agenti chimici sono valutazioni relative proprie di TechRef. Le proprietà reali dipendono da grado, stato, forma, dimensioni e fornitore; verifica il certificato del materiale, la scheda tecnica del produttore o la norma applicabile.</p><p><strong>Arrotondamento e precisione di visualizzazione.</strong> I risultati sono arrotondati al numero di cifre decimali scelto nelle Impostazioni. L’arrotondamento può introdurre errori e i valori visualizzati possono differire dal risultato interno a piena precisione. Scegli una precisione adeguata alla tua fascia di tolleranza.</p><p><strong>Scelta dell’unità.</strong> Sei responsabile della scelta dell’unità e della categoria corrette per i dati inseriti. L’app non può rilevare un’unità assegnata in modo errato.</p><p><strong>Limitazione di responsabilità.</strong> Nella misura massima consentita dalla legge applicabile, lo sviluppatore non è responsabile di alcun danno diretto, indiretto, incidentale o consequenziale derivante dall’uso o dall’impossibilità di usare l’app, inclusi, a titolo esemplificativo, pezzi difettosi, rilavorazioni, ritardi di produzione, danni alle attrezzature, lesioni personali o perdite economiche.</p><p><strong>Disponibilità.</strong> Aggiornamenti di iOS, cambiamenti nell’ambiente del dispositivo o la disponibilità di iCloud possono influire sul funzionamento dell’app senza preavviso. Lo sviluppatore può modificare o interrompere l’app senza preavviso e non è responsabile della perdita di dati derivante da tali cambiamenti, compresi i dati nei backup su iCloud. Conserva copie dei dati importanti, ad esempio con l’esportazione CSV.</p>"
+      },
+      {
+        id: "law",
+        title: "Legge applicabile",
+        html: "<p>La presente informativa è regolata dalla legge giapponese. Qualsiasi controversia relativa alla presente informativa è soggetta alla competenza esclusiva, in primo grado, del tribunale competente per la sede dello sviluppatore.</p>"
+      },
+      {
+        id: "changes",
+        title: "Modifiche alla presente informativa",
+        html: "<p>La presente informativa può essere aggiornata con l’evoluzione dell’app. La versione modificata entra in vigore quando viene pubblicata in questa pagina e la data di entrata in vigore in alto viene aggiornata di conseguenza.</p><p>Poiché non vengono raccolti dati, le modifiche alla presente informativa non possono incidere su dati già in possesso dello sviluppatore. Se una modifica incide in modo sostanziale sul funzionamento dell’app — ad esempio l’introduzione di acquisti in-app o del backup su iCloud — sarà pubblicata qui prima che raggiunga gli utenti.</p>"
+      },
+      {
+        id: "contact",
+        title: "Contatti",
+        html: "<p>Domande, correzioni e richieste di funzioni sono benvenute. Se trovi un errore in un fattore di conversione o in una tabella di riferimento, segnalalo: le segnalazioni sull’accuratezza hanno la priorità.</p><div class='contact-box'><p>Sito web / modulo di contatto: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-mail: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "es": {
+    meta: {
+      langName: "Español",
+      selectLabel: "Idioma",
+      pageTitle: "Política de privacidad y aviso legal",
+      subtitle: "TechRef guarda tus datos en tu dispositivo y solo hace copia de seguridad en tu propia cuenta de iCloud. Nada de lo que introduces se envía nunca al desarrollador ni a nadie más. Esta página explica exactamente qué significa eso y los límites con los que deben usarse los resultados de la app.",
+      updatedLabel: "Vigente desde",
+      updatedDate: "13 de octubre de 2026",
+      footer: {
+        ariaGithub: "GitHub (se abre en una pestaña nueva)",
+        ariaX: "X, antes Twitter (se abre en una pestaña nueva)",
+        ariaInstagram: "Instagram (se abre en una pestaña nueva)",
+        ariaTop: "Volver al principio de la página",
+        ariaLegal: "Información legal",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Página de inicio de Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "Introducción",
+        html: "<p>Esta es la política de privacidad y el aviso legal de <strong>TechRef</strong>, una app para iOS desarrollada por Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef es una herramienta de conversión de unidades, consulta técnica y cálculo para profesionales técnicos. Se basa en un principio sencillo: tus datos te pertenecen. Permanecen en tu dispositivo y en tu propia cuenta de iCloud, y el desarrollador nunca los recibe.</p><p>Lee esta página antes de usar la app. La sección <a href='#disclaimer'>Aviso legal</a> describe limitaciones importantes sobre el uso de los resultados de la app.</p>"
+      },
+      {
+        id: "storage",
+        title: "Datos guardados en tu dispositivo",
+        html: "<div class='zero-data'><p>Todos los datos que introduces permanecen en tu dispositivo y en tu propia cuenta de iCloud. TechRef no tiene servidor propio y no se transmite nada al desarrollador.</p></div><p>TechRef guarda en tu dispositivo:</p><ul><li>Historial de conversiones (valores, tolerancias, unidades, etiquetas, notas, fecha y hora)</li><li>Datos de las hojas (nombres de piezas, nombres de puntos de medición, cotas, valores medidos, notas)</li><li>Ajustes de la app (decimales, apariencia, idioma, las unidades, tablas, materiales y demás elementos que eliges mostrar, y las unidades de las calculadoras)</li><li>Información que la app necesita para funcionar correctamente (número de guardados gratuitos usados, aceptación de los términos y consejos ya mostrados)</li></ul><p>Los valores introducidos en las calculadoras solo se conservan mientras la calculadora está abierta y no se guardan.</p><p>El historial y las hojas se guardan como archivos en la carpeta Application Support de la app. Los ajustes se guardan en el almacén estándar de preferencias de iOS. Al eliminar la app, todos estos datos se borran del dispositivo. La copia de seguridad de tu cuenta de iCloud no se elimina con la app; consulta <a href='#icloud'>Copia de seguridad en iCloud</a>.</p><p>El desarrollador no tiene acceso a ninguno de estos datos.</p>"
+      },
+      {
+        id: "network",
+        title: "Actividad de red",
+        html: "<p>Las funciones principales de TechRef — conversión de unidades, cálculo de tolerancias, tablas de referencia, calculadoras y guardado de datos — funcionan totalmente sin conexión. No se necesita conexión a la red para usarlas.</p><p>No hay SDK de analítica, servicios de informes de fallos, SDK de publicidad ni bibliotecas de terceros que transmitan datos.</p><p><strong>La app solo se conecta a la red en los siguientes casos:</strong></p><ul><li><strong>Copia de seguridad y restauración en iCloud</strong> — tus hojas, historial y ajustes se envían a tu propia cuenta de iCloud y se leen de ella al restaurar (consulta <a href='#icloud'>Copia de seguridad en iCloud</a>). La copia automática está activada por defecto y puede desactivarse en Configuración.</li><li><strong>Compra o restauración de la compra dentro de la app</strong> — gestionadas por Apple a través del App Store (consulta <a href='#purchases'>Compras dentro de la app</a>)</li><li><strong>Tocar un enlace de la app</strong> — como la página de soporte, esta política o un sitio web oficial de normas que aparece en Configuración — que se abre en el navegador</li></ul><p><strong>En ninguno de estos casos se envían tus datos al desarrollador.</strong> Las copias de seguridad de iCloud solo van a tu propia cuenta de iCloud. El tráfico de compras va a Apple y no contiene ninguno de los valores que introdujiste en la app.</p><p><strong>Estadísticas de uso recopiladas por Apple.</strong> Como la app se distribuye a través del App Store, Apple, como operador de la plataforma, agrega estadísticas como instalaciones, aperturas, duración de las sesiones y compras, y las facilita al desarrollador de forma anónima y agregada. Si activaste el envío de datos de diagnóstico en los ajustes de iOS, los informes de fallos se facilitan de la misma manera. Todo esto lo gestiona Apple y el desarrollador no puede activarlo ni desactivarlo.</p><p><strong>Lo que estas estadísticas nunca incluyen:</strong> las cotas, tolerancias, nombres de piezas y de puntos de medición, valores medidos, etiquetas, notas, historial de conversiones ni el contenido de las hojas que introduces. La única copia de tus datos que sale del dispositivo es la copia de seguridad de tu propia cuenta de iCloud, a la que el desarrollador no puede acceder. Las estadísticas de Apple le indican al desarrollador que la app se usó, no qué calculaste.</p><p>Aparte de la copia de seguridad en iCloud, tus datos solo salen del dispositivo mediante la copia al portapapeles y la exportación CSV descritas en <a href='#export'>Exportar tus datos</a>, y ambas ocurren solo cuando tú lo decides.</p>"
+      },
+      {
+        id: "icloud",
+        title: "Copia de seguridad en iCloud",
+        html: "<p>TechRef hace copia de seguridad de tus hojas (incluidos los valores medidos), el historial y los ajustes en tu propia cuenta de iCloud, mediante la base de datos privada de CloudKit de Apple. Así puedes recuperar tus datos tras reinstalar la app o cambiar de dispositivo. La copia de seguridad en iCloud es gratuita.</p><ul><li><strong>Dónde se guarda</strong> — en la base de datos privada de tu cuenta de iCloud. Solo puede leerse cuando has iniciado sesión con tu Apple Account. El desarrollador no puede verla, acceder a ella ni eliminarla.</li><li><strong>Cuándo se envía</strong> — con «Copia de seguridad automática» activada (por defecto), poco después de guardar y al cerrar la app. «Hacer copia ahora» en Configuración &gt; iCloud hace la copia de inmediato. Si no has iniciado sesión en iCloud, no se hace ninguna copia.</li><li><strong>Lo que no se copia</strong> — el número de guardados gratuitos usados, la aceptación de los términos, los consejos y tu compra. La compra se restaura aparte desde Apple (consulta <a href='#purchases'>Compras dentro de la app</a>).</li><li><strong>Restauración</strong> — tras reinstalar la app o en un dispositivo nuevo, la app pregunta si quieres restaurar la copia. «Restaurar desde iCloud» en Configuración &gt; iCloud sustituye los datos del dispositivo por la copia.</li></ul><p><strong>Desactivarla y eliminarla.</strong> Puedes desactivar «Copia de seguridad automática» en Configuración &gt; iCloud dentro de la app. La copia ocupa espacio de tu iCloud. Para eliminarla, abre Ajustes &gt; [tu nombre] &gt; iCloud &gt; Gestionar almacenamiento de la cuenta en el dispositivo y elige TechRef.</p><p><strong>Copias del dispositivo.</strong> Aparte de lo anterior, si la copia de seguridad de iCloud está activada en los ajustes del dispositivo, iOS puede incluir los archivos de datos de TechRef en la copia del dispositivo junto con los datos de tus otras apps. Es una función estándar del sistema operativo gestionada íntegramente por Apple. El desarrollador no inicia estas copias ni tiene acceso a ellas.</p><p>Los datos guardados en iCloud se tratan según la <a href='https://www.apple.com/es/legal/privacy/' target='_blank' rel='noopener'>Política de privacidad de Apple</a>.</p>"
+      },
+      {
+        id: "export",
+        title: "Exportar tus datos",
+        html: "<p>TechRef te permite sacar tus datos de la app de dos formas:</p><ul><li><strong>Copiar</strong> — los resultados de conversión, los datos de las hojas o los valores medidos se copian al portapapeles del sistema</li><li><strong>Guardar en Archivos</strong> — se escribe un archivo CSV en la ubicación que elijas en la app Archivos</li></ul><p>Ambas acciones las inicias tú y la app no envía datos a ningún sitio por su cuenta. Una vez que los datos salen de la app, su tratamiento — incluido dónde los pegas, a quién los envías y el almacenamiento en la nube que elijas en la app Archivos — queda fuera del control de la app y es tu responsabilidad.</p><p>Si trabajas con datos dimensionales que tu organización considera confidenciales, sigue tus normas internas al exportar y al decidir si usar la copia de seguridad en iCloud.</p>"
+      },
+      {
+        id: "advertising",
+        title: "Publicidad y seguimiento",
+        html: "<p>TechRef <strong>no contiene publicidad</strong>.</p><p>La app no usa el identificador de publicidad (IDFA), no solicita el permiso de App Tracking Transparency y no te rastrea entre apps ni sitios web. No hay elaboración de perfiles, análisis de comportamiento ni relación alguna con intermediarios de datos.</p><p>Es una decisión de diseño, no algo temporal. TechRef es una herramienta profesional y no incluirá publicidad.</p>"
+      },
+      {
+        id: "purchases",
+        title: "Compras dentro de la app",
+        html: "<p>TechRef se descarga gratis. La conversión de unidades, el cálculo de tolerancias, las tablas de brocas, la calculadora de velocidad de corte y avance, los valores medidos y la copia de seguridad en iCloud pueden usarse sin límite de uso, compres o no.</p><p>Guardar nuevas cotas en el historial y las hojas es gratis hasta cierto número de guardados. A partir de ahí, la frecuencia de guardado está limitada. Una compra única (no consumible) dentro de la app, TechRef Pro, elimina ese límite para siempre y desbloquea funciones adicionales, como más tablas de referencia y las calculadoras de ingeniería. <strong>El número concreto, el tipo de límite, las funciones incluidas y el precio se muestran en la página del producto en el App Store y en la pantalla de compra de la app.</strong></p><p>Todo el procesamiento de pagos lo realiza Apple a través del App Store. El desarrollador no recibe tus datos de pago, de tarjeta ni ninguna información personal asociada a la transacción. Consulta la <a href='https://www.apple.com/es/legal/privacy/' target='_blank' rel='noopener'>Política de privacidad de Apple</a> para saber cómo trata Apple esos datos.</p><p><strong>Restaurar una compra.</strong> La compra está vinculada a tu Apple Account, no a un dispositivo concreto, y no forma parte de la copia de seguridad en iCloud. «Restaurar compras» en Configuración pregunta a Apple si esa cuenta tiene la compra. La consulta se realiza entre tu dispositivo y Apple; el desarrollador no guarda ni recibe tu Apple Account. Úsala para recuperar tu compra tras cambiar de dispositivo o reinstalar la app.</p><p>Cualquier cambio de este tipo se reflejará en esta página antes de que entre en vigor.</p>"
+      },
+      {
+        id: "sharing",
+        title: "Compartir información",
+        html: "<p>El desarrollador no vende, comparte ni transfiere información de los usuarios a terceros, por la sencilla razón de que no recopila ninguna.</p><p>No hay datos que revelar a anunciantes, proveedores de analítica ni intermediarios de datos. Tu copia de seguridad de iCloud la guarda Apple en tu propia cuenta de iCloud y el desarrollador no puede acceder a ella. Ante un requerimiento legalmente vinculante de una autoridad competente, el desarrollador no dispone de datos de usuarios que pueda aportar.</p>"
+      },
+      {
+        id: "children",
+        title: "Privacidad de los menores",
+        html: "<p>TechRef es una herramienta profesional de ingeniería y no está dirigida a menores.</p><p>Aun así, como la app no recopila información personal de nadie, de ninguna edad, no plantea problemas de privacidad de menores. No hay datos que proteger, compartir ni eliminar, de ningún usuario.</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "Aviso legal",
+        html: "<div class='lead-note'><p>TechRef es una herramienta de consulta y cálculo. No sustituye a las normas oficiales, al criterio técnico ni a mediciones verificadas.</p></div><p><strong>Solo información de referencia.</strong> Los factores de conversión, las tablas de referencia, los datos de materiales y los resultados de cálculo que ofrece la app son información de referencia recopilada a partir de la información de normas publicada oficialmente y de sus definiciones. No son datos certificados y no se garantiza su exactitud, integridad ni idoneidad para un fin concreto.</p><p><strong>La verificación es tu responsabilidad.</strong> Antes de aplicar cualquier valor de la app al diseño, el mecanizado, la inspección o las compras, debes verificarlo con la norma oficial aplicable, el plano de referencia y los procedimientos internos de tu organización. La app está pensada para ayudar en ese proceso, no para sustituirlo.</p><p><strong>Límites del cálculo de tolerancias.</strong> El valor central y el intervalo que muestra la app son el resultado de operaciones aritméticas con los valores que introduces. El cálculo no tiene en cuenta el método de mecanizado, el estado de las herramientas, la incertidumbre de medición, las propiedades del material, la dilatación térmica, la clase de ajuste ni ningún otro factor físico o de proceso. Un valor central matemáticamente correcto no es necesariamente un ajuste adecuado de la máquina.</p><p><strong>Límites de las calculadoras de ingeniería.</strong> Las calculadoras usan fórmulas sencillas de libro de texto en condiciones ideales, como sección uniforme, comportamiento elástico lineal y las condiciones de apoyo y carga indicadas. No comprueban el pandeo, la fatiga, la concentración de tensiones ni otros modos de fallo. Sus resultados no sustituyen una comprobación de resistencia hecha por una persona cualificada ni un coeficiente de seguridad adecuado.</p><p><strong>Datos de materiales.</strong> En las tablas de materiales, los valores con ≥ o ≤ son límites recopilados a partir de la información de normas publicada oficialmente. Todos los demás valores, incluidos la densidad, el módulo de Young y la dilatación térmica, son valores representativos y no están garantizados. Las valoraciones de resistencia a la corrosión y a los productos químicos son valoraciones relativas propias de TechRef. Las propiedades reales dependen del grado, el estado, la forma, el tamaño y el proveedor; comprueba el certificado del material, la hoja de datos del fabricante o la norma aplicable.</p><p><strong>Redondeo y precisión de la visualización.</strong> Los resultados se redondean al número de decimales elegido en Configuración. El redondeo puede introducir errores y los valores mostrados pueden diferir del resultado interno con precisión completa. Elige una precisión adecuada a tu banda de tolerancia.</p><p><strong>Selección de unidades.</strong> Eres responsable de elegir la unidad y la categoría correctas para tus datos. La app no puede detectar una unidad mal asignada.</p><p><strong>Limitación de responsabilidad.</strong> En la máxima medida permitida por la ley aplicable, el desarrollador no será responsable de ningún daño directo, indirecto, incidental o consecuente derivado del uso o de la imposibilidad de usar la app, incluidos, entre otros, piezas defectuosas, retrabajos, retrasos de producción, daños en equipos, lesiones personales o pérdidas económicas.</p><p><strong>Disponibilidad.</strong> Las actualizaciones de iOS, los cambios en el entorno del dispositivo o la disponibilidad de iCloud pueden afectar al funcionamiento de la app sin previo aviso. El desarrollador puede modificar o retirar la app sin previo aviso y no es responsable de la pérdida de datos derivada de dichos cambios, incluidos los datos de las copias de seguridad de iCloud. Guarda tus propias copias de los datos importantes, por ejemplo con la exportación CSV.</p>"
+      },
+      {
+        id: "law",
+        title: "Legislación aplicable",
+        html: "<p>Esta política se rige por las leyes de Japón. Cualquier controversia relacionada con esta política se someterá a la jurisdicción exclusiva, en primera instancia, del tribunal competente para el domicilio del desarrollador.</p>"
+      },
+      {
+        id: "changes",
+        title: "Cambios en esta política",
+        html: "<p>Esta política puede actualizarse a medida que evoluciona la app. La versión revisada entra en vigor cuando se publica en esta página, y la fecha de vigencia de la parte superior se actualiza en consecuencia.</p><p>Como no se recopilan datos, los cambios en esta política no pueden afectar a datos que ya se tengan sobre ti. Si un cambio afecta de forma sustancial al funcionamiento de la app — por ejemplo, la introducción de compras dentro de la app o de la copia de seguridad en iCloud — se publicará aquí antes de que llegue a los usuarios.</p>"
+      },
+      {
+        id: "contact",
+        title: "Contacto",
+        html: "<p>Las preguntas, correcciones y sugerencias de funciones son bienvenidas. Si encuentras un error en un factor de conversión o en una tabla de referencia, comunícalo: los avisos sobre exactitud tienen prioridad.</p><div class='contact-box'><p>Sitio web / formulario de contacto: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Correo electrónico: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "de": {
+    meta: {
+      langName: "Deutsch",
+      selectLabel: "Sprache",
+      pageTitle: "Datenschutzerklärung & Haftungsausschluss",
+      subtitle: "TechRef speichert deine Daten auf deinem Gerät und sichert sie nur in deinem eigenen iCloud-Account. Nichts, was du eingibst, wird jemals an den Entwickler oder an andere gesendet. Diese Seite erklärt genau, was das bedeutet und wo die Grenzen bei der Verwendung der Ergebnisse der App liegen.",
+      updatedLabel: "Gültig ab",
+      updatedDate: "13. Oktober 2026",
+      footer: {
+        ariaGithub: "GitHub (öffnet in einem neuen Tab)",
+        ariaX: "X, ehemals Twitter (öffnet in einem neuen Tab)",
+        ariaInstagram: "Instagram (öffnet in einem neuen Tab)",
+        ariaTop: "Zurück zum Seitenanfang",
+        ariaLegal: "Rechtliche Hinweise",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Startseite von Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "Einleitung",
+        html: "<p>Dies ist die Datenschutzerklärung und der Haftungsausschluss für <strong>TechRef</strong>, eine iOS-App von Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef ist ein Werkzeug für Einheitenumrechnung, technische Nachschlagetabellen und Berechnungen für Fachleute. Es beruht auf einem einfachen Grundsatz: Deine Daten gehören dir. Sie bleiben auf deinem Gerät und in deinem eigenen iCloud-Account, und der Entwickler erhält sie nie.</p><p>Bitte lies diese Seite, bevor du die App verwendest. Der Abschnitt <a href='#disclaimer'>Haftungsausschluss</a> beschreibt wichtige Einschränkungen bei der Verwendung der Ergebnisse der App.</p>"
+      },
+      {
+        id: "storage",
+        title: "Auf deinem Gerät gespeicherte Daten",
+        html: "<div class='zero-data'><p>Alle Daten, die du eingibst, bleiben auf deinem Gerät und in deinem eigenen iCloud-Account. TechRef hat keinen eigenen Server, und nichts wird an den Entwickler übertragen.</p></div><p>TechRef speichert auf deinem Gerät:</p><ul><li>Umrechnungsverlauf (Werte, Toleranzen, Einheiten, Bezeichnungen, Notizen, Zeitstempel)</li><li>Daten der Messblätter (Teilenamen, Namen der Messpunkte, Maße, Messwerte, Notizen)</li><li>App-Einstellungen (Nachkommastellen, Darstellung, Sprache, die angezeigten Einheiten, Tabellen, Werkstoffe und weiteren Elemente sowie die Einheiten der Rechner)</li><li>Informationen, die die App für den korrekten Betrieb braucht (Anzahl der genutzten kostenlosen Speicherungen, Zustimmung zu den Bedingungen, bereits angezeigte Tipps)</li></ul><p>In den Rechnern eingegebene Werte bleiben nur erhalten, solange der Rechner geöffnet ist, und werden nicht gespeichert.</p><p>Verlauf und Messblätter werden als Dateien im Ordner Application Support der App gespeichert. Einstellungen werden im Standardspeicher für iOS-Einstellungen abgelegt. Wenn du die App löschst, werden alle diese Daten von deinem Gerät entfernt. Eine Sicherung in deinem iCloud-Account wird mit der App nicht gelöscht; siehe <a href='#icloud'>iCloud-Sicherung</a>.</p><p>Der Entwickler hat auf keine dieser Daten Zugriff.</p>"
+      },
+      {
+        id: "network",
+        title: "Netzwerkaktivität",
+        html: "<p>Die Kernfunktionen von TechRef — Einheitenumrechnung, Toleranzberechnung, Nachschlagetabellen, Rechner und das Speichern deiner Daten — funktionieren vollständig offline. Für ihre Nutzung ist keine Netzwerkverbindung nötig.</p><p>Es gibt keine Analyse-SDKs, keine Absturzberichtsdienste, keine Werbe-SDKs und keine Bibliotheken von Drittanbietern, die Daten übertragen.</p><p><strong>Die App selbst verbindet sich nur in folgenden Fällen mit dem Netzwerk:</strong></p><ul><li><strong>iCloud-Sicherung und -Wiederherstellung</strong> — Messblätter, Verlauf und Einstellungen werden an deinen eigenen iCloud-Account gesendet und beim Wiederherstellen von dort gelesen (siehe <a href='#icloud'>iCloud-Sicherung</a>). Die automatische Sicherung ist standardmäßig eingeschaltet und kann in den Einstellungen ausgeschaltet werden.</li><li><strong>Kauf oder Wiederherstellung des In-App-Kaufs</strong> — wird von Apple über den App Store abgewickelt (siehe <a href='#purchases'>In-App-Käufe</a>)</li><li><strong>Tippen auf einen Link in der App</strong> — etwa die Supportseite, diese Erklärung oder eine offizielle Normen-Website aus den Einstellungen —, der im Browser geöffnet wird</li></ul><p><strong>In keinem dieser Fälle werden deine Daten an den Entwickler gesendet.</strong> iCloud-Sicherungen gehen nur an deinen eigenen iCloud-Account. Der Datenverkehr beim Kauf geht an Apple und enthält keinen der Werte, die du in der App eingegeben hast.</p><p><strong>Von Apple erhobene Nutzungsstatistiken.</strong> Da die App über den App Store vertrieben wird, fasst Apple als Plattformbetreiber Statistiken wie Installationen, Starts, Sitzungsdauer und Käufe zusammen und stellt sie dem Entwickler anonymisiert und aggregiert bereit. Wenn du in den iOS-Einstellungen das Teilen von Analysedaten aktiviert hast, werden Absturzberichte auf die gleiche Weise bereitgestellt. All dies wird von Apple verwaltet; der Entwickler kann es weder ein- noch ausschalten.</p><p><strong>Was diese Statistiken nie enthalten:</strong> die Maße, Toleranzen, Teilenamen, Namen der Messpunkte, Messwerte, Bezeichnungen, Notizen, den Umrechnungsverlauf oder die Inhalte der Messblätter, die du eingibst. Die einzige Kopie deiner Daten, die dein Gerät verlässt, ist die Sicherung in deinem eigenen iCloud-Account, auf die der Entwickler keinen Zugriff hat. Apples Statistiken zeigen dem Entwickler, dass die App benutzt wurde — nicht, was du berechnet hast.</p><p>Abgesehen von der iCloud-Sicherung verlassen deine Daten das Gerät nur über das Kopieren in die Zwischenablage und den CSV-Export, die unter <a href='#export'>Export deiner Daten</a> beschrieben sind, und beides geschieht nur, wenn du es willst.</p>"
+      },
+      {
+        id: "icloud",
+        title: "iCloud-Sicherung",
+        html: "<p>TechRef sichert deine Messblätter (einschließlich Messwerten), deinen Verlauf und deine Einstellungen in deinem eigenen iCloud-Account, über die private Datenbank von Apples CloudKit. So kannst du deine Daten nach einer Neuinstallation der App oder auf einem neuen Gerät wiederherstellen. Die iCloud-Sicherung ist kostenlos.</p><ul><li><strong>Wo sie gespeichert wird</strong> — in der privaten Datenbank deines iCloud-Accounts. Sie kann nur gelesen werden, wenn du mit deinem Apple Account angemeldet bist. Der Entwickler kann sie weder einsehen noch darauf zugreifen oder sie löschen.</li><li><strong>Wann sie gesendet wird</strong> — bei eingeschaltetem „Automatisch sichern“ (Standard) kurz nach dem Speichern und beim Schließen der App. „Jetzt sichern“ unter Einstellungen &gt; iCloud sichert sofort. Wenn du nicht bei iCloud angemeldet bist, wird nichts gesichert.</li><li><strong>Was nicht gesichert wird</strong> — die Anzahl der genutzten kostenlosen Speicherungen, deine Zustimmung zu den Bedingungen, Tipps und dein Kauf. Ein Kauf wird separat über Apple wiederhergestellt (siehe <a href='#purchases'>In-App-Käufe</a>).</li><li><strong>Wiederherstellen</strong> — nach einer Neuinstallation der App oder auf einem neuen Gerät fragt die App, ob die Sicherung wiederhergestellt werden soll. „Aus iCloud wiederherstellen“ unter Einstellungen &gt; iCloud ersetzt die Daten auf dem Gerät durch die Sicherung.</li></ul><p><strong>Ausschalten und Löschen.</strong> Du kannst „Automatisch sichern“ in der App unter Einstellungen &gt; iCloud ausschalten. Die Sicherung belegt deinen iCloud-Speicher. Um sie zu löschen, öffne auf deinem Gerät Einstellungen &gt; [dein Name] &gt; iCloud &gt; Accountspeicher verwalten und wähle TechRef.</p><p><strong>Gerätesicherungen.</strong> Unabhängig davon kann iOS die Datendateien von TechRef zusammen mit den Daten deiner anderen Apps in die Gerätesicherung aufnehmen, wenn die iCloud-Sicherung in den Geräteeinstellungen aktiviert ist. Dies ist eine Standardfunktion des Betriebssystems, die vollständig von Apple verwaltet wird. Der Entwickler startet diese Sicherungen nicht und hat keinen Zugriff darauf.</p><p>In iCloud gespeicherte Daten werden gemäß der <a href='https://www.apple.com/de/legal/privacy/' target='_blank' rel='noopener'>Datenschutzrichtlinie von Apple</a> behandelt.</p>"
+      },
+      {
+        id: "export",
+        title: "Export deiner Daten",
+        html: "<p>Mit TechRef kannst du deine Daten auf zwei Arten aus der App mitnehmen:</p><ul><li><strong>Kopieren</strong> — Umrechnungsergebnisse, Daten der Messblätter oder Messwerte werden in die Zwischenablage gelegt</li><li><strong>In „Dateien“ sichern</strong> — eine CSV-Datei wird an einem Ort gespeichert, den du in der App „Dateien“ wählst</li></ul><p>Beide Aktionen startest du selbst, und die App sendet von sich aus keine Daten. Sobald Daten die App verlassen, liegt ihr Umgang — einschließlich wo du sie einfügst, an wen du sie sendest und welchen Cloud-Speicher du in der App „Dateien“ wählst — außerhalb der Kontrolle der App und in deiner Verantwortung.</p><p>Wenn du mit Maßdaten arbeitest, die deine Organisation als vertraulich behandelt, halte dich beim Export und bei der Entscheidung über die iCloud-Sicherung an deine internen Richtlinien.</p>"
+      },
+      {
+        id: "advertising",
+        title: "Werbung und Tracking",
+        html: "<p>TechRef enthält <strong>keine Werbung</strong>.</p><p>Die App verwendet keine Werbe-ID (IDFA), fragt keine Erlaubnis für App-Tracking-Transparenz an und verfolgt dich nicht über Apps oder Websites hinweg. Es gibt kein Profiling, keine Verhaltensanalyse und keinerlei Beziehung zu Datenhändlern.</p><p>Das ist eine bewusste Entscheidung, kein vorübergehender Zustand. TechRef ist ein professionelles Werkzeug und wird keine Werbung enthalten.</p>"
+      },
+      {
+        id: "purchases",
+        title: "In-App-Käufe",
+        html: "<p>TechRef ist kostenlos erhältlich. Einheitenumrechnung, Toleranzberechnung, die Bohrertabellen, der Rechner für Schnittgeschwindigkeit und Vorschub, Messwerte und die iCloud-Sicherung können unabhängig von einem Kauf ohne Nutzungsbeschränkung verwendet werden.</p><p>Das Speichern neuer Maße im Verlauf und in Messblättern ist bis zu einer bestimmten Anzahl kostenlos. Danach ist die Häufigkeit des Speicherns begrenzt. Ein einmaliger (nicht verbrauchbarer) In-App-Kauf, TechRef Pro, hebt diese Begrenzung dauerhaft auf und schaltet zusätzliche Funktionen frei, etwa weitere Nachschlagetabellen und die technischen Rechner. <strong>Die genaue Anzahl, die Art der Begrenzung, die enthaltenen Funktionen und der Preis werden auf der Produktseite im App Store und auf dem Kaufbildschirm in der App angezeigt.</strong></p><p>Die gesamte Zahlungsabwicklung erfolgt durch Apple über den App Store. Der Entwickler erhält weder deine Zahlungsdaten noch Kartendaten noch personenbezogene Daten zur Transaktion. Wie Apple mit diesen Daten umgeht, steht in der <a href='https://www.apple.com/de/legal/privacy/' target='_blank' rel='noopener'>Datenschutzrichtlinie von Apple</a>.</p><p><strong>Kauf wiederherstellen.</strong> Ein Kauf ist an deinen Apple Account gebunden, nicht an ein bestimmtes Gerät, und ist nicht Teil der iCloud-Sicherung. „Käufe wiederherstellen“ in den Einstellungen fragt bei Apple an, ob dieser Account den Kauf besitzt. Die Abfrage erfolgt zwischen deinem Gerät und Apple; der Entwickler speichert oder erhält deinen Apple Account nicht. Verwende sie, um deinen Kauf nach einem Gerätewechsel oder einer Neuinstallation wiederherzustellen.</p><p>Jede Änderung dieser Art wird auf dieser Seite veröffentlicht, bevor sie in Kraft tritt.</p>"
+      },
+      {
+        id: "sharing",
+        title: "Weitergabe von Informationen",
+        html: "<p>Der Entwickler verkauft, teilt oder überträgt keine Nutzerdaten an Dritte — aus dem einfachen Grund, dass überhaupt keine Nutzerdaten erhoben werden.</p><p>Es gibt keine Daten, die an Werbetreibende, Analyseanbieter oder Datenhändler weitergegeben werden könnten. Deine iCloud-Sicherung wird von Apple in deinem eigenen iCloud-Account gespeichert, und der Entwickler hat keinen Zugriff darauf. Bei einer rechtsverbindlichen Anfrage einer zuständigen Behörde verfügt der Entwickler über keine Nutzerdaten, die herausgegeben werden könnten.</p>"
+      },
+      {
+        id: "children",
+        title: "Datenschutz von Kindern",
+        html: "<p>TechRef ist ein professionelles technisches Werkzeug und richtet sich nicht an Kinder.</p><p>Da die App von niemandem, gleich welchen Alters, personenbezogene Daten erhebt, entstehen ohnehin keine Bedenken hinsichtlich des Datenschutzes von Kindern. Es gibt für keinen Nutzer Daten, die geschützt, weitergegeben oder gelöscht werden müssten.</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "Haftungsausschluss",
+        html: "<div class='lead-note'><p>TechRef ist ein Nachschlage- und Rechenwerkzeug. Es ersetzt weder offizielle Normen noch fachliches Urteil noch geprüfte Messungen.</p></div><p><strong>Nur Referenzinformationen.</strong> Umrechnungsfaktoren, Nachschlagetabellen, Werkstoffdaten und Berechnungsergebnisse der App sind Referenzinformationen, zusammengestellt anhand offiziell veröffentlichter Normeninformationen und Definitionen. Es handelt sich nicht um zertifizierte Daten, und es wird keine Gewähr für Richtigkeit, Vollständigkeit oder Eignung für einen bestimmten Zweck übernommen.</p><p><strong>Die Prüfung liegt in deiner Verantwortung.</strong> Bevor du einen Wert aus der App für Konstruktion, Fertigung, Prüfung oder Beschaffung verwendest, musst du ihn anhand der geltenden offiziellen Norm, der maßgeblichen Zeichnung und der internen Verfahren deiner Organisation prüfen. Die App soll diesen Prozess unterstützen, nicht ersetzen.</p><p><strong>Grenzen der Toleranzberechnung.</strong> Der von der App angezeigte Mittelwert und Bereich sind das Ergebnis einer Rechnung mit den von dir eingegebenen Werten. Die Berechnung berücksichtigt weder Fertigungsverfahren, Werkzeugzustand, Messunsicherheit, Werkstoffeigenschaften, Wärmeausdehnung, Passungsklasse noch andere physikalische oder prozessbedingte Faktoren. Ein mathematisch korrekter Mittelwert ist nicht unbedingt eine geeignete Maschineneinstellung.</p><p><strong>Grenzen der technischen Rechner.</strong> Die Rechner verwenden einfache Lehrbuchformeln unter idealisierten Bedingungen, etwa gleichbleibender Querschnitt, linear-elastisches Verhalten und die angezeigten Lager- und Lastfälle. Knicken, Ermüdung, Kerbwirkung und andere Versagensarten werden nicht geprüft. Die Ergebnisse ersetzen keinen Festigkeitsnachweis durch eine qualifizierte Person und keinen angemessenen Sicherheitsfaktor.</p><p><strong>Werkstoffdaten.</strong> In den Werkstofftabellen sind Werte mit ≥ oder ≤ Grenzwerte, zusammengestellt anhand offiziell veröffentlichter Normeninformationen. Alle anderen Werte, einschließlich Dichte, Elastizitätsmodul und Wärmeausdehnung, sind typische Werte und nicht garantiert. Die Bewertungen der Korrosions- und Chemikalienbeständigkeit sind eigene relative Bewertungen von TechRef. Die tatsächlichen Eigenschaften hängen von Sorte, Zustand, Form, Abmessung und Lieferant ab; prüfe das Werkszeugnis, das Datenblatt des Herstellers oder die geltende Norm.</p><p><strong>Rundung und Anzeigegenauigkeit.</strong> Ergebnisse werden auf die in den Einstellungen gewählte Anzahl von Nachkommastellen gerundet. Durch Rundung können Fehler entstehen, und angezeigte Werte können vom intern genau berechneten Ergebnis abweichen. Wähle eine Genauigkeit, die zu deinem Toleranzband passt.</p><p><strong>Wahl der Einheit.</strong> Du bist dafür verantwortlich, für deine Eingabe die richtige Einheit und Kategorie zu wählen. Die App kann eine falsch zugeordnete Einheit nicht erkennen.</p><p><strong>Haftungsbeschränkung.</strong> Soweit nach geltendem Recht zulässig, haftet der Entwickler nicht für direkte, indirekte, zufällige oder Folgeschäden, die aus der Nutzung oder Nichtnutzbarkeit der App entstehen — insbesondere nicht für fehlerhafte Teile, Nacharbeit, Produktionsverzögerungen, Geräteschäden, Personenschäden oder wirtschaftliche Verluste.</p><p><strong>Verfügbarkeit.</strong> iOS-Updates, Änderungen der Geräteumgebung oder die Verfügbarkeit von iCloud können das Verhalten der App ohne Vorankündigung beeinflussen. Der Entwickler kann die App ohne Vorankündigung ändern oder einstellen und haftet nicht für daraus entstehenden Datenverlust, einschließlich Daten in iCloud-Sicherungen. Bewahre eigene Kopien wichtiger Daten auf, zum Beispiel per CSV-Export.</p>"
+      },
+      {
+        id: "law",
+        title: "Anwendbares Recht",
+        html: "<p>Diese Erklärung unterliegt japanischem Recht. Für alle Streitigkeiten im Zusammenhang mit dieser Erklärung ist in erster Instanz ausschließlich das für den Sitz des Entwicklers zuständige Gericht zuständig.</p>"
+      },
+      {
+        id: "changes",
+        title: "Änderungen dieser Erklärung",
+        html: "<p>Diese Erklärung kann mit der Weiterentwicklung der App aktualisiert werden. Die überarbeitete Fassung tritt mit ihrer Veröffentlichung auf dieser Seite in Kraft, und das Gültigkeitsdatum oben auf der Seite wird entsprechend angepasst.</p><p>Da keine Daten erhoben werden, können Änderungen dieser Erklärung keine bereits über dich gespeicherten Daten betreffen. Wenn eine Änderung das Verhalten der App wesentlich beeinflusst — zum Beispiel die Einführung von In-App-Käufen oder der iCloud-Sicherung —, wird sie hier veröffentlicht, bevor sie die Nutzer erreicht.</p>"
+      },
+      {
+        id: "contact",
+        title: "Kontakt",
+        html: "<p>Fragen, Korrekturen und Funktionswünsche sind willkommen. Wenn du einen Fehler in einem Umrechnungsfaktor oder einer Nachschlagetabelle findest, melde ihn bitte — Hinweise zur Genauigkeit werden vorrangig bearbeitet.</p><div class='contact-box'><p>Website / Kontaktformular: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-Mail: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "fr": {
+    meta: {
+      langName: "Français",
+      selectLabel: "Langue",
+      pageTitle: "Politique de confidentialité et avertissement",
+      subtitle: "TechRef conserve vos données sur votre appareil et ne les sauvegarde que dans votre propre compte iCloud. Rien de ce que vous saisissez n’est jamais envoyé au développeur ni à qui que ce soit. Cette page explique précisément ce que cela signifie, ainsi que les limites d’utilisation des résultats de l’app.",
+      updatedLabel: "En vigueur depuis le",
+      updatedDate: "13 octobre 2026",
+      footer: {
+        ariaGithub: "GitHub (s’ouvre dans un nouvel onglet)",
+        ariaX: "X, anciennement Twitter (s’ouvre dans un nouvel onglet)",
+        ariaInstagram: "Instagram (s’ouvre dans un nouvel onglet)",
+        ariaTop: "Retour en haut de la page",
+        ariaLegal: "Informations légales",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Page d’accueil de Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "Introduction",
+        html: "<p>Voici la politique de confidentialité et l’avertissement de <strong>TechRef</strong>, une app iOS développée par Flying Dev Lab (空飛ぶ研究室).</p><p>TechRef est un outil de conversion d’unités, de référence technique et de calcul destiné aux professionnels. Il repose sur un principe simple : vos données vous appartiennent. Elles restent sur votre appareil et dans votre propre compte iCloud, et le développeur ne les reçoit jamais.</p><p>Veuillez lire cette page avant d’utiliser l’app. La section <a href='#disclaimer'>Avertissement</a> décrit des limites importantes quant à l’utilisation des résultats de l’app.</p>"
+      },
+      {
+        id: "storage",
+        title: "Données enregistrées sur votre appareil",
+        html: "<div class='zero-data'><p>Toutes les données que vous saisissez restent sur votre appareil et dans votre propre compte iCloud. TechRef n’a pas de serveur propre, et rien n’est transmis au développeur.</p></div><p>TechRef enregistre sur votre appareil :</p><ul><li>L’historique des conversions (valeurs, tolérances, unités, libellés, notes, horodatages)</li><li>Les données des fiches (noms des pièces, noms des points de mesure, cotes, valeurs mesurées, notes)</li><li>Les réglages de l’app (décimales, apparence, langue, unités, tableaux, matériaux et autres éléments que vous choisissez d’afficher, unités des calculateurs)</li><li>Les informations nécessaires au bon fonctionnement de l’app (nombre d’enregistrements gratuits utilisés, acceptation des conditions, conseils déjà affichés)</li></ul><p>Les valeurs saisies dans les calculateurs ne sont conservées que tant que le calculateur est ouvert et ne sont pas enregistrées.</p><p>L’historique et les fiches sont enregistrés sous forme de fichiers dans le dossier Application Support de l’app. Les réglages sont enregistrés dans le stockage standard des préférences d’iOS. La suppression de l’app efface toutes ces données de votre appareil. Une sauvegarde dans votre compte iCloud n’est pas supprimée avec l’app ; voir <a href='#icloud'>Sauvegarde iCloud</a>.</p><p>Le développeur n’a accès à aucune de ces données.</p>"
+      },
+      {
+        id: "network",
+        title: "Activité réseau",
+        html: "<p>Les fonctions principales de TechRef — conversion d’unités, calcul de tolérances, tableaux de référence, calculateurs et enregistrement de vos données — fonctionnent entièrement hors ligne. Aucune connexion réseau n’est nécessaire pour les utiliser.</p><p>Il n’y a aucun SDK d’analyse, aucun service de rapport de plantage, aucun SDK publicitaire et aucune bibliothèque tierce qui transmet des données.</p><p><strong>L’app elle-même ne se connecte au réseau que dans les cas suivants :</strong></p><ul><li><strong>Sauvegarde et restauration iCloud</strong> — vos fiches, votre historique et vos réglages sont envoyés vers votre propre compte iCloud et relus depuis celui-ci lors d’une restauration (voir <a href='#icloud'>Sauvegarde iCloud</a>). La sauvegarde automatique est activée par défaut et peut être désactivée dans les Réglages.</li><li><strong>Achat ou restauration de l’achat intégré</strong> — traités par Apple via l’App Store (voir <a href='#purchases'>Achats intégrés</a>)</li><li><strong>Toucher un lien dans l’app</strong> — par exemple la page d’assistance, cette politique ou un site officiel de normes indiqué dans les Réglages — qui s’ouvre dans votre navigateur</li></ul><p><strong>Dans aucun de ces cas vos données ne sont envoyées au développeur.</strong> Les sauvegardes iCloud vont uniquement vers votre propre compte iCloud. Le trafic lié aux achats va vers Apple et ne contient aucune des valeurs saisies dans l’app.</p><p><strong>Statistiques d’utilisation collectées par Apple.</strong> L’app étant distribuée via l’App Store, Apple, en tant qu’exploitant de la plateforme, agrège des statistiques telles que les installations, les lancements, la durée des sessions et les achats, et les fournit au développeur sous forme anonyme et agrégée. Si vous avez activé le partage des données de diagnostic dans les réglages d’iOS, les rapports de plantage sont fournis de la même manière. Tout cela est géré par Apple, et le développeur ne peut ni l’activer ni le désactiver.</p><p><strong>Ce que ces statistiques n’incluent jamais :</strong> les cotes, tolérances, noms de pièces et de points de mesure, valeurs mesurées, libellés, notes, l’historique des conversions ou le contenu des fiches que vous saisissez. La seule copie de vos données qui quitte votre appareil est la sauvegarde dans votre propre compte iCloud, à laquelle le développeur n’a pas accès. Les statistiques d’Apple indiquent au développeur que l’app a été utilisée — pas ce que vous avez calculé.</p><p>En dehors de la sauvegarde iCloud, vos données ne quittent l’appareil que par la copie dans le presse-papiers et l’export CSV décrits dans <a href='#export'>Exporter vos données</a>, et uniquement lorsque vous le décidez.</p>"
+      },
+      {
+        id: "icloud",
+        title: "Sauvegarde iCloud",
+        html: "<p>TechRef sauvegarde vos fiches (y compris les valeurs mesurées), votre historique et vos réglages dans votre propre compte iCloud, à l’aide de la base de données privée de CloudKit d’Apple. Vous pouvez ainsi récupérer vos données après une réinstallation de l’app ou sur un nouvel appareil. La sauvegarde iCloud est gratuite.</p><ul><li><strong>Où elle est stockée</strong> — dans la base de données privée de votre compte iCloud. Elle ne peut être lue que lorsque vous êtes connecté avec votre compte Apple. Le développeur ne peut ni la voir, ni y accéder, ni la supprimer.</li><li><strong>Quand elle est envoyée</strong> — avec « Sauvegarder automatiquement » activé (par défaut), peu après chaque enregistrement et à la fermeture de l’app. « Sauvegarder maintenant » dans Réglages &gt; iCloud sauvegarde immédiatement. Si vous n’êtes pas connecté à iCloud, rien n’est sauvegardé.</li><li><strong>Ce qui n’est pas sauvegardé</strong> — le nombre d’enregistrements gratuits utilisés, l’acceptation des conditions, les conseils et votre achat. Un achat se restaure séparément auprès d’Apple (voir <a href='#purchases'>Achats intégrés</a>).</li><li><strong>Restauration</strong> — après une réinstallation de l’app ou sur un nouvel appareil, l’app vous demande si vous voulez restaurer la sauvegarde. « Restaurer depuis iCloud » dans Réglages &gt; iCloud remplace les données de l’appareil par la sauvegarde.</li></ul><p><strong>Désactiver et supprimer.</strong> Vous pouvez désactiver « Sauvegarder automatiquement » dans Réglages &gt; iCloud dans l’app. La sauvegarde utilise votre stockage iCloud. Pour la supprimer, ouvrez Réglages &gt; [votre nom] &gt; iCloud &gt; Gérer le stockage du compte sur votre appareil et choisissez TechRef.</p><p><strong>Sauvegardes de l’appareil.</strong> Indépendamment de ce qui précède, si la sauvegarde iCloud est activée dans les réglages de votre appareil, iOS peut inclure les fichiers de données de TechRef dans la sauvegarde de l’appareil, avec les données de vos autres apps. Il s’agit d’une fonction standard du système d’exploitation entièrement gérée par Apple. Le développeur ne déclenche pas ces sauvegardes et n’y a pas accès.</p><p>Les données stockées dans iCloud sont traitées conformément à la <a href='https://www.apple.com/fr/legal/privacy/' target='_blank' rel='noopener'>Politique de confidentialité d’Apple</a>.</p>"
+      },
+      {
+        id: "export",
+        title: "Exporter vos données",
+        html: "<p>TechRef vous permet de sortir vos données de l’app de deux façons :</p><ul><li><strong>Copier</strong> — les résultats de conversion, les données des fiches ou les valeurs mesurées sont placés dans le presse-papiers du système</li><li><strong>Enregistrer dans Fichiers</strong> — un fichier CSV est écrit à l’emplacement que vous choisissez dans l’app Fichiers</li></ul><p>Ces deux actions sont déclenchées par vous, et l’app n’envoie aucune donnée de sa propre initiative. Une fois les données sorties de l’app, leur traitement — y compris l’endroit où vous les collez, les personnes à qui vous les envoyez et le stockage cloud choisi dans l’app Fichiers — échappe au contrôle de l’app et relève de votre responsabilité.</p><p>Si vous travaillez avec des données dimensionnelles que votre organisation considère comme confidentielles, suivez vos règles internes pour l’export et pour décider d’utiliser ou non la sauvegarde iCloud.</p>"
+      },
+      {
+        id: "advertising",
+        title: "Publicité et suivi",
+        html: "<p>TechRef ne contient <strong>aucune publicité</strong>.</p><p>L’app n’utilise pas l’identifiant publicitaire (IDFA), ne demande pas l’autorisation App Tracking Transparency et ne vous suit pas entre les apps ou les sites web. Il n’y a ni profilage, ni analyse comportementale, ni relation d’aucune sorte avec des courtiers en données.</p><p>C’est un choix de conception, pas une situation temporaire. TechRef est un outil professionnel et ne contiendra pas de publicité.</p>"
+      },
+      {
+        id: "purchases",
+        title: "Achats intégrés",
+        html: "<p>TechRef est téléchargeable gratuitement. La conversion d’unités, le calcul de tolérances, les tableaux de forets, le calculateur de vitesse de coupe et d’avance, les valeurs mesurées et la sauvegarde iCloud peuvent être utilisés sans limite d’utilisation, avec ou sans achat.</p><p>L’enregistrement de nouvelles cotes dans l’historique et les fiches est gratuit jusqu’à un certain nombre d’enregistrements. Au-delà, la fréquence des enregistrements est limitée. Un achat intégré unique (non consommable), TechRef Pro, supprime définitivement cette limite et débloque des fonctions supplémentaires, comme d’autres tableaux de référence et les calculateurs de mécanique. <strong>Le nombre exact, la nature de la limite, les fonctions incluses et le prix sont indiqués sur la page du produit dans l’App Store et sur l’écran d’achat de l’app.</strong></p><p>Tous les paiements sont traités par Apple via l’App Store. Le développeur ne reçoit ni vos informations de paiement, ni vos données de carte, ni aucune information personnelle liée à la transaction. Consultez la <a href='https://www.apple.com/fr/legal/privacy/' target='_blank' rel='noopener'>Politique de confidentialité d’Apple</a> pour savoir comment Apple traite ces données.</p><p><strong>Restaurer un achat.</strong> Un achat est lié à votre compte Apple, et non à un appareil particulier, et ne fait pas partie de la sauvegarde iCloud. « Restaurer les achats » dans les Réglages demande à Apple si ce compte possède l’achat. La vérification se fait entre votre appareil et Apple ; le développeur ne stocke ni ne reçoit votre compte Apple. Utilisez-la pour restaurer votre achat après un changement d’appareil ou une réinstallation de l’app.</p><p>Toute modification de ce type sera publiée sur cette page avant son entrée en vigueur.</p>"
+      },
+      {
+        id: "sharing",
+        title: "Partage des informations",
+        html: "<p>Le développeur ne vend, ne partage ni ne transfère aucune information sur les utilisateurs à des tiers, pour la simple raison qu’aucune information n’est collectée.</p><p>Il n’existe aucune donnée à communiquer à des annonceurs, des prestataires d’analyse ou des courtiers en données. Votre sauvegarde iCloud est stockée par Apple dans votre propre compte iCloud, et le développeur n’y a pas accès. En cas de demande juridiquement contraignante d’une autorité compétente, le développeur ne détient aucune donnée d’utilisateur pouvant être fournie.</p>"
+      },
+      {
+        id: "children",
+        title: "Confidentialité des enfants",
+        html: "<p>TechRef est un outil technique professionnel et ne s’adresse pas aux enfants.</p><p>Quoi qu’il en soit, l’app ne collectant aucune information personnelle auprès de quiconque, quel que soit son âge, elle ne pose aucun problème de confidentialité des enfants. Il n’existe aucune donnée à protéger, partager ou supprimer, pour aucun utilisateur.</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "Avertissement",
+        html: "<div class='lead-note'><p>TechRef est un outil de référence et de calcul. Il ne remplace ni les normes officielles, ni le jugement technique, ni des mesures vérifiées.</p></div><p><strong>Informations de référence uniquement.</strong> Les facteurs de conversion, tableaux de référence, données de matériaux et résultats de calcul fournis par l’app sont des informations de référence établies à partir des informations officiellement publiées sur les normes et de leurs définitions. Ce ne sont pas des données certifiées, et aucune garantie n’est donnée quant à leur exactitude, leur exhaustivité ou leur adéquation à un usage particulier.</p><p><strong>La vérification vous incombe.</strong> Avant d’appliquer une valeur de l’app à la conception, à l’usinage, au contrôle ou aux achats, vous devez la vérifier par rapport à la norme officielle applicable, au plan de référence et aux procédures internes de votre organisation. L’app est destinée à faciliter ce processus, pas à le remplacer.</p><p><strong>Limites du calcul de tolérances.</strong> La valeur centrale et l’intervalle affichés par l’app résultent d’opérations arithmétiques sur les valeurs saisies. Le calcul ne tient compte ni du procédé d’usinage, ni de l’état des outils, ni de l’incertitude de mesure, ni des propriétés du matériau, ni de la dilatation thermique, ni de la classe d’ajustement, ni d’aucun autre facteur physique ou de procédé. Une valeur centrale mathématiquement correcte n’est pas nécessairement un réglage machine approprié.</p><p><strong>Limites des calculateurs de mécanique.</strong> Les calculateurs utilisent des formules simples de manuel dans des conditions idéalisées, comme une section uniforme, un comportement élastique linéaire et les conditions d’appui et de charge indiquées. Ils ne vérifient ni le flambement, ni la fatigue, ni la concentration de contraintes, ni d’autres modes de défaillance. Leurs résultats ne remplacent ni une vérification de résistance par une personne qualifiée ni un coefficient de sécurité approprié.</p><p><strong>Données des matériaux.</strong> Dans les tableaux de matériaux, les valeurs marquées ≥ ou ≤ sont des limites établies à partir des informations officiellement publiées sur les normes. Toutes les autres valeurs, y compris la masse volumique, le module d’Young et la dilatation thermique, sont des valeurs représentatives et ne sont pas garanties. Les notes de résistance à la corrosion et aux produits chimiques sont des évaluations relatives propres à TechRef. Les propriétés réelles dépendent de la nuance, de l’état, de la forme, des dimensions et du fournisseur ; vérifiez le certificat matière, la fiche technique du fabricant ou la norme applicable.</p><p><strong>Arrondi et précision d’affichage.</strong> Les résultats sont arrondis au nombre de décimales choisi dans les Réglages. L’arrondi peut introduire des erreurs, et les valeurs affichées peuvent différer du résultat interne en pleine précision. Choisissez une précision adaptée à votre intervalle de tolérance.</p><p><strong>Choix de l’unité.</strong> Il vous incombe de choisir l’unité et la catégorie correctes pour votre saisie. L’app ne peut pas détecter une unité mal attribuée.</p><p><strong>Limitation de responsabilité.</strong> Dans toute la mesure permise par la loi applicable, le développeur ne saurait être tenu responsable de dommages directs, indirects, accessoires ou consécutifs résultant de l’utilisation ou de l’impossibilité d’utiliser l’app — notamment pièces défectueuses, reprises, retards de production, dommages matériels, blessures ou pertes économiques.</p><p><strong>Disponibilité.</strong> Les mises à jour d’iOS, l’évolution de l’environnement de l’appareil ou la disponibilité d’iCloud peuvent affecter le fonctionnement de l’app sans préavis. Le développeur peut modifier ou arrêter l’app sans préavis et n’est pas responsable des pertes de données qui en résulteraient, y compris les données des sauvegardes iCloud. Conservez vos propres copies des données importantes, par exemple grâce à l’export CSV.</p>"
+      },
+      {
+        id: "law",
+        title: "Droit applicable",
+        html: "<p>La présente politique est régie par le droit japonais. Tout litige lié à la présente politique relève de la compétence exclusive, en première instance, du tribunal compétent pour le lieu d’établissement du développeur.</p>"
+      },
+      {
+        id: "changes",
+        title: "Modifications de cette politique",
+        html: "<p>Cette politique peut être mise à jour au fil de l’évolution de l’app. La version révisée prend effet dès sa publication sur cette page, et la date d’entrée en vigueur en haut de la page est mise à jour en conséquence.</p><p>Aucune donnée n’étant collectée, les modifications de cette politique ne peuvent affecter des données déjà détenues à votre sujet. Si une modification affecte sensiblement le fonctionnement de l’app — par exemple l’introduction d’achats intégrés ou de la sauvegarde iCloud —, elle sera publiée ici avant d’atteindre les utilisateurs.</p>"
+      },
+      {
+        id: "contact",
+        title: "Contact",
+        html: "<p>Les questions, corrections et suggestions de fonctions sont les bienvenues. Si vous trouvez une erreur dans un facteur de conversion ou un tableau de référence, signalez-la : les signalements d’exactitude sont traités en priorité.</p><div class='contact-box'><p>Site web / formulaire de contact : <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-mail : <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "pt": {
+    meta: {
+      langName: "Português",
+      selectLabel: "Idioma",
+      pageTitle: "Política de privacidade e aviso legal",
+      subtitle: "O TechRef guarda seus dados no seu dispositivo e faz backup apenas na sua própria conta do iCloud. Nada do que você insere é enviado ao desenvolvedor nem a mais ninguém. Esta página explica exatamente o que isso significa e os limites de uso dos resultados do app.",
+      updatedLabel: "Vigente desde",
+      updatedDate: "13 de outubro de 2026",
+      footer: {
+        ariaGithub: "GitHub (abre em uma nova aba)",
+        ariaX: "X, antigo Twitter (abre em uma nova aba)",
+        ariaInstagram: "Instagram (abre em uma nova aba)",
+        ariaTop: "Voltar ao topo da página",
+        ariaLegal: "Informações legais",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Página inicial da Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "Introdução",
+        html: "<p>Esta é a política de privacidade e o aviso legal do <strong>TechRef</strong>, um app para iOS desenvolvido pela Flying Dev Lab (空飛ぶ研究室).</p><p>O TechRef é uma ferramenta de conversão de unidades, consulta técnica e cálculo para profissionais técnicos. Ele se baseia em um princípio simples: seus dados pertencem a você. Eles ficam no seu dispositivo e na sua própria conta do iCloud, e o desenvolvedor nunca os recebe.</p><p>Leia esta página antes de usar o app. A seção <a href='#disclaimer'>Aviso legal</a> descreve limitações importantes sobre o uso dos resultados do app.</p>"
+      },
+      {
+        id: "storage",
+        title: "Dados armazenados no seu dispositivo",
+        html: "<div class='zero-data'><p>Todos os dados que você insere ficam no seu dispositivo e na sua própria conta do iCloud. O TechRef não tem servidor próprio, e nada é transmitido ao desenvolvedor.</p></div><p>O TechRef armazena no seu dispositivo:</p><ul><li>Histórico de conversões (valores, tolerâncias, unidades, rótulos, notas, data e hora)</li><li>Dados das planilhas (nomes das peças, nomes dos pontos de medição, cotas, valores medidos, notas)</li><li>Ajustes do app (casas decimais, aparência, idioma, as unidades, tabelas, materiais e outros itens que você escolhe exibir, e as unidades usadas nas calculadoras)</li><li>Informações de que o app precisa para funcionar corretamente (número de gravações gratuitas usadas, aceite dos termos e dicas já exibidas)</li></ul><p>Os valores inseridos nas calculadoras são mantidos apenas enquanto a calculadora está aberta e não são salvos.</p><p>O histórico e as planilhas são salvos como arquivos na pasta Application Support do app. Os ajustes são salvos no armazenamento padrão de preferências do iOS. Ao apagar o app, todos esses dados são removidos do dispositivo. O backup na sua conta do iCloud não é apagado junto com o app; veja <a href='#icloud'>Backup do iCloud</a>.</p><p>O desenvolvedor não tem acesso a nenhum desses dados.</p>"
+      },
+      {
+        id: "network",
+        title: "Atividade de rede",
+        html: "<p>Os recursos principais do TechRef — conversão de unidades, cálculo de tolerâncias, tabelas de referência, calculadoras e gravação dos seus dados — funcionam totalmente offline. Nenhuma conexão de rede é necessária para usá-los.</p><p>Não há SDKs de análise, serviços de relatório de falhas, SDKs de publicidade nem bibliotecas de terceiros que transmitam dados.</p><p><strong>O app só se conecta à rede nos seguintes casos:</strong></p><ul><li><strong>Backup e restauração do iCloud</strong> — suas planilhas, histórico e ajustes são enviados à sua própria conta do iCloud e lidos de volta quando você restaura (veja <a href='#icloud'>Backup do iCloud</a>). O backup automático vem ativado por padrão e pode ser desativado nos Ajustes.</li><li><strong>Compra ou restauração da compra dentro do app</strong> — processadas pela Apple por meio da App Store (veja <a href='#purchases'>Compras dentro do app</a>)</li><li><strong>Tocar em um link no app</strong> — como a página de suporte, esta política ou um site oficial de normas listado nos Ajustes — que abre no navegador</li></ul><p><strong>Em nenhum desses casos seus dados são enviados ao desenvolvedor.</strong> Os backups do iCloud vão apenas para a sua própria conta do iCloud. O tráfego de compras vai para a Apple e não contém nenhum dos valores inseridos no app.</p><p><strong>Estatísticas de uso coletadas pela Apple.</strong> Como o app é distribuído pela App Store, a Apple, como operadora da plataforma, agrega estatísticas como instalações, aberturas, duração das sessões e compras, e as fornece ao desenvolvedor de forma anônima e agregada. Se você ativou o compartilhamento de dados de diagnóstico nos ajustes do iOS, os relatórios de falhas são fornecidos da mesma forma. Tudo isso é gerenciado pela Apple, e o desenvolvedor não pode ativá-lo nem desativá-lo.</p><p><strong>O que essas estatísticas nunca incluem:</strong> as cotas, tolerâncias, nomes de peças e de pontos de medição, valores medidos, rótulos, notas, histórico de conversões ou o conteúdo das planilhas que você insere. A única cópia dos seus dados que sai do dispositivo é o backup na sua própria conta do iCloud, ao qual o desenvolvedor não tem acesso. As estatísticas da Apple informam ao desenvolvedor que o app foi usado — não o que você calculou.</p><p>Além do backup do iCloud, seus dados só saem do dispositivo pela cópia para a área de transferência e pela exportação CSV descritas em <a href='#export'>Exportar seus dados</a>, e ambas só acontecem quando você decide.</p>"
+      },
+      {
+        id: "icloud",
+        title: "Backup do iCloud",
+        html: "<p>O TechRef faz backup das suas planilhas (incluindo os valores medidos), do histórico e dos ajustes na sua própria conta do iCloud, usando o banco de dados privado do CloudKit da Apple. Assim, você pode recuperar seus dados depois de reinstalar o app ou trocar de dispositivo. O backup do iCloud é gratuito.</p><ul><li><strong>Onde fica armazenado</strong> — no banco de dados privado da sua conta do iCloud. Ele só pode ser lido quando você está conectado com a sua Conta Apple. O desenvolvedor não pode vê-lo, acessá-lo nem apagá-lo.</li><li><strong>Quando é enviado</strong> — com «Backup automático» ativado (padrão), pouco depois de cada gravação e ao fechar o app. «Fazer backup agora» em Ajustes &gt; iCloud faz o backup na hora. Se você não estiver conectado ao iCloud, nada é copiado.</li><li><strong>O que não entra no backup</strong> — o número de gravações gratuitas usadas, o aceite dos termos, as dicas e a sua compra. A compra é restaurada separadamente pela Apple (veja <a href='#purchases'>Compras dentro do app</a>).</li><li><strong>Restauração</strong> — depois de reinstalar o app ou em um novo dispositivo, o app pergunta se você quer restaurar o backup. «Restaurar do iCloud» em Ajustes &gt; iCloud substitui os dados do dispositivo pelo backup.</li></ul><p><strong>Desativar e apagar.</strong> Você pode desativar «Backup automático» em Ajustes &gt; iCloud no app. O backup ocupa o seu armazenamento do iCloud. Para apagá-lo, abra Ajustes &gt; [seu nome] &gt; iCloud &gt; Gerenciar Armazenamento da Conta no dispositivo e escolha TechRef.</p><p><strong>Backups do dispositivo.</strong> Independentemente do que foi dito acima, se o Backup do iCloud estiver ativado nos ajustes do dispositivo, o iOS pode incluir os arquivos de dados do TechRef no backup do dispositivo, junto com os dados dos seus outros apps. Esse é um recurso padrão do sistema operacional, gerenciado integralmente pela Apple. O desenvolvedor não inicia esses backups nem tem acesso a eles.</p><p>Os dados armazenados no iCloud são tratados de acordo com a <a href='https://www.apple.com/br/legal/privacy/' target='_blank' rel='noopener'>Política de Privacidade da Apple</a>.</p>"
+      },
+      {
+        id: "export",
+        title: "Exportar seus dados",
+        html: "<p>O TechRef permite levar seus dados para fora do app de duas formas:</p><ul><li><strong>Copiar</strong> — resultados de conversão, dados das planilhas ou valores medidos vão para a área de transferência do sistema</li><li><strong>Salvar em Arquivos</strong> — um arquivo CSV é gravado no local que você escolher no app Arquivos</li></ul><p>As duas ações são iniciadas por você, e o app não envia dados a lugar nenhum por conta própria. Depois que os dados saem do app, o tratamento deles — inclusive onde você os cola, para quem os envia e o armazenamento em nuvem escolhido no app Arquivos — fica fora do controle do app e é de sua responsabilidade.</p><p>Se você trabalha com dados dimensionais que sua organização trata como confidenciais, siga as normas internas ao exportar e ao decidir se usará o backup do iCloud.</p>"
+      },
+      {
+        id: "advertising",
+        title: "Publicidade e rastreamento",
+        html: "<p>O TechRef <strong>não contém anúncios</strong>.</p><p>O app não usa o identificador de publicidade (IDFA), não solicita a permissão de Transparência de Rastreamento de Apps e não rastreia você entre apps ou sites. Não há criação de perfis, análise de comportamento nem qualquer relação com corretores de dados.</p><p>É uma decisão de projeto, não uma situação temporária. O TechRef é uma ferramenta profissional e não terá anúncios.</p>"
+      },
+      {
+        id: "purchases",
+        title: "Compras dentro do app",
+        html: "<p>O TechRef é gratuito para baixar. Conversão de unidades, cálculo de tolerâncias, tabelas de brocas, calculadora de velocidade de corte e avanço, valores medidos e backup do iCloud podem ser usados sem limite de uso, com ou sem compra.</p><p>Gravar novas cotas no histórico e nas planilhas é gratuito até um certo número de gravações. Depois disso, a frequência de gravação fica limitada. Uma compra única (não consumível) dentro do app, o TechRef Pro, remove esse limite para sempre e libera recursos adicionais, como outras tabelas de referência e as calculadoras de engenharia. <strong>O número exato, o tipo de limite, os recursos incluídos e o preço aparecem na página do produto na App Store e na tela de compra dentro do app.</strong></p><p>Todo o processamento de pagamentos é feito pela Apple por meio da App Store. O desenvolvedor não recebe seus dados de pagamento, dados do cartão nem nenhuma informação pessoal ligada à transação. Consulte a <a href='https://www.apple.com/br/legal/privacy/' target='_blank' rel='noopener'>Política de Privacidade da Apple</a> para saber como a Apple trata esses dados.</p><p><strong>Restaurar uma compra.</strong> A compra é vinculada à sua Conta Apple, não a um dispositivo específico, e não faz parte do backup do iCloud. «Restaurar compras» nos Ajustes pergunta à Apple se essa conta possui a compra. A consulta acontece entre o seu dispositivo e a Apple; o desenvolvedor não armazena nem recebe a sua Conta Apple. Use-a para restaurar a compra depois de trocar de dispositivo ou reinstalar o app.</p><p>Qualquer mudança desse tipo será publicada nesta página antes de entrar em vigor.</p>"
+      },
+      {
+        id: "sharing",
+        title: "Compartilhamento de informações",
+        html: "<p>O desenvolvedor não vende, compartilha nem transfere informações de usuários a terceiros, pelo simples motivo de que nenhuma informação é coletada.</p><p>Não há dados a divulgar a anunciantes, fornecedores de análise ou corretores de dados. O seu backup do iCloud é armazenado pela Apple na sua própria conta do iCloud, e o desenvolvedor não tem acesso a ele. Diante de uma solicitação legalmente vinculante de uma autoridade competente, o desenvolvedor não possui dados de usuários que possam ser apresentados.</p>"
+      },
+      {
+        id: "children",
+        title: "Privacidade de crianças",
+        html: "<p>O TechRef é uma ferramenta profissional de engenharia e não é voltado a crianças.</p><p>Ainda assim, como o app não coleta informações pessoais de ninguém, de nenhuma idade, ele não apresenta questões de privacidade infantil. Não há dados a proteger, compartilhar ou apagar, de nenhum usuário.</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "Aviso legal",
+        html: "<div class='lead-note'><p>O TechRef é uma ferramenta de consulta e cálculo. Ele não substitui normas oficiais, o julgamento técnico nem medições verificadas.</p></div><p><strong>Apenas informações de referência.</strong> Fatores de conversão, tabelas de referência, dados de materiais e resultados de cálculo fornecidos pelo app são informações de referência compiladas com base nas informações de normas publicadas oficialmente e em suas definições. Não são dados certificados e não há garantia de exatidão, completude ou adequação a uma finalidade específica.</p><p><strong>A verificação é sua responsabilidade.</strong> Antes de aplicar qualquer valor do app em projeto, usinagem, inspeção ou compras, você deve verificá-lo em relação à norma oficial aplicável, ao desenho de referência e aos procedimentos internos da sua organização. O app serve para apoiar esse processo, não para substituí-lo.</p><p><strong>Limites do cálculo de tolerâncias.</strong> O valor central e o intervalo exibidos pelo app são o resultado de operações aritméticas com os valores que você insere. O cálculo não considera o método de usinagem, o estado das ferramentas, a incerteza de medição, as propriedades do material, a dilatação térmica, a classe de ajuste nem qualquer outro fator físico ou de processo. Um valor central matematicamente correto não é necessariamente um ajuste adequado da máquina.</p><p><strong>Limites das calculadoras de engenharia.</strong> As calculadoras usam fórmulas simples de livro-texto em condições idealizadas, como seção uniforme, comportamento elástico linear e as condições de apoio e carga indicadas. Elas não verificam flambagem, fadiga, concentração de tensões nem outros modos de falha. Os resultados não substituem uma verificação de resistência feita por uma pessoa qualificada nem um coeficiente de segurança adequado.</p><p><strong>Dados de materiais.</strong> Nas tabelas de materiais, os valores com ≥ ou ≤ são limites compilados com base nas informações de normas publicadas oficialmente. Todos os demais valores, incluindo densidade, módulo de Young e dilatação térmica, são valores representativos e não são garantidos. As avaliações de resistência à corrosão e a produtos químicos são avaliações relativas próprias do TechRef. As propriedades reais dependem da classe, da condição, da forma, das dimensões e do fornecedor; confira o certificado do material, a ficha técnica do fabricante ou a norma aplicável.</p><p><strong>Arredondamento e precisão de exibição.</strong> Os resultados são arredondados para o número de casas decimais escolhido nos Ajustes. O arredondamento pode introduzir erros, e os valores exibidos podem diferir do resultado interno com precisão total. Escolha uma precisão adequada à sua faixa de tolerância.</p><p><strong>Escolha da unidade.</strong> Você é responsável por escolher a unidade e a categoria corretas para os dados inseridos. O app não consegue detectar uma unidade atribuída de forma errada.</p><p><strong>Limitação de responsabilidade.</strong> Na máxima extensão permitida pela lei aplicável, o desenvolvedor não será responsável por danos diretos, indiretos, incidentais ou consequentes decorrentes do uso ou da impossibilidade de uso do app — incluindo, entre outros, peças defeituosas, retrabalho, atrasos de produção, danos a equipamentos, lesões pessoais ou perdas econômicas.</p><p><strong>Disponibilidade.</strong> Atualizações do iOS, mudanças no ambiente do dispositivo ou a disponibilidade do iCloud podem afetar o funcionamento do app sem aviso prévio. O desenvolvedor pode modificar ou descontinuar o app sem aviso prévio e não se responsabiliza pela perda de dados decorrente dessas mudanças, incluindo os dados dos backups do iCloud. Guarde suas próprias cópias dos dados importantes, por exemplo com a exportação CSV.</p>"
+      },
+      {
+        id: "law",
+        title: "Legislação aplicável",
+        html: "<p>Esta política é regida pelas leis do Japão. Qualquer disputa relacionada a esta política estará sujeita à jurisdição exclusiva, em primeira instância, do tribunal competente para a sede do desenvolvedor.</p>"
+      },
+      {
+        id: "changes",
+        title: "Alterações nesta política",
+        html: "<p>Esta política pode ser atualizada à medida que o app evolui. A versão revisada entra em vigor quando é publicada nesta página, e a data de vigência no topo é atualizada de acordo.</p><p>Como nenhum dado é coletado, alterações nesta política não podem afetar dados já mantidos sobre você. Se uma mudança afetar de forma relevante o funcionamento do app — por exemplo, a introdução de compras dentro do app ou do backup do iCloud —, ela será publicada aqui antes de chegar aos usuários.</p>"
+      },
+      {
+        id: "contact",
+        title: "Contato",
+        html: "<p>Perguntas, correções e sugestões de recursos são bem-vindas. Se você encontrar um erro em um fator de conversão ou em uma tabela de referência, informe-nos — relatos sobre exatidão têm prioridade.</p><div class='contact-box'><p>Site / formulário de contato: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-mail: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "ko": {
+    meta: {
+      langName: "한국어",
+      selectLabel: "언어",
+      pageTitle: "개인정보 처리방침 및 면책 조항",
+      subtitle: "TechRef는 데이터를 기기에 저장하고, 본인의 iCloud 계정에만 백업합니다. 입력한 내용이 개발자나 다른 누구에게도 전송되지 않습니다. 이 페이지에서는 그 구체적인 의미와 앱의 결과를 사용할 때의 제한 사항을 설명합니다.",
+      updatedLabel: "시행일",
+      updatedDate: "2026년 10월 13일",
+      footer: {
+        ariaGithub: "GitHub(새 탭에서 열림)",
+        ariaX: "X(구 Twitter)(새 탭에서 열림)",
+        ariaInstagram: "Instagram(새 탭에서 열림)",
+        ariaTop: "페이지 맨 위로",
+        ariaLegal: "법적 정보",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab 홈페이지'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "소개",
+        html: "<p>이 페이지는 Flying Dev Lab(空飛ぶ研究室)이 개발한 iOS 앱 <strong>TechRef</strong>의 개인정보 처리방침 및 면책 조항입니다.</p><p>TechRef는 기술 전문가를 위한 단위 변환·엔지니어링 참조·계산 도구입니다. \"데이터는 사용자의 것\"이라는 단순한 원칙을 바탕으로 만들어졌습니다. 데이터는 기기와 본인의 iCloud 계정에만 저장되며, 개발자는 이를 받지 않습니다.</p><p>앱을 사용하기 전에 이 페이지를 읽어 주세요. <a href='#disclaimer'>면책 조항</a> 항목에는 앱의 결과를 사용할 때의 중요한 제한 사항이 적혀 있습니다.</p>"
+      },
+      {
+        id: "storage",
+        title: "기기에 저장되는 데이터",
+        html: "<div class='zero-data'><p>입력한 모든 데이터는 기기와 본인의 iCloud 계정에만 남습니다. TechRef에는 자체 서버가 없으며, 개발자에게 전송되는 것은 없습니다.</p></div><p>TechRef가 기기에 저장하는 것:</p><ul><li>변환 기록(값·공차·단위·라벨·메모·일시)</li><li>시트 데이터(부품명·측정 포인트명·치수·측정값·메모)</li><li>앱 설정(소수 자릿수·외관·언어, 표시할 단위·표·재료 등의 선택, 계산기의 단위계)</li><li>앱이 올바르게 동작하는 데 필요한 정보(무료 저장 사용 횟수, 이용 약관 동의, 이미 표시한 도움말)</li></ul><p>계산기에 입력한 값은 계산기 화면이 열려 있는 동안만 유지되며 저장되지 않습니다.</p><p>기록과 시트는 앱의 Application Support 폴더에 파일로 저장됩니다. 설정은 iOS 표준 환경설정 저장소에 저장됩니다. 앱을 삭제하면 이 데이터는 모두 기기에서 삭제됩니다. 본인의 iCloud 계정에 있는 백업은 앱을 삭제해도 지워지지 않습니다(<a href='#icloud'>iCloud 백업</a> 참조).</p><p>개발자는 이 중 어떤 데이터에도 접근할 수 없습니다.</p>"
+      },
+      {
+        id: "network",
+        title: "네트워크 통신",
+        html: "<p>TechRef의 핵심 기능 — 단위 변환, 공차 계산, 참조 표, 계산기, 데이터 저장 — 은 모두 오프라인으로 동작합니다. 이 기능을 사용하는 데 네트워크 연결은 필요하지 않습니다.</p><p>분석 SDK, 충돌 보고 서비스, 광고 SDK, 데이터를 전송하는 타사 라이브러리는 사용하지 않습니다.</p><p><strong>앱 자체가 네트워크에 연결하는 경우는 다음뿐입니다:</strong></p><ul><li><strong>iCloud 백업 및 복원</strong> — 시트·기록·설정을 본인의 iCloud 계정으로 보내고, 복원할 때 다시 읽어 옵니다(<a href='#icloud'>iCloud 백업</a> 참조). 자동 백업은 기본으로 켜져 있으며 설정에서 끌 수 있습니다.</li><li><strong>앱 내 구입 및 복원</strong> — App Store를 통해 Apple이 처리합니다(<a href='#purchases'>앱 내 구입</a> 참조)</li><li><strong>앱 안의 링크를 탭한 경우</strong> — 지원 페이지, 이 방침, 설정에 실린 규격 공식 웹사이트 등이 브라우저에서 열립니다</li></ul><p><strong>어느 경우에도 사용자의 데이터가 개발자에게 전송되지 않습니다.</strong> iCloud 백업은 본인의 iCloud 계정으로만 갑니다. 구입 관련 통신은 Apple로만 가며, 앱에 입력한 값은 전혀 포함되지 않습니다.</p><p><strong>Apple이 수집하는 이용 통계.</strong> 앱은 App Store를 통해 배포되므로, Apple은 플랫폼 운영자로서 설치 수·실행 횟수·사용 시간·구입 수 등의 통계를 집계하여 익명화·집계된 형태로 개발자에게 제공합니다. iOS 설정에서 진단 데이터 공유를 켠 경우 충돌 정보도 같은 방식으로 제공됩니다. 이는 모두 Apple이 관리하는 것으로, 개발자가 켜거나 끌 수 없습니다.</p><p><strong>이 통계에 포함되지 않는 것:</strong> 입력한 치수, 공차, 부품명, 측정 포인트명, 측정값, 라벨, 메모, 변환 기록, 시트의 내용. 데이터가 기기 밖으로 나가는 것은 본인의 iCloud 계정에 대한 백업뿐이며, 개발자는 여기에 접근할 수 없습니다. Apple의 통계로 개발자가 알 수 있는 것은 \"앱이 사용되었다\"는 사실이지, \"무엇을 계산했는지\"가 아닙니다.</p><p>iCloud 백업 외에 데이터를 기기 밖으로 내보내는 방법은 <a href='#export'>데이터 내보내기</a>에서 설명하는 복사와 CSV 내보내기뿐이며, 둘 다 사용자가 직접 할 때만 실행됩니다.</p>"
+      },
+      {
+        id: "icloud",
+        title: "iCloud 백업",
+        html: "<p>TechRef는 Apple CloudKit의 비공개 데이터베이스를 사용하여 시트(측정값 포함)·기록·설정을 본인의 iCloud 계정에 백업합니다. 앱을 다시 설치하거나 기기를 바꾼 뒤 데이터를 되돌리기 위해서입니다. iCloud 백업은 무료입니다.</p><ul><li><strong>저장 위치</strong> — 본인 iCloud 계정의 비공개 데이터베이스입니다. 본인의 Apple 계정으로 로그인한 경우에만 읽을 수 있습니다. 개발자는 이를 보거나, 접근하거나, 삭제할 수 없습니다.</li><li><strong>보내는 시점</strong> — '자동으로 백업'이 켜져 있으면(기본값) 저장 직후와 앱을 닫을 때 보냅니다. 설정 &gt; iCloud의 '지금 백업'으로 바로 보낼 수도 있습니다. iCloud에 로그인하지 않은 경우에는 백업하지 않습니다.</li><li><strong>백업하지 않는 것</strong> — 무료 저장 사용 횟수, 이용 약관 동의, 도움말 표시 상태, 구입 상태. 구입은 Apple에서 따로 복원합니다(<a href='#purchases'>앱 내 구입</a> 참조).</li><li><strong>복원</strong> — 앱을 다시 설치한 뒤나 새 기기에서는 백업을 되돌릴지 앱이 묻습니다. 설정 &gt; iCloud의 'iCloud에서 복원'으로 기기의 데이터를 백업 내용으로 바꿀 수도 있습니다.</li></ul><p><strong>끄기와 삭제.</strong> 앱의 설정 &gt; iCloud에서 '자동으로 백업'을 끌 수 있습니다. 백업은 본인의 iCloud 저장 공간을 사용합니다. 삭제하려면 기기의 설정 &gt; [사용자 이름] &gt; iCloud &gt; 계정 저장 공간 관리에서 TechRef를 선택하세요.</p><p><strong>기기 백업.</strong> 위와 별도로, 기기 설정에서 iCloud 백업을 켠 경우 iOS가 다른 앱의 데이터와 함께 TechRef의 데이터 파일을 기기 백업에 포함할 수 있습니다. 이는 Apple이 전적으로 관리하는 운영 체제의 표준 기능입니다. 개발자는 이 백업을 시작하지 않으며 내용에 접근할 수도 없습니다.</p><p>iCloud에 저장된 데이터는 <a href='https://www.apple.com/kr/legal/privacy/' target='_blank' rel='noopener'>Apple 개인정보 처리방침</a>에 따라 취급됩니다.</p>"
+      },
+      {
+        id: "export",
+        title: "데이터 내보내기",
+        html: "<p>TechRef에서는 두 가지 방법으로 데이터를 앱 밖으로 가져갈 수 있습니다:</p><ul><li><strong>복사</strong> — 변환 결과·시트 데이터·측정값을 시스템 클립보드에 복사</li><li><strong>파일 앱에 저장</strong> — 파일 앱에서 지정한 위치에 CSV 파일을 저장</li></ul><p>두 가지 모두 사용자가 직접 시작하는 것이며, 앱이 스스로 데이터를 보내는 일은 없습니다. 데이터가 앱 밖으로 나간 뒤의 취급(붙여넣는 곳, 보내는 상대, 파일 앱에서 선택한 클라우드 저장 위치 포함)은 앱이 관리할 수 없으며 사용자의 책임입니다.</p><p>회사에서 기밀로 취급하는 치수 데이터를 다루는 경우에는 내보내기와 iCloud 백업 사용 여부에 대해 소속 조직의 규정을 따르세요.</p>"
+      },
+      {
+        id: "advertising",
+        title: "광고 및 추적",
+        html: "<p>TechRef에는 <strong>광고가 전혀 없습니다</strong>.</p><p>광고 식별자(IDFA)를 사용하지 않고, 앱 추적 투명성 권한을 요청하지 않으며, 앱이나 웹사이트를 넘나드는 추적도 하지 않습니다. 프로파일링, 행동 분석, 데이터 브로커와의 관계는 전혀 없습니다.</p><p>이는 일시적인 상태가 아니라 설계상의 결정입니다. TechRef는 전문가용 도구이며 앞으로도 광고를 싣지 않습니다.</p>"
+      },
+      {
+        id: "purchases",
+        title: "앱 내 구입",
+        html: "<p>TechRef는 무료로 다운로드할 수 있습니다. 단위 변환·공차 계산·드릴 크기 표·절삭 속도와 이송 계산기·측정값·iCloud 백업은 구입 여부와 관계없이 횟수 제한 없이 사용할 수 있습니다.</p><p>기록 및 시트에 새 치수를 저장하는 것은 일정 횟수까지 무료입니다. 그 횟수를 넘으면 저장 빈도가 제한됩니다. 한 번 구입(비소모성)하는 앱 내 구입 'TechRef Pro'로 이 제한이 영구히 해제되며, 추가 참조 표와 기계 공학 계산기 등의 기능을 사용할 수 있습니다. <strong>구체적인 횟수·제한 내용·포함된 기능·가격은 App Store 제품 페이지와 앱 안의 구입 화면에 표시됩니다.</strong></p><p>결제 처리는 모두 App Store를 통해 Apple이 수행합니다. 개발자는 결제 정보, 카드 정보, 거래와 관련된 개인정보를 받지 않습니다. Apple의 취급에 대해서는 <a href='https://www.apple.com/kr/legal/privacy/' target='_blank' rel='noopener'>Apple 개인정보 처리방침</a>을 참조하세요.</p><p><strong>구입 복원.</strong> 구입은 기기가 아니라 Apple 계정에 연결되며, iCloud 백업에는 포함되지 않습니다. 설정의 '구입 항목 복원'은 해당 계정이 구입을 보유하고 있는지 Apple에 조회합니다. 이 조회는 기기와 Apple 사이에서 이루어지며, 개발자는 사용자의 Apple 계정을 저장하거나 받지 않습니다. 기기를 바꾸거나 앱을 다시 설치한 경우 이 기능으로 구입 상태를 복원할 수 있습니다.</p><p>이러한 변경이 있을 경우 시행 전에 이 페이지에 반영합니다.</p>"
+      },
+      {
+        id: "sharing",
+        title: "정보 제공",
+        html: "<p>개발자는 사용자의 정보를 제3자에게 판매·공유·제공하지 않습니다. 애초에 사용자의 정보를 전혀 수집하지 않기 때문입니다.</p><p>광고주·분석 사업자·데이터 브로커에게 공개할 데이터는 없습니다. iCloud 백업은 Apple이 본인의 iCloud 계정 안에 저장하는 것으로, 개발자는 접근할 수 없습니다. 권한 있는 기관으로부터 법적 구속력이 있는 요청을 받더라도, 개발자가 제출할 수 있는 사용자 데이터는 없습니다.</p>"
+      },
+      {
+        id: "children",
+        title: "아동의 개인정보",
+        html: "<p>TechRef는 전문가용 엔지니어링 도구이며 아동을 대상으로 하지 않습니다.</p><p>다만 나이와 관계없이 어떤 개인정보도 수집하지 않으므로 아동의 개인정보에 관한 우려는 생기지 않습니다. 어떤 사용자에 대해서도 보호·공유·삭제할 데이터가 없습니다.</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "면책 조항",
+        html: "<div class='lead-note'><p>TechRef는 참조 및 계산 도구입니다. 공식 규격, 기술적 판단, 검증된 측정을 대신하지 않습니다.</p></div><p><strong>참고 정보로서의 위치.</strong> 앱이 제공하는 변환 계수·참조 표·재료 데이터·계산 결과는 공식적으로 공개된 규격 정보와 정의를 참고하여 정리한 참고 정보입니다. 인증된 데이터가 아니며, 정확성·완전성·특정 목적에의 적합성을 보증하지 않습니다.</p><p><strong>검증은 사용자의 책임.</strong> 앱의 값을 설계·가공·검사·조달에 적용하기 전에, 해당 공식 규격, 기준 도면, 소속 조직의 내부 절차에 비추어 반드시 검증하세요. 앱은 그 과정을 돕기 위한 것이며 대신하는 것이 아닙니다.</p><p><strong>공차 계산의 한계.</strong> 앱이 표시하는 중앙값과 범위는 입력값에 대한 산술 연산의 결과입니다. 가공 방법, 공구 상태, 측정 불확도, 재료 특성, 열팽창, 끼워맞춤 등급, 그 밖의 어떤 물리적·공정상 요인도 고려하지 않습니다. 수학적으로 올바른 중앙값이 반드시 적절한 기계 설정값인 것은 아닙니다.</p><p><strong>기계 공학 계산기의 한계.</strong> 계산기는 균일한 단면, 선형 탄성, 표시된 지지 및 하중 조건 같은 이상화된 조건에서 교과서의 간단한 식을 사용합니다. 좌굴·피로·응력 집중 등 다른 파괴 형태는 확인하지 않습니다. 계산 결과는 자격을 갖춘 사람의 강도 검토나 적절한 안전율을 대신하지 않습니다.</p><p><strong>재료 데이터.</strong> 재료 표에서 ≥ 또는 ≤가 붙은 값은 공식적으로 공개된 규격 정보를 참고하여 정리한 규격값입니다. 밀도·영률·열팽창 계수를 포함한 그 밖의 값은 대표값이며 보증값이 아닙니다. 내식성·내약품성 평가는 TechRef 자체의 상대 평가입니다. 실제 특성은 재종·상태·형상·치수·제조사에 따라 다르므로, 밀시트, 제조사 데이터 시트 또는 해당 규격으로 확인하세요.</p><p><strong>반올림과 표시 자릿수.</strong> 결과는 설정에서 선택한 소수 자릿수로 반올림됩니다. 반올림으로 오차가 생길 수 있으며, 표시값이 내부의 전체 정밀도 값과 다를 수 있습니다. 공차 폭에 맞는 적절한 자릿수를 선택하세요.</p><p><strong>단위 선택.</strong> 입력에 맞는 올바른 단위와 카테고리를 선택하는 것은 사용자의 책임입니다. 앱은 잘못 지정된 단위를 감지할 수 없습니다.</p><p><strong>책임의 제한.</strong> 관련 법률이 허용하는 최대한의 범위에서, 개발자는 앱의 사용 또는 사용 불능으로 인해 발생하는 직접적·간접적·부수적·결과적 손해(불량품, 재작업, 생산 지연, 설비 손상, 인적 상해, 경제적 손실을 포함하되 이에 한정되지 않음)에 대해 책임을 지지 않습니다.</p><p><strong>제공의 지속성.</strong> iOS 업데이트, 기기 환경의 변화, iCloud의 제공 상황에 따라 예고 없이 앱의 동작에 영향이 생길 수 있습니다. 개발자는 예고 없이 앱을 변경하거나 제공을 종료할 수 있으며, 그로 인한 데이터 손실(iCloud 백업의 데이터 포함)에 대해 책임을 지지 않습니다. 중요한 데이터는 CSV 내보내기 등으로 직접 보관해 주세요.</p>"
+      },
+      {
+        id: "law",
+        title: "준거법 및 관할",
+        html: "<p>이 방침은 일본법을 준거법으로 합니다. 이 방침과 관련하여 발생하는 분쟁은 개발자의 소재지를 관할하는 법원을 제1심의 전속적 합의 관할 법원으로 합니다.</p>"
+      },
+      {
+        id: "changes",
+        title: "방침의 변경",
+        html: "<p>이 방침은 앱의 발전에 따라 업데이트될 수 있습니다. 개정된 방침은 이 페이지에 게시된 시점부터 효력이 생기며, 페이지 상단의 시행일도 함께 업데이트됩니다.</p><p>데이터를 수집하지 않으므로, 이 방침의 변경이 기존 사용자 데이터에 영향을 주지 않습니다. 앱 동작에 실질적인 영향을 주는 변경(앱 내 구입이나 iCloud 백업의 도입 등)은 사용자에게 전달되기 전에 이 페이지에 공개합니다.</p>"
+      },
+      {
+        id: "contact",
+        title: "문의",
+        html: "<p>질문, 정정 요청, 기능 제안을 환영합니다. 변환 계수나 참조 표에서 오류를 발견하시면 꼭 알려 주세요. 정확성에 관한 제보를 우선적으로 처리합니다.</p><div class='contact-box'><p>웹사이트 / 문의 양식: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>이메일: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "zh-Hans": {
+    meta: {
+      langName: "简体中文",
+      selectLabel: "语言",
+      pageTitle: "隐私政策与免责声明",
+      subtitle: "TechRef 将数据保存在你的设备上，并只备份到你自己的 iCloud 账户。你输入的任何内容都不会发送给开发者或其他任何人。本页说明其具体含义，以及使用 App 结果时的限制。",
+      updatedLabel: "生效日期",
+      updatedDate: "2026年10月13日",
+      footer: {
+        ariaGithub: "GitHub（在新标签页中打开）",
+        ariaX: "X（原 Twitter）（在新标签页中打开）",
+        ariaInstagram: "Instagram（在新标签页中打开）",
+        ariaTop: "返回页面顶部",
+        ariaLegal: "法律信息",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab 主页'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "简介",
+        html: "<p>本页是 Flying Dev Lab（空飛ぶ研究室）开发的 iOS App <strong>TechRef</strong> 的隐私政策与免责声明。</p><p>TechRef 是面向技术人员的单位换算、工程参考和计算工具。它基于一个简单的原则：你的数据属于你。数据只保存在你的设备和你自己的 iCloud 账户中，开发者永远不会收到。</p><p>使用本 App 前请阅读本页。<a href='#disclaimer'>免责声明</a>一节说明了使用 App 结果时的重要限制。</p>"
+      },
+      {
+        id: "storage",
+        title: "保存在设备上的数据",
+        html: "<div class='zero-data'><p>你输入的所有数据都只保存在你的设备和你自己的 iCloud 账户中。TechRef 没有自己的服务器，不会向开发者传输任何内容。</p></div><p>TechRef 在你的设备上保存：</p><ul><li>换算记录（数值、公差、单位、标签、备注、时间）</li><li>测量表数据（零件名称、测量点名称、尺寸、实测值、备注）</li><li>App 设置（小数位数、外观、语言，选择显示的单位、表格、材料等，以及计算工具的单位制）</li><li>App 正常运行所需的信息（已使用的免费保存次数、是否同意条款、已显示过的提示）</li></ul><p>在计算工具中输入的数值只在该页面打开期间保留，不会保存。</p><p>记录和测量表以文件形式保存在 App 的 Application Support 目录中。设置保存在 iOS 标准的偏好设置存储中。删除 App 后，这些数据都会从设备中删除。你的 iCloud 账户中的备份不会随 App 一起删除；请参阅 <a href='#icloud'>iCloud 备份</a>。</p><p>开发者无法访问其中任何数据。</p>"
+      },
+      {
+        id: "network",
+        title: "网络通信",
+        html: "<p>TechRef 的核心功能——单位换算、公差计算、参考表格、计算工具和数据保存——全部离线完成。使用这些功能不需要网络连接。</p><p>不使用任何分析 SDK、崩溃报告服务、广告 SDK 或会传输数据的第三方库。</p><p><strong>App 本身只在以下情况下连接网络：</strong></p><ul><li><strong>iCloud 备份与恢复</strong> — 将测量表、记录和设置发送到你自己的 iCloud 账户，并在恢复时读回（请参阅 <a href='#icloud'>iCloud 备份</a>）。自动备份默认开启，可在设置中关闭。</li><li><strong>购买或恢复 App 内购买项目</strong> — 由 Apple 通过 App Store 处理（请参阅 <a href='#purchases'>App 内购买</a>）</li><li><strong>轻点 App 中的链接</strong> — 例如支持页面、本政策或设置中列出的标准官方网站——将在浏览器中打开</li></ul><p><strong>在任何情况下，你的数据都不会发送给开发者。</strong>iCloud 备份只会发送到你自己的 iCloud 账户。购买相关的通信只与 Apple 进行，不包含你在 App 中输入的任何数值。</p><p><strong>Apple 收集的使用统计。</strong>由于 App 通过 App Store 分发，Apple 作为平台运营者，会汇总安装次数、启动次数、使用时长和购买次数等统计信息，并以匿名、汇总的形式提供给开发者。如果你在 iOS 设置中开启了共享诊断数据，崩溃信息也会以同样方式提供。这一切都由 Apple 管理，开发者无法开启或关闭。</p><p><strong>这些统计绝不包含：</strong>你输入的尺寸、公差、零件名称、测量点名称、实测值、标签、备注、换算记录或测量表内容。离开设备的唯一数据副本是你自己 iCloud 账户中的备份，开发者无法访问。Apple 的统计只能让开发者知道 App 被使用过，而不是你计算了什么。</p><p>除 iCloud 备份外，你的数据只会通过 <a href='#export'>导出数据</a> 中说明的拷贝和 CSV 导出离开设备，且两者都只在你自己操作时进行。</p>"
+      },
+      {
+        id: "icloud",
+        title: "iCloud 备份",
+        html: "<p>TechRef 使用 Apple CloudKit 的私有数据库，将你的测量表（含实测值）、记录和设置备份到你自己的 iCloud 账户。这样在重新安装 App 或更换设备后，可以恢复数据。iCloud 备份是免费的。</p><ul><li><strong>保存位置</strong> — 你的 iCloud 账户的私有数据库。只有在你用自己的 Apple 账户登录时才能读取。开发者无法查看、访问或删除。</li><li><strong>发送时机</strong> — 当“自动备份”开启（默认）时，在保存后不久以及关闭 App 时发送。也可以在设置 &gt; iCloud 中轻点“立即备份”立刻发送。未登录 iCloud 时不会备份。</li><li><strong>不备份的内容</strong> — 已使用的免费保存次数、条款同意状态、提示的显示状态以及你的购买。购买需另外从 Apple 恢复（请参阅 <a href='#purchases'>App 内购买</a>）。</li><li><strong>恢复</strong> — 重新安装 App 后或在新设备上，App 会询问是否恢复备份。也可以在设置 &gt; iCloud 中使用“从 iCloud 恢复”，用备份替换设备上的数据。</li></ul><p><strong>关闭与删除。</strong>你可以在 App 的设置 &gt; iCloud 中关闭“自动备份”。备份会占用你的 iCloud 储存空间。如需删除，请在设备上打开“设置”&gt;［你的名字］&gt;“iCloud”&gt;“管理账户储存空间”，然后选择 TechRef。</p><p><strong>设备备份。</strong>此外，如果你在设备设置中开启了 iCloud 云备份，iOS 可能会将 TechRef 的数据文件与其他 App 的数据一起纳入设备备份。这是完全由 Apple 管理的操作系统标准功能。开发者不会发起这些备份，也无法访问其内容。</p><p>保存在 iCloud 中的数据按照 <a href='https://www.apple.com/cn/legal/privacy/' target='_blank' rel='noopener'>Apple 隐私政策</a> 处理。</p>"
+      },
+      {
+        id: "export",
+        title: "导出数据",
+        html: "<p>在 TechRef 中，你可以通过两种方式将数据带出 App：</p><ul><li><strong>拷贝</strong> — 将换算结果、测量表数据或实测值放到系统剪贴板</li><li><strong>存储到“文件”</strong> — 在“文件” App 中选择的位置写入 CSV 文件</li></ul><p>两者都由你自己发起，App 不会自行发送数据。数据离开 App 后的处理（包括粘贴到何处、发送给谁，以及在“文件” App 中选择的云存储位置）不在 App 的控制范围内，由你自行负责。</p><p>如果你处理的是公司视为机密的尺寸数据，请在导出以及决定是否使用 iCloud 备份时遵守所在组织的规定。</p>"
+      },
+      {
+        id: "advertising",
+        title: "广告与跟踪",
+        html: "<p>TechRef <strong>没有任何广告</strong>。</p><p>App 不使用广告标识符（IDFA），不请求 App 跟踪透明度权限，也不会跨 App 或网站跟踪你。没有用户画像、行为分析，也与数据经纪商没有任何关系。</p><p>这是设计上的决定，而不是暂时的状态。TechRef 是专业工具，今后也不会投放广告。</p>"
+      },
+      {
+        id: "purchases",
+        title: "App 内购买",
+        html: "<p>TechRef 可免费下载。单位换算、公差计算、钻头尺寸表、切削速度与进给计算工具、实测值和 iCloud 备份，无论是否购买都可无限次使用。</p><p>向记录和测量表保存新尺寸在一定次数内免费。超过该次数后，保存频率会受到限制。一次性（非消耗型）App 内购买“TechRef Pro”可永久取消此限制，并解锁更多参考表格和机械工程计算工具等功能。<strong>具体次数、限制内容、包含的功能和价格显示在 App Store 的产品页面和 App 内的购买界面上。</strong></p><p>所有付款均由 Apple 通过 App Store 处理。开发者不会收到你的付款信息、卡片信息或与交易相关的任何个人信息。关于 Apple 如何处理这些数据，请参阅 <a href='https://www.apple.com/cn/legal/privacy/' target='_blank' rel='noopener'>Apple 隐私政策</a>。</p><p><strong>恢复购买。</strong>购买与你的 Apple 账户绑定，而不是与某台设备绑定，并且不包含在 iCloud 备份中。设置中的“恢复购买项目”会向 Apple 查询该账户是否拥有此购买。查询在你的设备与 Apple 之间完成；开发者既不保存也不接收你的 Apple 账户。更换设备或重新安装 App 后，可以用它恢复购买。</p><p>如有此类变更，会在生效前反映在本页。</p>"
+      },
+      {
+        id: "sharing",
+        title: "信息共享",
+        html: "<p>开发者不会向第三方出售、共享或提供用户信息，原因很简单：根本不收集任何用户信息。</p><p>没有可以向广告商、分析服务商或数据经纪商披露的数据。iCloud 备份由 Apple 保存在你自己的 iCloud 账户中，开发者无法访问。即使收到主管机关具有法律约束力的要求，开发者也没有可以提供的用户数据。</p>"
+      },
+      {
+        id: "children",
+        title: "儿童隐私",
+        html: "<p>TechRef 是面向专业人员的工程工具，并非面向儿童。</p><p>不过，由于不收集任何年龄段任何人的个人信息，因此不存在儿童隐私方面的问题。对于任何用户，都没有需要保护、共享或删除的数据。</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "免责声明",
+        html: "<div class='lead-note'><p>TechRef 是参考与计算工具，不能替代正式标准、技术判断或经过验证的测量。</p></div><p><strong>仅供参考。</strong>App 提供的换算系数、参考表格、材料数据和计算结果，是参考官方公开的标准信息及定义整理的参考信息。这些不是经过认证的数据，不保证其准确性、完整性或对特定用途的适用性。</p><p><strong>验证是你的责任。</strong>在将 App 中的任何数值用于设计、加工、检验或采购之前，必须对照适用的正式标准、受控图纸以及所在组织的内部程序进行验证。App 旨在辅助这一过程，而不是取而代之。</p><p><strong>公差计算的局限。</strong>App 显示的中值和范围是对你输入的数值进行算术运算的结果。计算不考虑加工方法、刀具状态、测量不确定度、材料特性、热膨胀、配合等级或任何其他物理或工艺因素。数学上正确的中值不一定是合适的机床设定值。</p><p><strong>机械工程计算工具的局限。</strong>计算工具在理想化条件下使用教科书中的简单公式，例如等截面、线弹性，以及所示的支撑和载荷条件。不校核屈曲、疲劳、应力集中或其他失效形式。计算结果不能替代合格人员进行的强度校核或适当的安全系数。</p><p><strong>材料数据。</strong>在材料表中，带 ≥ 或 ≤ 的数值是参考官方公开的标准信息整理的限值。包括密度、弹性模量和热膨胀系数在内的其他数值均为代表值，并非保证值。耐蚀性和耐化学性评级是 TechRef 自定的相对评级。实际性能因牌号、状态、形状、尺寸和供应商而异，请以材质证明书、厂家数据表或适用标准确认。</p><p><strong>舍入与显示精度。</strong>结果按设置中选择的小数位数舍入。舍入可能产生误差，显示值可能与内部的全精度结果不同。请选择与公差带相适应的精度。</p><p><strong>单位选择。</strong>为输入选择正确的单位和类别是你的责任。App 无法检测单位分配错误。</p><p><strong>责任限制。</strong>在适用法律允许的最大范围内，开发者对因使用或无法使用 App 而产生的任何直接、间接、附带或后果性损害（包括但不限于不良品、返工、生产延误、设备损坏、人身伤害或经济损失）不承担责任。</p><p><strong>服务的持续性。</strong>iOS 更新、设备环境变化或 iCloud 的可用性，可能在没有事先通知的情况下影响 App 的运行。开发者可能在没有事先通知的情况下更改或停止提供 App，对由此造成的数据丢失（包括 iCloud 备份中的数据）不承担责任。重要数据请通过 CSV 导出等方式自行保存。</p>"
+      },
+      {
+        id: "law",
+        title: "适用法律与管辖",
+        html: "<p>本政策受日本法律管辖。与本政策相关的任何争议，以开发者所在地有管辖权的法院为第一审专属协议管辖法院。</p>"
+      },
+      {
+        id: "changes",
+        title: "本政策的变更",
+        html: "<p>本政策可能随 App 的发展而更新。修订后的政策自在本页发布之时起生效，页面顶部的生效日期也会相应更新。</p><p>由于不收集数据，本政策的变更不会影响已有的用户数据。如果某项变更会实质性地影响 App 的行为（例如引入 App 内购买或 iCloud 备份），会在该变更到达用户之前在本页公布。</p>"
+      },
+      {
+        id: "contact",
+        title: "联系方式",
+        html: "<p>欢迎提出问题、指正和功能建议。如果你发现换算系数或参考表格有误，请告诉我们——关于准确性的报告会优先处理。</p><div class='contact-box'><p>网站 / 联系表单：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>电子邮件：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+
+  "zh-Hant": {
+    meta: {
+      langName: "繁體中文",
+      selectLabel: "語言",
+      pageTitle: "隱私權政策與免責聲明",
+      subtitle: "TechRef 將資料儲存在你的裝置上，並只備份到你自己的 iCloud 帳號。你輸入的任何內容都不會傳送給開發者或其他任何人。本頁說明其具體含義，以及使用 App 結果時的限制。",
+      updatedLabel: "生效日期",
+      updatedDate: "2026年10月13日",
+      footer: {
+        ariaGithub: "GitHub（在新分頁中開啟）",
+        ariaX: "X（原 Twitter）（在新分頁中開啟）",
+        ariaInstagram: "Instagram（在新分頁中開啟）",
+        ariaTop: "回到頁面頂端",
+        ariaLegal: "法律資訊",
+        legalHtml: "",
+        copyHtml: "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab 首頁'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    sections: [
+      {
+        id: "introduction",
+        title: "簡介",
+        html: "<p>本頁是 Flying Dev Lab（空飛ぶ研究室）開發的 iOS App <strong>TechRef</strong> 的隱私權政策與免責聲明。</p><p>TechRef 是為技術人員設計的單位換算、工程參考與計算工具。它基於一個簡單的原則：你的資料屬於你。資料只儲存在你的裝置和你自己的 iCloud 帳號中，開發者永遠不會收到。</p><p>使用本 App 前請閱讀本頁。<a href='#disclaimer'>免責聲明</a>一節說明了使用 App 結果時的重要限制。</p>"
+      },
+      {
+        id: "storage",
+        title: "儲存在裝置上的資料",
+        html: "<div class='zero-data'><p>你輸入的所有資料都只儲存在你的裝置和你自己的 iCloud 帳號中。TechRef 沒有自己的伺服器，不會傳送任何內容給開發者。</p></div><p>TechRef 在你的裝置上儲存：</p><ul><li>換算紀錄（數值、公差、單位、標籤、備註、時間）</li><li>量測表資料（零件名稱、量測點名稱、尺寸、實測值、備註）</li><li>App 設定（小數位數、外觀、語言，選擇顯示的單位、表格、材料等，以及計算工具的單位制）</li><li>App 正常運作所需的資訊（已使用的免費儲存次數、是否同意條款、已顯示過的提示）</li></ul><p>在計算工具中輸入的數值只在該畫面開啟期間保留，不會儲存。</p><p>紀錄和量測表以檔案形式儲存在 App 的 Application Support 目錄中。設定儲存在 iOS 標準的偏好設定儲存區中。刪除 App 後，這些資料都會從裝置中刪除。你的 iCloud 帳號中的備份不會隨 App 一起刪除；請參閱 <a href='#icloud'>iCloud 備份</a>。</p><p>開發者無法存取其中任何資料。</p>"
+      },
+      {
+        id: "network",
+        title: "網路通訊",
+        html: "<p>TechRef 的核心功能——單位換算、公差計算、參考表格、計算工具和資料儲存——全部離線完成。使用這些功能不需要網路連線。</p><p>不使用任何分析 SDK、當機報告服務、廣告 SDK 或會傳送資料的第三方函式庫。</p><p><strong>App 本身只在以下情況下連線網路：</strong></p><ul><li><strong>iCloud 備份與回復</strong> — 將量測表、紀錄和設定傳送到你自己的 iCloud 帳號，並在回復時讀回（請參閱 <a href='#icloud'>iCloud 備份</a>）。自動備份預設開啟，可在設定中關閉。</li><li><strong>購買或回復 App 內購買項目</strong> — 由 Apple 透過 App Store 處理（請參閱 <a href='#purchases'>App 內購買</a>）</li><li><strong>點一下 App 中的連結</strong> — 例如支援頁面、本政策或設定中列出的標準官方網站——會在瀏覽器中開啟</li></ul><p><strong>在任何情況下，你的資料都不會傳送給開發者。</strong>iCloud 備份只會傳送到你自己的 iCloud 帳號。購買相關的通訊只與 Apple 進行，不包含你在 App 中輸入的任何數值。</p><p><strong>Apple 收集的使用統計。</strong>由於 App 透過 App Store 發佈，Apple 作為平台營運者，會彙整安裝次數、啟動次數、使用時間和購買次數等統計資訊，並以匿名、彙整的形式提供給開發者。如果你在 iOS 設定中開啟了分享診斷資料，當機資訊也會以同樣方式提供。這一切都由 Apple 管理，開發者無法開啟或關閉。</p><p><strong>這些統計絕不包含：</strong>你輸入的尺寸、公差、零件名稱、量測點名稱、實測值、標籤、備註、換算紀錄或量測表內容。離開裝置的唯一資料副本是你自己 iCloud 帳號中的備份，開發者無法存取。Apple 的統計只能讓開發者知道 App 被使用過，而不是你計算了什麼。</p><p>除 iCloud 備份外，你的資料只會透過 <a href='#export'>匯出資料</a> 中說明的拷貝和 CSV 匯出離開裝置，且兩者都只在你自己操作時進行。</p>"
+      },
+      {
+        id: "icloud",
+        title: "iCloud 備份",
+        html: "<p>TechRef 使用 Apple CloudKit 的私人資料庫，將你的量測表（含實測值）、紀錄和設定備份到你自己的 iCloud 帳號。如此在重新安裝 App 或更換裝置後，可以回復資料。iCloud 備份是免費的。</p><ul><li><strong>儲存位置</strong> — 你的 iCloud 帳號的私人資料庫。只有在你以自己的 Apple 帳號登入時才能讀取。開發者無法檢視、存取或刪除。</li><li><strong>傳送時機</strong> — 當「自動備份」開啟（預設）時，在儲存後不久以及關閉 App 時傳送。也可以在設定 &gt; iCloud 中點一下「立即備份」立刻傳送。未登入 iCloud 時不會備份。</li><li><strong>不備份的內容</strong> — 已使用的免費儲存次數、條款同意狀態、提示的顯示狀態以及你的購買。購買需另外從 Apple 回復（請參閱 <a href='#purchases'>App 內購買</a>）。</li><li><strong>回復</strong> — 重新安裝 App 後或在新裝置上，App 會詢問是否回復備份。也可以在設定 &gt; iCloud 中使用「從 iCloud 回復」，以備份取代裝置上的資料。</li></ul><p><strong>關閉與刪除。</strong>你可以在 App 的設定 &gt; iCloud 中關閉「自動備份」。備份會使用你的 iCloud 儲存空間。若要刪除，請在裝置上打開「設定」&gt;［你的名稱］&gt;「iCloud」&gt;「管理帳號儲存空間」，然後選擇 TechRef。</p><p><strong>裝置備份。</strong>此外，如果你在裝置設定中開啟了 iCloud 備份，iOS 可能會將 TechRef 的資料檔案與其他 App 的資料一起納入裝置備份。這是完全由 Apple 管理的作業系統標準功能。開發者不會啟動這些備份，也無法存取其內容。</p><p>儲存在 iCloud 中的資料依照 <a href='https://www.apple.com/tw/legal/privacy/' target='_blank' rel='noopener'>Apple 隱私權政策</a> 處理。</p>"
+      },
+      {
+        id: "export",
+        title: "匯出資料",
+        html: "<p>在 TechRef 中，你可以透過兩種方式將資料帶出 App：</p><ul><li><strong>拷貝</strong> — 將換算結果、量測表資料或實測值放到系統剪貼簿</li><li><strong>儲存到「檔案」</strong> — 在「檔案」App 中選擇的位置寫入 CSV 檔案</li></ul><p>兩者都由你自己啟動，App 不會自行傳送資料。資料離開 App 後的處理（包括貼上到何處、傳送給誰，以及在「檔案」App 中選擇的雲端儲存位置）不在 App 的控制範圍內，由你自行負責。</p><p>如果你處理的是公司視為機密的尺寸資料，請在匯出以及決定是否使用 iCloud 備份時遵守所屬組織的規定。</p>"
+      },
+      {
+        id: "advertising",
+        title: "廣告與追蹤",
+        html: "<p>TechRef <strong>沒有任何廣告</strong>。</p><p>App 不使用廣告識別碼（IDFA），不要求 App 追蹤透明度權限，也不會跨 App 或網站追蹤你。沒有使用者剖析、行為分析，也與資料仲介商沒有任何關係。</p><p>這是設計上的決定，而不是暫時的狀態。TechRef 是專業工具，今後也不會刊登廣告。</p>"
+      },
+      {
+        id: "purchases",
+        title: "App 內購買",
+        html: "<p>TechRef 可免費下載。單位換算、公差計算、鑽頭尺寸表、切削速度與進給計算工具、實測值和 iCloud 備份，無論是否購買都可無限次使用。</p><p>向紀錄和量測表儲存新尺寸在一定次數內免費。超過該次數後，儲存頻率會受到限制。一次購買（非消耗性）的 App 內購買「TechRef Pro」可永久取消此限制，並解鎖更多參考表格和機械工程計算工具等功能。<strong>具體次數、限制內容、包含的功能和價格顯示在 App Store 的產品頁面和 App 內的購買畫面上。</strong></p><p>所有付款均由 Apple 透過 App Store 處理。開發者不會收到你的付款資訊、卡片資訊或與交易相關的任何個人資訊。關於 Apple 如何處理這些資料，請參閱 <a href='https://www.apple.com/tw/legal/privacy/' target='_blank' rel='noopener'>Apple 隱私權政策</a>。</p><p><strong>回復購買。</strong>購買與你的 Apple 帳號綁定，而不是與某台裝置綁定，並且不包含在 iCloud 備份中。設定中的「回復購買項目」會向 Apple 查詢該帳號是否擁有此購買。查詢在你的裝置與 Apple 之間完成；開發者既不儲存也不接收你的 Apple 帳號。更換裝置或重新安裝 App 後，可以用它回復購買。</p><p>如有此類變更，會在生效前反映在本頁。</p>"
+      },
+      {
+        id: "sharing",
+        title: "資訊分享",
+        html: "<p>開發者不會向第三方出售、分享或提供使用者資訊，原因很簡單：根本不收集任何使用者資訊。</p><p>沒有可以向廣告商、分析服務商或資料仲介商揭露的資料。iCloud 備份由 Apple 儲存在你自己的 iCloud 帳號中，開發者無法存取。即使收到主管機關具法律拘束力的要求，開發者也沒有可以提供的使用者資料。</p>"
+      },
+      {
+        id: "children",
+        title: "兒童隱私",
+        html: "<p>TechRef 是為專業人員設計的工程工具，並非以兒童為對象。</p><p>不過，由於不收集任何年齡層任何人的個人資訊，因此不存在兒童隱私方面的疑慮。對於任何使用者，都沒有需要保護、分享或刪除的資料。</p>"
+      },
+      {
+        id: "disclaimer",
+        title: "免責聲明",
+        html: "<div class='lead-note'><p>TechRef 是參考與計算工具，不能取代正式標準、技術判斷或經過驗證的量測。</p></div><p><strong>僅供參考。</strong>App 提供的換算係數、參考表格、材料資料和計算結果，是參考官方公開的標準資訊及定義整理的參考資訊。這些不是經過認證的資料，不保證其正確性、完整性或對特定用途的適用性。</p><p><strong>驗證是你的責任。</strong>在將 App 中的任何數值用於設計、加工、檢驗或採購之前，必須對照適用的正式標準、受控圖面以及所屬組織的內部程序進行驗證。App 旨在輔助這一過程，而不是取而代之。</p><p><strong>公差計算的限制。</strong>App 顯示的中值和範圍是對你輸入的數值進行算術運算的結果。計算不考慮加工方法、刀具狀態、量測不確定度、材料特性、熱膨脹、配合等級或任何其他物理或製程因素。數學上正確的中值不一定是合適的機台設定值。</p><p><strong>機械工程計算工具的限制。</strong>計算工具在理想化條件下使用教科書中的簡單公式，例如等斷面、線彈性，以及所示的支撐和負載條件。不檢核挫曲、疲勞、應力集中或其他破壞形式。計算結果不能取代合格人員進行的強度檢核或適當的安全係數。</p><p><strong>材料資料。</strong>在材料表中，帶 ≥ 或 ≤ 的數值是參考官方公開的標準資訊整理的限值。包括密度、楊氏模數和熱膨脹係數在內的其他數值均為代表值，並非保證值。耐蝕性和耐化學性評級是 TechRef 自訂的相對評級。實際性質因材種、狀態、形狀、尺寸和供應商而異，請以材質證明書、廠商資料表或適用標準確認。</p><p><strong>四捨五入與顯示精度。</strong>結果依設定中選擇的小數位數四捨五入。四捨五入可能產生誤差，顯示值可能與內部的完整精度結果不同。請選擇與公差帶相符的精度。</p><p><strong>單位選擇。</strong>為輸入選擇正確的單位和類別是你的責任。App 無法偵測單位指定錯誤。</p><p><strong>責任限制。</strong>在適用法律允許的最大範圍內，開發者對因使用或無法使用 App 而產生的任何直接、間接、附帶或衍生性損害（包括但不限於不良品、重工、生產延誤、設備損壞、人身傷害或經濟損失）不負任何責任。</p><p><strong>服務的持續性。</strong>iOS 更新、裝置環境變化或 iCloud 的可用性，可能在未事先通知的情況下影響 App 的運作。開發者可能在未事先通知的情況下變更或停止提供 App，對由此造成的資料遺失（包括 iCloud 備份中的資料）不負責任。重要資料請透過 CSV 匯出等方式自行保存。</p>"
+      },
+      {
+        id: "law",
+        title: "準據法與管轄",
+        html: "<p>本政策以日本法律為準據法。與本政策相關的任何爭議，以開發者所在地有管轄權的法院為第一審專屬合意管轄法院。</p>"
+      },
+      {
+        id: "changes",
+        title: "本政策的變更",
+        html: "<p>本政策可能隨 App 的發展而更新。修訂後的政策自在本頁發布之時起生效，頁面頂端的生效日期也會相應更新。</p><p>由於不收集資料，本政策的變更不會影響既有的使用者資料。如果某項變更會實質影響 App 的行為（例如導入 App 內購買或 iCloud 備份），會在該變更到達使用者之前在本頁公布。</p>"
+      },
+      {
+        id: "contact",
+        title: "聯絡方式",
+        html: "<p>歡迎提出問題、指正和功能建議。如果你發現換算係數或參考表格有誤，請告訴我們——關於正確性的回報會優先處理。</p><div class='contact-box'><p>網站 / 聯絡表單：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>電子郵件：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
       }
     ]
   },
@@ -600,9 +1343,9 @@ const T = {
       pageTitle: "プライバシーポリシー・免責事項",
       /* 改訂（2026-08-25）: 「外部へ送信しません」は購入処理の通信がある以上
          言い過ぎになるため、主語を「入力されたデータ」に絞った。 */
-      subtitle: "TechRef はすべてのデータを端末内に保存します。入力されたデータが外部へ送信されることはありません。本ページでは、その具体的な内容と、アプリの出力を扱ううえでの制限について説明します。",
+      subtitle: "TechRef はデータを端末内に保存し、ご自身の iCloud アカウントにだけバックアップします。入力されたデータが開発者やそれ以外の第三者へ送信されることはありません。本ページでは、その具体的な内容と、アプリの出力を扱ううえでの制限について説明します。",
       updatedLabel: "発効日",
-      updatedDate: "2026年8月25日",
+      updatedDate: "2026年10月13日",
       footer: {
         ariaGithub: "GitHub（新しいタブで開きます）",
         ariaX: "X（旧Twitter）（新しいタブで開きます）",
@@ -618,28 +1361,28 @@ const T = {
         id: "introduction",
         title: "はじめに",
         /* 「第10章（免責事項）」の章番号直書きはアンカーリンクに置換済み（理由は英語版と同じ） */
-        html: "<p>本ページは、Flying Dev Labが開発した iOS アプリ <strong>TechRef</strong> のプライバシーポリシーおよび免責事項です。</p><p>TechRef は技術者向けの単位変換・エンジニアリングリファレンスツールです。「データは利用者のものであり、端末内にとどまる」という単純な原則に基づいて設計されています。</p><p>本アプリをご利用の前に本ページをお読みください。<a href='#disclaimer'>免責事項</a>の章には、本アプリの出力の取り扱いに関する重要な制限が記載されています。</p>"
+        html: "<p>本ページは、Flying Dev Labが開発した iOS アプリ <strong>TechRef</strong> のプライバシーポリシーおよび免責事項です。</p><p>TechRef は技術者向けの単位変換・エンジニアリングリファレンス・計算ツールです。「データは利用者のもの」という単純な原則に基づいて設計されています。データは端末内とご自身の iCloud アカウントにだけ保存され、開発者が受け取ることはありません。</p><p>本アプリをご利用の前に本ページをお読みください。<a href='#disclaimer'>免責事項</a>の章には、本アプリの出力の取り扱いに関する重要な制限が記載されています。</p>"
       },
       {
         id: "storage",
         title: "端末内に保存するデータ",
-        html: "<div class='zero-data'><p>入力されたデータはすべて端末内にとどまります。TechRef はサーバーを持たず、開発者へ送信されるものは一切ありません。</p></div><p>本アプリが端末内にのみ保存するもの：</p><ul><li>変換履歴（値・公差・単位・ラベル・メモ・日時）</li><li>Sheets のデータ（部品名・測定ポイント名・寸法・メモ）</li><li>アプリ設定（小数点桁数・外観・単位設定）</li></ul><p>履歴と Sheets はアプリの Application Support ディレクトリ内にファイルとして保存されます。設定は iOS 標準の設定ストアに保存されます。アプリを削除すると、これらのデータはすべて端末から削除されます。</p><p>当開発者はこれらに一切アクセスできません。</p>"
+        html: "<div class='zero-data'><p>入力されたデータはすべて、端末内とご自身の iCloud アカウントにとどまります。TechRef は独自のサーバーを持たず、開発者へ送信されるものは一切ありません。</p></div><p>本アプリが端末内に保存するもの：</p><ul><li>変換履歴（値・公差・単位・ラベル・メモ・日時）</li><li>Sheets のデータ（部品名・測定ポイント名・寸法・実測値・メモ）</li><li>アプリ設定（小数点桁数・外観・言語、表示する単位・表・材料などの選択、計算ツールの単位系）</li><li>アプリが正しく動くための情報（無料の保存の使用回数、利用規約への同意、表示済みのヒント）</li></ul><p>計算ツールに入力した値は、その画面を開いている間だけ保持され、保存されません。</p><p>履歴と Sheets はアプリの Application Support ディレクトリ内にファイルとして保存されます。設定は iOS 標準の設定ストアに保存されます。アプリを削除すると、これらのデータはすべて端末から削除されます。ご自身の iCloud アカウント内のバックアップは、アプリを削除しても削除されません（<a href='#icloud'>iCloud バックアップについて</a>を参照）。</p><p>当開発者はこれらに一切アクセスできません。</p>"
       },
       {
         id: "network",
         title: "ネットワーク通信",
         /* 改訂（2026-08-25）: 英語版と同じ理由。詳細は T.en.sections の network を参照。 */
-        html: "<p>TechRef の中核機能——単位変換、公差計算、リファレンステーブルの閲覧、データの保存——は、すべてオフラインで完結します。これらの利用にネットワーク接続は不要です。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、データを送信するサードパーティライブラリのいずれも使用していません。</p><p><strong>アプリ自身が通信を行うのは、ご自身の操作による次の2つの場合のみです：</strong></p><ul><li><strong>アプリ内課金の購入および復元</strong> — App Store を通じて Apple が処理します（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>設定画面の Support リンクをタップした場合</strong> — ブラウザで本サイトが開きます</li></ul><p><strong>いずれの場合も、入力された寸法データが送信されることはありません。</strong>購入処理の通信相手は Apple のみであり、アプリ内で入力された値は一切含まれません。</p><p><strong>Apple による利用統計について。</strong>App Store でアプリを配信する以上、Apple はプラットフォームの運営者として、インストール数・起動回数・利用時間・購入数といった統計情報を集計し、匿名化・集計された形で当開発者に提供します。また、iOS の設定で診断データの共有を有効にされている場合は、クラッシュ情報も同様に提供されます。これらはすべて Apple が管理する仕組みであり、当開発者が有効化・無効化できるものではありません。</p><p><strong>これらの統計に含まれないもの：</strong>入力された寸法値、公差、部品名、測定ポイント名、ラベル、メモ、変換履歴、Sheets の内容。これらはアプリが端末外へ送信しないため、Apple も当開発者も取得できません。Apple が把握するのは「アプリが使われた」という事実であって、「何を計算したか」ではありません。</p><p>ご自身のデータを端末の外に出す唯一の方法は、<a href='#export'>データの書き出しについて</a>で説明するコピーおよび CSV の書き出しです。いずれもご自身の操作によってのみ実行されます。</p>"
+        html: "<p>TechRef の中核機能——単位変換、公差計算、リファレンステーブルの閲覧、計算ツール、データの保存——は、すべてオフラインで完結します。これらの利用にネットワーク接続は不要です。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、データを送信するサードパーティライブラリのいずれも使用していません。</p><p><strong>アプリ自身が通信を行うのは、次の場合のみです：</strong></p><ul><li><strong>iCloud へのバックアップと復元</strong> — Sheets・履歴・設定をご自身の iCloud アカウントへ送り、復元のときに読み戻します（<a href='#icloud'>iCloud バックアップについて</a>を参照）。自動バックアップは初期設定でオンで、設定画面でオフにできます。</li><li><strong>アプリ内課金の購入および復元</strong> — App Store を通じて Apple が処理します（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>アプリ内のリンクをタップした場合</strong> — サポートページ、本ポリシー、設定画面に載せている規格の公式サイトなどがブラウザで開きます</li></ul><p><strong>いずれの場合も、ご自身のデータが開発者へ送信されることはありません。</strong>iCloud のバックアップの送り先は、ご自身の iCloud アカウントだけです。購入処理の通信相手は Apple のみであり、アプリ内で入力された値は一切含まれません。</p><p><strong>Apple による利用統計について。</strong>App Store でアプリを配信する以上、Apple はプラットフォームの運営者として、インストール数・起動回数・利用時間・購入数といった統計情報を集計し、匿名化・集計された形で当開発者に提供します。また、iOS の設定で診断データの共有を有効にされている場合は、クラッシュ情報も同様に提供されます。これらはすべて Apple が管理する仕組みであり、当開発者が有効化・無効化できるものではありません。</p><p><strong>これらの統計に含まれないもの：</strong>入力された寸法値、公差、部品名、測定ポイント名、実測値、ラベル、メモ、変換履歴、Sheets の内容。データが端末の外に出るのはご自身の iCloud アカウントへのバックアップだけで、当開発者はそれにアクセスできません。Apple の統計から当開発者が知りうるのは「アプリが使われた」という事実であって、「何を計算したか」ではありません。</p><p>iCloud へのバックアップのほかに、ご自身のデータを端末の外に出す方法は、<a href='#export'>データの書き出しについて</a>で説明するコピーおよび CSV の書き出しだけです。いずれもご自身の操作によってのみ実行されます。</p>"
       },
       {
         id: "icloud",
         title: "iCloud バックアップについて",
-        html: "<p>TechRef は CloudKit を使用せず、いかなるクラウドサービスともデータを同期しません。</p><p>ただし、端末設定で iCloud バックアップを有効にしている場合、iOS が他のアプリのデータとともに TechRef のデータファイルを端末バックアップに含めることがあります。これは Apple が完全に管理する OS 標準の機能です。当開発者がこのバックアップを開始することも、内容にアクセスすることもできません。</p><p>この仕組みにより、機種変更時に履歴や Sheets が自動的に復元されます。バックアップを望まない場合は、iOS の設定アプリから TechRef の iCloud バックアップを個別に無効化できます。</p><p>バックアップの取り扱いは <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple のプライバシーポリシー</a> に従います。</p>"
+        html: "<p>TechRef は、Sheets（実測値を含む）・履歴・設定を、Apple の CloudKit のプライベートデータベースを使って、ご自身の iCloud アカウントにバックアップします。アプリの再インストールや機種変更の後に、データを戻すためです。iCloud へのバックアップは無料です。</p><ul><li><strong>保存先</strong> — ご自身の iCloud アカウントのプライベートデータベースです。ご自身の Apple アカウントでサインインしているときにだけ読み出せます。当開発者が内容を見ること、アクセスすること、削除することはできません。</li><li><strong>送るとき</strong> — 「自動でバックアップ」がオン（初期設定）のとき、保存の少し後とアプリを閉じるときに送ります。設定 &gt; iCloud の「今すぐバックアップ」で、すぐに送ることもできます。iCloud にサインインしていない場合は送りません。</li><li><strong>バックアップしないもの</strong> — 無料の保存の使用回数、利用規約への同意、ヒントの表示状態、購入の状態。購入は Apple から別に復元します（<a href='#purchases'>アプリ内課金について</a>を参照）。</li><li><strong>復元</strong> — 再インストールの後や新しい端末では、バックアップを戻すかどうかをアプリが確認します。設定 &gt; iCloud の「iCloud から復元」で、端末のデータをバックアップの内容に置き換えることもできます。</li></ul><p><strong>オフにする・削除する。</strong>アプリの設定 &gt; iCloud で「自動でバックアップ」をオフにできます。バックアップはご自身の iCloud の容量を使います。削除するには、端末の「設定」&gt;［ご自身の名前］&gt;「iCloud」&gt;「アカウントのストレージを管理」で TechRef を選んでください。</p><p><strong>端末のバックアップについて。</strong>上記とは別に、端末設定で iCloud バックアップを有効にしている場合、iOS が他のアプリのデータとともに TechRef のデータファイルを端末バックアップに含めることがあります。これは Apple が完全に管理する OS 標準の機能です。当開発者がこのバックアップを開始することも、内容にアクセスすることもできません。</p><p>iCloud に保存されたデータの取り扱いは <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple のプライバシーポリシー</a> に従います。</p>"
       },
       {
         id: "export",
         title: "データの書き出しについて",
-        html: "<p>TechRef では、2つの方法でデータをアプリの外に持ち出せます：</p><ul><li><strong>コピー</strong> — 変換結果やシートのデータをシステムのクリップボードに配置</li><li><strong>Save to Files</strong> — Files アプリで指定した場所に CSV ファイルを書き出し</li></ul><p>いずれもご自身の操作によって開始されるものであり、アプリが自動的にデータを送信することはありません。データがアプリの外に出た後の取り扱い（貼り付け先、送信相手、Files アプリで選択したクラウド保存先を含む）はアプリの管理外であり、ご利用者の責任となります。</p><p>社内で機密として扱われる寸法データを扱う場合は、書き出しに際して所属組織の規定に従ってください。</p>"
+        html: "<p>TechRef では、2つの方法でデータをアプリの外に持ち出せます：</p><ul><li><strong>コピー</strong> — 変換結果・シートのデータ・実測値をシステムのクリップボードに配置</li><li><strong>Save to Files</strong> — Files アプリで指定した場所に CSV ファイルを書き出し</li></ul><p>いずれもご自身の操作によって開始されるものであり、アプリが自動的にデータを送信することはありません。データがアプリの外に出た後の取り扱い（貼り付け先、送信相手、Files アプリで選択したクラウド保存先を含む）はアプリの管理外であり、ご利用者の責任となります。</p><p>社内で機密として扱われる寸法データを扱う場合は、書き出しや iCloud へのバックアップの利用について、所属組織の規定に従ってください。</p>"
       },
       {
         id: "advertising",
@@ -650,12 +1393,12 @@ const T = {
         id: "purchases",
         title: "アプリ内課金について",
         /* 改訂（2026-08-25）: 英語版と同じ理由。詳細は T.en.sections の purchases を参照。 */
-        html: "<p>TechRef は無料でダウンロードできます。単位変換・公差計算・リファレンステーブルの機能は、購入の有無にかかわらず回数制限なくご利用いただけます。</p><p>履歴および Sheets への保存は、一定回数まで無料でご利用いただけます。その回数を超えた後は保存の頻度に制限がかかります。買い切り型（非消耗型）のアプリ内課金により、この制限は恒久的に解除されます。<strong>具体的な回数・制限内容・価格は、App Store の製品ページおよびアプリ内の購入画面に表示されます。</strong></p><p>決済処理はすべて App Store を通じて Apple が行います。当開発者が決済情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple による取り扱いについては <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple のプライバシーポリシー</a> をご参照ください。</p><p><strong>購入の復元について。</strong>購入は端末ではなく Apple アカウントに紐づけられます。設定画面の「Restore Purchases」は、そのアカウントが購入を保有しているかを Apple に照会するものです。この照会は端末と Apple との間で完結し、当開発者がお客様の Apple アカウントを保存することも、受け取ることもありません。機種変更や再インストールの際は、この操作で購入状態を復元できます。</p><p>この種の変更が生じる場合は、施行前に本ページに反映します。</p>"
+        html: "<p>TechRef は無料でダウンロードできます。単位変換・公差計算・ドリルサイズの表・切削速度と送りの計算・実測値・iCloud へのバックアップは、購入の有無にかかわらず回数制限なくご利用いただけます。</p><p>履歴および Sheets への新しい寸法の保存は、一定回数まで無料でご利用いただけます。その回数を超えた後は保存の頻度に制限がかかります。買い切り型（非消耗型）のアプリ内課金「TechRef Pro」により、この制限は恒久的に解除され、追加のリファレンステーブルや機械工学の計算ツールなどの機能が使えるようになります。<strong>具体的な回数・制限内容・含まれる機能・価格は、App Store の製品ページおよびアプリ内の購入画面に表示されます。</strong></p><p>決済処理はすべて App Store を通じて Apple が行います。当開発者が決済情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple による取り扱いについては <a href='https://www.apple.com/legal/privacy/' target='_blank' rel='noopener'>Apple のプライバシーポリシー</a> をご参照ください。</p><p><strong>購入の復元について。</strong>購入は端末ではなく Apple アカウントに紐づけられ、iCloud のバックアップには含まれません。設定画面の「購入を復元」は、そのアカウントが購入を保有しているかを Apple に照会するものです。この照会は端末と Apple との間で完結し、当開発者がお客様の Apple アカウントを保存することも、受け取ることもありません。機種変更や再インストールの際は、この操作で購入状態を復元できます。</p><p>この種の変更が生じる場合は、施行前に本ページに反映します。</p>"
       },
       {
         id: "sharing",
         title: "第三者への情報提供",
-        html: "<p>当開発者は利用者の情報を第三者に販売・共有・提供することはありません。そもそも利用者の情報を一切収集していないためです。</p><p>広告主・分析事業者・データブローカーに開示できるデータは存在しません。権限を有する当局から法的拘束力のある請求があった場合も、当開発者が提出しうる利用者データは存在しません。</p>"
+        html: "<p>当開発者は利用者の情報を第三者に販売・共有・提供することはありません。そもそも利用者の情報を一切収集していないためです。</p><p>広告主・分析事業者・データブローカーに開示できるデータは存在しません。iCloud のバックアップは Apple がご自身の iCloud アカウント内に保存するもので、当開発者はアクセスできません。権限を有する当局から法的拘束力のある請求があった場合も、当開発者が提出しうる利用者データは存在しません。</p>"
       },
       {
         id: "children",
@@ -665,7 +1408,7 @@ const T = {
       {
         id: "disclaimer",
         title: "免責事項",
-        html: "<div class='lead-note'><p>TechRef はリファレンス・計算ツールです。正式な規格、技術的判断、検証された測定に代わるものではありません。</p></div><p><strong>参考情報としての位置づけ。</strong>本アプリが提供する変換係数・リファレンステーブル・計算結果は、一般に公開された規格および定義に基づく参考情報です。認証されたデータではなく、正確性・完全性・特定目的への適合性を保証するものではありません。</p><p><strong>検証はご利用者の責任。</strong>本アプリの値を設計・加工・検査・調達に適用する前に、該当する正式規格、支配図面、および貴組織の社内手順に照らして必ず検証してください。本アプリはその工程を支援するものであり、代替するものではありません。</p><p><strong>公差計算の限界。</strong>表示される中央値および範囲は、入力値に対する算術演算の結果です。加工方法、工具状態、測定不確かさ、材料特性、熱膨張、はめあい等級その他一切の物理的・工程的要因を考慮していません。数学的に正しい中央値が、必ずしも適切な機械セット値であるとは限りません。</p><p><strong>丸めと表示桁数。</strong>結果は設定で選択した小数点以下桁数に丸められます。丸めにより誤差が生じ、表示値と内部の完全精度の値が異なる場合があります。公差幅に応じた適切な桁数を選択してください。</p><p><strong>単位の選択。</strong>入力に対する正しい単位・カテゴリの選択はご利用者の責任です。本アプリは単位の取り違えを検知できません。</p><p><strong>責任の制限。</strong>適用法が許す最大限の範囲において、当開発者は本アプリの使用または使用不能に起因する直接的・間接的・付随的・結果的損害（不良品、手直し、生産遅延、設備損傷、人身傷害、経済的損失を含むがこれらに限られない）について一切責任を負いません。</p><p><strong>提供の継続性。</strong>iOS のアップデートや端末環境の変化により、予告なくアプリの動作に影響が生じる場合があります。当開発者は予告なくアプリを変更・提供終了する場合があり、それに起因するデータ消失について責任を負いません。</p>"
+        html: "<div class='lead-note'><p>TechRef はリファレンス・計算ツールです。正式な規格、技術的判断、検証された測定に代わるものではありません。</p></div><p><strong>参考情報としての位置づけ。</strong>本アプリが提供する変換係数・リファレンステーブル・材料のデータ・計算結果は、公式に公開されている規格の情報および定義を参考にまとめた参考情報です。認証されたデータではなく、正確性・完全性・特定目的への適合性を保証するものではありません。</p><p><strong>検証はご利用者の責任。</strong>本アプリの値を設計・加工・検査・調達に適用する前に、該当する正式規格、支配図面、および貴組織の社内手順に照らして必ず検証してください。本アプリはその工程を支援するものであり、代替するものではありません。</p><p><strong>公差計算の限界。</strong>表示される中央値および範囲は、入力値に対する算術演算の結果です。加工方法、工具状態、測定不確かさ、材料特性、熱膨張、はめあい等級その他一切の物理的・工程的要因を考慮していません。数学的に正しい中央値が、必ずしも適切な機械セット値であるとは限りません。</p><p><strong>機械工学の計算ツールの限界。</strong>計算ツールは、一様な断面、線形弾性、表示した支持と荷重の条件といった理想化した条件のもとで、教科書どおりの簡単な式を使っています。座屈・疲労・応力集中その他の破壊の形態は確かめていません。計算結果は、有資格者による強度の確認や適切な安全率に代わるものではありません。</p><p><strong>材料のデータ。</strong>材料の表で ≥ または ≤ を付けた値は、公式に公開されている規格の情報を参考にまとめた規格の値です。密度・縦弾性係数・熱膨張係数を含むそれ以外の値は代表値であり、保証値ではありません。耐食性・耐薬品性の評価は TechRef 独自の相対評価です。実際の特性は材種・状態・形状・寸法・製造者によって変わるため、ミルシート、製造者のデータシート、または該当する規格で確かめてください。</p><p><strong>丸めと表示桁数。</strong>結果は設定で選択した小数点以下桁数に丸められます。丸めにより誤差が生じ、表示値と内部の完全精度の値が異なる場合があります。公差幅に応じた適切な桁数を選択してください。</p><p><strong>単位の選択。</strong>入力に対する正しい単位・カテゴリの選択はご利用者の責任です。本アプリは単位の取り違えを検知できません。</p><p><strong>責任の制限。</strong>適用法が許す最大限の範囲において、当開発者は本アプリの使用または使用不能に起因する直接的・間接的・付随的・結果的損害（不良品、手直し、生産遅延、設備損傷、人身傷害、経済的損失を含むがこれらに限られない）について一切責任を負いません。</p><p><strong>提供の継続性。</strong>iOS のアップデート、端末環境の変化、iCloud の提供状況により、予告なくアプリの動作に影響が生じる場合があります。当開発者は予告なくアプリを変更・提供終了する場合があり、それに起因するデータ消失（iCloud のバックアップ内のデータを含む）について責任を負いません。大切なデータは、CSV の書き出しなどでご自身でも保管してください。</p>"
       },
       {
         id: "law",
@@ -675,7 +1418,7 @@ const T = {
       {
         id: "changes",
         title: "ポリシーの変更について",
-        html: "<p>本ポリシーはアプリの進化に応じて更新されることがあります。改定後のポリシーは本ページに掲載された時点で効力を生じ、ページ上部の発効日も併せて更新されます。</p><p>データを収集していないため、本ポリシーの変更が既存の利用者データに影響を及ぼすことはありません。アプリの動作に実質的な影響を与える変更（アプリ内課金の導入など）については、その変更が利用者に届く前に本ページで公開します。</p>"
+        html: "<p>本ポリシーはアプリの進化に応じて更新されることがあります。改定後のポリシーは本ページに掲載された時点で効力を生じ、ページ上部の発効日も併せて更新されます。</p><p>データを収集していないため、本ポリシーの変更が既存の利用者データに影響を及ぼすことはありません。アプリの動作に実質的な影響を与える変更（アプリ内課金や iCloud へのバックアップの導入など）については、その変更が利用者に届く前に本ページで公開します。</p>"
       },
       {
         id: "contact",
@@ -696,7 +1439,16 @@ const T = {
  */
 const LANG_MAP = {
   "en": "en", "en-us": "en", "en-gb": "en", "en-au": "en", "en-ca": "en",
-  "ja": "ja"
+  "it": "it", "it-it": "it", "it-ch": "it",
+  "es": "es", "es-es": "es", "es-mx": "es", "es-419": "es", "es-us": "es",
+  "de": "de", "de-de": "de", "de-at": "de", "de-ch": "de",
+  "fr": "fr", "fr-fr": "fr", "fr-ca": "fr", "fr-be": "fr", "fr-ch": "fr",
+  "pt": "pt", "pt-br": "pt", "pt-pt": "pt",
+  "ko": "ko", "ko-kr": "ko",
+  /* 中国語は文字体系で分ける。"zh-Hant"（台湾・香港・マカオ）は繁体字、それ以外の "zh" は簡体字 */
+  "zh": "zh-Hans", "zh-cn": "zh-Hans", "zh-sg": "zh-Hans", "zh-hans": "zh-Hans",
+  "zh-tw": "zh-Hant", "zh-hk": "zh-Hant", "zh-mo": "zh-Hant", "zh-hant": "zh-Hant",
+  "ja": "ja", "ja-jp": "ja"
 };
 const SUPPORTED = Object.keys(T);
 const DEFAULT_LANG = "en";   // ★ アプリ本体が英語のため、英語をデフォルトとする
@@ -724,8 +1476,11 @@ function detectLang() {
        ブラウザによって "en-US" のように大文字が混ざる。
        「表のキーは小文字で書く・照合時も小文字にする」と決めておけば表記ゆれで取りこぼさない。
        なお地域コード付きが表に無くても、"-" の前（"en"）で再照合するので拾える。 */
+    /* "zh-Hant-TW" のように3つに分かれる値もあるので、全体 → 先頭2つ（"zh-hant"）→ 先頭1つ（"zh"）の順に照合する。
+       先頭1つだけで照合すると、台湾の繁体字が簡体字になってしまう。 */
     const key = String(l).toLowerCase();
-    const code = LANG_MAP[key] || LANG_MAP[key.split("-")[0]];
+    const parts = key.split("-");
+    const code = LANG_MAP[key] || LANG_MAP[parts.slice(0, 2).join("-")] || LANG_MAP[parts[0]];
     if (code && SUPPORTED.includes(code)) return code;
   }
   return DEFAULT_LANG;
