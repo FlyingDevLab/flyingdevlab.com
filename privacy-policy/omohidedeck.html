@@ -60,6 +60,12 @@
                 ヘッダーのバッジとタブのタイトルも表示言語の製品名に切り替えるようにした
                 （meta.appName）。発効日を 2026-09-23 に更新。
                 旧名からの一括置換で壊れていた canonical の URL（スペース入り）を修正。
+    2026-10-17  アプリ v1.1 に合わせて改訂。端末内に保存するものにグループとカードのタイトル・説明、
+                Pro の撮影の自動保存を追記。課金・こども・免責事項の Pro の内容を更新し、
+                免責事項に「デッキの削除でグループからも外れる」を追加。新しい機能には
+                「バージョン 1.1 以降」と付けた（1.1 の配信まで 1.0 と食い違わないように）。
+                アプリに合わせて 9 言語（繁体字・簡体字・韓・タイ・西・葡（ブラジル）・独・仏・蘭）を追加し、
+                準拠法の章に「翻訳と食い違うときは英語版が優先」を追記。発効日を 2026-10-17 に更新。
   ============================================================
   -->
   <title>Privacy Policy &amp; Disclaimer – OMOHIDE DECK</title>
@@ -389,7 +395,7 @@
     <div class="app-badge" id="hd-app">OMOHIDE DECK</div>
     <h1 id="hd-title">Privacy Policy &amp; Disclaimer</h1>
     <p class="hd-sub" id="hd-sub">OMOHIDE DECK turns your photos into cards, and keeps every one of them on your device. Nothing is ever transmitted off it. This page explains exactly what that means, and what the App does and does not do with your photos.</p>
-    <p class="updated" id="hd-updated">Effective: September 23, 2026</p>
+    <p class="updated" id="hd-updated">Effective: October 17, 2026</p>
     <div class="scale-rule" aria-hidden="true"></div>
   </div>
   <div class="lang-bar hd-inner">
@@ -448,13 +454,13 @@
     <p>This is the Privacy Policy and Disclaimer for <strong>OMOHIDE DECK</strong>, an iOS app developed by Flying Dev Lab (空飛ぶ研究室).</p><p>OMOHIDE DECK is a memory-matching card game that uses your own photos as the cards. It is built on a simple principle: your photos belong to you, and they stay on your device.</p><p>Please read this page before using the App. The <a href='#disclaimer'>Disclaimer</a> section explains what the App does and does not do with your photos, including what happens when you delete it.</p>
   </section><section class="policy-section" id="storage">
     <h2><span class="sec-num">2</span><span>Photos and Data Stored on Your Device</span></h2>
-    <div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Your consent record</strong> — the version (effective date) of this page (Privacy Policy and Disclaimer) you agreed to when you first opened the App, used only to show the agreement screen again if this page is revised</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>
+    <div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, the deck name, the dates it was created and last changed, and (from version 1.1) any title and note you write for each card</li><li><strong>Groups</strong> (from version 1.1) — the name of each group you make and which saved cards it includes. A group points to cards in your saved decks; it does not make extra copies of the images</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Your consent record</strong> — the version (effective date) of this page (Privacy Policy and Disclaimer) you agreed to when you first opened the App, used only to show the agreement screen again if this page is revised</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks and groups are saved as files in the App's Application Support directory. From version 1.1, with OMOHIDE DECK Pro, photos you take in the App are saved as a deck as soon as you finish shooting, so they are not lost if you stop before the end of the game. You can delete that deck at any time in My Decks. In the free version, and for photos you pick from your library, nothing is saved unless you choose to save the deck; those photos exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>
   </section><section class="policy-section" id="access">
     <h2><span class="sec-num">3</span><span>Photo Library and Camera Access</span></h2>
     <p>OMOHIDE DECK gets photos in two ways, and both are designed so the App sees only what you choose to show it.</p><p><strong>Choosing from your library.</strong> The App uses the iOS system photo picker. The picker runs outside the App, and only the photos you tap are handed over. The App is never granted access to your photo library — which is why iOS shows no permission prompt: there is no permission to ask for. The App cannot see, list, or read any photo you did not pick.</p><p><strong>Taking new photos.</strong> The camera path asks for camera permission, because iOS requires it to show a live preview and capture. Photos taken this way go directly into the App as cards. They are <strong>not</strong> written to your camera roll, and the App still has no access to photos already in your library.</p><p>The App never requests microphone, location, contacts, or any other permission.</p>
   </section><section class="policy-section" id="network">
     <h2><span class="sec-num">4</span><span>Network Activity</span></h2>
-    <p>Every feature of OMOHIDE DECK — choosing or taking photos, playing, and saving decks — works entirely offline. No network connection is required.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries of any kind in the App.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring OMOHIDE DECK Pro</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link on the About screen</strong> (Privacy Policy, Disclaimer, Support) — this website opens in your browser</li></ul><p><strong>In neither case is any photo, card image, or deck transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains nothing from your photos. Opening this website is an ordinary page load in your browser, unconnected to anything in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> your photos, the cards made from them, deck names, or anything about what is in your decks. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you played with.</p><p>The only way your card images leave the device is iCloud Backup, described next — and only if you have turned it on.</p>
+    <p>Every feature of OMOHIDE DECK — choosing or taking photos, playing, saving decks, and making groups — works entirely offline. No network connection is required.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries of any kind in the App.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring OMOHIDE DECK Pro</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link on the About screen</strong> (Privacy Policy, Disclaimer, Support) — this website opens in your browser</li></ul><p><strong>In neither case is any photo, card image, or deck transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains nothing from your photos. Opening this website is an ordinary page load in your browser, unconnected to anything in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> your photos, the cards made from them, deck names, card titles and notes, or anything about what is in your decks and groups. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you played with.</p><p>The only way your card images leave the device is iCloud Backup, described next — and only if you have turned it on.</p>
   </section><section class="policy-section" id="icloud">
     <h2><span class="sec-num">5</span><span>iCloud Backup</span></h2>
     <p>OMOHIDE DECK does not use CloudKit and does not synchronize your decks with any cloud service.</p><p>However, if you have enabled iCloud Backup in your device settings, iOS may include the App's saved decks — <strong>including the card images</strong> — in your device backup, along with data from your other apps. This is a standard operating system feature managed entirely by Apple. The Developer neither initiates nor has access to these backups.</p><p>This is what allows your decks to be restored automatically when you set up a new device. If you prefer that your card images not be included, you can disable iCloud Backup for OMOHIDE DECK in the iOS Settings app.</p><p>Backup handling is governed by Apple's Privacy Policy.</p>
@@ -463,19 +469,19 @@
     <p>OMOHIDE DECK contains <strong>no advertisements</strong>.</p><p>The App does not use the advertising identifier (IDFA), does not request App Tracking Transparency permission, and does not track you across apps or websites. There is no profiling, no behavioral analysis, and no data broker relationship of any kind.</p><p>This is a design decision, not a temporary state. A game built around your personal photos — and one that families may play with children — will not carry advertising.</p>
   </section><section class="policy-section" id="purchases">
     <h2><span class="sec-num">7</span><span>In-App Purchases</span></h2>
-    <p>OMOHIDE DECK is free to download. You can choose or take photos, play the 4-pair board, and keep one saved deck — named automatically by date — without purchasing anything.</p><p>A one-time (non-consumable) in-app purchase, <strong>OMOHIDE DECK Pro</strong>, unlocks the larger 6-pair and 7-pair boards, removes the one-deck limit on saving, and lets you name and rename your decks. The exact contents and the price are shown on the App Store product page and on the purchase screen inside the App.</p><p>All payment processing is handled by Apple through the App Store. The Developer never receives your payment details, card information, or any personal information associated with the transaction. See Apple's Privacy Policy for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. "Restore Purchase" on the Pro screen asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore Pro after changing devices or reinstalling the App.</p><p>Any change to what is free and what is paid will be reflected on this page before it takes effect.</p>
+    <p>OMOHIDE DECK is free to download. You can choose or take photos, play the 4-pair board, and keep one saved deck — named automatically by date — without purchasing anything.</p><p>A one-time (non-consumable) in-app purchase, <strong>OMOHIDE DECK Pro</strong>, unlocks the larger boards (6 and 7 pairs, plus 8, 10, and 12 pairs from version 1.1), removes the one-deck limit on saving, and lets you name and rename your decks. From version 1.1, Pro also lets you sort cards into groups, play with All Cards, and give each card a title and a note, and it saves photos taken in the App automatically (see <a href='#storage'>Photos and Data Stored on Your Device</a>). The exact contents and the price are shown on the App Store product page and on the purchase screen inside the App.</p><p>All payment processing is handled by Apple through the App Store. The Developer never receives your payment details, card information, or any personal information associated with the transaction. See Apple's Privacy Policy for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. "Restore Purchase" on the Pro screen asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore Pro after changing devices or reinstalling the App.</p><p>Any change to what is free and what is paid will be reflected on this page before it takes effect.</p>
   </section><section class="policy-section" id="sharing">
     <h2><span class="sec-num">8</span><span>Sharing of Information</span></h2>
     <p>The Developer does not sell, share, or transfer user information to third parties, for the simple reason that no user information is collected in the first place.</p><p>There is no data to disclose to advertisers, analytics providers, or data brokers. In the event of a legally binding request from a competent authority, the Developer has no user data — and no photos — that could be produced.</p>
   </section><section class="policy-section" id="children">
     <h2><span class="sec-num">9</span><span>Children's Privacy</span></h2>
-    <p>OMOHIDE DECK is a family game, not a children's app. It is made for families: adults and children can play together using family photos, and many families will do exactly that.</p><p>Because personal photos may be on the screen and a child may be playing, the App carries <strong>no advertisements</strong>. OMOHIDE DECK Pro is an optional add-on aimed at the adults in the family — larger boards, more saved decks, and named decks. The free version is fully playable, and nothing a child needs in order to enjoy the game sits behind a purchase.</p><p>The App collects no personal information from anyone of any age, so it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user. Photos chosen or taken during play stay on the device exactly as described above, regardless of who is playing.</p>
+    <p>OMOHIDE DECK is a family game, not a children's app. It is made for families: adults and children can play together using family photos, and many families will do exactly that.</p><p>Because personal photos may be on the screen and a child may be playing, the App carries <strong>no advertisements</strong>. OMOHIDE DECK Pro is an optional add-on aimed at the adults in the family — larger boards, more saved decks, named decks, and (from version 1.1) groups and card titles and notes. The free version is fully playable, and nothing a child needs in order to enjoy the game sits behind a purchase.</p><p>The App collects no personal information from anyone of any age, so it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user. Photos chosen or taken during play stay on the device exactly as described above, regardless of who is playing.</p>
   </section><section class="policy-section" id="disclaimer">
     <h2><span class="sec-num">10</span><span>Disclaimer</span></h2>
-    <div class='lead-note'><p>OMOHIDE DECK is a game. It is not a photo backup, an archive, or a photo-management tool. Please keep your original photos where you normally keep them.</p></div><p><strong>Card images are derived copies.</strong> The App makes square, downscaled copies of your photos for use as cards. These copies are lower in resolution than the originals and carry no metadata. They are not a substitute for the original photos.</p><p><strong>Photos taken in the App are not saved to your camera roll.</strong> If you take a photo in OMOHIDE DECK that you want to keep as a photo, take it again with the Camera app. The App is not designed to preserve camera captures beyond their use as cards.</p><p><strong>Deleting the App deletes your decks.</strong> Saved decks live only inside the App. Uninstalling it removes them, unless a device backup restores them later. The Developer cannot recover deleted decks.</p><p><strong>The free version keeps one deck.</strong> Saving a new deck replaces the existing one. The App warns you before it does so, but once replaced, the previous deck is gone.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to loss of decks, loss of photos taken within the App, or any other data loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>
+    <div class='lead-note'><p>OMOHIDE DECK is a game. It is not a photo backup, an archive, or a photo-management tool. Please keep your original photos where you normally keep them.</p></div><p><strong>Card images are derived copies.</strong> The App makes square, downscaled copies of your photos for use as cards. These copies are lower in resolution than the originals and carry no metadata. They are not a substitute for the original photos.</p><p><strong>Photos taken in the App are not saved to your camera roll.</strong> If you take a photo in OMOHIDE DECK that you want to keep as a photo, take it again with the Camera app. The App keeps camera captures only as cards: in a saved deck (with Pro, saved automatically), or otherwise only until the game ends.</p><p><strong>Deleting the App deletes your decks.</strong> Saved decks live only inside the App. Uninstalling it removes them, unless a device backup restores them later. The Developer cannot recover deleted decks.</p><p><strong>Deleting a deck also removes its cards from groups.</strong> Groups do not keep their own copies of the images, so cards from a deleted deck disappear from every group that used them. The App asks for confirmation first.</p><p><strong>The free version keeps one deck.</strong> Saving a new deck replaces the existing one. The App warns you before it does so, but once replaced, the previous deck is gone.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to loss of decks, loss of photos taken within the App, or any other data loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>
   </section><section class="policy-section" id="law">
     <h2><span class="sec-num">11</span><span>Governing Law</span></h2>
-    <p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p>
+    <p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p><p><strong>Translations.</strong> This page is provided in several languages for convenience. The English version is the original. If a translation differs from the English version, the English version prevails.</p>
   </section><section class="policy-section" id="changes">
     <h2><span class="sec-num">12</span><span>Changes to This Policy</span></h2>
     <p>This policy may be updated as the App evolves. The revised version takes effect when it is posted on this page, and the effective date at the top of the page will be updated accordingly.</p><p>Because no data is collected, changes to this policy cannot affect data already held about you. If a change materially affects how the App behaves — for example, a change to what OMOHIDE DECK Pro includes — it will be published here before that change reaches users.</p>
@@ -562,7 +568,7 @@ const T = {
       "pageTitle": "Privacy Policy & Disclaimer",
       "subtitle": "OMOHIDE DECK turns your photos into cards, and keeps every one of them on your device. Nothing is ever transmitted off it. This page explains exactly what that means, and what the App does and does not do with your photos.",
       "updatedLabel": "Effective",
-      "updatedDate": "September 23, 2026",
+      "updatedDate": "October 17, 2026",
       "footer": {
         "ariaGithub": "GitHub (opens in a new tab)",
         "ariaX": "X, formerly Twitter (opens in a new tab)",
@@ -582,7 +588,7 @@ const T = {
       {
         "id": "storage",
         "title": "Photos and Data Stored on Your Device",
-        "html": "<div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, plus the deck name and the dates it was created and last changed</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Your consent record</strong> — the version (effective date) of this page (Privacy Policy and Disclaimer) you agreed to when you first opened the App, used only to show the agreement screen again if this page is revised</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks are saved as files in the App's Application Support directory. Photos you pick or take but do not save as a deck exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>"
+        "html": "<div class='zero-data'><p>Everything the App keeps stays on your device. OMOHIDE DECK has no server, and no photo or other data is ever transmitted to the Developer.</p></div><p>OMOHIDE DECK stores the following on your device only:</p><ul><li><strong>Saved decks</strong> — the card images made from the photos you chose or took, the deck name, the dates it was created and last changed, and (from version 1.1) any title and note you write for each card</li><li><strong>Groups</strong> (from version 1.1) — the name of each group you make and which saved cards it includes. A group points to cards in your saved decks; it does not make extra copies of the images</li><li><strong>Your Pro purchase status</strong> — read from the App Store on your device (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Your consent record</strong> — the version (effective date) of this page (Privacy Policy and Disclaimer) you agreed to when you first opened the App, used only to show the agreement screen again if this page is revised</li></ul><p>Card images are not your original photos. When you pick or take a photo, the App crops it to a square, scales it down, and re-encodes it as a new JPEG. That process redraws the pixels from scratch, so the saved card carries <strong>none of the original's metadata</strong> — no location, no capture date or time, no camera model, and no other embedded information. Your original photos in the Photos app are never modified.</p><p>Decks and groups are saved as files in the App's Application Support directory. From version 1.1, with OMOHIDE DECK Pro, photos you take in the App are saved as a deck as soon as you finish shooting, so they are not lost if you stop before the end of the game. You can delete that deck at any time in My Decks. In the free version, and for photos you pick from your library, nothing is saved unless you choose to save the deck; those photos exist only in memory while you play and are discarded afterward. Deleting the App removes all of this data from your device.</p><p>The Developer has no access to any of it.</p>"
       },
       {
         "id": "access",
@@ -592,7 +598,7 @@ const T = {
       {
         "id": "network",
         "title": "Network Activity",
-        "html": "<p>Every feature of OMOHIDE DECK — choosing or taking photos, playing, and saving decks — works entirely offline. No network connection is required.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries of any kind in the App.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring OMOHIDE DECK Pro</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link on the About screen</strong> (Privacy Policy, Disclaimer, Support) — this website opens in your browser</li></ul><p><strong>In neither case is any photo, card image, or deck transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains nothing from your photos. Opening this website is an ordinary page load in your browser, unconnected to anything in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> your photos, the cards made from them, deck names, or anything about what is in your decks. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you played with.</p><p>The only way your card images leave the device is iCloud Backup, described next — and only if you have turned it on.</p>"
+        "html": "<p>Every feature of OMOHIDE DECK — choosing or taking photos, playing, saving decks, and making groups — works entirely offline. No network connection is required.</p><p>There are no analytics SDKs, no crash reporting services, no advertising SDKs, and no third-party libraries of any kind in the App.</p><p><strong>The App itself connects to the network in only two cases, both initiated by you:</strong></p><ul><li><strong>Purchasing or restoring OMOHIDE DECK Pro</strong> — handled by Apple through the App Store (see <a href='#purchases'>In-App Purchases</a>)</li><li><strong>Tapping a link on the About screen</strong> (Privacy Policy, Disclaimer, Support) — this website opens in your browser</li></ul><p><strong>In neither case is any photo, card image, or deck transmitted.</strong> Purchase traffic goes to Apple and to no one else, and it contains nothing from your photos. Opening this website is an ordinary page load in your browser, unconnected to anything in the App.</p><p><strong>Usage statistics collected by Apple.</strong> Because the App is distributed through the App Store, Apple — as the platform operator — aggregates statistics such as installs, launches, session length, and purchases, and provides them to the Developer in anonymized, aggregated form. If you have enabled diagnostic data sharing in your iOS settings, crash reports are provided in the same way. All of this is managed by Apple, and the Developer can neither enable nor disable it.</p><p><strong>What these statistics never include:</strong> your photos, the cards made from them, deck names, card titles and notes, or anything about what is in your decks and groups. The App never transmits any of it, so neither Apple nor the Developer can obtain it. Apple knows that the App was used — not what you played with.</p><p>The only way your card images leave the device is iCloud Backup, described next — and only if you have turned it on.</p>"
       },
       {
         "id": "icloud",
@@ -607,7 +613,7 @@ const T = {
       {
         "id": "purchases",
         "title": "In-App Purchases",
-        "html": "<p>OMOHIDE DECK is free to download. You can choose or take photos, play the 4-pair board, and keep one saved deck — named automatically by date — without purchasing anything.</p><p>A one-time (non-consumable) in-app purchase, <strong>OMOHIDE DECK Pro</strong>, unlocks the larger 6-pair and 7-pair boards, removes the one-deck limit on saving, and lets you name and rename your decks. The exact contents and the price are shown on the App Store product page and on the purchase screen inside the App.</p><p>All payment processing is handled by Apple through the App Store. The Developer never receives your payment details, card information, or any personal information associated with the transaction. See Apple's Privacy Policy for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. \"Restore Purchase\" on the Pro screen asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore Pro after changing devices or reinstalling the App.</p><p>Any change to what is free and what is paid will be reflected on this page before it takes effect.</p>"
+        "html": "<p>OMOHIDE DECK is free to download. You can choose or take photos, play the 4-pair board, and keep one saved deck — named automatically by date — without purchasing anything.</p><p>A one-time (non-consumable) in-app purchase, <strong>OMOHIDE DECK Pro</strong>, unlocks the larger boards (6 and 7 pairs, plus 8, 10, and 12 pairs from version 1.1), removes the one-deck limit on saving, and lets you name and rename your decks. From version 1.1, Pro also lets you sort cards into groups, play with All Cards, and give each card a title and a note, and it saves photos taken in the App automatically (see <a href='#storage'>Photos and Data Stored on Your Device</a>). The exact contents and the price are shown on the App Store product page and on the purchase screen inside the App.</p><p>All payment processing is handled by Apple through the App Store. The Developer never receives your payment details, card information, or any personal information associated with the transaction. See Apple's Privacy Policy for how Apple handles that data.</p><p><strong>Restoring a purchase.</strong> A purchase is tied to your Apple Account, not to a particular device. \"Restore Purchase\" on the Pro screen asks Apple whether that account holds the purchase. The query is completed between your device and Apple; the Developer neither stores nor receives your Apple Account. Use it to restore Pro after changing devices or reinstalling the App.</p><p>Any change to what is free and what is paid will be reflected on this page before it takes effect.</p>"
       },
       {
         "id": "sharing",
@@ -617,17 +623,17 @@ const T = {
       {
         "id": "children",
         "title": "Children's Privacy",
-        "html": "<p>OMOHIDE DECK is a family game, not a children's app. It is made for families: adults and children can play together using family photos, and many families will do exactly that.</p><p>Because personal photos may be on the screen and a child may be playing, the App carries <strong>no advertisements</strong>. OMOHIDE DECK Pro is an optional add-on aimed at the adults in the family — larger boards, more saved decks, and named decks. The free version is fully playable, and nothing a child needs in order to enjoy the game sits behind a purchase.</p><p>The App collects no personal information from anyone of any age, so it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user. Photos chosen or taken during play stay on the device exactly as described above, regardless of who is playing.</p>"
+        "html": "<p>OMOHIDE DECK is a family game, not a children's app. It is made for families: adults and children can play together using family photos, and many families will do exactly that.</p><p>Because personal photos may be on the screen and a child may be playing, the App carries <strong>no advertisements</strong>. OMOHIDE DECK Pro is an optional add-on aimed at the adults in the family — larger boards, more saved decks, named decks, and (from version 1.1) groups and card titles and notes. The free version is fully playable, and nothing a child needs in order to enjoy the game sits behind a purchase.</p><p>The App collects no personal information from anyone of any age, so it presents no children's privacy concerns. There is no data to protect, share, or delete — for any user. Photos chosen or taken during play stay on the device exactly as described above, regardless of who is playing.</p>"
       },
       {
         "id": "disclaimer",
         "title": "Disclaimer",
-        "html": "<div class='lead-note'><p>OMOHIDE DECK is a game. It is not a photo backup, an archive, or a photo-management tool. Please keep your original photos where you normally keep them.</p></div><p><strong>Card images are derived copies.</strong> The App makes square, downscaled copies of your photos for use as cards. These copies are lower in resolution than the originals and carry no metadata. They are not a substitute for the original photos.</p><p><strong>Photos taken in the App are not saved to your camera roll.</strong> If you take a photo in OMOHIDE DECK that you want to keep as a photo, take it again with the Camera app. The App is not designed to preserve camera captures beyond their use as cards.</p><p><strong>Deleting the App deletes your decks.</strong> Saved decks live only inside the App. Uninstalling it removes them, unless a device backup restores them later. The Developer cannot recover deleted decks.</p><p><strong>The free version keeps one deck.</strong> Saving a new deck replaces the existing one. The App warns you before it does so, but once replaced, the previous deck is gone.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to loss of decks, loss of photos taken within the App, or any other data loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>"
+        "html": "<div class='lead-note'><p>OMOHIDE DECK is a game. It is not a photo backup, an archive, or a photo-management tool. Please keep your original photos where you normally keep them.</p></div><p><strong>Card images are derived copies.</strong> The App makes square, downscaled copies of your photos for use as cards. These copies are lower in resolution than the originals and carry no metadata. They are not a substitute for the original photos.</p><p><strong>Photos taken in the App are not saved to your camera roll.</strong> If you take a photo in OMOHIDE DECK that you want to keep as a photo, take it again with the Camera app. The App keeps camera captures only as cards: in a saved deck (with Pro, saved automatically), or otherwise only until the game ends.</p><p><strong>Deleting the App deletes your decks.</strong> Saved decks live only inside the App. Uninstalling it removes them, unless a device backup restores them later. The Developer cannot recover deleted decks.</p><p><strong>Deleting a deck also removes its cards from groups.</strong> Groups do not keep their own copies of the images, so cards from a deleted deck disappear from every group that used them. The App asks for confirmation first.</p><p><strong>The free version keeps one deck.</strong> Saving a new deck replaces the existing one. The App warns you before it does so, but once replaced, the previous deck is gone.</p><p><strong>Limitation of liability.</strong> To the maximum extent permitted by applicable law, the Developer shall not be liable for any direct, indirect, incidental, or consequential damages arising from use of, or inability to use, the App — including but not limited to loss of decks, loss of photos taken within the App, or any other data loss.</p><p><strong>Availability.</strong> iOS updates or changes in the device environment may affect the App's behavior without prior notice. The Developer may modify or discontinue the App without prior notice, and is not liable for data loss resulting from such changes.</p>"
       },
       {
         "id": "law",
         "title": "Governing Law",
-        "html": "<p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p>"
+        "html": "<p>This policy is governed by the laws of Japan. Any dispute arising in connection with this policy shall be subject to the exclusive jurisdiction of the court having jurisdiction over the Developer's location as the court of first instance.</p><p><strong>Translations.</strong> This page is provided in several languages for convenience. The English version is the original. If a translation differs from the English version, the English version prevails.</p>"
       },
       {
         "id": "changes",
@@ -649,7 +655,7 @@ const T = {
       "pageTitle": "プライバシーポリシー・免責事項",
       "subtitle": "思ひ出デッキはお手持ちの写真をカードにして遊ぶアプリです。写真はすべて端末内にとどまり、外部へ送信されることはありません。本ページでは、その具体的な内容と、写真の取り扱いについて説明します。",
       "updatedLabel": "発効日",
-      "updatedDate": "2026年9月23日",
+      "updatedDate": "2026年10月17日",
       "footer": {
         "ariaGithub": "GitHub（新しいタブで開きます）",
         "ariaX": "X（旧Twitter）（新しいタブで開きます）",
@@ -669,7 +675,7 @@ const T = {
       {
         "id": "storage",
         "title": "端末内に保存する写真とデータ",
-        "html": "<div class='zero-data'><p>本アプリが保持するものはすべて端末内にとどまります。思ひ出デッキはサーバーを持たず、写真もその他のデータも、当開発者へ送信されることは一切ありません。</p></div><p>本アプリが端末内にのみ保存するもの：</p><ul><li><strong>保存したデッキ</strong> — 選択または撮影した写真から作られたカード画像、デッキ名、作成日時と最終更新日時</li><li><strong>Pro の購入状態</strong> — 端末上で App Store から読み取ります（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>同意の記録</strong> — 初回起動時に同意した本ページ（プライバシーポリシー・免責事項）の版（発効日）。本ページが改訂されたときに同意画面を出し直すためだけに使います</li></ul><p>カード画像は元の写真そのものではありません。写真を選択または撮影すると、本アプリはそれを正方形に切り出し、縮小したうえで、新しい JPEG として再エンコードします。この処理ではピクセルを一から描き直すため、保存されるカードには<strong>元の写真のメタデータが一切残りません</strong>——位置情報、撮影日時、カメラの機種、その他の埋め込み情報のいずれも含まれません。「写真」アプリ内の元の写真が変更されることもありません。</p><p>デッキはアプリの Application Support ディレクトリ内にファイルとして保存されます。選択または撮影したもののデッキとして保存しなかった写真は、プレイ中のみメモリ上に存在し、その後破棄されます。アプリを削除すると、これらのデータはすべて端末から削除されます。</p><p>当開発者はこれらに一切アクセスできません。</p>"
+        "html": "<div class='zero-data'><p>本アプリが保持するものはすべて端末内にとどまります。思ひ出デッキはサーバーを持たず、写真もその他のデータも、当開発者へ送信されることは一切ありません。</p></div><p>本アプリが端末内にのみ保存するもの：</p><ul><li><strong>保存したデッキ</strong> — 選択または撮影した写真から作られたカード画像、デッキ名、作成日時と最終更新日時、カードごとに書いたタイトルと説明（バージョン 1.1 以降）</li><li><strong>グループ</strong>（バージョン 1.1 以降） — 作成したグループの名前と、そのグループに入れた保存済みカードの一覧。グループは保存済みデッキのカードを指し示すだけで、画像の複製は作りません</li><li><strong>Pro の購入状態</strong> — 端末上で App Store から読み取ります（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>同意の記録</strong> — 初回起動時に同意した本ページ（プライバシーポリシー・免責事項）の版（発効日）。本ページが改訂されたときに同意画面を出し直すためだけに使います</li></ul><p>カード画像は元の写真そのものではありません。写真を選択または撮影すると、本アプリはそれを正方形に切り出し、縮小したうえで、新しい JPEG として再エンコードします。この処理ではピクセルを一から描き直すため、保存されるカードには<strong>元の写真のメタデータが一切残りません</strong>——位置情報、撮影日時、カメラの機種、その他の埋め込み情報のいずれも含まれません。「写真」アプリ内の元の写真が変更されることもありません。</p><p>デッキとグループはアプリの Application Support ディレクトリ内にファイルとして保存されます。バージョン 1.1 以降、思ひ出デッキ Pro では、アプリ内で撮影した写真は、撮り終えた時点でデッキとして保存されます（ゲームを途中でやめても失われないようにするためです）。保存されたデッキはマイデッキからいつでも削除できます。無料版で撮影した写真と、ライブラリから選んだ写真は、デッキとして保存を選ばない限り保存されず、プレイ中のみメモリ上に存在し、その後破棄されます。アプリを削除すると、これらのデータはすべて端末から削除されます。</p><p>当開発者はこれらに一切アクセスできません。</p>"
       },
       {
         "id": "access",
@@ -679,7 +685,7 @@ const T = {
       {
         "id": "network",
         "title": "ネットワーク通信",
-        "html": "<p>思ひ出デッキのすべての機能——写真の選択・撮影、プレイ、デッキの保存——は、オフラインで完結します。ネットワーク接続は不要です。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、その他いかなるサードパーティライブラリも本アプリには含まれていません。</p><p><strong>アプリ自身が通信を行うのは、ご自身の操作による次の2つの場合のみです：</strong></p><ul><li><strong>思ひ出デッキ Pro の購入および復元</strong> — App Store を通じて Apple が処理します（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>「このアプリについて」画面のリンク（プライバシーポリシー・免責事項・サポート）をタップした場合</strong> — ブラウザで本サイトが開きます</li></ul><p><strong>いずれの場合も、写真、カード画像、デッキが送信されることはありません。</strong>購入処理の通信相手は Apple のみであり、写真に由来する情報は一切含まれません。本サイトを開く操作は、ブラウザでの通常のページ読み込みであり、アプリ内の情報とは結びつきません。</p><p><strong>Apple による利用統計について。</strong>App Store でアプリを配信する以上、Apple はプラットフォームの運営者として、インストール数・起動回数・利用時間・購入数といった統計情報を集計し、匿名化・集計された形で当開発者に提供します。また、iOS の設定で診断データの共有を有効にされている場合は、クラッシュレポートも同様の形で提供されます。これらはすべて Apple が管理しており、当開発者が有効・無効を切り替えることはできません。</p><p><strong>これらの統計に決して含まれないもの：</strong>写真、写真から作られたカード、デッキ名、デッキの内容に関する情報。本アプリはこれらを一切送信しないため、Apple も当開発者も取得できません。Apple が知り得るのは「アプリが使われたこと」であって、「何で遊んだか」ではありません。</p><p>カード画像が端末の外に出る唯一の経路は、次章で説明する iCloud バックアップです——それも、ご自身で有効にされている場合に限ります。</p>"
+        "html": "<p>思ひ出デッキのすべての機能——写真の選択・撮影、プレイ、デッキの保存、グループの作成——は、オフラインで完結します。ネットワーク接続は不要です。</p><p>分析 SDK、クラッシュレポートサービス、広告 SDK、その他いかなるサードパーティライブラリも本アプリには含まれていません。</p><p><strong>アプリ自身が通信を行うのは、ご自身の操作による次の2つの場合のみです：</strong></p><ul><li><strong>思ひ出デッキ Pro の購入および復元</strong> — App Store を通じて Apple が処理します（<a href='#purchases'>アプリ内課金について</a>を参照）</li><li><strong>「このアプリについて」画面のリンク（プライバシーポリシー・免責事項・サポート）をタップした場合</strong> — ブラウザで本サイトが開きます</li></ul><p><strong>いずれの場合も、写真、カード画像、デッキが送信されることはありません。</strong>購入処理の通信相手は Apple のみであり、写真に由来する情報は一切含まれません。本サイトを開く操作は、ブラウザでの通常のページ読み込みであり、アプリ内の情報とは結びつきません。</p><p><strong>Apple による利用統計について。</strong>App Store でアプリを配信する以上、Apple はプラットフォームの運営者として、インストール数・起動回数・利用時間・購入数といった統計情報を集計し、匿名化・集計された形で当開発者に提供します。また、iOS の設定で診断データの共有を有効にされている場合は、クラッシュレポートも同様の形で提供されます。これらはすべて Apple が管理しており、当開発者が有効・無効を切り替えることはできません。</p><p><strong>これらの統計に決して含まれないもの：</strong>写真、写真から作られたカード、デッキ名、カードのタイトルと説明、デッキやグループの内容に関する情報。本アプリはこれらを一切送信しないため、Apple も当開発者も取得できません。Apple が知り得るのは「アプリが使われたこと」であって、「何で遊んだか」ではありません。</p><p>カード画像が端末の外に出る唯一の経路は、次章で説明する iCloud バックアップです——それも、ご自身で有効にされている場合に限ります。</p>"
       },
       {
         "id": "icloud",
@@ -694,7 +700,7 @@ const T = {
       {
         "id": "purchases",
         "title": "アプリ内課金について",
-        "html": "<p>思ひ出デッキは無料でダウンロードできます。写真の選択・撮影、4ペアの盤面でのプレイ、デッキ1件の保存（名前は日付が自動で付きます）は、購入なしで利用できます。</p><p>買い切り型（非消耗型）のアプリ内課金「<strong>思ひ出デッキ Pro</strong>」を購入すると、より大きな6ペア・7ペアの盤面が解放され、保存できるデッキが1件という制限がなくなり、デッキに名前を付けたり変更したりできるようになります。具体的な内容と価格は、App Store の製品ページおよびアプリ内の購入画面に表示されます。</p><p>決済処理はすべて App Store を通じて Apple が行います。当開発者が支払い情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple によるこれらのデータの取り扱いについては、Apple のプライバシーポリシーをご確認ください。</p><p><strong>購入の復元について。</strong>購入は特定の端末ではなく Apple アカウントに紐づきます。Pro 画面の「購入を復元」は、そのアカウントが購入済みかどうかを Apple に問い合わせます。この問い合わせは端末と Apple の間で完結し、当開発者が Apple アカウントを保存・受信することはありません。機種変更やアプリの再インストール後に Pro を復元する際にご利用ください。</p><p>無料の範囲と有料の範囲に変更がある場合は、施行前に本ページに反映します。</p>"
+        "html": "<p>思ひ出デッキは無料でダウンロードできます。写真の選択・撮影、4ペアの盤面でのプレイ、デッキ1件の保存（名前は日付が自動で付きます）は、購入なしで利用できます。</p><p>買い切り型（非消耗型）のアプリ内課金「<strong>思ひ出デッキ Pro</strong>」を購入すると、より大きな盤面（6ペア・7ペア。バージョン 1.1 以降は8ペア・10ペア・12ペアも）が解放され、保存できるデッキが1件という制限がなくなり、デッキに名前を付けたり変更したりできるようになります。バージョン 1.1 以降は、カードのグループ分け、「すべてのカード」で遊ぶこと、カードへのタイトルと説明の記入もできるようになり、アプリ内で撮影した写真が自動で保存されます（<a href='#storage'>端末内に保存する写真とデータ</a>を参照）。具体的な内容と価格は、App Store の製品ページおよびアプリ内の購入画面に表示されます。</p><p>決済処理はすべて App Store を通じて Apple が行います。当開発者が支払い情報、カード情報、取引に関連する個人情報を受け取ることはありません。Apple によるこれらのデータの取り扱いについては、Apple のプライバシーポリシーをご確認ください。</p><p><strong>購入の復元について。</strong>購入は特定の端末ではなく Apple アカウントに紐づきます。Pro 画面の「購入を復元」は、そのアカウントが購入済みかどうかを Apple に問い合わせます。この問い合わせは端末と Apple の間で完結し、当開発者が Apple アカウントを保存・受信することはありません。機種変更やアプリの再インストール後に Pro を復元する際にご利用ください。</p><p>無料の範囲と有料の範囲に変更がある場合は、施行前に本ページに反映します。</p>"
       },
       {
         "id": "sharing",
@@ -704,17 +710,17 @@ const T = {
       {
         "id": "children",
         "title": "こどもの利用について",
-        "html": "<p>思ひ出デッキはこども専用のアプリではなく、家族向けのゲームです。家族のために作ったもので、大人とこどもが家族写真を使って一緒に遊べます。実際にそのように遊ばれることも多いでしょう。</p><p>個人の写真が画面に出ること、またこどもが遊ぶ可能性があることから、本アプリに<strong>広告はありません</strong>。思ひ出デッキ Pro は家族の中の大人に向けた任意の拡張で、より大きな盤面、複数デッキの保存、デッキへの名前付けができるようになります。無料の範囲だけで十分に遊べる設計で、こどもが遊ぶうえで必要な機能が課金の向こう側に置かれることはありません。</p><p>本アプリは年齢を問わず誰からも個人情報を収集しないため、こどものプライバシーに関する懸念は生じません。保護・共有・削除すべきデータは、いかなる利用者についても存在しません。プレイ中に選択または撮影された写真は、誰が遊んでいるかにかかわらず、上記のとおり端末内にとどまります。</p>"
+        "html": "<p>思ひ出デッキはこども専用のアプリではなく、家族向けのゲームです。家族のために作ったもので、大人とこどもが家族写真を使って一緒に遊べます。実際にそのように遊ばれることも多いでしょう。</p><p>個人の写真が画面に出ること、またこどもが遊ぶ可能性があることから、本アプリに<strong>広告はありません</strong>。思ひ出デッキ Pro は家族の中の大人に向けた任意の拡張で、より大きな盤面、複数デッキの保存、デッキへの名前付け、そしてバージョン 1.1 以降はグループ分けやカードへのタイトル・説明の記入ができるようになります。無料の範囲だけで十分に遊べる設計で、こどもが遊ぶうえで必要な機能が課金の向こう側に置かれることはありません。</p><p>本アプリは年齢を問わず誰からも個人情報を収集しないため、こどものプライバシーに関する懸念は生じません。保護・共有・削除すべきデータは、いかなる利用者についても存在しません。プレイ中に選択または撮影された写真は、誰が遊んでいるかにかかわらず、上記のとおり端末内にとどまります。</p>"
       },
       {
         "id": "disclaimer",
         "title": "免責事項",
-        "html": "<div class='lead-note'><p>思ひ出デッキはゲームです。写真のバックアップ、アーカイブ、写真管理ツールではありません。元の写真は普段の保管場所に保管してください。</p></div><p><strong>カード画像は派生的な複製です。</strong>本アプリはカードとして使うために、写真の正方形・縮小版の複製を作成します。この複製は元の写真より解像度が低く、メタデータを持ちません。元の写真の代わりにはなりません。</p><p><strong>アプリ内で撮影した写真はカメラロールに保存されません。</strong>思ひ出デッキで撮影した写真を写真として残したい場合は、カメラアプリで撮り直してください。本アプリは、カードとしての用途を超えて撮影画像を保存するようには設計されていません。</p><p><strong>アプリを削除するとデッキも削除されます。</strong>保存したデッキはアプリの内部にのみ存在します。アンインストールすると、後に端末のバックアップから復元されない限り、デッキは失われます。当開発者が削除されたデッキを復旧することはできません。</p><p><strong>無料版で保存できるデッキは1件です。</strong>新しいデッキを保存すると既存のデッキが置き換えられます。置き換えの前にアプリが警告を表示しますが、置き換え後に以前のデッキを取り戻すことはできません。</p><p><strong>責任の制限。</strong>適用法令が許容する最大限の範囲において、当開発者は、本アプリの利用または利用不能から生じる直接的・間接的・付随的・結果的な損害——デッキの喪失、アプリ内で撮影した写真の喪失、その他のデータ喪失を含むがこれに限らない——について責任を負いません。</p><p><strong>提供の継続について。</strong>iOS のアップデートや端末環境の変化により、予告なく本アプリの動作が影響を受けることがあります。当開発者は予告なく本アプリを変更または提供終了することがあり、それに伴うデータ喪失について責任を負いません。</p>"
+        "html": "<div class='lead-note'><p>思ひ出デッキはゲームです。写真のバックアップ、アーカイブ、写真管理ツールではありません。元の写真は普段の保管場所に保管してください。</p></div><p><strong>カード画像は派生的な複製です。</strong>本アプリはカードとして使うために、写真の正方形・縮小版の複製を作成します。この複製は元の写真より解像度が低く、メタデータを持ちません。元の写真の代わりにはなりません。</p><p><strong>アプリ内で撮影した写真はカメラロールに保存されません。</strong>思ひ出デッキで撮影した写真を写真として残したい場合は、カメラアプリで撮り直してください。本アプリは撮影画像をカードとしてのみ保持します。保存したデッキの中に（Pro では自動で保存されます）、そうでなければゲームが終わるまでの間だけです。</p><p><strong>アプリを削除するとデッキも削除されます。</strong>保存したデッキはアプリの内部にのみ存在します。アンインストールすると、後に端末のバックアップから復元されない限り、デッキは失われます。当開発者が削除されたデッキを復旧することはできません。</p><p><strong>デッキを削除すると、そのカードはグループからも外れます。</strong>グループは画像の複製を持たないため、削除したデッキのカードは、それを使っていたすべてのグループから消えます。削除の前にアプリが確認を表示します。</p><p><strong>無料版で保存できるデッキは1件です。</strong>新しいデッキを保存すると既存のデッキが置き換えられます。置き換えの前にアプリが警告を表示しますが、置き換え後に以前のデッキを取り戻すことはできません。</p><p><strong>責任の制限。</strong>適用法令が許容する最大限の範囲において、当開発者は、本アプリの利用または利用不能から生じる直接的・間接的・付随的・結果的な損害——デッキの喪失、アプリ内で撮影した写真の喪失、その他のデータ喪失を含むがこれに限らない——について責任を負いません。</p><p><strong>提供の継続について。</strong>iOS のアップデートや端末環境の変化により、予告なく本アプリの動作が影響を受けることがあります。当開発者は予告なく本アプリを変更または提供終了することがあり、それに伴うデータ喪失について責任を負いません。</p>"
       },
       {
         "id": "law",
         "title": "準拠法・管轄",
-        "html": "<p>本ポリシーは日本法に準拠します。本ポリシーに関連して生じる紛争については、当開発者の所在地を管轄する裁判所を第一審の専属的合意管轄裁判所とします。</p>"
+        "html": "<p>本ポリシーは日本法に準拠します。本ポリシーに関連して生じる紛争については、当開発者の所在地を管轄する裁判所を第一審の専属的合意管轄裁判所とします。</p><p><strong>翻訳について。</strong>本ページは便宜のため複数の言語で提供しています。原文は英語版です。翻訳と英語版の内容が異なる場合は、英語版が優先します。</p>"
       },
       {
         "id": "changes",
@@ -725,6 +731,789 @@ const T = {
         "id": "contact",
         "title": "お問い合わせ",
         "html": "<p>ご質問・訂正のご指摘・機能のご要望をお待ちしています。本ページは思ひ出デッキのサポートページも兼ねています。</p><div class='contact-box'><p>ウェブサイト / お問い合わせフォーム：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>メール：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "zh-Hant": {
+    "meta": {
+      "langName": "繁體中文",
+      "selectLabel": "語言",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "隱私權政策與免責聲明",
+      "subtitle": "OMOHIDE DECK 會把您的照片變成卡片，並將每一張都保留在您的裝置上，絕不會傳送到裝置以外。本頁說明這代表什麼，以及 App 對您的照片會做與不會做的事。",
+      "updatedLabel": "生效日期",
+      "updatedDate": "2026年10月17日",
+      "footer": {
+        "ariaGithub": "GitHub（在新分頁中開啟）",
+        "ariaX": "X（前身為 Twitter）（在新分頁中開啟）",
+        "ariaInstagram": "Instagram（在新分頁中開啟）",
+        "ariaTop": "回到頁面頂端",
+        "ariaLegal": "法律資訊",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab 首頁'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "簡介",
+        "html": "<p>本頁是 Flying Dev Lab（空飛ぶ研究室）開發的 iOS App「<strong>OMOHIDE DECK</strong>」的隱私權政策與免責聲明。</p><p>OMOHIDE DECK 是一款用您自己的照片當作卡片的記憶配對遊戲。它建立在一個簡單的原則上：您的照片屬於您，並且留在您的裝置上。</p><p>使用本 App 前，請先閱讀本頁。<a href='#disclaimer'>免責聲明</a>一章說明本 App 對您的照片會做與不會做的事，以及刪除 App 時會發生什麼。</p>"
+      },
+      {
+        "id": "storage",
+        "title": "儲存在您裝置上的照片與資料",
+        "html": "<div class='zero-data'><p>App 保留的一切都留在您的裝置上。OMOHIDE DECK 沒有伺服器，任何照片或其他資料都絕不會傳送給開發者。</p></div><p>OMOHIDE DECK 只在您的裝置上儲存以下內容：</p><ul><li><strong>已儲存的牌組</strong> — 由您選取或拍攝的照片製成的卡片圖像、牌組名稱、建立與最後變更的日期，以及（自 1.1 版起）您為每張卡片寫下的標題與說明</li><li><strong>群組</strong>（自 1.1 版起） — 您建立的每個群組的名稱，以及其中包含哪些已儲存的卡片。群組只是指向已儲存牌組中的卡片，不會另外複製圖像</li><li><strong>您的 Pro 購買狀態</strong> — 在您的裝置上從 App Store 讀取（請參閱<a href='#purchases'>App 內購買</a>）</li><li><strong>您的同意紀錄</strong> — 您第一次開啟 App 時同意的本頁（隱私權政策與免責聲明）版本（生效日期），只用於在本頁修訂時再次顯示同意畫面</li></ul><p>卡片圖像並不是您的原始照片。當您選取或拍攝照片時，App 會將它裁成正方形、縮小，並重新編碼為新的 JPEG。這個過程會從頭重繪像素，因此儲存的卡片<strong>不帶有原始照片的任何中繼資料</strong>——沒有位置、沒有拍攝日期或時間、沒有相機型號，也沒有其他嵌入的資訊。「照片」App 中的原始照片絕不會被修改。</p><p>牌組與群組以檔案形式儲存在 App 的 Application Support 目錄中。自 1.1 版起，使用 OMOHIDE DECK Pro 時，您在 App 內拍攝的照片會在拍攝完成的那一刻儲存為牌組，因此即使在遊戲結束前停止，照片也不會遺失。您可以隨時在「我的牌組」中刪除該牌組。在免費版中，以及從圖庫選取的照片，除非您選擇儲存牌組，否則不會儲存任何內容；這些照片只在遊戲期間存在於記憶體中，之後即被捨棄。刪除 App 會從您的裝置上移除所有這些資料。</p><p>開發者無法存取其中任何內容。</p>"
+      },
+      {
+        "id": "access",
+        "title": "照片圖庫與相機的存取",
+        "html": "<p>OMOHIDE DECK 以兩種方式取得照片，兩者的設計都讓 App 只看到您選擇給它看的內容。</p><p><strong>從圖庫選取。</strong>App 使用 iOS 系統的照片選擇器。選擇器在 App 之外執行，只有您點選的照片會交給 App。App 從未被授予存取您照片圖庫的權限——這就是 iOS 不會顯示權限提示的原因：根本沒有需要請求的權限。App 無法查看、列出或讀取任何您沒有選取的照片。</p><p><strong>拍攝新照片。</strong>拍攝功能會請求相機權限，因為 iOS 需要此權限才能顯示即時預覽並拍攝。以這種方式拍攝的照片會直接以卡片形式進入 App。它們<strong>不會</strong>寫入您的相機膠卷，App 也依然無法存取圖庫中已有的照片。</p><p>App 絕不會請求麥克風、位置、聯絡人或任何其他權限。</p>"
+      },
+      {
+        "id": "network",
+        "title": "網路活動",
+        "html": "<p>OMOHIDE DECK 的所有功能——選取或拍攝照片、遊玩、儲存牌組與建立群組——都可完全離線運作，不需要網路連線。</p><p>App 中沒有分析 SDK、沒有當機回報服務、沒有廣告 SDK，也沒有任何種類的第三方程式庫。</p><p><strong>App 本身只在兩種情況下連線網路，兩者都由您主動發起：</strong></p><ul><li><strong>購買或回復購買 OMOHIDE DECK Pro</strong> — 由 Apple 透過 App Store 處理（請參閱<a href='#purchases'>App 內購買</a>）</li><li><strong>點選「關於」畫面上的連結</strong>（隱私權政策、免責聲明、支援） — 本網站會在您的瀏覽器中開啟</li></ul><p><strong>這兩種情況都不會傳送任何照片、卡片圖像或牌組。</strong>購買的通訊只會送到 Apple，不會送到其他任何人，而且不包含任何來自您照片的內容。開啟本網站只是在瀏覽器中一般地載入頁面，與 App 中的任何內容都沒有關聯。</p><p><strong>Apple 收集的使用統計。</strong>由於 App 透過 App Store 發布，Apple 身為平台營運者，會彙總安裝數、啟動次數、使用時間長度與購買數等統計，並以匿名、彙總的形式提供給開發者。如果您在 iOS 設定中啟用了分享診斷資料，當機報告也會以同樣的方式提供。這一切都由 Apple 管理，開發者無法啟用或停用。</p><p><strong>這些統計絕不包含：</strong>您的照片、由照片製成的卡片、牌組名稱、卡片的標題與說明，或任何關於您的牌組與群組內容的資訊。App 從不傳送其中任何一項，因此 Apple 與開發者都無法取得。Apple 知道 App 被使用過——但不知道您用什麼來遊玩。</p><p>您的卡片圖像離開裝置的唯一途徑，是下一章說明的 iCloud 備份——而且只在您自己開啟時才會發生。</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "iCloud 備份",
+        "html": "<p>OMOHIDE DECK 不使用 CloudKit，也不會將您的牌組與任何雲端服務同步。</p><p>不過，如果您在裝置設定中啟用了 iCloud 備份，iOS 可能會把 App 已儲存的牌組——<strong>包括卡片圖像</strong>——連同其他 App 的資料一起納入裝置備份。這是完全由 Apple 管理的作業系統標準功能。開發者既不會發起這些備份，也無法存取它們。</p><p>正因如此，在設定新裝置時，您的牌組才能自動回復。如果您不希望卡片圖像被納入備份，可以在 iOS 的「設定」App 中停用 OMOHIDE DECK 的 iCloud 備份。</p><p>備份的處理方式依 Apple 的隱私權政策辦理。</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "廣告與追蹤",
+        "html": "<p>OMOHIDE DECK <strong>沒有任何廣告</strong>。</p><p>App 不使用廣告識別碼（IDFA），不請求 App 追蹤透明度的權限，也不會跨 App 或網站追蹤您。沒有建立個人檔案、沒有行為分析，也與任何資料仲介沒有任何關係。</p><p>這是一項設計決定，而不是暫時的狀態。一款以您的個人照片為中心、家人可能與孩子一起玩的遊戲，不會放廣告。</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "App 內購買",
+        "html": "<p>OMOHIDE DECK 可免費下載。您無需購買任何東西，就能選取或拍攝照片、在 4 對的牌面上遊玩，並保留一個已儲存的牌組（名稱自動以日期命名）。</p><p>一次性（非消耗性）的 App 內購買「<strong>OMOHIDE DECK Pro</strong>」可解鎖更大的牌面（6 對與 7 對，自 1.1 版起再加上 8 對、10 對與 12 對），解除只能儲存一個牌組的限制，並讓您為牌組命名與重新命名。自 1.1 版起，Pro 還能讓您把卡片分成群組、用「所有卡片」遊玩，以及為每張卡片加上標題與說明，並會自動儲存在 App 內拍攝的照片（請參閱<a href='#storage'>儲存在您裝置上的照片與資料</a>）。確切內容與價格會顯示在 App Store 的產品頁面與 App 內的購買畫面上。</p><p>所有付款處理都由 Apple 透過 App Store 進行。開發者絕不會收到您的付款資料、卡片資訊或與交易相關的任何個人資訊。關於 Apple 如何處理這些資料，請參閱 Apple 的隱私權政策。</p><p><strong>回復購買。</strong>購買是綁定在您的 Apple 帳號上，而不是特定裝置。Pro 畫面上的「回復購買」會向 Apple 詢問該帳號是否擁有此購買項目。這項詢問只在您的裝置與 Apple 之間完成；開發者既不儲存也不會收到您的 Apple 帳號。更換裝置或重新安裝 App 後，可用它來回復 Pro。</p><p>免費與付費範圍若有任何變更，都會在生效前反映在本頁上。</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "資訊的分享",
+        "html": "<p>開發者不會將使用者資訊出售、分享或轉讓給第三方，原因很簡單：一開始就沒有收集任何使用者資訊。</p><p>沒有任何資料可以揭露給廣告商、分析服務供應商或資料仲介。即使主管機關提出具法律約束力的要求，開發者也沒有任何可提供的使用者資料——也沒有任何照片。</p>"
+      },
+      {
+        "id": "children",
+        "title": "兒童隱私",
+        "html": "<p>OMOHIDE DECK 是一款家庭遊戲，而不是兒童專用的 App。它是為家庭而做的：大人和孩子可以用家庭照片一起玩，許多家庭也確實會這樣做。</p><p>由於畫面上可能出現個人照片，而且可能是孩子在玩，App <strong>沒有任何廣告</strong>。OMOHIDE DECK Pro 是面向家中大人的選購擴充——更大的牌面、更多已儲存的牌組、為牌組命名，以及（自 1.1 版起）群組和卡片的標題與說明。免費版本身就能完整遊玩，孩子享受遊戲所需的任何功能都不會被放在購買之後。</p><p>App 不向任何年齡的任何人收集個人資訊，因此不會產生兒童隱私方面的疑慮。對任何使用者而言，都沒有需要保護、分享或刪除的資料。遊玩時選取或拍攝的照片，無論是誰在玩，都會完全依照上述方式留在裝置上。</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "免責聲明",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK 是一款遊戲，不是照片備份、典藏或照片管理工具。請將原始照片保存在您平常保存的地方。</p></div><p><strong>卡片圖像是衍生的複本。</strong>App 會製作照片的正方形縮小複本作為卡片。這些複本的解析度低於原始照片，也不帶有中繼資料，無法取代原始照片。</p><p><strong>在 App 內拍攝的照片不會儲存到您的相機膠卷。</strong>如果您在 OMOHIDE DECK 中拍了想以照片形式保留的畫面，請用「相機」App 再拍一次。App 只會把拍攝的影像當作卡片保留：保留在已儲存的牌組中（使用 Pro 時會自動儲存），否則只保留到遊戲結束為止。</p><p><strong>刪除 App 會刪除您的牌組。</strong>已儲存的牌組只存在於 App 內。解除安裝 App 會將其移除，除非之後由裝置備份回復。開發者無法復原已刪除的牌組。</p><p><strong>刪除牌組也會將其卡片從群組中移除。</strong>群組不會保留自己的圖像複本，因此已刪除牌組中的卡片會從所有使用它們的群組中消失。App 會先要求您確認。</p><p><strong>免費版只能保留一個牌組。</strong>儲存新的牌組會取代現有的牌組。App 會在取代前提醒您，但一旦取代，先前的牌組就無法取回。</p><p><strong>責任限制。</strong>在適用法律允許的最大範圍內，對於因使用或無法使用本 App 而產生的任何直接、間接、附帶或衍生損害——包括但不限於牌組的遺失、在 App 內拍攝的照片的遺失，或任何其他資料遺失——開發者概不負責。</p><p><strong>服務的提供。</strong>iOS 更新或裝置環境的變化可能在未事先通知的情況下影響 App 的運作。開發者可能在未事先通知的情況下修改或終止提供 App，對於因此造成的資料遺失概不負責。</p>"
+      },
+      {
+        "id": "law",
+        "title": "準據法",
+        "html": "<p>本政策以日本法律為準據法。因本政策所生的任何爭議，以對開發者所在地有管轄權的法院為第一審專屬管轄法院。</p><p><strong>關於翻譯。</strong>為方便閱讀，本頁以多種語言提供。原文為英文版。若翻譯與英文版內容不同，以英文版為準。</p>"
+      },
+      {
+        "id": "changes",
+        "title": "本政策的變更",
+        "html": "<p>本政策可能會隨著 App 的發展而更新。修訂版自刊登於本頁時起生效，頁面頂端的生效日期也會隨之更新。</p><p>由於不收集任何資料，本政策的變更不會影響任何已持有的關於您的資料。若有變更會實質影響 App 的運作——例如 OMOHIDE DECK Pro 所含內容的變更——會在該變更送達使用者之前於本頁公布。</p>"
+      },
+      {
+        "id": "contact",
+        "title": "聯絡我們",
+        "html": "<p>歡迎提出問題、指正與功能建議。本頁也是 OMOHIDE DECK 的支援頁面。</p><div class='contact-box'><p>網站 / 聯絡表單：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>電子郵件：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "zh-Hans": {
+    "meta": {
+      "langName": "简体中文",
+      "selectLabel": "语言",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "隐私政策与免责声明",
+      "subtitle": "OMOHIDE DECK 把你的照片变成卡片，并把每一张都留在你的设备上，绝不会传出设备。本页说明这意味着什么，以及 App 对你的照片会做和不会做的事。",
+      "updatedLabel": "生效日期",
+      "updatedDate": "2026年10月17日",
+      "footer": {
+        "ariaGithub": "GitHub（在新标签页中打开）",
+        "ariaX": "X（原 Twitter）（在新标签页中打开）",
+        "ariaInstagram": "Instagram（在新标签页中打开）",
+        "ariaTop": "返回页面顶部",
+        "ariaLegal": "法律信息",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab 首页'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "简介",
+        "html": "<p>本页是 Flying Dev Lab（空飛ぶ研究室）开发的 iOS App「<strong>OMOHIDE DECK</strong>」的隐私政策与免责声明。</p><p>OMOHIDE DECK 是一款用你自己的照片作为卡片的记忆配对游戏。它基于一个简单的原则：你的照片属于你，并且留在你的设备上。</p><p>使用本 App 前，请先阅读本页。<a href='#disclaimer'>免责声明</a>一章说明了本 App 对你的照片会做和不会做的事，以及删除 App 时会发生什么。</p>"
+      },
+      {
+        "id": "storage",
+        "title": "存储在你设备上的照片与数据",
+        "html": "<div class='zero-data'><p>App 保留的一切都留在你的设备上。OMOHIDE DECK 没有服务器，任何照片或其他数据都绝不会传送给开发者。</p></div><p>OMOHIDE DECK 只在你的设备上存储以下内容：</p><ul><li><strong>已保存的卡组</strong> — 由你选择或拍摄的照片制成的卡片图像、卡组名称、创建和最后更改的日期，以及（自 1.1 版起）你为每张卡片写下的标题和说明</li><li><strong>群组</strong>（自 1.1 版起） — 你创建的每个群组的名称，以及其中包含哪些已保存的卡片。群组只是指向已保存卡组中的卡片，不会另外复制图像</li><li><strong>你的 Pro 购买状态</strong> — 在你的设备上从 App Store 读取（参见<a href='#purchases'>App 内购买</a>）</li><li><strong>你的同意记录</strong> — 你第一次打开 App 时同意的本页（隐私政策与免责声明）版本（生效日期），仅用于在本页修订时再次显示同意界面</li></ul><p>卡片图像并不是你的原始照片。当你选择或拍摄照片时，App 会把它裁成正方形、缩小，并重新编码为新的 JPEG。这个过程会从头重绘像素，因此保存的卡片<strong>不带有原始照片的任何元数据</strong>——没有位置、没有拍摄日期或时间、没有相机型号，也没有其他嵌入的信息。「照片」App 中的原始照片绝不会被修改。</p><p>卡组和群组以文件形式保存在 App 的 Application Support 目录中。自 1.1 版起，使用 OMOHIDE DECK Pro 时，你在 App 内拍摄的照片会在拍摄完成时立即保存为卡组，因此即使在游戏结束前停止，照片也不会丢失。你可以随时在「我的卡组」中删除该卡组。在免费版中，以及对于从图库选择的照片，除非你选择保存卡组，否则不会保存任何内容；这些照片只在游戏期间存在于内存中，之后即被丢弃。删除 App 会从你的设备上移除所有这些数据。</p><p>开发者无法访问其中任何内容。</p>"
+      },
+      {
+        "id": "access",
+        "title": "照片图库与相机的访问",
+        "html": "<p>OMOHIDE DECK 通过两种方式获取照片，两者的设计都让 App 只看到你选择给它看的内容。</p><p><strong>从图库选择。</strong>App 使用 iOS 系统的照片选择器。选择器在 App 之外运行，只有你点按的照片会交给 App。App 从未被授予访问你照片图库的权限——这就是 iOS 不显示权限提示的原因：根本没有需要请求的权限。App 无法查看、列出或读取任何你没有选择的照片。</p><p><strong>拍摄新照片。</strong>拍摄功能会请求相机权限，因为 iOS 需要此权限才能显示实时预览并拍摄。以这种方式拍摄的照片会直接以卡片形式进入 App。它们<strong>不会</strong>写入你的相册，App 也仍然无法访问图库中已有的照片。</p><p>App 绝不会请求麦克风、位置、通讯录或任何其他权限。</p>"
+      },
+      {
+        "id": "network",
+        "title": "网络活动",
+        "html": "<p>OMOHIDE DECK 的所有功能——选择或拍摄照片、游玩、保存卡组和创建群组——都可完全离线使用，不需要网络连接。</p><p>App 中没有分析 SDK、没有崩溃报告服务、没有广告 SDK，也没有任何种类的第三方库。</p><p><strong>App 本身只在两种情况下连接网络，两者都由你主动发起：</strong></p><ul><li><strong>购买或恢复购买 OMOHIDE DECK Pro</strong> — 由 Apple 通过 App Store 处理（参见<a href='#purchases'>App 内购买</a>）</li><li><strong>点按「关于」界面上的链接</strong>（隐私政策、免责声明、支持） — 本网站会在你的浏览器中打开</li></ul><p><strong>这两种情况都不会传送任何照片、卡片图像或卡组。</strong>购买的通信只发往 Apple，不会发往其他任何人，而且不包含任何来自你照片的内容。打开本网站只是在浏览器中普通地加载页面，与 App 中的任何内容都没有关联。</p><p><strong>Apple 收集的使用统计。</strong>由于 App 通过 App Store 分发，Apple 作为平台运营者，会汇总安装量、启动次数、使用时长和购买量等统计，并以匿名、汇总的形式提供给开发者。如果你在 iOS 设置中启用了共享诊断数据，崩溃报告也会以同样的方式提供。这一切都由 Apple 管理，开发者无法启用或停用。</p><p><strong>这些统计绝不包含：</strong>你的照片、由照片制成的卡片、卡组名称、卡片的标题和说明，或任何关于你的卡组和群组内容的信息。App 从不传送其中任何一项，因此 Apple 和开发者都无法获取。Apple 知道 App 被使用过——但不知道你用什么来玩。</p><p>你的卡片图像离开设备的唯一途径，是下一章说明的 iCloud 备份——而且只在你自己开启时才会发生。</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "iCloud 备份",
+        "html": "<p>OMOHIDE DECK 不使用 CloudKit，也不会将你的卡组与任何云服务同步。</p><p>不过，如果你在设备设置中启用了 iCloud 备份，iOS 可能会把 App 已保存的卡组——<strong>包括卡片图像</strong>——连同其他 App 的数据一起纳入设备备份。这是完全由 Apple 管理的操作系统标准功能。开发者既不会发起这些备份，也无法访问它们。</p><p>正因如此，在设置新设备时，你的卡组才能自动恢复。如果你不希望卡片图像被纳入备份，可以在 iOS 的「设置」App 中关闭 OMOHIDE DECK 的 iCloud 备份。</p><p>备份的处理方式遵循 Apple 的隐私政策。</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "广告与跟踪",
+        "html": "<p>OMOHIDE DECK <strong>没有任何广告</strong>。</p><p>App 不使用广告标识符（IDFA），不请求 App 跟踪透明度权限，也不会跨 App 或网站跟踪你。没有用户画像、没有行为分析，也与任何数据经纪商没有任何关系。</p><p>这是一项设计决定，而不是暂时的状态。一款以你的个人照片为中心、家人可能和孩子一起玩的游戏，不会放广告。</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "App 内购买",
+        "html": "<p>OMOHIDE DECK 可免费下载。你无需购买任何东西，就能选择或拍摄照片、在 4 对的牌面上游玩，并保留一个已保存的卡组（名称自动按日期命名）。</p><p>一次性（非消耗型）的 App 内购买「<strong>OMOHIDE DECK Pro</strong>」可解锁更大的牌面（6 对和 7 对，自 1.1 版起再加上 8 对、10 对和 12 对），解除只能保存一个卡组的限制，并让你为卡组命名和重命名。自 1.1 版起，Pro 还能让你把卡片分成群组、用「所有卡片」游玩，以及为每张卡片添加标题和说明，并会自动保存在 App 内拍摄的照片（参见<a href='#storage'>存储在你设备上的照片与数据</a>）。具体内容和价格会显示在 App Store 的产品页面和 App 内的购买界面上。</p><p>所有付款处理都由 Apple 通过 App Store 进行。开发者绝不会收到你的付款信息、银行卡信息或与交易相关的任何个人信息。关于 Apple 如何处理这些数据，请参阅 Apple 的隐私政策。</p><p><strong>恢复购买。</strong>购买绑定在你的 Apple 账户上，而不是特定设备。Pro 界面上的「恢复购买」会向 Apple 查询该账户是否拥有此购买项目。这项查询只在你的设备和 Apple 之间完成；开发者既不存储也不会收到你的 Apple 账户。更换设备或重新安装 App 后，可用它来恢复 Pro。</p><p>免费与付费范围如有任何变更，都会在生效前反映在本页上。</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "信息的共享",
+        "html": "<p>开发者不会将用户信息出售、共享或转让给第三方，原因很简单：一开始就没有收集任何用户信息。</p><p>没有任何数据可以披露给广告商、分析服务商或数据经纪商。即使主管机关提出具有法律约束力的要求，开发者也没有任何可以提供的用户数据——也没有任何照片。</p>"
+      },
+      {
+        "id": "children",
+        "title": "儿童隐私",
+        "html": "<p>OMOHIDE DECK 是一款家庭游戏，而不是儿童专用 App。它是为家庭而做的：大人和孩子可以用家庭照片一起玩，许多家庭也确实会这样做。</p><p>由于屏幕上可能出现个人照片，而且可能是孩子在玩，App <strong>没有任何广告</strong>。OMOHIDE DECK Pro 是面向家中大人的可选扩展——更大的牌面、更多已保存的卡组、为卡组命名，以及（自 1.1 版起）群组和卡片的标题与说明。免费版本身就能完整游玩，孩子享受游戏所需的任何功能都不会被放在购买之后。</p><p>App 不向任何年龄的任何人收集个人信息，因此不会产生儿童隐私方面的问题。对任何用户而言，都没有需要保护、共享或删除的数据。游玩时选择或拍摄的照片，无论是谁在玩，都会完全按照上述方式留在设备上。</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "免责声明",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK 是一款游戏，不是照片备份、存档或照片管理工具。请把原始照片保存在你平常保存的地方。</p></div><p><strong>卡片图像是衍生的副本。</strong>App 会制作照片的正方形缩小副本作为卡片。这些副本的分辨率低于原始照片，也不带有元数据，无法替代原始照片。</p><p><strong>在 App 内拍摄的照片不会保存到你的相册。</strong>如果你在 OMOHIDE DECK 中拍了想作为照片保留的画面，请用「相机」App 再拍一次。App 只会把拍摄的图像作为卡片保留：保留在已保存的卡组中（使用 Pro 时会自动保存），否则只保留到游戏结束为止。</p><p><strong>删除 App 会删除你的卡组。</strong>已保存的卡组只存在于 App 内。卸载 App 会将其移除，除非之后通过设备备份恢复。开发者无法恢复已删除的卡组。</p><p><strong>删除卡组也会将其卡片从群组中移除。</strong>群组不会保留自己的图像副本，因此已删除卡组中的卡片会从所有使用它们的群组中消失。App 会先请你确认。</p><p><strong>免费版只能保留一个卡组。</strong>保存新的卡组会替换现有的卡组。App 会在替换前提醒你，但一旦替换，之前的卡组就无法找回。</p><p><strong>责任限制。</strong>在适用法律允许的最大范围内，对于因使用或无法使用本 App 而产生的任何直接、间接、附带或后果性损害——包括但不限于卡组的丢失、在 App 内拍摄的照片的丢失或任何其他数据丢失——开发者概不负责。</p><p><strong>服务的提供。</strong>iOS 更新或设备环境的变化可能在不事先通知的情况下影响 App 的运行。开发者可能在不事先通知的情况下修改或停止提供 App，对由此造成的数据丢失概不负责。</p>"
+      },
+      {
+        "id": "law",
+        "title": "适用法律",
+        "html": "<p>本政策受日本法律管辖。因本政策引起的任何争议，以对开发者所在地有管辖权的法院为第一审专属管辖法院。</p><p><strong>关于翻译。</strong>为方便阅读，本页以多种语言提供。原文为英文版。如翻译与英文版内容不一致，以英文版为准。</p>"
+      },
+      {
+        "id": "changes",
+        "title": "本政策的变更",
+        "html": "<p>本政策可能会随着 App 的发展而更新。修订版自发布在本页时起生效，页面顶部的生效日期也会随之更新。</p><p>由于不收集任何数据，本政策的变更不会影响任何已持有的关于你的数据。如有变更会实质影响 App 的运行——例如 OMOHIDE DECK Pro 所含内容的变更——会在该变更到达用户之前在本页公布。</p>"
+      },
+      {
+        "id": "contact",
+        "title": "联系我们",
+        "html": "<p>欢迎提出问题、指正和功能建议。本页也是 OMOHIDE DECK 的支持页面。</p><div class='contact-box'><p>网站 / 联系表单：<a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>电子邮件：<a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "ko": {
+    "meta": {
+      "langName": "한국어",
+      "selectLabel": "언어",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "개인정보 처리방침 및 면책 조항",
+      "subtitle": "OMOHIDE DECK은 사용자의 사진을 카드로 만들고, 그 모든 사진을 기기 안에만 둡니다. 기기 밖으로 전송되는 것은 없습니다. 이 페이지는 그것이 정확히 무엇을 뜻하는지, 그리고 앱이 사진으로 하는 일과 하지 않는 일을 설명합니다.",
+      "updatedLabel": "시행일",
+      "updatedDate": "2026년 10월 17일",
+      "footer": {
+        "ariaGithub": "GitHub(새 탭에서 열림)",
+        "ariaX": "X(구 Twitter)(새 탭에서 열림)",
+        "ariaInstagram": "Instagram(새 탭에서 열림)",
+        "ariaTop": "페이지 맨 위로",
+        "ariaLegal": "법적 정보",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Flying Dev Lab 홈페이지'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "소개",
+        "html": "<p>이 페이지는 Flying Dev Lab(空飛ぶ研究室)이 개발한 iOS 앱 <strong>OMOHIDE DECK</strong>의 개인정보 처리방침 및 면책 조항입니다.</p><p>OMOHIDE DECK은 사용자 자신의 사진을 카드로 사용하는 짝 맞추기 카드 게임입니다. 이 앱은 하나의 간단한 원칙 위에 만들어졌습니다. 사진은 사용자의 것이며, 사용자의 기기 안에 머문다는 것입니다.</p><p>앱을 사용하기 전에 이 페이지를 읽어 주세요. <a href='#disclaimer'>면책 조항</a> 장에서는 앱이 사진으로 하는 일과 하지 않는 일, 그리고 앱을 삭제하면 어떻게 되는지를 설명합니다.</p>"
+      },
+      {
+        "id": "storage",
+        "title": "기기에 저장되는 사진과 데이터",
+        "html": "<div class='zero-data'><p>앱이 보관하는 모든 것은 사용자의 기기 안에 머뭅니다. OMOHIDE DECK에는 서버가 없으며, 어떤 사진이나 데이터도 개발자에게 전송되지 않습니다.</p></div><p>OMOHIDE DECK은 다음 항목을 사용자의 기기에만 저장합니다.</p><ul><li><strong>저장한 덱</strong> — 선택하거나 촬영한 사진으로 만든 카드 이미지, 덱 이름, 만든 날짜와 마지막으로 변경한 날짜, 그리고 (버전 1.1부터) 카드마다 작성한 제목과 설명</li><li><strong>그룹</strong>(버전 1.1부터) — 사용자가 만든 각 그룹의 이름과 그 그룹에 포함된 저장된 카드의 목록. 그룹은 저장한 덱의 카드를 가리킬 뿐이며 이미지의 사본을 따로 만들지 않습니다</li><li><strong>Pro 구입 상태</strong> — 기기에서 App Store로부터 읽어 옵니다(<a href='#purchases'>앱 내 구입</a> 참조)</li><li><strong>동의 기록</strong> — 앱을 처음 열었을 때 동의한 이 페이지(개인정보 처리방침 및 면책 조항)의 버전(시행일). 이 페이지가 개정되었을 때 동의 화면을 다시 보여 주는 데에만 사용합니다</li></ul><p>카드 이미지는 원본 사진이 아닙니다. 사진을 선택하거나 촬영하면 앱은 사진을 정사각형으로 자르고, 크기를 줄인 뒤, 새로운 JPEG으로 다시 인코딩합니다. 이 과정에서 픽셀을 처음부터 다시 그리기 때문에 저장된 카드에는 <strong>원본의 메타데이터가 전혀 남지 않습니다</strong>. 위치, 촬영 날짜와 시각, 카메라 기종, 그 밖의 어떤 내장 정보도 없습니다. 사진 앱의 원본 사진은 절대 변경되지 않습니다.</p><p>덱과 그룹은 앱의 Application Support 디렉터리에 파일로 저장됩니다. 버전 1.1부터 OMOHIDE DECK Pro에서는 앱에서 촬영한 사진이 촬영을 마치는 즉시 덱으로 저장되므로, 게임을 끝까지 하지 않고 멈추더라도 사진을 잃지 않습니다. 이 덱은 내 덱에서 언제든지 삭제할 수 있습니다. 무료 버전에서 촬영한 사진과 라이브러리에서 고른 사진은 사용자가 덱 저장을 선택하지 않는 한 저장되지 않으며, 게임 중에만 메모리에 존재하고 그 후에는 폐기됩니다. 앱을 삭제하면 이 모든 데이터가 기기에서 제거됩니다.</p><p>개발자는 이 중 어떤 것에도 접근할 수 없습니다.</p>"
+      },
+      {
+        "id": "access",
+        "title": "사진 보관함과 카메라 접근",
+        "html": "<p>OMOHIDE DECK이 사진을 받는 방법은 두 가지이며, 둘 다 사용자가 보여 주기로 한 것만 앱이 보도록 설계되어 있습니다.</p><p><strong>보관함에서 고르는 경우.</strong> 앱은 iOS 시스템의 사진 선택기를 사용합니다. 선택기는 앱 밖에서 실행되며, 사용자가 탭한 사진만 앱에 전달됩니다. 앱은 사진 보관함에 접근할 권한을 받지 않습니다. iOS가 권한 요청을 표시하지 않는 이유도 여기에 있습니다. 요청할 권한 자체가 없기 때문입니다. 앱은 사용자가 고르지 않은 사진을 보거나, 목록으로 만들거나, 읽을 수 없습니다.</p><p><strong>새로 촬영하는 경우.</strong> 촬영 기능은 카메라 권한을 요청합니다. iOS가 실시간 미리보기와 촬영에 이 권한을 요구하기 때문입니다. 이렇게 촬영한 사진은 카드로 바로 앱에 들어갑니다. 이 사진은 카메라 롤에 <strong>저장되지 않으며</strong>, 앱은 여전히 보관함에 있는 기존 사진에 접근할 수 없습니다.</p><p>앱은 마이크, 위치, 연락처 또는 그 밖의 어떤 권한도 요청하지 않습니다.</p>"
+      },
+      {
+        "id": "network",
+        "title": "네트워크 활동",
+        "html": "<p>OMOHIDE DECK의 모든 기능, 즉 사진 선택과 촬영, 게임, 덱 저장, 그룹 만들기는 완전히 오프라인으로 작동합니다. 네트워크 연결이 필요하지 않습니다.</p><p>앱에는 분석 SDK, 충돌 보고 서비스, 광고 SDK를 비롯한 어떤 종류의 서드파티 라이브러리도 없습니다.</p><p><strong>앱 자체가 네트워크에 연결하는 경우는 다음 두 가지뿐이며, 둘 다 사용자가 직접 시작합니다.</strong></p><ul><li><strong>OMOHIDE DECK Pro의 구입 또는 복원</strong> — Apple이 App Store를 통해 처리합니다(<a href='#purchases'>앱 내 구입</a> 참조)</li><li><strong>정보 화면의 링크를 탭하는 경우</strong>(개인정보 처리방침, 면책 조항, 지원) — 이 웹사이트가 브라우저에서 열립니다</li></ul><p><strong>어느 경우에도 사진, 카드 이미지, 덱은 전송되지 않습니다.</strong> 구입 통신은 Apple로만 가며 다른 누구에게도 가지 않고, 사진에서 나온 어떤 내용도 포함하지 않습니다. 이 웹사이트를 여는 것은 브라우저에서 일반적으로 페이지를 불러오는 것일 뿐이며, 앱 안의 어떤 것과도 연결되지 않습니다.</p><p><strong>Apple이 수집하는 이용 통계.</strong> 앱이 App Store를 통해 배포되기 때문에 Apple은 플랫폼 운영자로서 설치 수, 실행 횟수, 사용 시간, 구입 수와 같은 통계를 집계하고, 이를 익명화·집계된 형태로 개발자에게 제공합니다. iOS 설정에서 진단 데이터 공유를 켠 경우에는 충돌 보고서도 같은 방식으로 제공됩니다. 이 모든 것은 Apple이 관리하며, 개발자는 이를 켜거나 끌 수 없습니다.</p><p><strong>이 통계에 절대 포함되지 않는 것:</strong> 사진, 사진으로 만든 카드, 덱 이름, 카드의 제목과 설명, 그리고 덱과 그룹의 내용에 관한 어떤 정보도 포함되지 않습니다. 앱은 이 중 어떤 것도 전송하지 않으므로 Apple도 개발자도 이를 얻을 수 없습니다. Apple이 아는 것은 앱이 사용되었다는 사실이지, 무엇으로 놀았는지가 아닙니다.</p><p>카드 이미지가 기기 밖으로 나가는 유일한 경로는 다음 장에서 설명하는 iCloud 백업이며, 그것도 사용자가 직접 켠 경우에만 해당합니다.</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "iCloud 백업",
+        "html": "<p>OMOHIDE DECK은 CloudKit을 사용하지 않으며, 덱을 어떤 클라우드 서비스와도 동기화하지 않습니다.</p><p>다만 기기 설정에서 iCloud 백업을 켠 경우, iOS는 다른 앱의 데이터와 함께 이 앱의 저장된 덱을 <strong>카드 이미지까지 포함하여</strong> 기기 백업에 넣을 수 있습니다. 이는 Apple이 전적으로 관리하는 운영체제의 표준 기능입니다. 개발자는 이러한 백업을 시작하지도 않고, 백업에 접근할 수도 없습니다.</p><p>이 덕분에 새 기기를 설정할 때 덱이 자동으로 복원됩니다. 카드 이미지가 백업에 포함되지 않기를 원하면 iOS 설정 앱에서 OMOHIDE DECK의 iCloud 백업을 끌 수 있습니다.</p><p>백업의 처리는 Apple의 개인정보 처리방침을 따릅니다.</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "광고 및 추적",
+        "html": "<p>OMOHIDE DECK에는 <strong>광고가 없습니다</strong>.</p><p>앱은 광고 식별자(IDFA)를 사용하지 않고, 앱 추적 투명성 권한을 요청하지 않으며, 앱이나 웹사이트를 넘나들며 사용자를 추적하지 않습니다. 프로파일링, 행동 분석, 데이터 브로커와의 관계는 일절 없습니다.</p><p>이것은 일시적인 상태가 아니라 설계상의 결정입니다. 개인 사진을 중심으로 한 게임이고 가족이 아이와 함께 즐길 수도 있는 게임이므로, 광고를 싣지 않습니다.</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "앱 내 구입",
+        "html": "<p>OMOHIDE DECK은 무료로 다운로드할 수 있습니다. 아무것도 구입하지 않고도 사진을 선택하거나 촬영하고, 4쌍 판에서 게임을 하고, 날짜로 자동으로 이름이 붙는 덱 하나를 저장해 둘 수 있습니다.</p><p>1회성(비소모성) 앱 내 구입인 <strong>OMOHIDE DECK Pro</strong>를 구입하면 더 큰 판(6쌍과 7쌍, 버전 1.1부터는 8쌍·10쌍·12쌍도)이 열리고, 덱을 하나만 저장할 수 있는 제한이 없어지며, 덱에 이름을 붙이고 바꿀 수 있습니다. 버전 1.1부터 Pro에서는 카드를 그룹으로 나누고, 모든 카드로 게임을 하고, 카드마다 제목과 설명을 붙일 수도 있으며, 앱에서 촬영한 사진이 자동으로 저장됩니다(<a href='#storage'>기기에 저장되는 사진과 데이터</a> 참조). 정확한 내용과 가격은 App Store의 제품 페이지와 앱 안의 구입 화면에 표시됩니다.</p><p>모든 결제 처리는 Apple이 App Store를 통해 합니다. 개발자는 결제 정보, 카드 정보, 거래와 관련된 어떤 개인정보도 받지 않습니다. Apple이 이 데이터를 어떻게 처리하는지는 Apple의 개인정보 처리방침을 확인해 주세요.</p><p><strong>구입 복원.</strong> 구입은 특정 기기가 아니라 Apple 계정에 연결됩니다. Pro 화면의 구입 복원은 해당 계정이 이 구입 항목을 보유하고 있는지 Apple에 확인합니다. 이 확인은 사용자의 기기와 Apple 사이에서 완료되며, 개발자는 Apple 계정을 저장하지도 받지도 않습니다. 기기를 바꾸거나 앱을 다시 설치한 뒤 Pro를 복원할 때 사용하세요.</p><p>무료 범위와 유료 범위가 바뀌는 경우, 시행 전에 이 페이지에 반영합니다.</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "정보의 공유",
+        "html": "<p>개발자는 사용자 정보를 제3자에게 판매, 공유 또는 양도하지 않습니다. 이유는 간단합니다. 애초에 어떤 사용자 정보도 수집하지 않기 때문입니다.</p><p>광고주, 분석 업체, 데이터 브로커에게 공개할 데이터가 없습니다. 권한 있는 기관으로부터 법적 구속력이 있는 요청을 받더라도, 개발자가 제출할 수 있는 사용자 데이터나 사진은 존재하지 않습니다.</p>"
+      },
+      {
+        "id": "children",
+        "title": "아동의 개인정보",
+        "html": "<p>OMOHIDE DECK은 아동 전용 앱이 아니라 가족을 위한 게임입니다. 가족을 위해 만들었으며, 어른과 아이가 가족사진으로 함께 즐길 수 있습니다. 실제로 많은 가족이 그렇게 즐길 것입니다.</p><p>화면에 개인 사진이 나올 수 있고 아이가 게임을 할 수도 있기 때문에, 앱에는 <strong>광고가 없습니다</strong>. OMOHIDE DECK Pro는 가족 중 어른을 위한 선택형 추가 기능으로, 더 큰 판, 더 많은 덱 저장, 덱 이름 붙이기, 그리고 (버전 1.1부터) 그룹과 카드의 제목·설명을 제공합니다. 무료 버전만으로도 충분히 즐길 수 있으며, 아이가 게임을 즐기는 데 필요한 기능은 구입 뒤에 두지 않았습니다.</p><p>앱은 나이와 관계없이 누구에게서도 개인정보를 수집하지 않으므로 아동의 개인정보에 관한 우려가 생기지 않습니다. 어떤 사용자에 대해서도 보호·공유·삭제할 데이터가 존재하지 않습니다. 게임 중에 선택하거나 촬영한 사진은 누가 게임을 하든 위에서 설명한 대로 기기 안에 머뭅니다.</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "면책 조항",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK은 게임입니다. 사진 백업, 보관소, 사진 관리 도구가 아닙니다. 원본 사진은 평소 보관하던 곳에 보관해 주세요.</p></div><p><strong>카드 이미지는 파생된 사본입니다.</strong> 앱은 카드로 쓰기 위해 사진을 정사각형으로 줄인 사본을 만듭니다. 이 사본은 원본보다 해상도가 낮고 메타데이터가 없습니다. 원본 사진을 대신할 수 없습니다.</p><p><strong>앱에서 촬영한 사진은 카메라 롤에 저장되지 않습니다.</strong> OMOHIDE DECK에서 촬영한 장면을 사진으로 남기고 싶다면 카메라 앱으로 다시 촬영해 주세요. 앱은 촬영한 이미지를 카드로만 보관합니다. 저장한 덱 안에(Pro에서는 자동으로 저장됩니다), 그렇지 않으면 게임이 끝날 때까지만 보관합니다.</p><p><strong>앱을 삭제하면 덱도 삭제됩니다.</strong> 저장한 덱은 앱 안에만 존재합니다. 앱을 제거하면 나중에 기기 백업으로 복원하지 않는 한 덱은 사라집니다. 개발자는 삭제된 덱을 복구할 수 없습니다.</p><p><strong>덱을 삭제하면 그 카드는 그룹에서도 빠집니다.</strong> 그룹은 이미지의 사본을 따로 갖지 않으므로, 삭제한 덱의 카드는 그 카드를 쓰던 모든 그룹에서 사라집니다. 앱은 삭제하기 전에 먼저 확인을 요청합니다.</p><p><strong>무료 버전은 덱을 하나만 보관합니다.</strong> 새 덱을 저장하면 기존 덱이 대체됩니다. 앱은 대체하기 전에 경고하지만, 한 번 대체되면 이전 덱은 되돌릴 수 없습니다.</p><p><strong>책임의 제한.</strong> 관련 법령이 허용하는 최대한의 범위에서, 개발자는 앱의 사용 또는 사용 불능으로 인해 발생하는 직접적, 간접적, 부수적 또는 결과적 손해(덱의 손실, 앱에서 촬영한 사진의 손실, 그 밖의 데이터 손실을 포함하되 이에 한정되지 않음)에 대해 책임을 지지 않습니다.</p><p><strong>제공의 지속.</strong> iOS 업데이트나 기기 환경의 변화로 인해 예고 없이 앱의 동작이 영향을 받을 수 있습니다. 개발자는 예고 없이 앱을 변경하거나 제공을 중단할 수 있으며, 그로 인한 데이터 손실에 대해 책임을 지지 않습니다.</p>"
+      },
+      {
+        "id": "law",
+        "title": "준거법",
+        "html": "<p>이 방침은 일본법에 따릅니다. 이 방침과 관련하여 발생하는 모든 분쟁은 개발자의 소재지를 관할하는 법원을 제1심의 전속적 합의 관할 법원으로 합니다.</p><p><strong>번역에 관하여.</strong> 이 페이지는 편의를 위해 여러 언어로 제공됩니다. 원문은 영어판입니다. 번역이 영어판과 다른 경우에는 영어판이 우선합니다.</p>"
+      },
+      {
+        "id": "changes",
+        "title": "이 방침의 변경",
+        "html": "<p>이 방침은 앱의 발전에 따라 갱신될 수 있습니다. 개정판은 이 페이지에 게시되는 시점에 효력이 생기며, 페이지 상단의 시행일도 그에 맞춰 갱신됩니다.</p><p>데이터를 수집하지 않으므로, 이 방침의 변경이 이미 보유된 사용자 데이터에 영향을 줄 수는 없습니다. 앱의 동작에 중대한 영향을 주는 변경(예: OMOHIDE DECK Pro의 내용 변경)이 있는 경우, 그 변경이 사용자에게 적용되기 전에 이 페이지에 공개합니다.</p>"
+      },
+      {
+        "id": "contact",
+        "title": "문의",
+        "html": "<p>질문, 오류 지적, 기능 요청을 환영합니다. 이 페이지는 OMOHIDE DECK의 지원 페이지도 겸합니다.</p><div class='contact-box'><p>웹사이트 / 문의 양식: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>이메일: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "th": {
+    "meta": {
+      "langName": "ภาษาไทย",
+      "selectLabel": "ภาษา",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "นโยบายความเป็นส่วนตัวและข้อจำกัดความรับผิดชอบ",
+      "subtitle": "OMOHIDE DECK เปลี่ยนรูปภาพของคุณให้เป็นการ์ด และเก็บทุกรูปไว้ในอุปกรณ์ของคุณ ไม่มีสิ่งใดถูกส่งออกไปนอกอุปกรณ์ หน้านี้อธิบายว่าสิ่งนั้นหมายถึงอะไร และแอปทำและไม่ทำอะไรกับรูปภาพของคุณ",
+      "updatedLabel": "มีผลบังคับใช้",
+      "updatedDate": "17 ตุลาคม 2569",
+      "footer": {
+        "ariaGithub": "GitHub (เปิดในแท็บใหม่)",
+        "ariaX": "X หรือ Twitter เดิม (เปิดในแท็บใหม่)",
+        "ariaInstagram": "Instagram (เปิดในแท็บใหม่)",
+        "ariaTop": "กลับไปด้านบนของหน้า",
+        "ariaLegal": "ข้อมูลทางกฎหมาย",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='หน้าแรกของ Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "บทนำ",
+        "html": "<p>หน้านี้คือนโยบายความเป็นส่วนตัวและข้อจำกัดความรับผิดชอบของ <strong>OMOHIDE DECK</strong> แอป iOS ที่พัฒนาโดย Flying Dev Lab (空飛ぶ研究室)</p><p>OMOHIDE DECK เป็นเกมการ์ดจับคู่ที่ใช้รูปภาพของคุณเองเป็นการ์ด แอปนี้สร้างขึ้นบนหลักการง่าย ๆ ข้อเดียว คือรูปภาพเป็นของคุณ และอยู่ในอุปกรณ์ของคุณ</p><p>โปรดอ่านหน้านี้ก่อนใช้แอป ส่วน<a href='#disclaimer'>ข้อจำกัดความรับผิดชอบ</a>อธิบายว่าแอปทำและไม่ทำอะไรกับรูปภาพของคุณ รวมถึงสิ่งที่เกิดขึ้นเมื่อคุณลบแอป</p>"
+      },
+      {
+        "id": "storage",
+        "title": "รูปภาพและข้อมูลที่จัดเก็บในอุปกรณ์ของคุณ",
+        "html": "<div class='zero-data'><p>ทุกสิ่งที่แอปเก็บไว้อยู่ในอุปกรณ์ของคุณ OMOHIDE DECK ไม่มีเซิร์ฟเวอร์ และไม่มีรูปภาพหรือข้อมูลใด ๆ ถูกส่งไปยังผู้พัฒนาเลย</p></div><p>OMOHIDE DECK จัดเก็บสิ่งต่อไปนี้ในอุปกรณ์ของคุณเท่านั้น:</p><ul><li><strong>เด็คที่บันทึกไว้</strong> — ภาพการ์ดที่สร้างจากรูปภาพที่คุณเลือกหรือถ่าย ชื่อเด็ค วันที่สร้างและวันที่แก้ไขล่าสุด และ (ตั้งแต่เวอร์ชัน 1.1) ชื่อเรื่องและคำบรรยายที่คุณเขียนให้การ์ดแต่ละใบ</li><li><strong>กลุ่ม</strong> (ตั้งแต่เวอร์ชัน 1.1) — ชื่อของแต่ละกลุ่มที่คุณสร้าง และรายการการ์ดที่บันทึกไว้ซึ่งอยู่ในกลุ่มนั้น กลุ่มเพียงชี้ไปยังการ์ดในเด็คที่บันทึกไว้ และไม่ได้สร้างสำเนาภาพเพิ่ม</li><li><strong>สถานะการซื้อ Pro</strong> — อ่านจาก App Store บนอุปกรณ์ของคุณ (ดู<a href='#purchases'>การซื้อภายในแอป</a>)</li><li><strong>บันทึกการยอมรับ</strong> — เวอร์ชัน (วันที่มีผลบังคับใช้) ของหน้านี้ (นโยบายความเป็นส่วนตัวและข้อจำกัดความรับผิดชอบ) ที่คุณยอมรับเมื่อเปิดแอปครั้งแรก ใช้เพื่อแสดงหน้าจอการยอมรับอีกครั้งเมื่อหน้านี้มีการแก้ไขเท่านั้น</li></ul><p>ภาพการ์ดไม่ใช่รูปภาพต้นฉบับของคุณ เมื่อคุณเลือกหรือถ่ายรูป แอปจะครอบตัดให้เป็นสี่เหลี่ยมจัตุรัส ย่อขนาด และเข้ารหัสใหม่เป็น JPEG ไฟล์ใหม่ กระบวนการนี้วาดพิกเซลขึ้นใหม่ทั้งหมด การ์ดที่บันทึกไว้จึง<strong>ไม่มีเมทาดาทาของต้นฉบับเหลืออยู่เลย</strong> ไม่มีตำแหน่ง ไม่มีวันที่หรือเวลาที่ถ่าย ไม่มีรุ่นกล้อง และไม่มีข้อมูลฝังอื่นใด รูปภาพต้นฉบับในแอปรูปภาพจะไม่ถูกแก้ไขเลย</p><p>เด็คและกลุ่มถูกบันทึกเป็นไฟล์ในไดเรกทอรี Application Support ของแอป ตั้งแต่เวอร์ชัน 1.1 เมื่อใช้ OMOHIDE DECK Pro รูปภาพที่คุณถ่ายในแอปจะถูกบันทึกเป็นเด็คทันทีที่ถ่ายเสร็จ เพื่อไม่ให้สูญหายแม้คุณจะหยุดก่อนเกมจบ คุณลบเด็คนั้นได้ทุกเมื่อในเด็คของฉัน ในเวอร์ชันฟรี และสำหรับรูปภาพที่เลือกจากคลังภาพ จะไม่มีการบันทึกสิ่งใดเว้นแต่คุณเลือกบันทึกเด็ค รูปภาพเหล่านั้นอยู่ในหน่วยความจำเฉพาะระหว่างเล่นและจะถูกทิ้งหลังจากนั้น การลบแอปจะลบข้อมูลทั้งหมดนี้ออกจากอุปกรณ์ของคุณ</p><p>ผู้พัฒนาไม่สามารถเข้าถึงข้อมูลเหล่านี้ได้เลย</p>"
+      },
+      {
+        "id": "access",
+        "title": "การเข้าถึงคลังภาพและกล้อง",
+        "html": "<p>OMOHIDE DECK รับรูปภาพได้สองวิธี และทั้งสองวิธีออกแบบมาให้แอปเห็นเฉพาะสิ่งที่คุณเลือกให้ดูเท่านั้น</p><p><strong>การเลือกจากคลังภาพ</strong> แอปใช้ตัวเลือกรูปภาพของระบบ iOS ตัวเลือกทำงานอยู่นอกแอป และส่งให้แอปเฉพาะรูปที่คุณแตะเท่านั้น แอปไม่เคยได้รับสิทธิ์เข้าถึงคลังภาพของคุณ นี่คือเหตุผลที่ iOS ไม่แสดงคำขออนุญาต เพราะไม่มีสิทธิ์ใดที่ต้องขอ แอปไม่สามารถดู แสดงรายการ หรืออ่านรูปภาพที่คุณไม่ได้เลือก</p><p><strong>การถ่ายรูปใหม่</strong> การถ่ายรูปจะขอสิทธิ์ใช้กล้อง เพราะ iOS กำหนดให้ต้องมีสิทธิ์นี้เพื่อแสดงภาพตัวอย่างสดและถ่ายภาพ รูปที่ถ่ายด้วยวิธีนี้จะเข้าสู่แอปเป็นการ์ดโดยตรง และ<strong>ไม่</strong>ถูกบันทึกลงในม้วนฟิล์มของคุณ แอปยังคงไม่มีสิทธิ์เข้าถึงรูปภาพที่มีอยู่ในคลังภาพ</p><p>แอปไม่เคยขอสิทธิ์ไมโครโฟน ตำแหน่ง รายชื่อติดต่อ หรือสิทธิ์อื่นใด</p>"
+      },
+      {
+        "id": "network",
+        "title": "การใช้งานเครือข่าย",
+        "html": "<p>ทุกฟีเจอร์ของ OMOHIDE DECK ทั้งการเลือกหรือถ่ายรูป การเล่น การบันทึกเด็ค และการสร้างกลุ่ม ทำงานแบบออฟไลน์ได้ทั้งหมด ไม่จำเป็นต้องเชื่อมต่อเครือข่าย</p><p>ในแอปไม่มี SDK วิเคราะห์ข้อมูล ไม่มีบริการรายงานข้อขัดข้อง ไม่มี SDK โฆษณา และไม่มีไลบรารีของบุคคลที่สามใด ๆ ทั้งสิ้น</p><p><strong>ตัวแอปเชื่อมต่อเครือข่ายในสองกรณีเท่านั้น และทั้งสองกรณีเริ่มจากคุณเอง:</strong></p><ul><li><strong>การซื้อหรือกู้คืนการซื้อ OMOHIDE DECK Pro</strong> — Apple ดำเนินการผ่าน App Store (ดู<a href='#purchases'>การซื้อภายในแอป</a>)</li><li><strong>การแตะลิงก์ในหน้าจอเกี่ยวกับ</strong> (นโยบายความเป็นส่วนตัว ข้อจำกัดความรับผิดชอบ ฝ่ายช่วยเหลือ) — เว็บไซต์นี้จะเปิดในเบราว์เซอร์ของคุณ</li></ul><p><strong>ไม่ว่ากรณีใด จะไม่มีการส่งรูปภาพ ภาพการ์ด หรือเด็คใด ๆ</strong> การสื่อสารเรื่องการซื้อไปยัง Apple เท่านั้น ไม่ไปยังผู้อื่น และไม่มีสิ่งใดจากรูปภาพของคุณ การเปิดเว็บไซต์นี้เป็นเพียงการโหลดหน้าเว็บตามปกติในเบราว์เซอร์ ซึ่งไม่เกี่ยวข้องกับสิ่งใดในแอป</p><p><strong>สถิติการใช้งานที่ Apple รวบรวม</strong> เนื่องจากแอปเผยแพร่ผ่าน App Store ทาง Apple ในฐานะผู้ให้บริการแพลตฟอร์มจะรวบรวมสถิติ เช่น จำนวนการติดตั้ง จำนวนครั้งที่เปิด ระยะเวลาการใช้งาน และจำนวนการซื้อ แล้วส่งให้ผู้พัฒนาในรูปแบบที่ไม่ระบุตัวตนและรวมเป็นภาพรวม หากคุณเปิดการแชร์ข้อมูลการวินิจฉัยในการตั้งค่า iOS รายงานข้อขัดข้องก็จะถูกส่งในลักษณะเดียวกัน ทั้งหมดนี้ Apple เป็นผู้จัดการ และผู้พัฒนาไม่สามารถเปิดหรือปิดได้</p><p><strong>สิ่งที่สถิติเหล่านี้ไม่มีวันรวมอยู่:</strong> รูปภาพของคุณ การ์ดที่สร้างจากรูปภาพ ชื่อเด็ค ชื่อเรื่องและคำบรรยายของการ์ด หรือข้อมูลใด ๆ เกี่ยวกับเนื้อหาในเด็คและกลุ่มของคุณ แอปไม่เคยส่งสิ่งเหล่านี้เลย ทั้ง Apple และผู้พัฒนาจึงไม่สามารถได้รับข้อมูลเหล่านี้ Apple รู้ว่ามีการใช้แอป แต่ไม่รู้ว่าคุณเล่นกับอะไร</p><p>ช่องทางเดียวที่ภาพการ์ดของคุณจะออกไปนอกอุปกรณ์คือการสำรองข้อมูล iCloud ซึ่งอธิบายในส่วนถัดไป และจะเกิดขึ้นเฉพาะเมื่อคุณเปิดใช้เองเท่านั้น</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "การสำรองข้อมูล iCloud",
+        "html": "<p>OMOHIDE DECK ไม่ใช้ CloudKit และไม่ซิงค์เด็คของคุณกับบริการคลาวด์ใด ๆ</p><p>อย่างไรก็ตาม หากคุณเปิดการสำรองข้อมูล iCloud ในการตั้งค่าอุปกรณ์ iOS อาจรวมเด็คที่บันทึกไว้ของแอป <strong>รวมถึงภาพการ์ด</strong> ไว้ในข้อมูลสำรองของอุปกรณ์ พร้อมกับข้อมูลของแอปอื่น ๆ นี่เป็นฟีเจอร์มาตรฐานของระบบปฏิบัติการที่ Apple จัดการทั้งหมด ผู้พัฒนาไม่ได้เป็นผู้เริ่มการสำรองข้อมูลเหล่านี้ และไม่สามารถเข้าถึงได้</p><p>สิ่งนี้ทำให้เด็คของคุณกู้คืนได้โดยอัตโนมัติเมื่อตั้งค่าอุปกรณ์ใหม่ หากคุณไม่ต้องการให้รวมภาพการ์ดไว้ คุณสามารถปิดการสำรองข้อมูล iCloud สำหรับ OMOHIDE DECK ได้ในแอปการตั้งค่าของ iOS</p><p>การจัดการข้อมูลสำรองเป็นไปตามนโยบายความเป็นส่วนตัวของ Apple</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "โฆษณาและการติดตาม",
+        "html": "<p>OMOHIDE DECK <strong>ไม่มีโฆษณา</strong></p><p>แอปไม่ใช้ตัวระบุโฆษณา (IDFA) ไม่ขอสิทธิ์ความโปร่งใสในการติดตามของแอป และไม่ติดตามคุณข้ามแอปหรือเว็บไซต์ ไม่มีการทำโปรไฟล์ ไม่มีการวิเคราะห์พฤติกรรม และไม่มีความสัมพันธ์ใด ๆ กับนายหน้าข้อมูล</p><p>นี่เป็นการตัดสินใจในการออกแบบ ไม่ใช่สถานะชั่วคราว เกมที่สร้างขึ้นรอบรูปภาพส่วนตัวของคุณ และเป็นเกมที่ครอบครัวอาจเล่นกับเด็ก ๆ จะไม่มีโฆษณา</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "การซื้อภายในแอป",
+        "html": "<p>OMOHIDE DECK ดาวน์โหลดได้ฟรี คุณสามารถเลือกหรือถ่ายรูป เล่นบนกระดาน 4 คู่ และเก็บเด็คที่บันทึกไว้หนึ่งเด็ค ซึ่งตั้งชื่อตามวันที่โดยอัตโนมัติ ได้โดยไม่ต้องซื้ออะไร</p><p>การซื้อภายในแอปแบบครั้งเดียว (ไม่สิ้นเปลือง) <strong>OMOHIDE DECK Pro</strong> จะปลดล็อกกระดานที่ใหญ่ขึ้น (6 และ 7 คู่ และตั้งแต่เวอร์ชัน 1.1 เพิ่ม 8, 10 และ 12 คู่) ยกเลิกข้อจำกัดการบันทึกได้เพียงเด็คเดียว และให้คุณตั้งชื่อและเปลี่ยนชื่อเด็คได้ ตั้งแต่เวอร์ชัน 1.1 Pro ยังให้คุณจัดการ์ดเป็นกลุ่ม เล่นด้วยการ์ดทั้งหมด และใส่ชื่อเรื่องและคำบรรยายให้การ์ดแต่ละใบ และจะบันทึกรูปภาพที่ถ่ายในแอปโดยอัตโนมัติ (ดู<a href='#storage'>รูปภาพและข้อมูลที่จัดเก็บในอุปกรณ์ของคุณ</a>) เนื้อหาและราคาที่แน่นอนแสดงอยู่ในหน้าผลิตภัณฑ์บน App Store และในหน้าจอการซื้อภายในแอป</p><p>การชำระเงินทั้งหมดดำเนินการโดย Apple ผ่าน App Store ผู้พัฒนาไม่เคยได้รับรายละเอียดการชำระเงิน ข้อมูลบัตร หรือข้อมูลส่วนบุคคลใด ๆ ที่เกี่ยวข้องกับธุรกรรม โปรดดูนโยบายความเป็นส่วนตัวของ Apple ว่า Apple จัดการข้อมูลเหล่านั้นอย่างไร</p><p><strong>การกู้คืนการซื้อ</strong> การซื้อผูกกับบัญชี Apple ของคุณ ไม่ได้ผูกกับอุปกรณ์เครื่องใดเครื่องหนึ่ง ปุ่มกู้คืนการซื้อในหน้าจอ Pro จะสอบถาม Apple ว่าบัญชีนั้นมีการซื้อนี้หรือไม่ การสอบถามนี้เสร็จสิ้นระหว่างอุปกรณ์ของคุณกับ Apple ผู้พัฒนาไม่ได้จัดเก็บหรือได้รับบัญชี Apple ของคุณ ใช้เพื่อกู้คืน Pro หลังเปลี่ยนอุปกรณ์หรือติดตั้งแอปใหม่</p><p>หากมีการเปลี่ยนแปลงขอบเขตของส่วนที่ฟรีและส่วนที่ต้องชำระเงิน จะแสดงในหน้านี้ก่อนมีผลบังคับใช้</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "การแบ่งปันข้อมูล",
+        "html": "<p>ผู้พัฒนาไม่ขาย แบ่งปัน หรือโอนข้อมูลผู้ใช้ให้บุคคลที่สาม ด้วยเหตุผลง่าย ๆ คือไม่มีการเก็บข้อมูลผู้ใช้ตั้งแต่แรก</p><p>ไม่มีข้อมูลที่จะเปิดเผยต่อผู้ลงโฆษณา ผู้ให้บริการวิเคราะห์ข้อมูล หรือนายหน้าข้อมูล ในกรณีที่มีคำขอที่มีผลผูกพันทางกฎหมายจากหน่วยงานที่มีอำนาจ ผู้พัฒนาก็ไม่มีข้อมูลผู้ใช้หรือรูปภาพใด ๆ ที่จะส่งมอบได้</p>"
+      },
+      {
+        "id": "children",
+        "title": "ความเป็นส่วนตัวของเด็ก",
+        "html": "<p>OMOHIDE DECK เป็นเกมสำหรับครอบครัว ไม่ใช่แอปสำหรับเด็กโดยเฉพาะ แอปนี้สร้างขึ้นเพื่อครอบครัว ผู้ใหญ่และเด็กสามารถเล่นด้วยกันโดยใช้รูปครอบครัว และหลายครอบครัวก็จะเล่นแบบนั้นจริง ๆ</p><p>เนื่องจากอาจมีรูปภาพส่วนตัวบนหน้าจอ และอาจมีเด็กเป็นผู้เล่น แอปจึง<strong>ไม่มีโฆษณา</strong> OMOHIDE DECK Pro เป็นส่วนเสริมที่เลือกได้สำหรับผู้ใหญ่ในครอบครัว ได้แก่ กระดานที่ใหญ่ขึ้น การบันทึกเด็คได้มากขึ้น การตั้งชื่อเด็ค และ (ตั้งแต่เวอร์ชัน 1.1) กลุ่มและชื่อเรื่องกับคำบรรยายของการ์ด เวอร์ชันฟรีเล่นได้อย่างสมบูรณ์ และไม่มีสิ่งใดที่เด็กต้องใช้เพื่อสนุกกับเกมถูกวางไว้หลังการซื้อ</p><p>แอปไม่เก็บข้อมูลส่วนบุคคลจากผู้ใดไม่ว่าอายุเท่าใด จึงไม่มีข้อกังวลด้านความเป็นส่วนตัวของเด็ก ไม่มีข้อมูลที่ต้องปกป้อง แบ่งปัน หรือลบ สำหรับผู้ใช้คนใดเลย รูปภาพที่เลือกหรือถ่ายระหว่างเล่นจะอยู่ในอุปกรณ์ตามที่อธิบายไว้ข้างต้น ไม่ว่าใครจะเป็นผู้เล่น</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "ข้อจำกัดความรับผิดชอบ",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK เป็นเกม ไม่ใช่เครื่องมือสำรองรูปภาพ คลังเก็บถาวร หรือเครื่องมือจัดการรูปภาพ โปรดเก็บรูปภาพต้นฉบับไว้ในที่ที่คุณเก็บตามปกติ</p></div><p><strong>ภาพการ์ดเป็นสำเนาที่ดัดแปลงมา</strong> แอปสร้างสำเนารูปภาพแบบสี่เหลี่ยมจัตุรัสที่ย่อขนาดเพื่อใช้เป็นการ์ด สำเนาเหล่านี้มีความละเอียดต่ำกว่าต้นฉบับและไม่มีเมทาดาทา จึงไม่สามารถใช้แทนรูปภาพต้นฉบับได้</p><p><strong>รูปภาพที่ถ่ายในแอปจะไม่ถูกบันทึกลงในม้วนฟิล์มของคุณ</strong> หากคุณถ่ายภาพใน OMOHIDE DECK แล้วต้องการเก็บไว้เป็นรูปภาพ โปรดถ่ายใหม่ด้วยแอปกล้อง แอปเก็บภาพที่ถ่ายไว้เป็นการ์ดเท่านั้น คือเก็บไว้ในเด็คที่บันทึก (เมื่อใช้ Pro จะบันทึกโดยอัตโนมัติ) มิฉะนั้นจะเก็บไว้จนกว่าเกมจะจบเท่านั้น</p><p><strong>การลบแอปจะลบเด็คของคุณ</strong> เด็คที่บันทึกไว้อยู่ภายในแอปเท่านั้น การถอนการติดตั้งจะลบเด็คเหล่านั้น เว้นแต่จะกู้คืนจากข้อมูลสำรองของอุปกรณ์ในภายหลัง ผู้พัฒนาไม่สามารถกู้คืนเด็คที่ถูกลบได้</p><p><strong>การลบเด็คจะนำการ์ดของเด็คนั้นออกจากกลุ่มด้วย</strong> กลุ่มไม่ได้เก็บสำเนาภาพของตัวเอง ดังนั้นการ์ดจากเด็คที่ถูกลบจะหายไปจากทุกกลุ่มที่ใช้การ์ดเหล่านั้น แอปจะขอให้ยืนยันก่อน</p><p><strong>เวอร์ชันฟรีเก็บเด็คได้หนึ่งเด็ค</strong> การบันทึกเด็คใหม่จะแทนที่เด็คเดิม แอปจะเตือนก่อนแทนที่ แต่เมื่อแทนที่แล้ว เด็คก่อนหน้าจะหายไป</p><p><strong>การจำกัดความรับผิด</strong> ภายในขอบเขตสูงสุดที่กฎหมายที่ใช้บังคับอนุญาต ผู้พัฒนาจะไม่รับผิดชอบต่อความเสียหายทางตรง ทางอ้อม ความเสียหายโดยบังเอิญ หรือความเสียหายต่อเนื่องใด ๆ ที่เกิดจากการใช้หรือไม่สามารถใช้แอป รวมถึงแต่ไม่จำกัดเพียงการสูญหายของเด็ค การสูญหายของรูปภาพที่ถ่ายในแอป หรือการสูญหายของข้อมูลอื่นใด</p><p><strong>การให้บริการ</strong> การอัปเดต iOS หรือการเปลี่ยนแปลงสภาพแวดล้อมของอุปกรณ์อาจส่งผลต่อการทำงานของแอปโดยไม่แจ้งล่วงหน้า ผู้พัฒนาอาจแก้ไขหรือยุติการให้บริการแอปโดยไม่แจ้งล่วงหน้า และไม่รับผิดชอบต่อการสูญหายของข้อมูลที่เกิดจากการเปลี่ยนแปลงดังกล่าว</p>"
+      },
+      {
+        "id": "law",
+        "title": "กฎหมายที่ใช้บังคับ",
+        "html": "<p>นโยบายนี้อยู่ภายใต้กฎหมายของประเทศญี่ปุ่น ข้อพิพาทใด ๆ ที่เกิดขึ้นเกี่ยวกับนโยบายนี้ให้อยู่ในเขตอำนาจเฉพาะของศาลที่มีเขตอำนาจเหนือที่ตั้งของผู้พัฒนาในฐานะศาลชั้นต้น</p><p><strong>เกี่ยวกับการแปล</strong> หน้านี้มีให้บริการหลายภาษาเพื่อความสะดวก ต้นฉบับคือฉบับภาษาอังกฤษ หากคำแปลแตกต่างจากฉบับภาษาอังกฤษ ให้ถือฉบับภาษาอังกฤษเป็นหลัก</p>"
+      },
+      {
+        "id": "changes",
+        "title": "การเปลี่ยนแปลงนโยบายนี้",
+        "html": "<p>นโยบายนี้อาจได้รับการปรับปรุงตามการพัฒนาของแอป ฉบับแก้ไขจะมีผลเมื่อเผยแพร่ในหน้านี้ และวันที่มีผลบังคับใช้ที่ด้านบนของหน้าจะได้รับการปรับปรุงตามไปด้วย</p><p>เนื่องจากไม่มีการเก็บข้อมูล การเปลี่ยนแปลงนโยบายนี้จึงไม่ส่งผลต่อข้อมูลเกี่ยวกับคุณที่ถูกเก็บไว้แล้ว หากการเปลี่ยนแปลงใดส่งผลอย่างมีนัยสำคัญต่อการทำงานของแอป เช่น การเปลี่ยนแปลงสิ่งที่รวมอยู่ใน OMOHIDE DECK Pro จะเผยแพร่ในหน้านี้ก่อนที่การเปลี่ยนแปลงนั้นจะถึงผู้ใช้</p>"
+      },
+      {
+        "id": "contact",
+        "title": "ติดต่อ",
+        "html": "<p>ยินดีรับคำถาม การแจ้งข้อผิดพลาด และคำขอฟีเจอร์ หน้านี้ยังทำหน้าที่เป็นหน้าฝ่ายช่วยเหลือของ OMOHIDE DECK ด้วย</p><div class='contact-box'><p>เว็บไซต์ / แบบฟอร์มติดต่อ: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>อีเมล: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "es": {
+    "meta": {
+      "langName": "Español",
+      "selectLabel": "Idioma",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "Política de privacidad y aviso legal",
+      "subtitle": "OMOHIDE DECK convierte tus fotos en cartas y las guarda todas en tu dispositivo. Nada sale nunca de él. Esta página explica exactamente qué significa eso y qué hace y qué no hace la app con tus fotos.",
+      "updatedLabel": "Vigente desde",
+      "updatedDate": "17 de octubre de 2026",
+      "footer": {
+        "ariaGithub": "GitHub (se abre en una pestaña nueva)",
+        "ariaX": "X, antes Twitter (se abre en una pestaña nueva)",
+        "ariaInstagram": "Instagram (se abre en una pestaña nueva)",
+        "ariaTop": "Volver al inicio de la página",
+        "ariaLegal": "Información legal",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Página de inicio de Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introducción",
+        "html": "<p>Esta es la política de privacidad y el aviso legal de <strong>OMOHIDE DECK</strong>, una app para iOS desarrollada por Flying Dev Lab (空飛ぶ研究室).</p><p>OMOHIDE DECK es un juego de cartas de parejas que usa tus propias fotos como cartas. Se basa en un principio sencillo: tus fotos te pertenecen y se quedan en tu dispositivo.</p><p>Lee esta página antes de usar la app. La sección <a href='#disclaimer'>Aviso legal</a> explica qué hace y qué no hace la app con tus fotos, incluido lo que ocurre cuando la eliminas.</p>"
+      },
+      {
+        "id": "storage",
+        "title": "Fotos y datos guardados en tu dispositivo",
+        "html": "<div class='zero-data'><p>Todo lo que guarda la app se queda en tu dispositivo. OMOHIDE DECK no tiene servidor, y ninguna foto ni ningún otro dato se envía nunca al desarrollador.</p></div><p>OMOHIDE DECK guarda lo siguiente solo en tu dispositivo:</p><ul><li><strong>Mazos guardados</strong>: las imágenes de las cartas creadas a partir de las fotos que elegiste o tomaste, el nombre del mazo, las fechas en que se creó y se modificó por última vez y (desde la versión 1.1) el título y la nota que escribas para cada carta</li><li><strong>Grupos</strong> (desde la versión 1.1): el nombre de cada grupo que crees y qué cartas guardadas incluye. Un grupo apunta a cartas de tus mazos guardados; no crea copias adicionales de las imágenes</li><li><strong>Tu estado de compra de Pro</strong>: se lee del App Store en tu dispositivo (consulta <a href='#purchases'>Compras dentro de la app</a>)</li><li><strong>Tu registro de aceptación</strong>: la versión (fecha de vigencia) de esta página (política de privacidad y aviso legal) que aceptaste al abrir la app por primera vez. Solo se usa para volver a mostrar la pantalla de aceptación si esta página se revisa</li></ul><p>Las imágenes de las cartas no son tus fotos originales. Cuando eliges o tomas una foto, la app la recorta en un cuadrado, la reduce y la vuelve a codificar como un JPEG nuevo. Ese proceso vuelve a dibujar los píxeles desde cero, así que la carta guardada <strong>no conserva ningún metadato del original</strong>: ni ubicación, ni fecha u hora de captura, ni modelo de cámara, ni ninguna otra información incrustada. Tus fotos originales en la app Fotos nunca se modifican.</p><p>Los mazos y los grupos se guardan como archivos en el directorio Application Support de la app. Desde la versión 1.1, con OMOHIDE DECK Pro, las fotos que tomas en la app se guardan como un mazo en cuanto terminas de tomarlas, para que no se pierdan si dejas la partida antes de terminar. Puedes eliminar ese mazo en cualquier momento en Mis mazos. En la versión gratuita, y con las fotos que eliges de tu fototeca, no se guarda nada a menos que elijas guardar el mazo; esas fotos solo existen en la memoria mientras juegas y después se descartan. Al eliminar la app se borran todos estos datos de tu dispositivo.</p><p>El desarrollador no tiene acceso a nada de esto.</p>"
+      },
+      {
+        "id": "access",
+        "title": "Acceso a la fototeca y a la cámara",
+        "html": "<p>OMOHIDE DECK obtiene fotos de dos maneras, y ambas están diseñadas para que la app vea solo lo que tú decides mostrarle.</p><p><strong>Elegir de tu fototeca.</strong> La app usa el selector de fotos del sistema iOS. El selector funciona fuera de la app y solo le entrega las fotos que tocas. La app nunca recibe acceso a tu fototeca; por eso iOS no muestra ninguna solicitud de permiso: no hay ningún permiso que pedir. La app no puede ver, listar ni leer ninguna foto que no hayas elegido.</p><p><strong>Tomar fotos nuevas.</strong> La función de cámara pide permiso para usar la cámara, porque iOS lo exige para mostrar la vista previa en directo y tomar fotos. Las fotos tomadas así entran directamente en la app como cartas. <strong>No</strong> se guardan en tu carrete, y la app sigue sin tener acceso a las fotos que ya están en tu fototeca.</p><p>La app nunca pide permiso para el micrófono, la ubicación, los contactos ni ningún otro.</p>"
+      },
+      {
+        "id": "network",
+        "title": "Actividad de red",
+        "html": "<p>Todas las funciones de OMOHIDE DECK (elegir o tomar fotos, jugar, guardar mazos y crear grupos) funcionan completamente sin conexión. No se necesita conexión de red.</p><p>La app no incluye SDK de análisis, servicios de informes de fallos, SDK de publicidad ni bibliotecas de terceros de ningún tipo.</p><p><strong>La app solo se conecta a la red en dos casos, y ambos los inicias tú:</strong></p><ul><li><strong>Comprar o restaurar OMOHIDE DECK Pro</strong>: lo gestiona Apple a través del App Store (consulta <a href='#purchases'>Compras dentro de la app</a>)</li><li><strong>Tocar un enlace en la pantalla Acerca de</strong> (Política de privacidad, Aviso legal, Soporte): este sitio web se abre en tu navegador</li></ul><p><strong>En ninguno de los dos casos se envía ninguna foto, imagen de carta ni mazo.</strong> El tráfico de compra va a Apple y a nadie más, y no contiene nada de tus fotos. Abrir este sitio web es una carga normal de página en tu navegador, sin relación con nada de la app.</p><p><strong>Estadísticas de uso que recopila Apple.</strong> Como la app se distribuye a través del App Store, Apple, como operador de la plataforma, recopila estadísticas como instalaciones, aperturas, duración de las sesiones y compras, y se las proporciona al desarrollador de forma anónima y agregada. Si has activado el envío de datos de diagnóstico en los ajustes de iOS, los informes de fallos se proporcionan de la misma manera. Todo esto lo gestiona Apple, y el desarrollador no puede activarlo ni desactivarlo.</p><p><strong>Lo que estas estadísticas nunca incluyen:</strong> tus fotos, las cartas creadas a partir de ellas, los nombres de los mazos, los títulos y las notas de las cartas, ni nada sobre el contenido de tus mazos y grupos. La app nunca envía nada de eso, así que ni Apple ni el desarrollador pueden obtenerlo. Apple sabe que se usó la app, no con qué jugaste.</p><p>La única forma en que las imágenes de tus cartas salen del dispositivo es la copia de seguridad de iCloud, que se describe a continuación, y solo si la has activado.</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "Copia de seguridad de iCloud",
+        "html": "<p>OMOHIDE DECK no usa CloudKit y no sincroniza tus mazos con ningún servicio en la nube.</p><p>Sin embargo, si has activado la copia de seguridad de iCloud en los ajustes del dispositivo, iOS puede incluir los mazos guardados de la app, <strong>con las imágenes de las cartas</strong>, en la copia de seguridad del dispositivo junto con los datos de tus otras apps. Es una función estándar del sistema operativo que gestiona íntegramente Apple. El desarrollador no inicia estas copias ni tiene acceso a ellas.</p><p>Gracias a esto, tus mazos se restauran automáticamente cuando configuras un dispositivo nuevo. Si prefieres que las imágenes de tus cartas no se incluyan, puedes desactivar la copia de seguridad de iCloud para OMOHIDE DECK en la app Ajustes de iOS.</p><p>El tratamiento de las copias de seguridad se rige por la política de privacidad de Apple.</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "Publicidad y rastreo",
+        "html": "<p>OMOHIDE DECK <strong>no tiene anuncios</strong>.</p><p>La app no usa el identificador de publicidad (IDFA), no pide el permiso de Transparencia de rastreo de apps y no te rastrea entre apps ni sitios web. No hay elaboración de perfiles, ni análisis de comportamiento, ni relación alguna con intermediarios de datos.</p><p>Es una decisión de diseño, no un estado temporal. Un juego hecho con tus fotos personales, y al que las familias pueden jugar con niños, no llevará publicidad.</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "Compras dentro de la app",
+        "html": "<p>OMOHIDE DECK se descarga gratis. Puedes elegir o tomar fotos, jugar en el tablero de 4 pares y conservar un mazo guardado, con un nombre de fecha que se pone automáticamente, sin comprar nada.</p><p>Una compra única (no consumible) dentro de la app, <strong>OMOHIDE DECK Pro</strong>, desbloquea los tableros más grandes (6 y 7 pares, y desde la versión 1.1 también 8, 10 y 12 pares), elimina el límite de un solo mazo guardado y te permite poner y cambiar el nombre de tus mazos. Desde la versión 1.1, Pro también te permite organizar las cartas en grupos, jugar con Todas las cartas y dar a cada carta un título y una nota, y guarda automáticamente las fotos tomadas en la app (consulta <a href='#storage'>Fotos y datos guardados en tu dispositivo</a>). El contenido exacto y el precio se muestran en la página del producto en el App Store y en la pantalla de compra de la app.</p><p>Todo el procesamiento de pagos lo realiza Apple a través del App Store. El desarrollador nunca recibe tus datos de pago, la información de tu tarjeta ni ningún dato personal relacionado con la transacción. Consulta la política de privacidad de Apple para saber cómo trata Apple esos datos.</p><p><strong>Restaurar una compra.</strong> Una compra está vinculada a tu cuenta de Apple, no a un dispositivo concreto. Restaurar compra, en la pantalla de Pro, pregunta a Apple si esa cuenta tiene la compra. La consulta se completa entre tu dispositivo y Apple; el desarrollador no guarda ni recibe tu cuenta de Apple. Úsalo para recuperar Pro después de cambiar de dispositivo o reinstalar la app.</p><p>Cualquier cambio en lo que es gratis y lo que es de pago se reflejará en esta página antes de que entre en vigor.</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "Compartir información",
+        "html": "<p>El desarrollador no vende, comparte ni transfiere información de los usuarios a terceros, por la sencilla razón de que no se recopila ninguna información de los usuarios.</p><p>No hay datos que revelar a anunciantes, proveedores de análisis ni intermediarios de datos. Ante una solicitud legalmente vinculante de una autoridad competente, el desarrollador no tiene datos de usuarios, ni fotos, que pueda entregar.</p>"
+      },
+      {
+        "id": "children",
+        "title": "Privacidad de los niños",
+        "html": "<p>OMOHIDE DECK es un juego familiar, no una app infantil. Está hecho para familias: adultos y niños pueden jugar juntos con fotos familiares, y muchas familias lo harán exactamente así.</p><p>Como puede haber fotos personales en la pantalla y puede estar jugando un niño, la app <strong>no tiene anuncios</strong>. OMOHIDE DECK Pro es un complemento opcional pensado para los adultos de la familia: tableros más grandes, más mazos guardados, mazos con nombre y (desde la versión 1.1) grupos y títulos y notas en las cartas. La versión gratuita se puede jugar por completo, y nada de lo que un niño necesita para disfrutar del juego está detrás de una compra.</p><p>La app no recopila información personal de nadie, tenga la edad que tenga, por lo que no plantea problemas de privacidad infantil. No hay datos que proteger, compartir ni eliminar de ningún usuario. Las fotos elegidas o tomadas durante el juego se quedan en el dispositivo tal como se describe arriba, juegue quien juegue.</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "Aviso legal",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK es un juego. No es una copia de seguridad de fotos, ni un archivo, ni una herramienta para gestionar fotos. Guarda tus fotos originales donde las guardas normalmente.</p></div><p><strong>Las imágenes de las cartas son copias derivadas.</strong> La app crea copias cuadradas y reducidas de tus fotos para usarlas como cartas. Estas copias tienen menos resolución que los originales y no tienen metadatos. No sustituyen a las fotos originales.</p><p><strong>Las fotos tomadas en la app no se guardan en tu carrete.</strong> Si tomas en OMOHIDE DECK una foto que quieres conservar como foto, vuelve a tomarla con la app Cámara. La app conserva las capturas de la cámara solo como cartas: en un mazo guardado (con Pro, se guarda automáticamente) o, si no, solo hasta que termina la partida.</p><p><strong>Eliminar la app elimina tus mazos.</strong> Los mazos guardados solo existen dentro de la app. Al desinstalarla se borran, salvo que una copia de seguridad del dispositivo los restaure más adelante. El desarrollador no puede recuperar mazos eliminados.</p><p><strong>Eliminar un mazo también quita sus cartas de los grupos.</strong> Los grupos no guardan copias propias de las imágenes, así que las cartas de un mazo eliminado desaparecen de todos los grupos que las usaban. La app pide confirmación antes.</p><p><strong>La versión gratuita conserva un mazo.</strong> Al guardar un mazo nuevo se reemplaza el existente. La app te avisa antes de hacerlo, pero una vez reemplazado, el mazo anterior desaparece.</p><p><strong>Limitación de responsabilidad.</strong> En la máxima medida permitida por la ley aplicable, el desarrollador no será responsable de ningún daño directo, indirecto, incidental o consecuente derivado del uso o de la imposibilidad de uso de la app, incluidos, entre otros, la pérdida de mazos, la pérdida de fotos tomadas en la app o cualquier otra pérdida de datos.</p><p><strong>Disponibilidad.</strong> Las actualizaciones de iOS o los cambios en el entorno del dispositivo pueden afectar al funcionamiento de la app sin previo aviso. El desarrollador puede modificar la app o dejar de ofrecerla sin previo aviso, y no es responsable de la pérdida de datos que se derive de esos cambios.</p>"
+      },
+      {
+        "id": "law",
+        "title": "Ley aplicable",
+        "html": "<p>Esta política se rige por las leyes de Japón. Cualquier controversia relacionada con esta política se someterá a la jurisdicción exclusiva del tribunal competente del lugar donde se encuentra el desarrollador, como tribunal de primera instancia.</p><p><strong>Traducciones.</strong> Esta página se ofrece en varios idiomas para tu comodidad. La versión en inglés es el original. Si una traducción difiere de la versión en inglés, prevalece la versión en inglés.</p>"
+      },
+      {
+        "id": "changes",
+        "title": "Cambios en esta política",
+        "html": "<p>Esta política puede actualizarse a medida que la app evoluciona. La versión revisada entra en vigor cuando se publica en esta página, y la fecha de vigencia de la parte superior se actualiza en consecuencia.</p><p>Como no se recopilan datos, los cambios en esta política no pueden afectar a datos que ya se tengan sobre ti. Si un cambio afecta de forma importante al funcionamiento de la app (por ejemplo, un cambio en lo que incluye OMOHIDE DECK Pro), se publicará aquí antes de que llegue a los usuarios.</p>"
+      },
+      {
+        "id": "contact",
+        "title": "Contacto",
+        "html": "<p>Las preguntas, las correcciones y las sugerencias de funciones son bienvenidas. Esta página también es la página de soporte de OMOHIDE DECK.</p><div class='contact-box'><p>Sitio web / formulario de contacto: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>Correo electrónico: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "pt-BR": {
+    "meta": {
+      "langName": "Português (Brasil)",
+      "selectLabel": "Idioma",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "Política de Privacidade e Aviso Legal",
+      "subtitle": "O OMOHIDE DECK transforma suas fotos em cartas e mantém todas elas no seu dispositivo. Nada é transmitido para fora dele. Esta página explica exatamente o que isso significa e o que o app faz e não faz com suas fotos.",
+      "updatedLabel": "Em vigor desde",
+      "updatedDate": "17 de outubro de 2026",
+      "footer": {
+        "ariaGithub": "GitHub (abre em uma nova aba)",
+        "ariaX": "X, antigo Twitter (abre em uma nova aba)",
+        "ariaInstagram": "Instagram (abre em uma nova aba)",
+        "ariaTop": "Voltar ao topo da página",
+        "ariaLegal": "Informações legais",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Página inicial da Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introdução",
+        "html": "<p>Esta é a Política de Privacidade e o Aviso Legal do <strong>OMOHIDE DECK</strong>, um app para iOS desenvolvido pela Flying Dev Lab (空飛ぶ研究室).</p><p>O OMOHIDE DECK é um jogo de cartas de pares que usa suas próprias fotos como cartas. Ele se baseia em um princípio simples: suas fotos pertencem a você e ficam no seu dispositivo.</p><p>Leia esta página antes de usar o app. A seção <a href='#disclaimer'>Aviso Legal</a> explica o que o app faz e não faz com suas fotos, inclusive o que acontece quando você o apaga.</p>"
+      },
+      {
+        "id": "storage",
+        "title": "Fotos e dados armazenados no seu dispositivo",
+        "html": "<div class='zero-data'><p>Tudo o que o app guarda fica no seu dispositivo. O OMOHIDE DECK não tem servidor, e nenhuma foto ou outro dado é transmitido ao desenvolvedor.</p></div><p>O OMOHIDE DECK armazena o seguinte somente no seu dispositivo:</p><ul><li><strong>Baralhos salvos</strong> — as imagens das cartas feitas a partir das fotos que você escolheu ou tirou, o nome do baralho, as datas em que foi criado e alterado pela última vez e (a partir da versão 1.1) o título e a nota que você escrever para cada carta</li><li><strong>Grupos</strong> (a partir da versão 1.1) — o nome de cada grupo que você criar e quais cartas salvas ele inclui. Um grupo aponta para cartas dos seus baralhos salvos; ele não faz cópias extras das imagens</li><li><strong>Seu status de compra do Pro</strong> — lido da App Store no seu dispositivo (veja <a href='#purchases'>Compras no app</a>)</li><li><strong>Seu registro de consentimento</strong> — a versão (data de vigência) desta página (Política de Privacidade e Aviso Legal) com a qual você concordou ao abrir o app pela primeira vez, usada apenas para mostrar a tela de consentimento novamente se esta página for revisada</li></ul><p>As imagens das cartas não são suas fotos originais. Quando você escolhe ou tira uma foto, o app a recorta em um quadrado, reduz o tamanho e a recodifica como um novo JPEG. Esse processo redesenha os pixels do zero, então a carta salva <strong>não carrega nenhum metadado do original</strong> — nenhuma localização, nenhuma data ou hora da captura, nenhum modelo de câmera e nenhuma outra informação incorporada. Suas fotos originais no app Fotos nunca são modificadas.</p><p>Baralhos e grupos são salvos como arquivos no diretório Application Support do app. A partir da versão 1.1, com o OMOHIDE DECK Pro, as fotos que você tira no app são salvas como um baralho assim que você termina de fotografar, para que não se percam se você parar antes do fim da partida. Você pode apagar esse baralho a qualquer momento em Meus baralhos. Na versão gratuita, e com as fotos que você escolhe da fototeca, nada é salvo a menos que você opte por salvar o baralho; essas fotos existem apenas na memória enquanto você joga e são descartadas depois. Apagar o app remove todos esses dados do seu dispositivo.</p><p>O desenvolvedor não tem acesso a nada disso.</p>"
+      },
+      {
+        "id": "access",
+        "title": "Acesso à fototeca e à câmera",
+        "html": "<p>O OMOHIDE DECK recebe fotos de duas maneiras, e as duas são feitas para que o app veja apenas o que você decide mostrar.</p><p><strong>Escolher da fototeca.</strong> O app usa o seletor de fotos do sistema iOS. O seletor funciona fora do app, e só as fotos que você toca são entregues a ele. O app nunca recebe acesso à sua fototeca — e é por isso que o iOS não mostra nenhum pedido de permissão: não há permissão a pedir. O app não pode ver, listar nem ler nenhuma foto que você não escolheu.</p><p><strong>Tirar fotos novas.</strong> A câmera do app pede permissão de câmera, porque o iOS exige isso para mostrar a pré-visualização ao vivo e fotografar. As fotos tiradas assim entram direto no app como cartas. Elas <strong>não</strong> são gravadas no seu rolo da câmera, e o app continua sem acesso às fotos que já estão na sua fototeca.</p><p>O app nunca pede permissão de microfone, localização, contatos ou qualquer outra.</p>"
+      },
+      {
+        "id": "network",
+        "title": "Atividade de rede",
+        "html": "<p>Todos os recursos do OMOHIDE DECK — escolher ou tirar fotos, jogar, salvar baralhos e criar grupos — funcionam totalmente offline. Nenhuma conexão de rede é necessária.</p><p>O app não tem SDKs de análise, serviços de relatórios de falhas, SDKs de publicidade nem bibliotecas de terceiros de nenhum tipo.</p><p><strong>O próprio app se conecta à rede em apenas dois casos, ambos iniciados por você:</strong></p><ul><li><strong>Comprar ou restaurar o OMOHIDE DECK Pro</strong> — processado pela Apple por meio da App Store (veja <a href='#purchases'>Compras no app</a>)</li><li><strong>Tocar em um link na tela Sobre</strong> (Política de Privacidade, Aviso Legal, Suporte) — este site abre no seu navegador</li></ul><p><strong>Em nenhum dos casos qualquer foto, imagem de carta ou baralho é transmitido.</strong> O tráfego da compra vai para a Apple e para mais ninguém, e não contém nada das suas fotos. Abrir este site é um carregamento comum de página no seu navegador, sem ligação com nada no app.</p><p><strong>Estatísticas de uso coletadas pela Apple.</strong> Como o app é distribuído pela App Store, a Apple — como operadora da plataforma — reúne estatísticas como instalações, aberturas, duração das sessões e compras, e as fornece ao desenvolvedor de forma anônima e agregada. Se você ativou o compartilhamento de dados de diagnóstico nos ajustes do iOS, os relatórios de falhas são fornecidos da mesma forma. Tudo isso é gerenciado pela Apple, e o desenvolvedor não pode ativar nem desativar.</p><p><strong>O que essas estatísticas nunca incluem:</strong> suas fotos, as cartas feitas com elas, os nomes dos baralhos, os títulos e as notas das cartas, nem nada sobre o conteúdo dos seus baralhos e grupos. O app nunca transmite nada disso, então nem a Apple nem o desenvolvedor podem obter essas informações. A Apple sabe que o app foi usado — não com o que você jogou.</p><p>A única forma de as imagens das suas cartas saírem do dispositivo é o Backup do iCloud, descrito a seguir — e somente se você o tiver ativado.</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "Backup do iCloud",
+        "html": "<p>O OMOHIDE DECK não usa o CloudKit e não sincroniza seus baralhos com nenhum serviço de nuvem.</p><p>No entanto, se você ativou o Backup do iCloud nos ajustes do dispositivo, o iOS pode incluir os baralhos salvos do app — <strong>incluindo as imagens das cartas</strong> — no backup do dispositivo, junto com os dados dos seus outros apps. Esse é um recurso padrão do sistema operacional, gerenciado inteiramente pela Apple. O desenvolvedor não inicia esses backups nem tem acesso a eles.</p><p>É isso que permite que seus baralhos sejam restaurados automaticamente quando você configura um novo dispositivo. Se preferir que as imagens das suas cartas não sejam incluídas, você pode desativar o Backup do iCloud para o OMOHIDE DECK no app Ajustes do iOS.</p><p>O tratamento dos backups é regido pela Política de Privacidade da Apple.</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "Publicidade e rastreamento",
+        "html": "<p>O OMOHIDE DECK <strong>não tem anúncios</strong>.</p><p>O app não usa o identificador de publicidade (IDFA), não pede a permissão de Transparência de Rastreamento de Apps e não rastreia você entre apps ou sites. Não há criação de perfis, nem análise de comportamento, nem relação de qualquer tipo com corretores de dados.</p><p>Esta é uma decisão de projeto, não uma situação temporária. Um jogo feito com suas fotos pessoais — e que famílias podem jogar com crianças — não terá publicidade.</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "Compras no app",
+        "html": "<p>O OMOHIDE DECK pode ser baixado gratuitamente. Você pode escolher ou tirar fotos, jogar no tabuleiro de 4 pares e manter um baralho salvo — com nome automático pela data — sem comprar nada.</p><p>Uma compra única (não consumível) no app, o <strong>OMOHIDE DECK Pro</strong>, desbloqueia os tabuleiros maiores (6 e 7 pares, e a partir da versão 1.1 também 8, 10 e 12 pares), remove o limite de um único baralho salvo e permite dar nome e renomear seus baralhos. A partir da versão 1.1, o Pro também permite organizar as cartas em grupos, jogar com Todas as cartas e dar a cada carta um título e uma nota, e salva automaticamente as fotos tiradas no app (veja <a href='#storage'>Fotos e dados armazenados no seu dispositivo</a>). O conteúdo exato e o preço aparecem na página do produto na App Store e na tela de compra dentro do app.</p><p>Todo o processamento de pagamentos é feito pela Apple por meio da App Store. O desenvolvedor nunca recebe seus dados de pagamento, informações do cartão nem qualquer informação pessoal ligada à transação. Consulte a Política de Privacidade da Apple para saber como a Apple trata esses dados.</p><p><strong>Restaurar uma compra.</strong> Uma compra fica vinculada à sua Conta Apple, não a um dispositivo específico. Restaurar compra, na tela do Pro, pergunta à Apple se essa conta tem a compra. A consulta é concluída entre o seu dispositivo e a Apple; o desenvolvedor não armazena nem recebe a sua Conta Apple. Use-a para restaurar o Pro depois de trocar de dispositivo ou reinstalar o app.</p><p>Qualquer mudança no que é gratuito e no que é pago será refletida nesta página antes de entrar em vigor.</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "Compartilhamento de informações",
+        "html": "<p>O desenvolvedor não vende, compartilha nem transfere informações dos usuários a terceiros, pelo simples motivo de que nenhuma informação dos usuários é coletada.</p><p>Não há dados para divulgar a anunciantes, provedores de análise ou corretores de dados. Diante de uma solicitação legalmente vinculante de uma autoridade competente, o desenvolvedor não tem dados de usuários — nem fotos — que possam ser fornecidos.</p>"
+      },
+      {
+        "id": "children",
+        "title": "Privacidade das crianças",
+        "html": "<p>O OMOHIDE DECK é um jogo para a família, não um app infantil. Ele foi feito para famílias: adultos e crianças podem jogar juntos com fotos da família, e muitas famílias farão exatamente isso.</p><p>Como fotos pessoais podem aparecer na tela e uma criança pode estar jogando, o app <strong>não tem anúncios</strong>. O OMOHIDE DECK Pro é um complemento opcional voltado aos adultos da família — tabuleiros maiores, mais baralhos salvos, baralhos com nome e (a partir da versão 1.1) grupos e títulos e notas nas cartas. A versão gratuita pode ser jogada por completo, e nada de que uma criança precise para aproveitar o jogo fica atrás de uma compra.</p><p>O app não coleta informações pessoais de ninguém, de nenhuma idade, por isso não gera preocupações com a privacidade das crianças. Não há dados a proteger, compartilhar ou apagar — de nenhum usuário. As fotos escolhidas ou tiradas durante o jogo ficam no dispositivo exatamente como descrito acima, seja quem for que estiver jogando.</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "Aviso Legal",
+        "html": "<div class='lead-note'><p>O OMOHIDE DECK é um jogo. Não é um backup de fotos, um arquivo nem uma ferramenta de gerenciamento de fotos. Guarde suas fotos originais onde você normalmente as guarda.</p></div><p><strong>As imagens das cartas são cópias derivadas.</strong> O app faz cópias quadradas e reduzidas das suas fotos para usar como cartas. Essas cópias têm resolução menor que a dos originais e não têm metadados. Elas não substituem as fotos originais.</p><p><strong>As fotos tiradas no app não são salvas no seu rolo da câmera.</strong> Se você tirar no OMOHIDE DECK uma foto que queira guardar como foto, tire-a de novo com o app Câmera. O app guarda as capturas da câmera apenas como cartas: em um baralho salvo (com o Pro, salvo automaticamente) ou, caso contrário, só até o fim da partida.</p><p><strong>Apagar o app apaga seus baralhos.</strong> Os baralhos salvos existem apenas dentro do app. Desinstalá-lo os remove, a menos que um backup do dispositivo os restaure depois. O desenvolvedor não pode recuperar baralhos apagados.</p><p><strong>Apagar um baralho também remove as cartas dele dos grupos.</strong> Os grupos não guardam cópias próprias das imagens, então as cartas de um baralho apagado desaparecem de todos os grupos que as usavam. O app pede confirmação antes.</p><p><strong>A versão gratuita guarda um baralho.</strong> Salvar um novo baralho substitui o existente. O app avisa antes de fazer isso, mas, depois de substituído, o baralho anterior não pode ser recuperado.</p><p><strong>Limitação de responsabilidade.</strong> Na máxima extensão permitida pela lei aplicável, o desenvolvedor não será responsável por quaisquer danos diretos, indiretos, incidentais ou consequentes decorrentes do uso ou da impossibilidade de uso do app — incluindo, entre outros, a perda de baralhos, a perda de fotos tiradas no app ou qualquer outra perda de dados.</p><p><strong>Disponibilidade.</strong> Atualizações do iOS ou mudanças no ambiente do dispositivo podem afetar o funcionamento do app sem aviso prévio. O desenvolvedor pode modificar ou descontinuar o app sem aviso prévio e não se responsabiliza pela perda de dados resultante dessas mudanças.</p>"
+      },
+      {
+        "id": "law",
+        "title": "Lei aplicável",
+        "html": "<p>Esta política é regida pelas leis do Japão. Qualquer controvérsia relacionada a esta política estará sujeita à jurisdição exclusiva do tribunal competente do local do desenvolvedor, como tribunal de primeira instância.</p><p><strong>Traduções.</strong> Esta página é oferecida em vários idiomas para sua conveniência. A versão em inglês é o original. Se uma tradução for diferente da versão em inglês, prevalece a versão em inglês.</p>"
+      },
+      {
+        "id": "changes",
+        "title": "Alterações nesta política",
+        "html": "<p>Esta política pode ser atualizada conforme o app evolui. A versão revisada entra em vigor quando é publicada nesta página, e a data de vigência no topo da página é atualizada de acordo.</p><p>Como nenhum dado é coletado, as alterações nesta política não podem afetar dados já mantidos sobre você. Se uma alteração afetar de forma relevante o funcionamento do app — por exemplo, uma mudança no que o OMOHIDE DECK Pro inclui —, ela será publicada aqui antes de chegar aos usuários.</p>"
+      },
+      {
+        "id": "contact",
+        "title": "Contato",
+        "html": "<p>Perguntas, correções e sugestões de recursos são bem-vindas. Esta página também é a página de suporte do OMOHIDE DECK.</p><div class='contact-box'><p>Site / formulário de contato: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-mail: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "de": {
+    "meta": {
+      "langName": "Deutsch",
+      "selectLabel": "Sprache",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "Datenschutzerklärung und Haftungsausschluss",
+      "subtitle": "OMOHIDE DECK macht aus deinen Fotos Karten und behält jedes einzelne auf deinem Gerät. Nichts davon verlässt es jemals. Diese Seite erklärt genau, was das bedeutet und was die App mit deinen Fotos tut und was nicht.",
+      "updatedLabel": "Gültig ab",
+      "updatedDate": "17. Oktober 2026",
+      "footer": {
+        "ariaGithub": "GitHub (öffnet in einem neuen Tab)",
+        "ariaX": "X, ehemals Twitter (öffnet in einem neuen Tab)",
+        "ariaInstagram": "Instagram (öffnet in einem neuen Tab)",
+        "ariaTop": "Zurück zum Seitenanfang",
+        "ariaLegal": "Rechtliche Hinweise",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Startseite von Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Einleitung",
+        "html": "<p>Dies ist die Datenschutzerklärung und der Haftungsausschluss für <strong>OMOHIDE DECK</strong>, eine iOS-App von Flying Dev Lab (空飛ぶ研究室).</p><p>OMOHIDE DECK ist ein Kartenspiel zum Paarefinden, bei dem deine eigenen Fotos die Karten sind. Es beruht auf einem einfachen Grundsatz: Deine Fotos gehören dir, und sie bleiben auf deinem Gerät.</p><p>Bitte lies diese Seite, bevor du die App benutzt. Der Abschnitt <a href='#disclaimer'>Haftungsausschluss</a> erklärt, was die App mit deinen Fotos tut und was nicht, und was passiert, wenn du sie löschst.</p>"
+      },
+      {
+        "id": "storage",
+        "title": "Fotos und Daten auf deinem Gerät",
+        "html": "<div class='zero-data'><p>Alles, was die App speichert, bleibt auf deinem Gerät. OMOHIDE DECK hat keinen Server, und kein Foto und keine anderen Daten werden jemals an den Entwickler übertragen.</p></div><p>OMOHIDE DECK speichert Folgendes nur auf deinem Gerät:</p><ul><li><strong>Gespeicherte Decks</strong> – die Kartenbilder aus den Fotos, die du ausgewählt oder aufgenommen hast, den Namen des Decks, das Erstellungs- und das letzte Änderungsdatum sowie (ab Version 1.1) Titel und Notiz, die du für jede Karte schreibst</li><li><strong>Gruppen</strong> (ab Version 1.1) – den Namen jeder Gruppe, die du anlegst, und welche gespeicherten Karten sie enthält. Eine Gruppe verweist auf Karten in deinen gespeicherten Decks; sie legt keine zusätzlichen Kopien der Bilder an</li><li><strong>Deinen Pro-Kaufstatus</strong> – wird auf deinem Gerät aus dem App Store gelesen (siehe <a href='#purchases'>In-App-Käufe</a>)</li><li><strong>Deine Zustimmung</strong> – die Version (das Gültigkeitsdatum) dieser Seite (Datenschutzerklärung und Haftungsausschluss), der du beim ersten Öffnen der App zugestimmt hast. Sie dient nur dazu, den Zustimmungsbildschirm erneut zu zeigen, wenn diese Seite überarbeitet wird</li></ul><p>Kartenbilder sind nicht deine Originalfotos. Wenn du ein Foto auswählst oder aufnimmst, schneidet die App es quadratisch zu, verkleinert es und speichert es als neues JPEG. Dabei werden die Pixel komplett neu gezeichnet, deshalb enthält die gespeicherte Karte <strong>keinerlei Metadaten des Originals</strong> – keinen Ort, kein Aufnahmedatum und keine Uhrzeit, kein Kameramodell und keine anderen eingebetteten Informationen. Deine Originalfotos in der Fotos-App werden nie verändert.</p><p>Decks und Gruppen werden als Dateien im Application-Support-Verzeichnis der App gespeichert. Ab Version 1.1 werden mit OMOHIDE DECK Pro Fotos, die du in der App aufnimmst, als Deck gespeichert, sobald du mit dem Fotografieren fertig bist. So gehen sie nicht verloren, wenn du vor dem Ende des Spiels aufhörst. Du kannst dieses Deck jederzeit in Meine Decks löschen. In der Gratisversion und bei Fotos, die du aus deiner Mediathek auswählst, wird nichts gespeichert, solange du das Deck nicht selbst speicherst; diese Fotos existieren nur während des Spiels im Arbeitsspeicher und werden danach verworfen. Wenn du die App löschst, werden alle diese Daten von deinem Gerät entfernt.</p><p>Der Entwickler hat auf nichts davon Zugriff.</p>"
+      },
+      {
+        "id": "access",
+        "title": "Zugriff auf Mediathek und Kamera",
+        "html": "<p>OMOHIDE DECK bekommt Fotos auf zwei Wegen, und beide sind so gebaut, dass die App nur sieht, was du ihr zeigen willst.</p><p><strong>Aus der Mediathek auswählen.</strong> Die App nutzt die Fotoauswahl von iOS. Die Auswahl läuft außerhalb der App, und nur die Fotos, die du antippst, werden übergeben. Die App erhält nie Zugriff auf deine Mediathek – deshalb zeigt iOS keine Berechtigungsabfrage: Es gibt keine Berechtigung, nach der gefragt werden müsste. Die App kann kein Foto sehen, auflisten oder lesen, das du nicht ausgewählt hast.</p><p><strong>Neue Fotos aufnehmen.</strong> Die Kamerafunktion fragt nach der Kameraberechtigung, weil iOS sie für die Live-Vorschau und die Aufnahme verlangt. So aufgenommene Fotos landen direkt als Karten in der App. Sie werden <strong>nicht</strong> in deiner Aufnahmen-Mediathek gespeichert, und die App hat weiterhin keinen Zugriff auf die Fotos, die schon in deiner Mediathek sind.</p><p>Die App fragt nie nach Mikrofon, Standort, Kontakten oder anderen Berechtigungen.</p>"
+      },
+      {
+        "id": "network",
+        "title": "Netzwerkaktivität",
+        "html": "<p>Alle Funktionen von OMOHIDE DECK – Fotos auswählen oder aufnehmen, spielen, Decks speichern und Gruppen anlegen – funktionieren komplett offline. Eine Netzwerkverbindung ist nicht nötig.</p><p>Die App enthält keine Analyse-SDKs, keine Absturzberichtsdienste, keine Werbe-SDKs und keinerlei Bibliotheken von Drittanbietern.</p><p><strong>Die App selbst verbindet sich nur in zwei Fällen mit dem Netzwerk, und beide startest du selbst:</strong></p><ul><li><strong>Kauf oder Wiederherstellung von OMOHIDE DECK Pro</strong> – wird von Apple über den App Store abgewickelt (siehe <a href='#purchases'>In-App-Käufe</a>)</li><li><strong>Tippen auf einen Link im Info-Bildschirm</strong> (Datenschutzerklärung, Haftungsausschluss, Support) – diese Website öffnet sich in deinem Browser</li></ul><p><strong>In keinem der beiden Fälle wird ein Foto, Kartenbild oder Deck übertragen.</strong> Der Datenverkehr beim Kauf geht an Apple und an niemanden sonst, und er enthält nichts aus deinen Fotos. Das Öffnen dieser Website ist ein ganz normaler Seitenaufruf in deinem Browser, ohne Verbindung zu irgendetwas in der App.</p><p><strong>Von Apple erfasste Nutzungsstatistiken.</strong> Da die App über den App Store vertrieben wird, erfasst Apple als Plattformbetreiber Statistiken wie Installationen, App-Starts, Sitzungsdauer und Käufe und stellt sie dem Entwickler anonymisiert und zusammengefasst zur Verfügung. Wenn du in den iOS-Einstellungen das Teilen von Diagnosedaten aktiviert hast, werden Absturzberichte auf dieselbe Weise bereitgestellt. All das wird von Apple verwaltet, und der Entwickler kann es weder ein- noch ausschalten.</p><p><strong>Was diese Statistiken nie enthalten:</strong> deine Fotos, die daraus gemachten Karten, Decknamen, Titel und Notizen der Karten oder irgendetwas über den Inhalt deiner Decks und Gruppen. Die App überträgt nichts davon, daher können weder Apple noch der Entwickler es erhalten. Apple weiß, dass die App benutzt wurde – nicht, womit du gespielt hast.</p><p>Der einzige Weg, auf dem deine Kartenbilder das Gerät verlassen, ist das iCloud-Backup, das als Nächstes beschrieben wird – und nur, wenn du es eingeschaltet hast.</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "iCloud-Backup",
+        "html": "<p>OMOHIDE DECK nutzt kein CloudKit und synchronisiert deine Decks mit keinem Cloud-Dienst.</p><p>Wenn du jedoch in den Geräteeinstellungen das iCloud-Backup aktiviert hast, kann iOS die gespeicherten Decks der App – <strong>einschließlich der Kartenbilder</strong> – zusammen mit den Daten deiner anderen Apps in das Geräte-Backup aufnehmen. Das ist eine Standardfunktion des Betriebssystems, die vollständig von Apple verwaltet wird. Der Entwickler startet diese Backups nicht und hat keinen Zugriff darauf.</p><p>Dadurch werden deine Decks automatisch wiederhergestellt, wenn du ein neues Gerät einrichtest. Wenn deine Kartenbilder nicht enthalten sein sollen, kannst du das iCloud-Backup für OMOHIDE DECK in der Einstellungen-App von iOS ausschalten.</p><p>Für den Umgang mit Backups gilt die Datenschutzrichtlinie von Apple.</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "Werbung und Tracking",
+        "html": "<p>OMOHIDE DECK enthält <strong>keine Werbung</strong>.</p><p>Die App nutzt nicht die Werbe-ID (IDFA), fragt nicht nach der Berechtigung für App-Tracking-Transparenz und verfolgt dich nicht über Apps oder Websites hinweg. Es gibt keine Profilbildung, keine Verhaltensanalyse und keinerlei Beziehung zu Datenhändlern.</p><p>Das ist eine bewusste Designentscheidung und kein vorübergehender Zustand. Ein Spiel, das um deine persönlichen Fotos herum gebaut ist – und das Familien auch mit Kindern spielen –, wird keine Werbung enthalten.</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "In-App-Käufe",
+        "html": "<p>OMOHIDE DECK kann kostenlos geladen werden. Ohne etwas zu kaufen, kannst du Fotos auswählen oder aufnehmen, auf dem Spielfeld mit 4 Paaren spielen und ein gespeichertes Deck behalten, das automatisch nach dem Datum benannt wird.</p><p>Ein einmaliger (nicht verbrauchbarer) In-App-Kauf, <strong>OMOHIDE DECK Pro</strong>, schaltet die größeren Spielfelder frei (6 und 7 Paare, ab Version 1.1 zusätzlich 8, 10 und 12 Paare), hebt die Grenze von einem gespeicherten Deck auf und erlaubt dir, deine Decks zu benennen und umzubenennen. Ab Version 1.1 kannst du mit Pro außerdem Karten in Gruppen sortieren, mit Alle Karten spielen und jeder Karte einen Titel und eine Notiz geben, und in der App aufgenommene Fotos werden automatisch gespeichert (siehe <a href='#storage'>Fotos und Daten auf deinem Gerät</a>). Den genauen Umfang und den Preis findest du auf der Produktseite im App Store und auf dem Kaufbildschirm in der App.</p><p>Die gesamte Zahlungsabwicklung übernimmt Apple über den App Store. Der Entwickler erhält nie deine Zahlungsdaten, Kartendaten oder andere persönliche Informationen zur Transaktion. Wie Apple mit diesen Daten umgeht, steht in der Datenschutzrichtlinie von Apple.</p><p><strong>Kauf wiederherstellen.</strong> Ein Kauf ist an deinen Apple Account gebunden, nicht an ein bestimmtes Gerät. Kauf wiederherstellen auf dem Pro-Bildschirm fragt bei Apple nach, ob dieser Account den Kauf besitzt. Die Abfrage läuft nur zwischen deinem Gerät und Apple; der Entwickler speichert oder erhält deinen Apple Account nicht. Nutze sie, um Pro nach einem Gerätewechsel oder einer Neuinstallation der App wiederherzustellen.</p><p>Jede Änderung daran, was kostenlos und was kostenpflichtig ist, wird auf dieser Seite veröffentlicht, bevor sie in Kraft tritt.</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "Weitergabe von Informationen",
+        "html": "<p>Der Entwickler verkauft, teilt oder übermittelt keine Nutzerinformationen an Dritte – aus dem einfachen Grund, dass gar keine Nutzerinformationen erhoben werden.</p><p>Es gibt keine Daten, die an Werbetreibende, Analyseanbieter oder Datenhändler weitergegeben werden könnten. Selbst bei einer rechtlich verbindlichen Anfrage einer zuständigen Behörde hat der Entwickler keine Nutzerdaten – und keine Fotos –, die er herausgeben könnte.</p>"
+      },
+      {
+        "id": "children",
+        "title": "Datenschutz bei Kindern",
+        "html": "<p>OMOHIDE DECK ist ein Familienspiel, keine App speziell für Kinder. Es ist für Familien gemacht: Erwachsene und Kinder können mit Familienfotos zusammen spielen, und viele Familien werden genau das tun.</p><p>Weil persönliche Fotos auf dem Bildschirm erscheinen können und vielleicht ein Kind spielt, enthält die App <strong>keine Werbung</strong>. OMOHIDE DECK Pro ist eine optionale Erweiterung für die Erwachsenen in der Familie – größere Spielfelder, mehr gespeicherte Decks, benannte Decks und (ab Version 1.1) Gruppen sowie Titel und Notizen für Karten. Die Gratisversion ist vollständig spielbar, und nichts, was ein Kind zum Spielen braucht, liegt hinter einem Kauf.</p><p>Die App erhebt von niemandem persönliche Informationen, gleich welchen Alters, daher gibt es keine Bedenken beim Datenschutz für Kinder. Es gibt für keinen Nutzer Daten, die geschützt, geteilt oder gelöscht werden müssten. Fotos, die beim Spielen ausgewählt oder aufgenommen werden, bleiben genau wie oben beschrieben auf dem Gerät, ganz gleich, wer spielt.</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "Haftungsausschluss",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK ist ein Spiel. Es ist kein Foto-Backup, kein Archiv und kein Werkzeug zur Fotoverwaltung. Bitte bewahre deine Originalfotos dort auf, wo du sie normalerweise aufbewahrst.</p></div><p><strong>Kartenbilder sind abgeleitete Kopien.</strong> Die App erstellt quadratische, verkleinerte Kopien deiner Fotos, um sie als Karten zu verwenden. Diese Kopien haben eine geringere Auflösung als die Originale und enthalten keine Metadaten. Sie ersetzen die Originalfotos nicht.</p><p><strong>In der App aufgenommene Fotos werden nicht in deiner Aufnahmen-Mediathek gespeichert.</strong> Wenn du in OMOHIDE DECK ein Foto aufnimmst, das du als Foto behalten möchtest, nimm es mit der Kamera-App noch einmal auf. Die App behält Kameraaufnahmen nur als Karten: in einem gespeicherten Deck (mit Pro automatisch gespeichert), sonst nur bis zum Ende des Spiels.</p><p><strong>Wenn du die App löschst, werden deine Decks gelöscht.</strong> Gespeicherte Decks existieren nur in der App. Beim Deinstallieren werden sie entfernt, sofern sie nicht später aus einem Geräte-Backup wiederhergestellt werden. Der Entwickler kann gelöschte Decks nicht wiederherstellen.</p><p><strong>Wenn du ein Deck löschst, verschwinden seine Karten auch aus den Gruppen.</strong> Gruppen haben keine eigenen Kopien der Bilder, deshalb verschwinden die Karten eines gelöschten Decks aus allen Gruppen, die sie verwendet haben. Die App fragt vorher nach.</p><p><strong>Die Gratisversion behält ein Deck.</strong> Wenn du ein neues Deck speicherst, ersetzt es das vorhandene. Die App warnt dich vorher, aber nach dem Ersetzen ist das vorherige Deck weg.</p><p><strong>Haftungsbeschränkung.</strong> Soweit nach geltendem Recht zulässig, haftet der Entwickler nicht für direkte, indirekte, zufällige oder Folgeschäden, die aus der Nutzung oder der Unmöglichkeit der Nutzung der App entstehen – einschließlich, aber nicht beschränkt auf den Verlust von Decks, den Verlust von in der App aufgenommenen Fotos oder sonstigen Datenverlust.</p><p><strong>Verfügbarkeit.</strong> iOS-Updates oder Änderungen der Geräteumgebung können das Verhalten der App ohne vorherige Ankündigung beeinflussen. Der Entwickler kann die App ohne vorherige Ankündigung ändern oder einstellen und haftet nicht für Datenverluste, die sich daraus ergeben.</p>"
+      },
+      {
+        "id": "law",
+        "title": "Anwendbares Recht",
+        "html": "<p>Diese Richtlinie unterliegt japanischem Recht. Für alle Streitigkeiten im Zusammenhang mit dieser Richtlinie ist ausschließlich das für den Sitz des Entwicklers zuständige Gericht als Gericht erster Instanz zuständig.</p><p><strong>Übersetzungen.</strong> Diese Seite wird zur besseren Verständlichkeit in mehreren Sprachen angeboten. Die englische Fassung ist das Original. Weicht eine Übersetzung von der englischen Fassung ab, gilt die englische Fassung.</p>"
+      },
+      {
+        "id": "changes",
+        "title": "Änderungen dieser Richtlinie",
+        "html": "<p>Diese Richtlinie kann aktualisiert werden, wenn sich die App weiterentwickelt. Die überarbeitete Fassung gilt ab ihrer Veröffentlichung auf dieser Seite, und das Gültigkeitsdatum oben auf der Seite wird entsprechend aktualisiert.</p><p>Da keine Daten erhoben werden, können Änderungen dieser Richtlinie keine bereits über dich gespeicherten Daten betreffen. Wenn eine Änderung das Verhalten der App wesentlich beeinflusst – zum Beispiel eine Änderung am Umfang von OMOHIDE DECK Pro –, wird sie hier veröffentlicht, bevor sie die Nutzer erreicht.</p>"
+      },
+      {
+        "id": "contact",
+        "title": "Kontakt",
+        "html": "<p>Fragen, Korrekturen und Funktionswünsche sind willkommen. Diese Seite ist auch die Support-Seite für OMOHIDE DECK.</p><div class='contact-box'><p>Website / Kontaktformular: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-Mail: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "fr": {
+    "meta": {
+      "langName": "Français",
+      "selectLabel": "Langue",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "Politique de confidentialité et avertissement",
+      "subtitle": "OMOHIDE DECK transforme vos photos en cartes et les garde toutes sur votre appareil. Rien n’en sort jamais. Cette page explique précisément ce que cela signifie, et ce que l’app fait et ne fait pas avec vos photos.",
+      "updatedLabel": "En vigueur à compter du",
+      "updatedDate": "17 octobre 2026",
+      "footer": {
+        "ariaGithub": "GitHub (s’ouvre dans un nouvel onglet)",
+        "ariaX": "X, anciennement Twitter (s’ouvre dans un nouvel onglet)",
+        "ariaInstagram": "Instagram (s’ouvre dans un nouvel onglet)",
+        "ariaTop": "Retour en haut de la page",
+        "ariaLegal": "Informations légales",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Page d’accueil de Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introduction",
+        "html": "<p>Voici la politique de confidentialité et l’avertissement d’<strong>OMOHIDE DECK</strong>, une app iOS développée par Flying Dev Lab (空飛ぶ研究室).</p><p>OMOHIDE DECK est un jeu de cartes où l’on retrouve les paires, avec vos propres photos comme cartes. Il repose sur un principe simple : vos photos vous appartiennent, et elles restent sur votre appareil.</p><p>Veuillez lire cette page avant d’utiliser l’app. La section <a href='#disclaimer'>Avertissement</a> explique ce que l’app fait et ne fait pas avec vos photos, y compris ce qui se passe lorsque vous la supprimez.</p>"
+      },
+      {
+        "id": "storage",
+        "title": "Photos et données stockées sur votre appareil",
+        "html": "<div class='zero-data'><p>Tout ce que l’app conserve reste sur votre appareil. OMOHIDE DECK n’a pas de serveur, et aucune photo ni aucune autre donnée n’est jamais transmise au développeur.</p></div><p>OMOHIDE DECK stocke les éléments suivants uniquement sur votre appareil :</p><ul><li><strong>Paquets enregistrés</strong> — les images des cartes créées à partir des photos que vous avez choisies ou prises, le nom du paquet, ses dates de création et de dernière modification et (à partir de la version 1.1) le titre et la note que vous écrivez pour chaque carte</li><li><strong>Groupes</strong> (à partir de la version 1.1) — le nom de chaque groupe que vous créez et les cartes enregistrées qu’il contient. Un groupe renvoie aux cartes de vos paquets enregistrés ; il ne crée pas de copies supplémentaires des images</li><li><strong>Votre statut d’achat Pro</strong> — lu depuis l’App Store sur votre appareil (voir <a href='#purchases'>Achats intégrés</a>)</li><li><strong>Votre accord enregistré</strong> — la version (date d’entrée en vigueur) de cette page (politique de confidentialité et avertissement) que vous avez acceptée à la première ouverture de l’app, utilisée uniquement pour afficher de nouveau l’écran d’accord si cette page est révisée</li></ul><p>Les images des cartes ne sont pas vos photos originales. Lorsque vous choisissez ou prenez une photo, l’app la recadre en carré, la réduit et la réencode en un nouveau JPEG. Ce traitement redessine entièrement les pixels : la carte enregistrée ne conserve donc <strong>aucune métadonnée de l’original</strong> — ni lieu, ni date ou heure de prise de vue, ni modèle d’appareil, ni aucune autre information intégrée. Vos photos originales dans l’app Photos ne sont jamais modifiées.</p><p>Les paquets et les groupes sont enregistrés sous forme de fichiers dans le répertoire Application Support de l’app. À partir de la version 1.1, avec OMOHIDE DECK Pro, les photos que vous prenez dans l’app sont enregistrées en tant que paquet dès que vous avez fini de les prendre, pour ne pas être perdues si vous arrêtez avant la fin de la partie. Vous pouvez supprimer ce paquet à tout moment dans Mes paquets. Dans la version gratuite, et pour les photos choisies dans votre photothèque, rien n’est enregistré tant que vous ne choisissez pas d’enregistrer le paquet ; ces photos n’existent qu’en mémoire pendant la partie et sont ensuite supprimées. Supprimer l’app efface toutes ces données de votre appareil.</p><p>Le développeur n’a accès à aucune d’entre elles.</p>"
+      },
+      {
+        "id": "access",
+        "title": "Accès à la photothèque et à l’appareil photo",
+        "html": "<p>OMOHIDE DECK obtient des photos de deux façons, toutes deux conçues pour que l’app ne voie que ce que vous choisissez de lui montrer.</p><p><strong>Choisir dans votre photothèque.</strong> L’app utilise le sélecteur de photos du système iOS. Le sélecteur fonctionne en dehors de l’app, et seules les photos que vous touchez lui sont transmises. L’app n’obtient jamais l’accès à votre photothèque — c’est pourquoi iOS n’affiche aucune demande d’autorisation : il n’y a aucune autorisation à demander. L’app ne peut ni voir, ni lister, ni lire une photo que vous n’avez pas choisie.</p><p><strong>Prendre de nouvelles photos.</strong> La prise de vue demande l’autorisation d’accès à l’appareil photo, car iOS l’exige pour afficher l’aperçu en direct et prendre la photo. Les photos prises ainsi entrent directement dans l’app sous forme de cartes. Elles ne sont <strong>pas</strong> enregistrées dans votre pellicule, et l’app n’a toujours pas accès aux photos déjà présentes dans votre photothèque.</p><p>L’app ne demande jamais l’accès au micro, à la localisation, aux contacts ni à aucune autre autorisation.</p>"
+      },
+      {
+        "id": "network",
+        "title": "Activité réseau",
+        "html": "<p>Toutes les fonctions d’OMOHIDE DECK — choisir ou prendre des photos, jouer, enregistrer des paquets et créer des groupes — fonctionnent entièrement hors ligne. Aucune connexion réseau n’est nécessaire.</p><p>L’app ne contient aucun SDK d’analyse, aucun service de rapport de plantage, aucun SDK publicitaire, ni aucune bibliothèque tierce de quelque sorte que ce soit.</p><p><strong>L’app elle-même ne se connecte au réseau que dans deux cas, tous deux à votre initiative :</strong></p><ul><li><strong>Acheter ou restaurer OMOHIDE DECK Pro</strong> — géré par Apple via l’App Store (voir <a href='#purchases'>Achats intégrés</a>)</li><li><strong>Toucher un lien de l’écran À propos</strong> (Politique de confidentialité, Avertissement, Assistance) — ce site s’ouvre dans votre navigateur</li></ul><p><strong>Dans aucun de ces cas une photo, une image de carte ou un paquet n’est transmis.</strong> Les échanges liés à l’achat vont à Apple et à personne d’autre, et ne contiennent rien de vos photos. Ouvrir ce site est un chargement de page ordinaire dans votre navigateur, sans lien avec quoi que ce soit dans l’app.</p><p><strong>Statistiques d’utilisation collectées par Apple.</strong> Comme l’app est distribuée via l’App Store, Apple — en tant qu’exploitant de la plateforme — agrège des statistiques telles que les installations, les lancements, la durée des sessions et les achats, et les fournit au développeur sous forme anonyme et agrégée. Si vous avez activé le partage des données de diagnostic dans les réglages d’iOS, les rapports de plantage sont fournis de la même manière. Tout cela est géré par Apple, et le développeur ne peut ni l’activer ni le désactiver.</p><p><strong>Ce que ces statistiques n’incluent jamais :</strong> vos photos, les cartes créées à partir d’elles, les noms des paquets, les titres et notes des cartes, ni quoi que ce soit sur le contenu de vos paquets et groupes. L’app ne transmet jamais rien de tout cela : ni Apple ni le développeur ne peuvent donc l’obtenir. Apple sait que l’app a été utilisée — pas avec quoi vous avez joué.</p><p>La seule façon dont les images de vos cartes quittent l’appareil est la sauvegarde iCloud, décrite ci-après — et seulement si vous l’avez activée.</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "Sauvegarde iCloud",
+        "html": "<p>OMOHIDE DECK n’utilise pas CloudKit et ne synchronise vos paquets avec aucun service en ligne.</p><p>Toutefois, si vous avez activé la sauvegarde iCloud dans les réglages de l’appareil, iOS peut inclure les paquets enregistrés de l’app — <strong>y compris les images des cartes</strong> — dans la sauvegarde de l’appareil, avec les données de vos autres apps. Il s’agit d’une fonction standard du système d’exploitation, entièrement gérée par Apple. Le développeur ne déclenche pas ces sauvegardes et n’y a pas accès.</p><p>C’est ce qui permet de restaurer automatiquement vos paquets lorsque vous configurez un nouvel appareil. Si vous préférez que les images de vos cartes n’y soient pas incluses, vous pouvez désactiver la sauvegarde iCloud pour OMOHIDE DECK dans l’app Réglages d’iOS.</p><p>Le traitement des sauvegardes est régi par la politique de confidentialité d’Apple.</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "Publicité et suivi",
+        "html": "<p>OMOHIDE DECK ne contient <strong>aucune publicité</strong>.</p><p>L’app n’utilise pas l’identifiant publicitaire (IDFA), ne demande pas l’autorisation de transparence du suivi des apps et ne vous suit pas d’une app ou d’un site à l’autre. Il n’y a ni profilage, ni analyse comportementale, ni relation d’aucune sorte avec des courtiers en données.</p><p>C’est un choix de conception, pas un état provisoire. Un jeu construit autour de vos photos personnelles — et auquel des familles peuvent jouer avec des enfants — ne contiendra pas de publicité.</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "Achats intégrés",
+        "html": "<p>OMOHIDE DECK se télécharge gratuitement. Sans rien acheter, vous pouvez choisir ou prendre des photos, jouer sur le plateau de 4 paires et conserver un paquet enregistré, nommé automatiquement d’après la date.</p><p>Un achat intégré unique (non consommable), <strong>OMOHIDE DECK Pro</strong>, débloque les plateaux plus grands (6 et 7 paires, et à partir de la version 1.1 également 8, 10 et 12 paires), supprime la limite d’un seul paquet enregistré et vous permet de nommer et renommer vos paquets. À partir de la version 1.1, Pro vous permet aussi de classer les cartes en groupes, de jouer avec Toutes les cartes et de donner à chaque carte un titre et une note, et il enregistre automatiquement les photos prises dans l’app (voir <a href='#storage'>Photos et données stockées sur votre appareil</a>). Le contenu exact et le prix figurent sur la page du produit dans l’App Store et sur l’écran d’achat de l’app.</p><p>Tous les paiements sont traités par Apple via l’App Store. Le développeur ne reçoit jamais vos informations de paiement, les données de votre carte ni aucune information personnelle liée à la transaction. Consultez la politique de confidentialité d’Apple pour savoir comment Apple traite ces données.</p><p><strong>Restaurer un achat.</strong> Un achat est lié à votre compte Apple, et non à un appareil précis. Restaurer l’achat, sur l’écran Pro, demande à Apple si ce compte possède l’achat. La demande s’effectue entre votre appareil et Apple ; le développeur ne stocke ni ne reçoit votre compte Apple. Utilisez-la pour retrouver Pro après un changement d’appareil ou une réinstallation de l’app.</p><p>Toute modification de ce qui est gratuit et de ce qui est payant sera indiquée sur cette page avant d’entrer en vigueur.</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "Partage des informations",
+        "html": "<p>Le développeur ne vend, ne partage ni ne transfère aucune information sur les utilisateurs à des tiers, pour la simple raison qu’aucune information sur les utilisateurs n’est collectée.</p><p>Il n’y a aucune donnée à communiquer à des annonceurs, des prestataires d’analyse ou des courtiers en données. Face à une demande juridiquement contraignante d’une autorité compétente, le développeur ne dispose d’aucune donnée utilisateur — ni d’aucune photo — à produire.</p>"
+      },
+      {
+        "id": "children",
+        "title": "Confidentialité des enfants",
+        "html": "<p>OMOHIDE DECK est un jeu familial, pas une app pour enfants. Il est fait pour les familles : adultes et enfants peuvent jouer ensemble avec des photos de famille, et beaucoup de familles le feront exactement ainsi.</p><p>Parce que des photos personnelles peuvent s’afficher à l’écran et qu’un enfant peut être en train de jouer, l’app ne contient <strong>aucune publicité</strong>. OMOHIDE DECK Pro est une option destinée aux adultes de la famille — des plateaux plus grands, davantage de paquets enregistrés, des paquets nommés et (à partir de la version 1.1) des groupes ainsi que des titres et des notes sur les cartes. La version gratuite se joue entièrement, et rien de ce dont un enfant a besoin pour profiter du jeu n’est réservé à un achat.</p><p>L’app ne collecte aucune information personnelle auprès de qui que ce soit, quel que soit son âge ; elle ne pose donc aucun problème de confidentialité pour les enfants. Il n’y a aucune donnée à protéger, partager ou supprimer, pour aucun utilisateur. Les photos choisies ou prises pendant le jeu restent sur l’appareil exactement comme décrit ci-dessus, quelle que soit la personne qui joue.</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "Avertissement",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK est un jeu. Ce n’est ni une sauvegarde de photos, ni une archive, ni un outil de gestion de photos. Conservez vos photos originales là où vous les rangez habituellement.</p></div><p><strong>Les images des cartes sont des copies dérivées.</strong> L’app crée des copies carrées et réduites de vos photos pour les utiliser comme cartes. Ces copies ont une résolution inférieure aux originaux et ne contiennent aucune métadonnée. Elles ne remplacent pas les photos originales.</p><p><strong>Les photos prises dans l’app ne sont pas enregistrées dans votre pellicule.</strong> Si vous prenez dans OMOHIDE DECK une photo que vous souhaitez garder en tant que photo, reprenez-la avec l’app Appareil photo. L’app ne conserve les prises de vue que sous forme de cartes : dans un paquet enregistré (avec Pro, enregistré automatiquement), sinon seulement jusqu’à la fin de la partie.</p><p><strong>Supprimer l’app supprime vos paquets.</strong> Les paquets enregistrés n’existent que dans l’app. La désinstaller les efface, sauf si une sauvegarde de l’appareil les restaure ensuite. Le développeur ne peut pas récupérer des paquets supprimés.</p><p><strong>Supprimer un paquet retire aussi ses cartes des groupes.</strong> Les groupes ne gardent pas leurs propres copies des images : les cartes d’un paquet supprimé disparaissent donc de tous les groupes qui les utilisaient. L’app demande d’abord une confirmation.</p><p><strong>La version gratuite conserve un seul paquet.</strong> Enregistrer un nouveau paquet remplace le paquet existant. L’app vous prévient avant, mais une fois remplacé, le paquet précédent est perdu.</p><p><strong>Limitation de responsabilité.</strong> Dans toute la mesure permise par la loi applicable, le développeur ne saurait être tenu responsable de tout dommage direct, indirect, accessoire ou consécutif résultant de l’utilisation ou de l’impossibilité d’utiliser l’app — y compris, sans s’y limiter, la perte de paquets, la perte de photos prises dans l’app ou toute autre perte de données.</p><p><strong>Disponibilité.</strong> Les mises à jour d’iOS ou les changements de l’environnement de l’appareil peuvent modifier le comportement de l’app sans préavis. Le développeur peut modifier l’app ou cesser de la proposer sans préavis, et n’est pas responsable des pertes de données qui en résulteraient.</p>"
+      },
+      {
+        "id": "law",
+        "title": "Droit applicable",
+        "html": "<p>La présente politique est régie par le droit japonais. Tout litige lié à la présente politique relève de la compétence exclusive du tribunal du lieu où se trouve le développeur, en tant que juridiction de première instance.</p><p><strong>Traductions.</strong> Cette page est proposée en plusieurs langues pour votre commodité. La version anglaise est l’original. En cas de divergence entre une traduction et la version anglaise, la version anglaise prévaut.</p>"
+      },
+      {
+        "id": "changes",
+        "title": "Modifications de cette politique",
+        "html": "<p>Cette politique peut être mise à jour au fil de l’évolution de l’app. La version révisée prend effet dès sa publication sur cette page, et la date d’entrée en vigueur en haut de la page est mise à jour en conséquence.</p><p>Comme aucune donnée n’est collectée, les modifications de cette politique ne peuvent pas toucher des données déjà détenues à votre sujet. Si une modification change de façon importante le fonctionnement de l’app — par exemple ce que comprend OMOHIDE DECK Pro —, elle sera publiée ici avant d’atteindre les utilisateurs.</p>"
+      },
+      {
+        "id": "contact",
+        "title": "Contact",
+        "html": "<p>Les questions, corrections et suggestions de fonctions sont les bienvenues. Cette page sert aussi de page d’assistance pour OMOHIDE DECK.</p><div class='contact-box'><p>Site web / formulaire de contact : <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-mail : <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
+      }
+    ]
+  },
+  "nl": {
+    "meta": {
+      "langName": "Nederlands",
+      "selectLabel": "Taal",
+      "appName": "OMOHIDE DECK",
+      "pageTitle": "Privacybeleid en disclaimer",
+      "subtitle": "OMOHIDE DECK maakt kaarten van je foto’s en houdt ze allemaal op je apparaat. Er wordt nooit iets naar buiten verstuurd. Deze pagina legt precies uit wat dat betekent, en wat de app wel en niet met je foto’s doet.",
+      "updatedLabel": "Van kracht vanaf",
+      "updatedDate": "17 oktober 2026",
+      "footer": {
+        "ariaGithub": "GitHub (opent in een nieuw tabblad)",
+        "ariaX": "X, voorheen Twitter (opent in een nieuw tabblad)",
+        "ariaInstagram": "Instagram (opent in een nieuw tabblad)",
+        "ariaTop": "Terug naar boven",
+        "ariaLegal": "Juridische informatie",
+        "legalHtml": "",
+        "copyHtml": "&copy;&nbsp;2026&nbsp;<a href='/' aria-label='Startpagina van Flying Dev Lab'>Flying&nbsp;Dev&nbsp;Lab</a>"
+      }
+    },
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Inleiding",
+        "html": "<p>Dit is het privacybeleid en de disclaimer van <strong>OMOHIDE DECK</strong>, een iOS-app van Flying Dev Lab (空飛ぶ研究室).</p><p>OMOHIDE DECK is een kaartspel waarin je paren zoekt, met je eigen foto’s als kaarten. Het is gebouwd op een eenvoudig principe: je foto’s zijn van jou, en ze blijven op je apparaat.</p><p>Lees deze pagina voordat je de app gebruikt. Het onderdeel <a href='#disclaimer'>Disclaimer</a> legt uit wat de app wel en niet met je foto’s doet, en wat er gebeurt als je de app verwijdert.</p>"
+      },
+      {
+        "id": "storage",
+        "title": "Foto’s en gegevens op je apparaat",
+        "html": "<div class='zero-data'><p>Alles wat de app bewaart, blijft op je apparaat. OMOHIDE DECK heeft geen server, en er worden nooit foto’s of andere gegevens naar de ontwikkelaar verstuurd.</p></div><p>OMOHIDE DECK bewaart het volgende alleen op je apparaat:</p><ul><li><strong>Bewaarde decks</strong> — de kaartafbeeldingen die gemaakt zijn van de foto’s die je hebt gekozen of gemaakt, de naam van het deck, de datum waarop het is aangemaakt en voor het laatst gewijzigd, en (vanaf versie 1.1) de titel en notitie die je bij elke kaart schrijft</li><li><strong>Groepen</strong> (vanaf versie 1.1) — de naam van elke groep die je maakt en welke bewaarde kaarten erin zitten. Een groep verwijst naar kaarten in je bewaarde decks; er worden geen extra kopieën van de afbeeldingen gemaakt</li><li><strong>Je Pro-aankoopstatus</strong> — op je apparaat gelezen uit de App Store (zie <a href='#purchases'>In-app-aankopen</a>)</li><li><strong>Je toestemming</strong> — de versie (ingangsdatum) van deze pagina (privacybeleid en disclaimer) waarmee je akkoord ging toen je de app voor het eerst opende. Die wordt alleen gebruikt om het toestemmingsscherm opnieuw te tonen als deze pagina wordt herzien</li></ul><p>Kaartafbeeldingen zijn niet je originele foto’s. Als je een foto kiest of maakt, snijdt de app die bij tot een vierkant, verkleint hem en slaat hem opnieuw op als een nieuwe JPEG. Daarbij worden de pixels helemaal opnieuw getekend, dus de bewaarde kaart bevat <strong>geen enkele metadata van het origineel</strong> — geen locatie, geen opnamedatum of -tijd, geen cameramodel en geen andere ingesloten informatie. Je originele foto’s in de Foto’s-app worden nooit gewijzigd.</p><p>Decks en groepen worden als bestanden bewaard in de map Application Support van de app. Vanaf versie 1.1 worden met OMOHIDE DECK Pro de foto’s die je in de app maakt als deck bewaard zodra je klaar bent met fotograferen, zodat ze niet verloren gaan als je stopt voordat het spel is afgelopen. Je kunt dat deck altijd verwijderen in Mijn decks. In de gratis versie, en bij foto’s die je uit je bibliotheek kiest, wordt niets bewaard tenzij je er zelf voor kiest het deck te bewaren; die foto’s bestaan alleen in het geheugen terwijl je speelt en worden daarna weggegooid. Als je de app verwijdert, worden al deze gegevens van je apparaat verwijderd.</p><p>De ontwikkelaar heeft tot niets hiervan toegang.</p>"
+      },
+      {
+        "id": "access",
+        "title": "Toegang tot fotobibliotheek en camera",
+        "html": "<p>OMOHIDE DECK krijgt op twee manieren foto’s, en beide zijn zo ontworpen dat de app alleen ziet wat jij hem wilt laten zien.</p><p><strong>Kiezen uit je bibliotheek.</strong> De app gebruikt de fotokiezer van iOS. De kiezer draait buiten de app, en alleen de foto’s die je aantikt worden doorgegeven. De app krijgt nooit toegang tot je fotobibliotheek — daarom toont iOS geen toestemmingsvraag: er is geen toestemming om te vragen. De app kan geen enkele foto zien, opsommen of lezen die je niet hebt gekozen.</p><p><strong>Nieuwe foto’s maken.</strong> De camerafunctie vraagt om toestemming voor de camera, omdat iOS die nodig heeft om een livevoorvertoning te tonen en foto’s te maken. Foto’s die je zo maakt, gaan rechtstreeks als kaarten de app in. Ze worden <strong>niet</strong> in je filmrol bewaard, en de app heeft nog steeds geen toegang tot de foto’s die al in je bibliotheek staan.</p><p>De app vraagt nooit om toegang tot de microfoon, locatie, contacten of iets anders.</p>"
+      },
+      {
+        "id": "network",
+        "title": "Netwerkactiviteit",
+        "html": "<p>Alle functies van OMOHIDE DECK — foto’s kiezen of maken, spelen, decks bewaren en groepen maken — werken volledig offline. Er is geen netwerkverbinding nodig.</p><p>De app bevat geen analyse-SDK’s, geen diensten voor crashrapporten, geen advertentie-SDK’s en geen enkele bibliotheek van derden.</p><p><strong>De app zelf maakt maar in twee gevallen verbinding met het netwerk, en die start je allebei zelf:</strong></p><ul><li><strong>OMOHIDE DECK Pro kopen of herstellen</strong> — afgehandeld door Apple via de App Store (zie <a href='#purchases'>In-app-aankopen</a>)</li><li><strong>Een link aantikken in het scherm Over</strong> (Privacybeleid, Disclaimer, Ondersteuning) — deze website opent in je browser</li></ul><p><strong>In geen van beide gevallen worden foto’s, kaartafbeeldingen of decks verstuurd.</strong> Het verkeer van de aankoop gaat naar Apple en naar niemand anders, en bevat niets uit je foto’s. Deze website openen is een gewone pagina laden in je browser, los van alles in de app.</p><p><strong>Gebruiksstatistieken die Apple verzamelt.</strong> Omdat de app via de App Store wordt verspreid, verzamelt Apple als beheerder van het platform statistieken zoals installaties, keren dat de app is geopend, sessieduur en aankopen, en geeft die geanonimiseerd en samengevoegd door aan de ontwikkelaar. Als je in de iOS-instellingen het delen van diagnostische gegevens hebt ingeschakeld, worden crashrapporten op dezelfde manier doorgegeven. Dit alles wordt door Apple beheerd, en de ontwikkelaar kan het niet in- of uitschakelen.</p><p><strong>Wat deze statistieken nooit bevatten:</strong> je foto’s, de kaarten die ervan gemaakt zijn, decknamen, titels en notities van kaarten, of iets over de inhoud van je decks en groepen. De app verstuurt niets daarvan, dus Apple en de ontwikkelaar kunnen het niet krijgen. Apple weet dat de app is gebruikt — niet waarmee je hebt gespeeld.</p><p>De enige manier waarop je kaartafbeeldingen het apparaat verlaten, is de iCloud-reservekopie die hierna wordt beschreven — en alleen als je die hebt ingeschakeld.</p>"
+      },
+      {
+        "id": "icloud",
+        "title": "iCloud-reservekopie",
+        "html": "<p>OMOHIDE DECK gebruikt geen CloudKit en synchroniseert je decks niet met een clouddienst.</p><p>Maar als je in de instellingen van je apparaat de iCloud-reservekopie hebt ingeschakeld, kan iOS de bewaarde decks van de app — <strong>inclusief de kaartafbeeldingen</strong> — samen met de gegevens van je andere apps in de reservekopie van je apparaat opnemen. Dat is een standaardfunctie van het besturingssysteem die volledig door Apple wordt beheerd. De ontwikkelaar start deze reservekopieën niet en heeft er geen toegang toe.</p><p>Hierdoor worden je decks automatisch teruggezet als je een nieuw apparaat instelt. Wil je liever niet dat je kaartafbeeldingen worden meegenomen, dan kun je de iCloud-reservekopie voor OMOHIDE DECK uitschakelen in de app Instellingen van iOS.</p><p>Voor de omgang met reservekopieën geldt het privacybeleid van Apple.</p>"
+      },
+      {
+        "id": "advertising",
+        "title": "Advertenties en tracking",
+        "html": "<p>OMOHIDE DECK bevat <strong>geen advertenties</strong>.</p><p>De app gebruikt de advertentie-ID (IDFA) niet, vraagt niet om toestemming voor App Tracking Transparency en volgt je niet over apps of websites heen. Er is geen profilering, geen gedragsanalyse en geen enkele relatie met datahandelaren.</p><p>Dit is een bewuste ontwerpkeuze, geen tijdelijke situatie. Een spel dat draait om je persoonlijke foto’s — en dat gezinnen met kinderen kunnen spelen — krijgt geen advertenties.</p>"
+      },
+      {
+        "id": "purchases",
+        "title": "In-app-aankopen",
+        "html": "<p>OMOHIDE DECK is gratis te downloaden. Zonder iets te kopen kun je foto’s kiezen of maken, spelen op het speelveld met 4 paren en één bewaard deck houden, dat automatisch een datum als naam krijgt.</p><p>Een eenmalige (niet-verbruikbare) in-app-aankoop, <strong>OMOHIDE DECK Pro</strong>, ontgrendelt de grotere speelvelden (6 en 7 paren, en vanaf versie 1.1 ook 8, 10 en 12 paren), heft de grens van één bewaard deck op en laat je je decks een naam geven en hernoemen. Vanaf versie 1.1 kun je met Pro ook kaarten in groepen indelen, spelen met Alle kaarten en elke kaart een titel en een notitie geven, en worden foto’s die je in de app maakt automatisch bewaard (zie <a href='#storage'>Foto’s en gegevens op je apparaat</a>). De precieze inhoud en de prijs staan op de productpagina in de App Store en op het aankoopscherm in de app.</p><p>Alle betalingen worden door Apple via de App Store verwerkt. De ontwikkelaar ontvangt nooit je betaalgegevens, kaartgegevens of andere persoonlijke informatie over de transactie. Lees het privacybeleid van Apple om te zien hoe Apple met die gegevens omgaat.</p><p><strong>Een aankoop herstellen.</strong> Een aankoop is gekoppeld aan je Apple Account, niet aan een bepaald apparaat. Aankoop herstellen op het Pro-scherm vraagt aan Apple of dat account de aankoop heeft. Die vraag wordt alleen tussen je apparaat en Apple afgehandeld; de ontwikkelaar bewaart of ontvangt je Apple Account niet. Gebruik het om Pro terug te zetten na een nieuw apparaat of het opnieuw installeren van de app.</p><p>Elke wijziging in wat gratis is en wat betaald is, wordt op deze pagina vermeld voordat die ingaat.</p>"
+      },
+      {
+        "id": "sharing",
+        "title": "Delen van informatie",
+        "html": "<p>De ontwikkelaar verkoopt, deelt of draagt geen gebruikersinformatie over aan derden, om de simpele reden dat er helemaal geen gebruikersinformatie wordt verzameld.</p><p>Er zijn geen gegevens om aan adverteerders, analyseaanbieders of datahandelaren te geven. Bij een juridisch bindend verzoek van een bevoegde instantie heeft de ontwikkelaar geen gebruikersgegevens — en geen foto’s — die hij kan overhandigen.</p>"
+      },
+      {
+        "id": "children",
+        "title": "Privacy van kinderen",
+        "html": "<p>OMOHIDE DECK is een spel voor het hele gezin, geen app speciaal voor kinderen. Het is gemaakt voor gezinnen: volwassenen en kinderen kunnen samen spelen met familiefoto’s, en veel gezinnen zullen precies dat doen.</p><p>Omdat er persoonlijke foto’s op het scherm kunnen staan en er een kind kan spelen, bevat de app <strong>geen advertenties</strong>. OMOHIDE DECK Pro is een optionele uitbreiding voor de volwassenen in het gezin — grotere speelvelden, meer bewaarde decks, decks met een naam en (vanaf versie 1.1) groepen en titels en notities bij kaarten. De gratis versie is volledig speelbaar, en niets wat een kind nodig heeft om van het spel te genieten zit achter een aankoop.</p><p>De app verzamelt van niemand persoonlijke informatie, van welke leeftijd ook, dus er zijn geen zorgen over de privacy van kinderen. Er zijn voor geen enkele gebruiker gegevens om te beschermen, te delen of te verwijderen. Foto’s die tijdens het spelen worden gekozen of gemaakt, blijven precies zoals hierboven beschreven op het apparaat, wie er ook speelt.</p>"
+      },
+      {
+        "id": "disclaimer",
+        "title": "Disclaimer",
+        "html": "<div class='lead-note'><p>OMOHIDE DECK is een spel. Het is geen fotoback-up, geen archief en geen hulpmiddel om foto’s te beheren. Bewaar je originele foto’s op de plek waar je ze normaal bewaart.</p></div><p><strong>Kaartafbeeldingen zijn afgeleide kopieën.</strong> De app maakt vierkante, verkleinde kopieën van je foto’s om als kaarten te gebruiken. Deze kopieën hebben een lagere resolutie dan de originelen en bevatten geen metadata. Ze zijn geen vervanging voor de originele foto’s.</p><p><strong>Foto’s die je in de app maakt, worden niet in je filmrol bewaard.</strong> Maak je in OMOHIDE DECK een foto die je als foto wilt houden, maak hem dan opnieuw met de Camera-app. De app bewaart camera-opnamen alleen als kaarten: in een bewaard deck (met Pro automatisch bewaard), en anders alleen tot het spel is afgelopen.</p><p><strong>Als je de app verwijdert, worden je decks verwijderd.</strong> Bewaarde decks bestaan alleen in de app. Als je de app verwijdert, zijn ze weg, tenzij ze later via een reservekopie van het apparaat worden teruggezet. De ontwikkelaar kan verwijderde decks niet terughalen.</p><p><strong>Als je een deck verwijdert, verdwijnen de kaarten ervan ook uit groepen.</strong> Groepen hebben geen eigen kopieën van de afbeeldingen, dus de kaarten van een verwijderd deck verdwijnen uit alle groepen die ze gebruikten. De app vraagt eerst om bevestiging.</p><p><strong>De gratis versie bewaart één deck.</strong> Als je een nieuw deck bewaart, vervangt het het bestaande. De app waarschuwt je vooraf, maar na het vervangen is het vorige deck weg.</p><p><strong>Beperking van aansprakelijkheid.</strong> Voor zover toegestaan door het toepasselijke recht is de ontwikkelaar niet aansprakelijk voor directe, indirecte, incidentele of gevolgschade die voortvloeit uit het gebruik of het niet kunnen gebruiken van de app — inclusief maar niet beperkt tot het verlies van decks, het verlies van foto’s die in de app zijn gemaakt of ander gegevensverlies.</p><p><strong>Beschikbaarheid.</strong> iOS-updates of veranderingen in de omgeving van het apparaat kunnen de werking van de app zonder voorafgaande kennisgeving beïnvloeden. De ontwikkelaar kan de app zonder voorafgaande kennisgeving wijzigen of stopzetten en is niet aansprakelijk voor gegevensverlies dat daaruit voortvloeit.</p>"
+      },
+      {
+        "id": "law",
+        "title": "Toepasselijk recht",
+        "html": "<p>Op dit beleid is het Japanse recht van toepassing. Geschillen in verband met dit beleid worden in eerste aanleg uitsluitend voorgelegd aan de rechtbank die bevoegd is voor de plaats waar de ontwikkelaar gevestigd is.</p><p><strong>Vertalingen.</strong> Deze pagina wordt voor het gemak in meerdere talen aangeboden. De Engelse versie is het origineel. Als een vertaling afwijkt van de Engelse versie, geldt de Engelse versie.</p>"
+      },
+      {
+        "id": "changes",
+        "title": "Wijzigingen in dit beleid",
+        "html": "<p>Dit beleid kan worden bijgewerkt naarmate de app zich ontwikkelt. De herziene versie geldt vanaf het moment dat die op deze pagina staat, en de ingangsdatum boven aan de pagina wordt daarop aangepast.</p><p>Omdat er geen gegevens worden verzameld, kunnen wijzigingen in dit beleid geen invloed hebben op gegevens die al over je worden bewaard. Als een wijziging de werking van de app wezenlijk verandert — bijvoorbeeld wat OMOHIDE DECK Pro bevat — wordt die hier gepubliceerd voordat de gebruikers er iets van merken.</p>"
+      },
+      {
+        "id": "contact",
+        "title": "Contact",
+        "html": "<p>Vragen, correcties en ideeën voor functies zijn welkom. Deze pagina is ook de ondersteuningspagina van OMOHIDE DECK.</p><div class='contact-box'><p>Website / contactformulier: <a href='https://flyingdevlab.com' target='_blank' rel='noopener'>flyingdevlab.com</a></p><p>E-mail: <a href='mailto:support@flyingdevlab.com'>support@flyingdevlab.com</a></p></div>"
       }
     ]
   }
@@ -740,7 +1529,18 @@ const T = {
  */
 const LANG_MAP = {
   "en": "en", "en-us": "en", "en-gb": "en", "en-au": "en", "en-ca": "en",
-  "ja": "ja"
+  "ja": "ja",
+  // 中国語は文字で分ける。台湾・香港・マカオは繁体字、地域なしと本土・シンガポールは簡体字
+  "zh": "zh-Hans", "zh-hans": "zh-Hans", "zh-cn": "zh-Hans", "zh-sg": "zh-Hans", "zh-my": "zh-Hans",
+  "zh-hant": "zh-Hant", "zh-tw": "zh-Hant", "zh-hk": "zh-Hant", "zh-mo": "zh-Hant",
+  "ko": "ko",
+  "th": "th",
+  "es": "es",
+  // ポルトガル語はブラジルの訳だけを持つので、ポルトガルの端末もこれで読む
+  "pt": "pt-BR", "pt-br": "pt-BR",
+  "de": "de",
+  "fr": "fr",
+  "nl": "nl"
 };
 const SUPPORTED = Object.keys(T);
 const DEFAULT_LANG = "en";   // ★ アプリ本体が英語のため、英語をデフォルトとする
@@ -767,9 +1567,11 @@ function detectLang() {
        LANG_MAP のキーは "en-us" のような小文字だが、navigator.languages が返す値は
        ブラウザによって "en-US" のように大文字が混ざる。
        「表のキーは小文字で書く・照合時も小文字にする」と決めておけば表記ゆれで取りこぼさない。
-       なお地域コード付きが表に無くても、"-" の前（"en"）で再照合するので拾える。 */
+       なお地域コード付きが表に無くても、"-" の前（"en"）で再照合するので拾える。
+       "zh-Hant-TW" のように文字の指定まで付く場合は、先頭2つ（"zh-hant"）でも照合する。 */
     const key = String(l).toLowerCase();
-    const code = LANG_MAP[key] || LANG_MAP[key.split("-")[0]];
+    const parts = key.split("-");
+    const code = LANG_MAP[key] || LANG_MAP[parts.slice(0, 2).join("-")] || LANG_MAP[parts[0]];
     if (code && SUPPORTED.includes(code)) return code;
   }
   return DEFAULT_LANG;
