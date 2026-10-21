@@ -54,9 +54,12 @@
        理由: MAKE10 は App Store 上で「MAKE10 - Kids Game Collection」に改称され、
              算数パズル単体からゲーム集へ性格が変わりました。さらに一般向けの
              PriceWise が公開され、こども向けアプリ1本という前提が実態と合わなくなったためです。
+       ※ 2026-11-01 に再度改名し、英語版のアプリ名は「Kids Games」になりました。
+         App Store のアプリ名は言語ごとに異なるため、日本語版（/ja/）は
+         「キッズゲームコレクション」と表記しています。
        ※ 検索結果でのスニペット切れを避けるため、全体を155文字以内に収めています。 -->
   <meta name="description"
-    content="Flying Dev Lab builds safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including Kids Game Collection and PriceWise.">
+    content="Flying Dev Lab builds safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including Kids Games and PriceWise.">
   <!-- Google は keywords メタタグを検索ランキングに使用しないが、他の検索エンジン向けに残している -->
   <!-- 変更: 算数ゲーム単体を指す語を外し、現在のラインナップに対応する語を追加しました。
        理由: こども向けの計算ゲーム1本という前提が実態と合わなくなったためです。
@@ -111,7 +114,7 @@
   <meta property="og:title" content="Flying Dev Lab">
   <!-- 変更: description と同じ理由でアプリ名を差し替えました。
        ※ OGP は検索結果と違い文字数の制約が緩いため、description より具体的に書いています。 -->
-  <meta property="og:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including Kids Game Collection, a free game app for children, and PriceWise, a unit price comparison tool.">
+  <meta property="og:description" content="Safe, reliable, and delightful iOS apps that bring smiles to kids and grown-ups alike — including Kids Games, a free game app for children, and PriceWise, a unit price comparison tool.">
   <meta property="og:image" content="https://flyingdevlab.com/ogp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -352,13 +355,17 @@
         </h2>
       </div>
       <div id="app-list">
-        <!-- Kids Game Collection -->
+        <!-- Kids Games
+             変更（2026-11-01 改名）: 表示名を「Kids Game Collection」から App Store の
+             英語版アプリ名「Kids Games」に変更。日本語版（/ja/）の「キッズゲームコレクション」は
+             日本語版アプリ名と一致しているため変更していない。
+             ※ アイコンのファイル名 icon-MAKE10.png は App Store の素材そのままなので改名しない。 -->
         <div class="app-card fade-up">
           <a href="https://apps.apple.com/app/id6760253962" target="_blank" rel="noopener noreferrer">
-            <div class="app-icon"><img src="/images/icon-MAKE10.png" alt="Kids Game Collection icon" class="app-icon-img"></div>
+            <div class="app-icon"><img src="/images/icon-MAKE10.png" alt="Kids Games icon" class="app-icon-img"></div>
             <div class="app-info">
-              <div class="app-name">Kids Game Collection</div>
-              <div class="app-desc">A simple, safe game for kids — completely free, no ads.</div>
+              <div class="app-name">Kids Games</div>
+              <div class="app-desc">Simple, safe games for kids — completely free, no ads.</div>
             </div>
             <span class="app-badge badge-live">LIVE</span>
           </a>
@@ -386,17 +393,17 @@
           </a>
         </div>
         <!-- OMOHIDE DECK
-             App Store の Apple ID（6810569599）は採番済みだが、商品ページはまだ存在しないため
-             リンクは付けていない（coming のため未リンク）。公開後、公開中のカードと同じ形式で
-             <a href="https://apps.apple.com/app/id6810569599" target="_blank" rel="noopener noreferrer"> で
-             ラップし、badge-live / LIVE に変更すること。 -->
+             変更: App Store での公開（2026-10-19 確認）に伴い、他の公開中カードと同じ形式に揃えた。
+             旧: リンクなし・badge-coming / COMING SOON（商品ページ未公開のため未リンクだった） -->
         <div class="app-card fade-up">
-          <div class="app-icon"><img src="/images/icon-omohidedeck.png" alt="OMOHIDE DECK icon" class="app-icon-img"></div>
-          <div class="app-info">
-            <div class="app-name">OMOHIDE DECK</div>
-            <div class="app-desc">A memory-matching game played with your own photos.</div>
-          </div>
-          <span class="app-badge badge-coming">COMING SOON</span>
+          <a href="https://apps.apple.com/app/id6810569599" target="_blank" rel="noopener noreferrer">
+            <div class="app-icon"><img src="/images/icon-omohidedeck.png" alt="OMOHIDE DECK icon" class="app-icon-img"></div>
+            <div class="app-info">
+              <div class="app-name">OMOHIDE DECK</div>
+              <div class="app-desc">A memory-matching game played with your own photos.</div>
+            </div>
+            <span class="app-badge badge-live">LIVE</span>
+          </a>
         </div>
       </div>
     </section>

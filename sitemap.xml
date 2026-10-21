@@ -252,6 +252,19 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy/techref"/>
   </url>
 
+  <url>
+    <loc>https://flyingdevlab.com/privacy-policy/omohidedeck</loc>
+    <!-- 変更: 新規追加。ページ自体は 2026-09 に作成済みだったが sitemap に未登録だった。
+         App Store 公開（2026-10-19 確認）に合わせて登録する。
+         lastmod はアプリ名を「思ひ出デッキ / OMOHIDE DECK」に改めた日。 -->
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/privacy-policy/omohidedeck"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/privacy-policy/omohidedeck"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/privacy-policy/omohidedeck"/>
+  </url>
+
   <!--
    ============================================================
    こどもたちへの誓い（Flying Dev Lab のポリシー宣言ページ）
