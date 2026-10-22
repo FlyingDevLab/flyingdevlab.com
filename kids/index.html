@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    各ゲームは user-scalable=no でピンチズームを切っているが、
+    このページは文章を読むページなのでズームを制限しない。
+    拡大できないと読めない利用者がいるため、制限する理由がない方を選ぶ。
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--
+  ============================================================
+  【設計メモ: 遊びの研究室 / Playing Dev Lab（こども向けハブ）】
+
+  ■ このページの役割
+    ブラウザゲーム5本の入口をひとつにまとめたページ。
+    こども向けコンテンツを /kids/ 配下の1箇所に集約するために作った。
+
+  ■ 名前について
+    表示名は「Playing Dev Lab / 遊びの研究室」。
+    App Store のアプリ名（en: Kids Games、ja: キッズゲームコレクション）
+    とは意図的に分けている。ブラウザゲーム集とアプリは別物であり、
+    同じ名前にすると「このページがアプリの紹介ページ」に見えてしまう。
+
+    親ブランド「Flying Dev Lab / 空飛ぶ研究室」と同じ型を継承している。
+      Flying  Dev Lab  ／ 空飛ぶ 研究室   … 開発スタジオ
+      Playing Dev Lab  ／ 遊びの 研究室   … ブラウザゲーム集
+    英語は現在分詞、日本語は「研究室」を受け継ぐ形で揃えてある。
+
+  ■ ⚠️ このページには外部リンクを置かない（最重要）
+    こどもがここから外部サイトへ出られないようにするため、
+    /kids/ 配下は外へ出るリンクを1本も持たない「袋小路」にしている。
+
+    置かないもの:
+      ・TOP（/ および /ja/）へのリンク … SNS埋め込みがあるため
+      ・誓い（/pledge）、プライバシーポリシー（/privacy-policy）へのリンク
+        … これらのページ自体が X・Instagram・GitHub へのリンクを
+          フッターに持っているため、1ホップで外部へ出られてしまう
+      ・App Store へのリンク … 外部リンクであるため
+      ・SNS、GitHub、その他すべての外部URL
+
+    保護者向けの情報は、リンクではなく地の文で書いている（下の .promise）。
+
+    この制約は CSP では守れない。_headers の /kids* ブロックは
+    「読み込み」を止めるが、<a href> による「遷移」は CSP の管轄外である。
+    守るのは人の注意力と、.github/workflows/ の自動検査。
+
+  ■ JavaScript を使っていない
+    言語切替も開閉もないため、スクリプトは1行も読み込まない。
+    ゲームへのリンクが並ぶだけのページに動く要素を足す理由がない。
+
+  ■ ゲームへのリンクは相対パス
+    make10/ のように書いている。/kids/make10/ と絶対パスで書いても
+    同じだが、相対にしておけば将来 /kids/ ごと移動しても壊れない。
+  ============================================================
+  -->
+
+  <!-- ===== SEO：ページタイトル・説明 =====
+       タイトル末尾の「| Flying Dev Lab」は、検索結果の時点で
+       このページが空飛ぶ研究室の一部だと伝えるために付けている。
+       ページ内には親サイトへのリンクを置かないため、
+       所属を示せる場所がタイトルとOGPだけになる。 -->
+  <title>Playing Dev Lab / 遊びの研究室 – Free Browser Games for Kids | Flying Dev Lab</title>
+  <meta name="description" content="Five free browser games for kids. No ads, no sign-up, nothing sent. こども向け無料ブラウザゲーム5本。広告なし・登録なし・外部送信なし。">
+
+  <!-- ===== canonical =====
+       このURLが正式な住所であることを検索エンジンに伝える。
+       各ゲームページには canonical が無く og:url のみだが、
+       このページは検索から直接到達する入口になるため明示する。 -->
+  <link rel="canonical" href="https://flyingdevlab.com/kids/">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="Playing Dev Lab / 遊びの研究室">
+  <meta property="og:description" content="Five free browser games for kids. No ads, no sign-up, nothing sent. こども向け無料ブラウザゲーム5本。広告なし・登録なし・外部送信なし。">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/">
+  <meta property="og:image"       content="https://flyingdevlab.com/ogp.png">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="Playing Dev Lab / 遊びの研究室">
+  <meta name="twitter:description" content="Five free browser games for kids. こども向け無料ブラウザゲーム5本。">
+  <meta name="twitter:image"      content="https://flyingdevlab.com/ogp.png">
+
+  <!-- ===== スタイルシート =====
+       このページ専用。ルートの /style.css には依存させていない。
+       理由は kids/style.css の冒頭コメントに書いてある。 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- スキップリンク。通常は画面外に隠れており、Tabキーを押したときだけ現れる。
+       キーボード利用者が見出しを読み飛ばしてゲーム一覧へ直接移動できる。
+       同一ページ内のアンカーなので外部リンクではない。
+       クラス名はサイト共通の .skip-link に合わせている（pledge.html 等と同じ）。 -->
+  <a href="#main" class="skip-link">Skip to games / ゲーム一覧へ</a>
+
+  <div class="wrap">
+
+    <header>
+      <!-- 装飾の絵文字。aria-hidden で読み上げ対象から外す
+           （「ゲーム機」と読まれても情報が増えないため）。 -->
+      <span class="h-icon" aria-hidden="true">🎮</span>
+      <h1>
+        <span class="t-en">Playing Dev Lab</span>
+        <span class="t-sep" aria-hidden="true">/</span>
+        <span class="t-ja" lang="ja">遊びの研究室</span>
+      </h1>
+      <p class="lead">
+        Five free games you can play right in your browser.
+        <span class="ja" lang="ja">ブラウザでそのまま遊べる、無料のゲーム5本。</span>
+      </p>
+    </header>
+
+    <main id="main">
+
+      <!-- ゲーム一覧
+           <ul> にしているのは「5件の並び」という構造を
+           補助技術に伝えるため。読み上げ時に「リスト、5項目」と案内される。
+
+           各ゲームの絵文字は、そのゲームのページ内で既に使われているものを
+           流用している（遊ぶ前と遊んだ後で同じ記号になるため迷わない）。
+             🚀 MAKE10 のスタートボタン
+             🧀 MAZE のチーズ
+             🐭 モグラ叩きのモグラ
+             🎯 ピンボールのターゲット
+             💡 テンパズルのヒント
+      -->
+      <ul class="games">
+        <li>
+          <a href="make10/">
+            <span class="g-icon" aria-hidden="true">🚀</span>
+            <span class="g-en">MAKE10</span>
+            <span class="g-ja" lang="ja">10をつくろう</span>
+            <span class="g-tip">
+              Add up to 10 in 30 seconds
+              <span class="ja" lang="ja">30秒で「足して10」</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="cheese-escape-web/">
+            <span class="g-icon" aria-hidden="true">🧀</span>
+            <span class="g-en">MAZE</span>
+            <span class="g-ja" lang="ja">迷路</span>
+            <span class="g-tip">
+              Carry the cheese to the goal
+              <span class="ja" lang="ja">チーズをゴールへ運ぼう</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="whack-a-mole/">
+            <span class="g-icon" aria-hidden="true">🐭</span>
+            <span class="g-en">Whack-a-Mole</span>
+            <span class="g-ja" lang="ja">モグラ叩き</span>
+            <span class="g-tip">
+              Whack as many as you can in 30 seconds
+              <span class="ja" lang="ja">30秒で何匹たたけるか</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="pinball/">
+            <span class="g-icon" aria-hidden="true">🎯</span>
+            <span class="g-en">Pinball</span>
+            <span class="g-ja" lang="ja">ピンボール</span>
+            <span class="g-tip">
+              Go for the high score with 3 balls
+              <span class="ja" lang="ja">3ボールでハイスコアを目指そう</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="ten-puzzle/">
+            <span class="g-icon" aria-hidden="true">💡</span>
+            <span class="g-en">Ten Puzzle</span>
+            <span class="g-ja" lang="ja">テンパズル</span>
+            <span class="g-tip">
+              Make 10 with four digits
+              <span class="ja" lang="ja">4つの数字で10をつくる</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- 約束
+           保護者が読む部分。リンクを置かない方針のため、
+           プライバシーポリシーの要点をここに地の文で書いている。
+
+           ここに書いた4つは、ブラウザゲームについては構造的に真である。
+             広告なし・課金なし … そもそも読み込む先がない
+             外部送信なし       … _headers の CSP が connect-src を開けていない
+             外部リンクなし     … このページと各ゲームにリンクを書いていない
+           アプリ側（App Store）の iCloud 保存のような例外はこちらには無い。
+      -->
+      <section class="promise" aria-labelledby="promise-heading">
+        <h2 id="promise-heading">
+          Our promise
+          <span class="ja" lang="ja">／ 約束</span>
+        </h2>
+        <ul>
+          <li>
+            No advertisements.
+            <span class="ja" lang="ja">広告は一切ありません。</span>
+          </li>
+          <li>
+            No purchases of any kind. Everything here is free.
+            <span class="ja" lang="ja">課金はありません。すべて無料です。</span>
+          </li>
+          <li>
+            Nothing is sent anywhere. Scores stay on this device.
+            <span class="ja" lang="ja">データを外部へ送りません。スコアはこの端末の中だけに残ります。</span>
+          </li>
+          <li>
+            No links that lead away from the games.
+            <span class="ja" lang="ja">ゲームの外に出るリンクはありません。</span>
+          </li>
+        </ul>
+        <p class="note">
+          For parents: this page and the games link only to each other.
+          There is no link here that takes a child to another site,
+          a social network, or an app store.
+          <!-- 日本語は文の途中で改行すると、その改行が半角スペースとして
+               描画されてしまうため1行で書いている。 -->
+          <span class="ja" lang="ja">保護者の方へ：このページと各ゲームは、互いの間だけでリンクしています。こどもが他のサイト・SNS・アプリストアへ移動できるリンクは置いていません。</span>
+        </p>
+      </section>
+
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <!-- 著作権は表示するが、リンクにはしない。
+           表示はする、しかしここから移動はできない、という形。 -->
+      <p>
+        &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
+      </p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

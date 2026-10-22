@@ -1,0 +1,357 @@
+/* ================================================================
+   kids/style.css ― 遊びの研究室（ハブページ）専用スタイル
+   ================================================================
+
+   ■ なぜルートの /style.css を使わないのか
+     各ゲームが自前の style.css を持っているのと同じ作法に合わせた。
+     ルートの style.css は TOP ページ専用の記述を多く含み、
+     そこへ手を入れるとこども向け領域に影響が出る。逆もまた同じ。
+     /kids/ 配下を独立させておけば、TOP の改修がこちらを壊さない。
+
+   ■ 外部リソースを一切読み込まない
+     フォントは /fonts/ の woff2 を自己ホストしている（下の @font-face）。
+     Google Fonts などの外部 CDN は使わない。
+     _headers の /kids* ブロックが default-src 'none' を敷いているため、
+     仮に外部URLを書いても読み込みはブラウザに拒否される。
+
+   ■ フォントのパスは絶対パスで書く
+     url('/fonts/...') と書く。相対 '../fonts/' にすると
+     /kids/fonts/ を指してしまい、存在しないので読めない。
+     各ゲームの style.css も同じ理由で絶対パスに揃えてある。
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   フォント（自己ホスト）
+   ----------------------------------------------------------------
+   font-display: swap … フォント読み込み中は代替フォントで表示し、
+   読み込み完了後に差し替える。文字が見えない時間を作らない指定。
+---------------------------------------------------------------- */
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/nunito-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/nunito-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/nunito-latin-900.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* ----------------------------------------------------------------
+   配色
+   ----------------------------------------------------------------
+   make10 / ten-puzzle と同じ値を使っている。
+   こども向け領域で配色が揃っていれば、ハブとゲームを行き来しても
+   「同じ場所にいる」感じが保たれる。
+---------------------------------------------------------------- */
+:root {
+  --bg:           #f5f0e6;
+  --card:         #ffffff;
+  --choice-fill:  #fdf8ee;
+  --primary:      #4d80d1;
+  --accent:       #9a6bc7;
+  --text:         #383843;
+  --muted:        #858588;
+  --shadow:       rgba(56, 56, 67, 0.08);
+  --radius:       20px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* 日本語フォールバックを明示している。Nunito はラテン文字のみのため、
+   日本語は OS 搭載フォントで表示される。チェーンを書いておかないと
+   環境によって読みにくい書体に落ちることがある。 */
+body {
+  font-family: 'Nunito', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+               'Yu Gothic', 'Meiryo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------------------------------------------------
+   スキップリンク
+   ----------------------------------------------------------------
+   普段は画面外（top: -100%）に置き、Tabキーでフォーカスが当たった
+   ときだけ上端へ滑り込ませる。見た目を邪魔せずキーボード操作を助ける。
+   クラス名と挙動はルートの style.css の .skip-link に揃えてある。
+---------------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 0 0 8px 8px;
+  z-index: 9999;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* 中央寄せのラッパー。横幅はカード2枚が気持ちよく並ぶ幅に収めている。 */
+.wrap {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+
+/* ----------------------------------------------------------------
+   ヘッダー
+---------------------------------------------------------------- */
+header {
+  padding: 48px 0 8px;
+  text-align: center;
+}
+
+.h-icon {
+  font-size: 40px;
+  line-height: 1;
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* 日英併記の見出し。英語を主、日本語を従として一段小さく表示する。
+   各ゲームページの <h1> と同じ組み方に揃えてある。 */
+h1 {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  color: var(--primary);
+}
+
+.t-sep {
+  color: var(--muted);
+  font-weight: 400;
+  margin: 0 0.4em;
+}
+
+.t-ja {
+  font-size: 0.68em;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* リード文。ここで「何があるページか」を日英1行ずつで伝える。 */
+.lead {
+  margin: 14px auto 0;
+  max-width: 34em;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.lead .ja {
+  display: block;
+}
+
+
+/* ----------------------------------------------------------------
+   ゲーム一覧
+   ----------------------------------------------------------------
+   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
+     → 1枚あたり最低220pxを確保しつつ、入る枚数だけ自動で並べる。
+       画面幅に応じて1列・2列・3列が自然に切り替わるため、
+       メディアクエリで列数を書き分ける必要がない。
+---------------------------------------------------------------- */
+.games {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 32px 0 0;
+}
+
+/* カード全体を <a> にして、どこを押しても遊べるようにしている。
+   こどもが使うため、当たり判定は大きいほどよい。 */
+.games a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
+  padding: 24px 18px;
+  background: var(--card);
+  border: 1px solid rgba(56, 56, 67, 0.07);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.games a:hover,
+.games a:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px var(--shadow);
+  border-color: var(--primary);
+}
+
+/* キーボード操作時のフォーカス位置をはっきり見せる。
+   :focus-visible はキーボード操作時のみ適用され、
+   マウスクリック時には出ないため見た目を邪魔しない。 */
+.games a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.g-icon {
+  font-size: 34px;
+  line-height: 1.2;
+}
+
+.g-en {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--primary);
+}
+
+.g-ja {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.g-tip {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.g-tip .ja {
+  display: block;
+}
+
+
+/* ----------------------------------------------------------------
+   約束
+   ----------------------------------------------------------------
+   リンクを置かず、地の文で書いている。
+   このページから外に出る導線を作らないという方針のため
+   （プライバシーポリシーや誓いのページへのリンクも置かない）。
+---------------------------------------------------------------- */
+.promise {
+  margin: 36px 0 0;
+  padding: 24px 22px;
+  background: var(--choice-fill);
+  border: 1px solid rgba(77, 128, 209, 0.18);
+  border-radius: var(--radius);
+}
+
+.promise h2 {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.promise h2 .ja {
+  font-size: 0.85em;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.promise ul {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.promise li {
+  font-size: 14px;
+  padding-left: 1.6em;
+  position: relative;
+}
+
+/* チェックマークは装飾なので content で描き、読み上げ対象から外している
+   （li のテキストだけが読まれる）。 */
+.promise li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: 900;
+}
+
+.promise li .ja {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 保護者向けの補足。なぜ外部リンクが無いのかを明記する。 */
+.promise .note {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(77, 128, 209, 0.15);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.promise .note .ja {
+  display: block;
+}
+
+
+/* ----------------------------------------------------------------
+   フッター
+   ----------------------------------------------------------------
+   著作権表示のみ。リンクは1本も置かない。
+   表示はするが、そこから移動はできない、という形にしている。
+---------------------------------------------------------------- */
+.site-footer {
+  margin-top: auto;
+  padding: 40px 0 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+
+/* ----------------------------------------------------------------
+   狭い画面での調整
+---------------------------------------------------------------- */
+@media (max-width: 420px) {
+  header { padding-top: 36px; }
+  h1 { font-size: 24px; }
+  .t-ja { display: block; font-size: 0.8em; margin-top: 2px; }
+  .t-sep { display: none; }
+  .games a { padding: 20px 16px; }
+}
+
+
+/* ----------------------------------------------------------------
+   画面の動きを減らす設定への配慮
+   ----------------------------------------------------------------
+   OS 側で「視差効果を減らす」を有効にしている利用者には
+   カードの浮き上がりを無効にする。
+---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .games a { transition: none; }
+  .games a:hover,
+  .games a:focus-visible { transform: none; }
+}
