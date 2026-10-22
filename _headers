@@ -9,7 +9,7 @@
 #    セキュリティヘッダーや CSP を配れるのが利点。
 #
 #  ■ 記法の基本
-#    ・1行目にパスのパターン（例: /*  や  /make10/*）を書く
+#    ・1行目にパスのパターン（例: /*  や  /kids*）を書く
 #    ・続くインデント行に「ヘッダー名: 値」を並べる
 #
 #  ■ 重要な仕様（実機確認で判明。公式ドキュメントにも明記あり）
@@ -89,29 +89,77 @@
 
 
 # ================================================================
-#  ② ゲームディレクトリ（最も厳格） ― 外部接続を完全に遮断
+#  ② こども向け領域 /kids/（最も厳格） ― 外部接続を完全に遮断
 # ================================================================
 #
-#  4ゲーム（make10 / cheese-escape-web / whack-a-mole / pinball）は
-#  外部ドメインへの読み込みが「ゼロ」であることを全ファイルで確認済み。
-#  そこで default-src 'none' を土台に、自ドメイン（'self'）の
-#  CSS・JS・画像・フォントだけを個別に開ける。
+#  変更（2026-11-01）: ゲームごとの4ブロックを1ブロックに統合した。
+#    旧: /make10/*  /cheese-escape-web/*  /whack-a-mole/*  /pinball/*
+#    新: /kids*（ゲーム5本とハブページをまとめて覆う）
 #
-#  ゲームごとの差分（確認結果）:
-#    ・make10        : style="..." 属性あり → style-src に 'unsafe-inline'
-#    ・whack-a-mole  : onclick="..." あり   → script-src に 'unsafe-inline'
-#    ・pinball       : onclick="..." あり   → script-src に 'unsafe-inline'
-#    ・cheese-escape : インライン一切なし（本来は unsafe-inline 不要）
+#    統合した理由は2つある。
+#      1. ゲームを /kids/ 配下へ移したため、1本で全部を覆えるようになった。
+#      2. 旧構成には /ten-puzzle/* のブロックが無く、ten-puzzle だけが
+#         ①の緩いルール（x.com 等を許可するCSP）の下に置かれていた。
+#         パスを1本ずつ列挙する方式は、ページを足したときに書き漏らしても
+#         何の警告も出ない。ディレクトリ単位にすれば、/kids/ に置いた
+#         時点で自動的に厳格ルールが当たる。
 #
-#  運用をシンプルに保つため、4ゲーム共通で同一の厳格ルールを当てる。
-#  （cheese-escape には過剰な許可となるが、閉じ方向の差なので実害はない。
-#    将来キレイにしたければ cheese-escape だけ別ブロックで締められる。）
+#  ■ なぜ /kids/* ではなく /kids* なのか
+#    /kids/* は「/kids/」と「/kids/配下」にマッチするが、
+#    「/kids」（末尾スラッシュなし）にはマッチしない。
+#    末尾スラッシュの正規化はホスティング側の挙動に依存するため、
+#    ハブページが①の緩いルールの下に落ちる可能性が残る。
+#    /kids* と書けば、スラッシュの有無に関係なく覆える。
 #
-#  各ブロック冒頭の「! ヘッダー名」は、上の①（/*）から継承された値を
-#  打ち消すための行（値は空でよい）。
-#  このファイルでは①より後に書かれているため、打ち消しが最後に効く。
+#    副作用として、将来 /kidsafe.html のような別のパスを作った場合も
+#    このルールにマッチする。だがその誤差は「厳しすぎる方向」であり、
+#    こども向けの安全を担保するルールとして倒れる方向は正しい側である。
+#    （緩い方向に倒れるパターンは採用しない）
 #
-#  変更: 打ち消し行を CSP だけでなく、再定義する4ヘッダー全てに広げた。
+#  ■ 開けているもの
+#    この配下は外部ドメインへの読み込みが「ゼロ」であることを全ファイルで
+#    確認済み。そこで default-src 'none' を土台に、自ドメイン（'self'）の
+#    CSS・JS・画像・フォントだけを個別に開ける。
+#
+#    'unsafe-inline' が必要な理由（確認結果）:
+#      ・style-src  … make10 に style="..." 属性が7箇所、ten-puzzle に4箇所
+#      ・script-src … whack-a-mole に onclick 等が3箇所、pinball に4箇所
+#      ・cheese-escape-web はインライン一切なし
+#        （過剰な許可になるが、閉じ方向の差なので実害はない。
+#          将来キレイにしたければ、そこだけ別ブロックで締められる）
+#
+#    フォントは /fonts/ から読む。同一オリジンなので font-src 'self' で足りる。
+#    各ゲームの style.css は絶対パス /fonts/ で参照している
+#    （相対 ../fonts/ だと /kids/fonts/ を指してしまうため)。
+#
+#  ■ 開けていないものと、その効果
+#    ここが「約束を構造で保証する」部分である。
+#
+#      connect-src を開けない → fetch / XHR / WebSocket が全て失敗する。
+#                               「外部へデータを送らない」が技術的に成立する。
+#      media-src を開けない   → 音声ファイルを読み込めない。
+#                               この配下の音は Web Audio API による合成音のみで、
+#                               音声ファイルは1つも使っていない（確認済み）。
+#      frame-src を開けない   → 外部の埋め込み（SNS等）を表示できない。
+#      img-src は 'self' のみ → 外部の画像・トラッキングピクセルを読めない。
+#
+#    つまり「広告なし・課金なし・外部送信なし」は、意思だけでなく
+#    このヘッダーによって裏打ちされている。書き足さない限り破れない。
+#
+#  ■ ⚠️ CSP で防げないもの
+#    <a href="https://..."> による外部サイトへの「リンク」は CSP の管轄外。
+#    CSP が止めるのは「読み込み」であって「遷移」ではない。
+#    リンクを1本書けば、そのまま機能してしまう。
+#
+#    したがって「外部リンクなし」だけは、このファイルでは守れない。
+#    .github/workflows/ の自動検査が、コミット時にこれを検出する担当である。
+#
+#  ■ 打ち消し行について
+#    各ブロック冒頭の「! ヘッダー名」は、上の①（/*）から継承された値を
+#    打ち消すための行（値は空でよい）。
+#    このファイルでは①より後に書かれているため、打ち消しが最後に効く。
+#
+#    打ち消しを CSP だけでなく、再定義する4ヘッダー全てに書いている。
 #    理由: 実機（curl -sIL）で確認したところ、打ち消していないヘッダーが
 #          そのまま重複して送られていた。
 #            referrer-policy: strict-origin-when-cross-origin   ← ①から継承
@@ -124,40 +172,10 @@
 #          「たまたま順序で正しくなっている」状態であり、意図が読み取れない。
 #          再定義するヘッダーは必ず打ち消す、という規則に統一した。
 #
-#  ※ Permissions-Policy は各ブロックで再定義しないため、打ち消し行も書かない。
-#     ①の値をサイト全体で継承させるのが意図である（加算方式を利用している）。
+#    ※ Permissions-Policy は各ブロックで再定義しないため、打ち消し行も書かない。
+#       ①の値をサイト全体で継承させるのが意図である（加算方式を利用している）。
 
-/make10/*
-  ! Content-Security-Policy
-  ! X-Content-Type-Options
-  ! Referrer-Policy
-  ! X-Frame-Options
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: no-referrer
-  X-Frame-Options: DENY
-
-/cheese-escape-web/*
-  ! Content-Security-Policy
-  ! X-Content-Type-Options
-  ! Referrer-Policy
-  ! X-Frame-Options
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: no-referrer
-  X-Frame-Options: DENY
-
-/whack-a-mole/*
-  ! Content-Security-Policy
-  ! X-Content-Type-Options
-  ! Referrer-Policy
-  ! X-Frame-Options
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: no-referrer
-  X-Frame-Options: DENY
-
-/pinball/*
+/kids*
   ! Content-Security-Policy
   ! X-Content-Type-Options
   ! Referrer-Policy
