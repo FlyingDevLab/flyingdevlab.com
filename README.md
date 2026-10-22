@@ -53,23 +53,44 @@ Our children's apps are built with **no ads, no in-app purchases, and no data se
 | `pledge.html` | こどもたちへの誓い |
 | `404.html` | カスタム 404 ページ |
 | `style.css` | 共通スタイル |
-| `apps.js` | アプリ一覧データ（ここを編集するだけでTOPに反映） |
 | `sitemap.xml` | サイトマップ |
 | `robots.txt` | クローラー設定 |
 | `_headers` | Cloudflare Pages のHTTPヘッダー定義 |
+| `_redirects` | Cloudflare Pages のリダイレクト定義（旧ゲームURLの301転送） |
+| `.github/workflows/` | `/kids/` に外部リンクが混入していないかの自動検査 |
 | `app-ads.txt` | AdMob 用の販売者宣言（PriceWise） |
 | `fonts/` | 自己ホストフォント（woff2 + OFLライセンス） |
-| `images/` | アプリアイコン等の画像アセット |
 | `favicon.ico` | ファビコン |
 | `favicon-512.png` | 高解像度ファビコン（512×512） |
 | `apple-touch-icon.png` | iOS ホーム画面用アイコン |
 | `ogp.png` | OGP / SNS シェア用画像 |
-| `make10/` | ブラウザゲーム：MAKE10 |
-| `cheese-escape-web/` | ブラウザゲーム：Cheese Escape（迷路） |
-| `whack-a-mole/` | ブラウザゲーム：Whack-a-Mole（モグラ叩き） |
-| `pinball/` | ブラウザゲーム：Pinball（ピンボール） |
-| `ten-puzzle/` | ブラウザゲーム：Ten Puzzle（テンパズル） |
+| `kids/` | こども向け領域。ハブ1枚とブラウザゲーム5本 |
+| `kids/index.html` | ハブ「Playing Dev Lab / 遊びの研究室」 |
+| `kids/make10/` | ブラウザゲーム：MAKE10（10をつくろう） |
+| `kids/cheese-escape-web/` | ブラウザゲーム：MAZE（迷路） |
+| `kids/whack-a-mole/` | ブラウザゲーム：Whack-a-Mole（モグラ叩き） |
+| `kids/pinball/` | ブラウザゲーム：Pinball（ピンボール） |
+| `kids/ten-puzzle/` | ブラウザゲーム：Ten Puzzle（テンパズル） |
 | `privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
+
+### この表に無いもの
+
+| 対象 | 理由 |
+|---|---|
+| `images/` | アプリアイコン等の画像アセット。権利のある素材を再配布しないため `.gitignore` で除外しており、**GitHub 上には存在しない**。サイトでは表示される（Cloudflare Pages へのデプロイは `.gitignore` を参照しないため） |
+| `apps.js` | TOP のアプリ一覧データだったが、JS無効環境で空白になる問題のため静的HTML直書きに変更した。ファイルはリポジトリ外に退避済み |
+
+⚠️ `images/` がリポジトリに無いため、**クローンしただけではサイトを完全には再現できません**。
+また、この構成はフォルダを直接アップロードするデプロイを前提としています。
+Git連携デプロイに切り替えると画像が 404 になります。
+
+### こども向け領域について
+
+`kids/` 配下は、こどもが外部サイトへ出られないよう**外部リンクを1本も持たない**構成にしています。
+
+- ハブからも各ゲームからも、TOP・SNS・App Store へのリンクを置いていない
+- `_headers` の `/kids*` ブロックが `default-src 'none'` を敷き、外部読み込みを遮断している
+- リンクについては CSP で防げないため、`.github/workflows/` の自動検査が担当している
 
 ブラウザゲームのページは英語をメイン、日本語をサブとして表示しています。
 `html` の `lang` は `en`（`ja/` のみ `ja`）で、日本語の行には個別に `lang="ja"` を付けています。
