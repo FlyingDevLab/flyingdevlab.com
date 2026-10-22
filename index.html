@@ -299,38 +299,22 @@
         </h2>
       </div>
 
-      <!-- MAKE10 -->
-      <a href="/make10/" class="try-game-card fade-up" id="game-card-1" aria-label="Play MAKE10 in browser">
-        <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-1">MAKE10</div>
-        </div>
-      </a>
+      <!-- 変更（2026-11-01）: ゲーム5本のカードを、こども向けハブへの入口カード1枚に置き換えた。
+           理由: こども向けコンテンツを /kids/ 配下の1箇所に集約したため。
+                 TOPにはSNS埋め込みがあるので、ここから各ゲームへ直接リンクすると
+                 「ゲーム → TOP → SNS」という経路が残り続ける。
+                 入口をハブ1枚に絞ることで、こどもが出入りする場所を1箇所にしている。
 
-      <!-- Cheese Escape -->
-      <a href="/cheese-escape-web/" class="try-game-card fade-up" id="game-card-2" aria-label="Play Cheese Escape in browser">
+           ※ 見出し（Try in Browser / ブラウザで遊ぶ）は変更していない。
+              この見出しが検索語を担当しているため。固有名はカード側に置く。
+           ※ 旧カードにあった id="game-card-N" / id="game-name-N" は、
+              参照しているJS・CSSが1つも無かったため付け直していない。
+           ※ try-game-entry は style.css で grid-column: 1 / -1 を当てるためのクラス。
+              2列グリッドにカードが1枚だと右半分が空くため、全幅に広げている。 -->
+      <a href="/kids/" class="try-game-card try-game-entry fade-up"
+         aria-label="Open Playing Dev Lab — five free browser games for kids">
         <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-2">Cheese Escape</div>
-        </div>
-      </a>
-
-      <!-- Whack-a-Mole -->
-      <a href="/whack-a-mole/" class="try-game-card fade-up" id="game-card-3" aria-label="Play Whack-a-Mole in browser">
-        <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-3">Whack-a-Mole</div>
-        </div>
-      </a>
-
-      <!-- Pinball -->
-      <a href="/pinball/" class="try-game-card fade-up" id="game-card-4" aria-label="Play Pinball in browser">
-        <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-4">Pinball</div>
-        </div>
-      </a>
-
-      <!-- Ten Puzzle -->
-      <a href="/ten-puzzle/" class="try-game-card fade-up" id="game-card-5" aria-label="Play Ten Puzzle in browser">
-        <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-5">Ten Puzzle</div>
+          <div class="try-game-name">Playing Dev Lab</div>
         </div>
       </a>
 
