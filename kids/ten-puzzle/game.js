@@ -11,7 +11,9 @@
 
 
 // ── 設定定数 ────────────────────────────────────────────────────
-const APP_STORE_URL         = 'https://apps.apple.com/app/id6760253962'; // App Store URL（MAKE10）
+// App Store への導線は持たない。
+// /kids/ 配下はこども向け領域として外部リンクを一切置かない方針のため、
+// 以前あった APP_STORE_URL 定数とボタンへの href 設定を削除した。
 const PROBLEMS_PER_SESSION  = 10;   // 1プレイの出題数
 const HINT_PENALTY          = true; // ヒントを使った問題は加点しない
 

@@ -4,7 +4,9 @@
 
 
 // ── 設定定数 ────────────────────────────────────────────────────
-const APP_STORE_URL   = 'https://apps.apple.com/app/id6760253962'; // App Store URL（MAKE10）
+// App Store への導線は持たない。
+// /kids/ 配下はこども向け領域として外部リンクを一切置かない方針のため、
+// 以前あった APP_STORE_URL 定数とボタンへの href 設定を削除した。
 const TOTAL_TIME      = 30;   // 制限時間（秒）
 const WRONG_PENALTY   = 1;    // 不正解ペナルティ（秒）
 const TILE_COUNT      = 4;    // 選択肢タイル数
@@ -398,8 +400,6 @@ function endGame() {
       hiEl.className   = 'result-hi';
     }
 
-    const appStoreBtn = $('appStoreBtn');
-    if (appStoreBtn) appStoreBtn.href = APP_STORE_URL;
   }, 300);
 }
 
@@ -514,9 +514,6 @@ document.getElementById('btn-top').addEventListener('click', () => {
 // ページ読み込み時にタイトル画面のハイスコアを即座に反映する
 updateTitleHi();
 
-// App Store ボタンがある場合は href を設定しておく
-const appStoreBtnInit = document.getElementById('appStoreBtn');
-if (appStoreBtnInit) appStoreBtnInit.href = APP_STORE_URL;
 
 // 最初はトップ画面を表示する（HTML 側でも active が付いているが明示的に呼ぶ）
 showScreen('top');
