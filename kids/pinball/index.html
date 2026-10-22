@@ -496,6 +496,15 @@
                              含む領域であることを補助技術に伝える。
   ══════════════════════════════════════════════════════════ -->
   <footer class="site-footer" role="contentinfo">
+    <!-- 戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
+         こども向け領域の外（TOP・SNS・App Store など）へは繋がない方針。
+
+         target="_blank" を付けていないのは、同一サイト内の移動だから。
+         新しいタブを開く理由があるのは外部サイトへ出るときだけで、
+         ここでは不要（タブが増えると、こどもは元の場所に戻りにくくなる）。 -->
+    <p class="footer-copy">
+      <a href="/kids/" class="footer-link">&larr; Playing Dev Lab&ensp;/&ensp;<span lang="ja">遊びの研究室</span></a>
+    </p>
     <p class="footer-copy">
       &copy;
       <!--
@@ -509,14 +518,15 @@
         datetime 属性に ISO 8601 形式の値を指定することで、
         検索エンジンや補助技術が年号を正確に解釈できる。
       -->
-      <a href="https://flyingdevlab.com" target="_blank" rel="noopener noreferrer" class="footer-link">Flying Dev Lab</a>.
       <!--
-        target="_blank" … リンクを新しいタブ（ウィンドウ）で開く。
-        rel="noopener"  … 新しいタブが window.opener 経由で元ページを
-                          操作できないようにするセキュリティ対策。
-        rel="noreferrer"… リファラー情報（どこから来たか）を送らない
-                          プライバシー保護の設定。noopener の効果も含む。
+        変更: 著作権表示からリンクを外した。
+        旧: 「Flying Dev Lab」の文字が https://flyingdevlab.com への
+            リンク（target="_blank" rel="noopener noreferrer"）だった。
+        理由: そのリンクを辿るとSNS埋め込みのあるTOPに到達できてしまい、
+              こども向け領域を袋小路にするという方針と矛盾するため。
+              著作権は表示する。ただしそこから移動はできない。
       -->
+      Flying Dev Lab.
       All rights reserved.
     </p>
   </footer>

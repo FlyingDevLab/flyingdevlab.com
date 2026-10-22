@@ -195,15 +195,19 @@
 
   <!-- ===== フッター：全画面共通のコピーライト ===== -->
   <footer class="site-footer" role="contentinfo">
+    <!-- 戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
+         こども向け領域の外（TOP・SNS・App Store など）へは繋がない方針。 -->
     <p class="footer-copy">
-      &copy; <time datetime="2026">2026</time>
-      <a
-        href="https://flyingdevlab.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="footer-link"
-        aria-label="Flying Dev Lab (opens in a new tab)"
-      >Flying Dev Lab</a>. All rights reserved.
+      <a href="/kids/" class="footer-link">&larr; Playing Dev Lab&ensp;/&ensp;<span lang="ja">遊びの研究室</span></a>
+    </p>
+    <!-- 変更: 著作権表示からリンクを外した。
+         旧: 「Flying Dev Lab」の文字が https://flyingdevlab.com への
+             リンク（target="_blank"）になっていた。
+         理由: そのリンクを辿るとSNS埋め込みのあるTOPに到達できてしまい、
+               こども向け領域を袋小路にするという方針と矛盾するため。
+               著作権は表示する。ただしそこから移動はできない。 -->
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
     </p>
   </footer>
 
