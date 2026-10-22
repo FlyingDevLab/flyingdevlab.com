@@ -45,7 +45,7 @@ Challenge モードには「そもそも10を作れない問題」が混ざり�
 ## 📁 ファイル構成
 
 ```
-/ten-puzzle/
+/kids/ten-puzzle/
 ├── index.html   # 画面（トップ / ゲーム / リザルト）
 ├── style.css    # 見た目・レイアウト
 ├── game.js      # ゲームロジック＋問題データ715問
@@ -99,53 +99,26 @@ MAKE10 アプリの `ten_puzzle_problems.json`（全715問）から生成しま�
 **検証済み：** 収録されている解の例552件すべてが、このパーサーで
 10 と判定されることを確認しています。
 
-## 🔧 サイトに組み込むときの作業
+## 🔧 サイトへの組み込み（完了済み）
 
-このフォルダを置くだけでは TOP ページに出ません。以下の3箇所を手で足してください。
+このゲームは組み込み済みです。以前ここには TOP ページへカードを
+追加する手順が書いてありましたが、2026-11-01 の構成変更で内容が
+合わなくなったため差し替えました。
 
-### 1. `index.html`（英語版）
+現在の構成はこうなっています。
 
-`game-card-4`（Pinball）の直後、`</section>` の前に追加：
+- こども向けコンテンツは `/kids/` 配下に集約されている
+- TOP ページにゲームごとのカードは無く、`/kids/` への入口カードが1枚あるだけ
+- ゲームの一覧はハブ（`/kids/index.html`）が持っている
+- `_headers` の `/kids*` ブロックが、この配下すべてに厳格な CSP を当てている
+- `_redirects` が旧URL（`/ten-puzzle/`）を新URLへ 301 転送している
 
-```html
-      <!-- Ten Puzzle -->
-      <a href="/ten-puzzle/" class="try-game-card fade-up" id="game-card-5" aria-label="Play Ten Puzzle in browser">
-        <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-5">Ten Puzzle</div>
-        </div>
-      </a>
-```
+したがって、新しいゲームを足すときに触るのは TOP ではなく
+**ハブと sitemap.xml** です。TOP 側の編集は不要です。
 
-### 2. `ja/index.html`（日本語版）
+⚠️ `/kids/` 配下には外部リンクを置きません（App Store・SNS を含む）。
+   こどもが外部サイトへ出られないようにするための方針です。
 
-同じ位置に追加：
-
-```html
-      <!-- Ten Puzzle -->
-      <a href="/ten-puzzle/" class="try-game-card fade-up" id="game-card-5" aria-label="テンパズルをブラウザでプレイ">
-        <div class="try-game-inner">
-          <div class="try-game-name" id="game-name-5">テンパズル</div>
-        </div>
-      </a>
-```
-
-### 3. `sitemap.xml`
-
-`/pinball/` の `</url>` の直後に追加（`lastmod` は公開日に直すこと）：
-
-```xml
-  <url>
-    <loc>https://flyingdevlab.com/ten-puzzle/</loc>
-    <lastmod>2026-08-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ten-puzzle/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/ten-puzzle/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/ten-puzzle/"/>
-  </url>
-```
-
-また、リポジトリ README の「ファイル構成」表にも1行足しておくと揃います。
 
 ```
 | `ten-puzzle/`        | ブラウザゲーム：テンパズル（四則演算で10をつくる） |
