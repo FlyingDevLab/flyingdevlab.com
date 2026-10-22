@@ -375,21 +375,6 @@ body {
 
 .btn-primary:active { box-shadow: 0 2px 12px rgba(77, 128, 209, 0.2); }
 
-/* App Store ダウンロードボタン（現在はコメントアウト中） */
-.btn-appstore {
-  background: #000;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  padding: 14px 28px;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.btn-appstore svg {
-  width: 22px; height: 22px; fill: #fff;
-}
-
 /* ガラス素材のセカンダリボタン */
 .btn-secondary {
   background: var(--glass);
