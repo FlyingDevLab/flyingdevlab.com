@@ -31,10 +31,12 @@ With a mission to "provide simple, honest tools that children can use with peace
 ## こどもたちへの誓い / Our Pledge to Children
 
 私たちは、こどもを利益の手段にしません。  
-こども向けアプリは**広告なし・課金なし・外部データ送信なし**で設計しています。
+こども向けアプリは**広告なし・課金なし・開発者や第三者へのデータ送信なし**で設計しています。  
+（アプリによっては、設定を有効にすると記録を利用者自身の iCloud にのみ保存します。開発者は受け取りません）
 
 We never treat children as a means to profit.  
-Our children's apps are built with **no ads, no in-app purchases, and no external data transmission**.
+Our children's apps are built with **no ads, no in-app purchases, and no data sent to the developer or any third party**.  
+(Some apps can save records to your own iCloud when you turn that setting on. The developer never receives them.)
 
 📜 [誓いの全文を読む / Read the full pledge](https://flyingdevlab.com/pledge)
 
