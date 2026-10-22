@@ -119,70 +119,104 @@
 
   <!--
     ============================================================
-    こども向けゲーム 4本  ← 新規追加
+    こども向け領域 /kids/（ハブ1枚 ＋ ブラウザゲーム5本）
     ============================================================
     無料・広告なし・データ送信なしのブラウザゲームです。
     サイトの主要コンテンツであるため、法的文書より高い priority を設定しています。
 
-    URLは末尾スラッシュ形（/make10/）です。
-    /make10/index.html は 308 で /make10/ へリダイレクトされるため、
+    変更（2026-11-01）: ゲームをルート直下から /kids/ 配下へ移しました。
+      旧: /make10/  /cheese-escape-web/  /whack-a-mole/  /pinball/  /ten-puzzle/
+      新: /kids/ とその配下
+    旧URLは _redirects で 301 転送しているため、外部から貼られた
+    リンクは生きていますが、sitemap には新URLだけを載せます。
+    転送元を申告すると「正式な住所」が二つあることになるためです。
+
+    URLは末尾スラッシュ形（/kids/make10/）です。
+    index.html 付きは 308 で末尾スラッシュ形へ転送されるため、
     index.html を明記すると申告と実配信が食い違います。
 
-    どのゲームも1つのURLで日英を併記しているため、
+    ハブもゲームも1つのURLで日英を併記しているため、
     hreflang は ja / en / x-default すべて同じURLを指します。
 
-    lastmod は最後にファイルを更新した日です（localStorage の例外処理を追加した日）。
+    lastmod は新URLが公開される日（＝デプロイ日）です。
+    この日より前は、ここに書いたURLは存在しません。
   -->
   <url>
-    <loc>https://flyingdevlab.com/make10/</loc>
-    <lastmod>2026-08-16</lastmod>
+    <!-- こども向けハブ「Playing Dev Lab / 遊びの研究室」。
+         ゲーム5本への唯一の入口であり、検索からの着地点にもなるため、
+         ゲーム本体（0.8）より高い 0.9 を設定しています。 -->
+    <loc>https://flyingdevlab.com/kids/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/"/>
+  </url>
+
+  <url>
+    <!-- MAKE10 / 10をつくろう -->
+    <loc>https://flyingdevlab.com/kids/make10/</loc>
+    <lastmod>2026-11-01</lastmod>
     <!-- ゲーム本体が頻繁に変わることはないため monthly -->
     <changefreq>monthly</changefreq>
     <!-- 主要コンテンツなので法的文書より高い 0.8 -->
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/make10/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/make10/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/make10/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/make10/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/make10/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/make10/"/>
   </url>
 
   <url>
-    <loc>https://flyingdevlab.com/cheese-escape-web/</loc>
-    <lastmod>2026-08-16</lastmod>
+    <!-- MAZE / 迷路 -->
+    <loc>https://flyingdevlab.com/kids/cheese-escape-web/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <!-- ゲーム本体が頻繁に変わることはないため monthly -->
     <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/cheese-escape-web/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/cheese-escape-web/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/cheese-escape-web/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/cheese-escape-web/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/cheese-escape-web/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/cheese-escape-web/"/>
   </url>
 
   <url>
-    <loc>https://flyingdevlab.com/whack-a-mole/</loc>
-    <lastmod>2026-08-16</lastmod>
+    <!-- Whack-a-Mole / モグラ叩き -->
+    <loc>https://flyingdevlab.com/kids/whack-a-mole/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <!-- ゲーム本体が頻繁に変わることはないため monthly -->
     <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/whack-a-mole/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/whack-a-mole/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/whack-a-mole/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/whack-a-mole/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/whack-a-mole/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/whack-a-mole/"/>
   </url>
 
   <url>
-    <loc>https://flyingdevlab.com/pinball/</loc>
-    <lastmod>2026-08-16</lastmod>
+    <!-- Pinball / ピンボール -->
+    <loc>https://flyingdevlab.com/kids/pinball/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <!-- ゲーム本体が頻繁に変わることはないため monthly -->
     <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/pinball/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/pinball/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/pinball/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/pinball/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/pinball/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/pinball/"/>
   </url>
 
   <url>
-    <loc>https://flyingdevlab.com/ten-puzzle/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <!-- Ten Puzzle / テンパズル -->
+    <loc>https://flyingdevlab.com/kids/ten-puzzle/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <!-- ゲーム本体が頻繁に変わることはないため monthly -->
     <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/ten-puzzle/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/ten-puzzle/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/ten-puzzle/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/ten-puzzle/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/ten-puzzle/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/ten-puzzle/"/>
   </url>
 
   <!-- 
