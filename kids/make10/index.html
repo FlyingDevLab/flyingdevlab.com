@@ -44,7 +44,9 @@
         <!-- [FIX] title-num → title-accent に修正（CSS クラス名の不一致を解消） -->
         MAKE<span class="title-accent">10</span>
       </h1>
-      <p class="site-tagline">30-SECOND CHALLENGE</p>
+      <!-- モードによって JS が「30-SECOND」「10-SECOND」を書き換える。
+           初期値は 30-SECOND（タイトル画面の既定モード）。 -->
+      <p class="site-tagline" id="siteTagline">30-SECOND CHALLENGE</p>
     </div>
   </header>
 
@@ -75,15 +77,29 @@
             aria-label="Best score"
           ></div>
 
-          <!-- スタートボタン -->
-          <button
-            class="btn btn-primary"
-            id="btn-start"
-            style="width:100%;"
-            aria-label="Start the game"
-          >
-            🚀 START&ensp;/&ensp;<span lang="ja">スタート</span>
-          </button>
+          <!-- モード選択。
+               iOS アプリ（FDL-TenBlitz）と同じ2モードを用意している。
+               アプリでは30秒で100問正解すると10秒モードが解放される仕組みだが、
+               ここでは最初から両方選べる。Web は一度きりの訪問が多く、
+               解放式にすると遊ばれないまま終わってしまうため。 -->
+          <div class="mode-buttons" role="group" aria-label="Choose a mode / モードをえらぶ">
+            <button
+              class="btn btn-primary"
+              id="btn-start"
+              aria-label="Start the 30 second mode"
+            >
+              <span class="mode-main">⏱️ 30 SEC</span>
+              <span class="mode-sub" lang="ja">30びょう</span>
+            </button>
+            <button
+              class="btn btn-blitz"
+              id="btn-blitz"
+              aria-label="Start the 10 second blitz mode"
+            >
+              <span class="mode-main">⚡ 10 SEC</span>
+              <span class="mode-sub" lang="ja">10びょう</span>
+            </button>
+          </div>
         </div>
       </section><!-- /#screen-top -->
 
@@ -164,6 +180,10 @@
         aria-live="assertive"
       >
         <div class="glass-card" style="text-align:center;">
+
+          <!-- どちらのモードの結果か。JS が文言を入れる。
+               10秒と30秒のスコアは比べられないため、必ず添える -->
+          <p class="result-mode" id="resultMode"></p>
 
           <!-- スコア表示 -->
           <p class="result-score-label">YOUR SCORE</p>

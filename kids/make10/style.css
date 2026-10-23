@@ -72,6 +72,12 @@
   --accent:       #9a6bc7;
   --gauge-full:   #6bb884;
   --gauge-warn:   #cc7566;
+  /* Blitz（10秒）モード専用の強調色。
+     iOS アプリ（FDL-TenBlitz）の DS.blitzColor と同じ値にしている。
+       Color(red: 0.82, green: 0.30, blue: 0.30) = rgb(209, 77, 77)
+     通常モードには使わない。ここぞという場面だけに使うから効く。 */
+  --blitz:        #d14d4d;
+  --blitz-accent: #e08a4a;
   --gauge-bg:     #dbd9cc;
   --text:         #383843;
   --muted:        #858588;
@@ -374,6 +380,84 @@ body {
 }
 
 .btn-primary:active { box-shadow: 0 2px 12px rgba(77, 128, 209, 0.2); }
+
+/*
+  Blitz（10秒）モード中の配色。
+
+  --primary と --accent を差し替えるだけで、タイトルの強調文字・問題の数字・
+  背景の光球・リザルトのスコア・フォーカス枠まで、まとめて赤系に変わる。
+  個別に上書きして回る必要がない。
+
+  iOS アプリも mainColor を isBlitz で切り替える同じ考え方をしている。
+
+  ■ --gauge-full は変えていない
+    ゲージの緑は「まだ余裕がある」、赤（--gauge-warn）は「残りわずか」を
+    意味している。Blitz だからといって常に赤にすると、この区別が消える。
+    モードの色と、状態を示す色は役割が違う。
+*/
+body.mode-blitz {
+  --primary: var(--blitz);
+  --accent:  var(--blitz-accent);
+}
+
+/* リザルト画面のモード表示。どちらの記録かを小さく添える */
+.result-mode {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+/* 10秒（Blitz）モードのボタン。
+   btn-primary が青→紫なのに対し、こちらは赤→橙。
+   「急ぐ」「熱い」という印象を色で伝える。 */
+.btn-blitz {
+  background: linear-gradient(135deg, var(--blitz), var(--blitz-accent));
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(209, 77, 77, 0.3);
+}
+
+.btn-blitz:active { box-shadow: 0 2px 12px rgba(209, 77, 77, 0.2); }
+
+/* モード選択の2つのボタン。
+   並べて置くことで「どちらかを選ぶ」ことが一目で伝わる。 */
+.mode-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* ボタンの中身は2行にする。
+   カードの幅は 380px で固定されており、横に並べると1つあたり約160px しかない。
+   「⏱️ 30 SEC / 30びょう」を1行に収めると文字が折り返して崩れるため、
+   英語と日本語を上下に分ける。サイトの他の箇所と同じ並べ方でもある。
+
+   ※ ここはビューポート幅ではなくカード幅で決まるので、
+      画面を広げても1つあたりの幅は変わらない。 */
+.mode-buttons .btn {
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 8px;
+}
+
+.mode-main {
+  font-size: 15px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.mode-sub {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+/* ごく狭い端末ではカード自体が縮むため、縦に積む */
+@media (max-width: 380px) {
+  .mode-buttons { flex-direction: column; }
+}
 
 /* ガラス素材のセカンダリボタン */
 .btn-secondary {

@@ -7,12 +7,36 @@
 // App Store への導線は持たない。
 // /kids/ 配下はこども向け領域として外部リンクを一切置かない方針のため、
 // 以前あった APP_STORE_URL 定数とボタンへの href 設定を削除した。
-const TOTAL_TIME      = 30;   // 制限時間（秒）
+/*
+ * ── ゲームモード ────────────────────────────────────────────────
+ * iOS アプリ（FDL-TenBlitz）と同じ2モードを用意する。
+ *   normal … 30秒。じっくり解く定番
+ *   blitz  … 10秒。短期決戦
+ *
+ * アプリでは「30秒で100問正解すると Blitz が解放」という仕組みだが、
+ * ここでは最初から両方選べるようにしている。
+ * アプリは繰り返し遊ぶ前提だが、Web は一度きりの訪問が多い。
+ * 遊べるものを隠すと、解放されないまま終わってしまう。
+ *
+ * ハイスコアはモードごとに分けて保存する。
+ * normal のキーを make10_hi のままにしているのは、
+ * このモードしか無かった頃の記録を引き継ぐため。
+ */
+const MODES = {
+  normal: { time: 30, warn: 6, hiKey: 'make10_hi',       tagline: '30-SECOND CHALLENGE', label: '⏱️ 30 SEC'       },
+  blitz:  { time: 10, warn: 3, hiKey: 'make10_hi_blitz', tagline: '10-SECOND BLITZ',    label: '⚡ 10 SEC BLITZ' },
+};
+
+/** 現在のモード名（'normal' | 'blitz'）。リトライ時も同じモードを保つ */
+let mode = 'normal';
+
+/** 現在のモードの設定を返す短縮形 */
+const conf = () => MODES[mode];
+
 const WRONG_PENALTY   = 1;    // 不正解ペナルティ（秒）
 const TILE_COUNT      = 4;    // 選択肢タイル数
 const COMBO_THRESHOLD = 5;    // タイムボーナス発動コンボ数
 const COMBO_EMOJIS    = ['🔥','⚡','💥','🌟','✨','🎯','💫','🚀','🎉','👏'];
-const GAUGE_WARN_SEC  = 8;    // 残りこの秒数以下でゲージを警告色にする
 
 /*
  * 1フレームで減らせる時間の上限（秒）。
@@ -60,7 +84,7 @@ const MAX_DELTA = 0.1;
  * 保存されているハイスコアを読み込む。読めない環境では 0 を返す。
  * @returns {number}
  */
-function loadHighScore() {
+function loadHighScore(key) {
   try {
     /*
      * 変更: parseInt の結果をそのまま返していたが、保存値が数値でない場合に
@@ -70,7 +94,7 @@ function loadHighScore() {
      * しかも表示は空のままなので、プレイヤーは不具合に気づけない。
      * 数値として妥当なときだけ採用する。
      */
-    const n = parseInt(localStorage.getItem('make10_hi'), 10);
+    const n = parseInt(localStorage.getItem(key), 10);
     return Number.isFinite(n) && n >= 0 ? n : 0;
   } catch (e) {
     return 0;  // 読めない環境ではハイスコアなしとして扱う
@@ -88,9 +112,9 @@ function loadHighScore() {
  *
  * @param {number} value - 保存するスコア
  */
-function saveHighScore(value) {
+function saveHighScore(key, value) {
   try {
-    localStorage.setItem('make10_hi', value);
+    localStorage.setItem(key, value);
   } catch (e) {
     /* 保存できなくても続行する（記録は今回のセッション限りになる） */
   }
@@ -101,9 +125,9 @@ function saveHighScore(value) {
 let score         = 0;        // 現在のスコア（正解数）
 let combo         = 0;        // 現在の連続正解数
 let maxCombo      = 0;        // このセッションの最大コンボ数
-let highScore     = loadHighScore();  // 変更: 直接呼び出しをやめ、try/catch 付きヘルパー経由に
+let highScore     = 0;        // 現在のモードのハイスコア（ゲーム開始時に読み込む）
 let isNewRecord   = false;    // 今回のゲームで新記録を出したか
-let timeLeft      = TOTAL_TIME;
+let timeLeft      = MODES.normal.time;
 let currentNum    = 0;        // 現在の問題の数字
 let nextNum       = 0;        // 次の問題の数字（プレビュー表示用）
 let correctAnswer = 0;        // 現在の正解（= 10 - currentNum）
@@ -145,12 +169,21 @@ function showScreen(name) {
 
 /**
  * トップ画面のハイスコア表示を更新する。
- * ハイスコアが 0 のときは空にする（min-height で高さは確保済み）。
+ * 記録のあるモードだけを並べて表示する。両方 0 のときは空にする
+ * （min-height で高さは確保済み）。
+ *
+ * モードごとに分けて出すのは、10秒と30秒のスコアを並べて比べても
+ * 意味がないため。どちらで出した記録かが分かる必要がある。
  */
 function updateTitleHi() {
   const el = $('titleHi');
   if (!el) return;
-  el.textContent = highScore > 0 ? `🏆 BEST: ${highScore}` : '';
+  const n = loadHighScore(MODES.normal.hiKey);
+  const b = loadHighScore(MODES.blitz.hiKey);
+  const parts = [];
+  if (n > 0) parts.push(`⏱️ 30s: ${n}`);
+  if (b > 0) parts.push(`⚡ 10s: ${b}`);
+  el.textContent = parts.length ? `🏆 ${parts.join('\u3000')}` : '';
 }
 
 
@@ -162,11 +195,29 @@ function updateTitleHi() {
  * 全状態をリセットして新しいゲームを開始する。
  * スコア・コンボ・残り時間を初期値に戻し、問題を生成してタイマーを起動する。
  */
-function startGame() {
+function startGame(name) {
+  // 引数が無いときは今のモードを維持する（リザルト画面の「もう一度」用）
+  if (name && MODES[name]) mode = name;
+
+  // このモードのハイスコアを読み込む。モードごとに別のキーで保存している
+  highScore = loadHighScore(conf().hiKey);
+
+  // Blitz のときだけ配色を変えるためのフラグ。CSS 側が body.mode-blitz を見る
+  document.body.classList.toggle('mode-blitz', mode === 'blitz');
+
+  // ゲージの最大値をモードに合わせる（支援技術に正しい残り時間を伝えるため）
+  const gw = $('gaugeWrapper');
+  if (gw) gw.setAttribute('aria-valuemax', conf().time);
+
+  // ヘッダーの副題もモードに合わせる。
+  // 10秒で遊んでいるのに「30-SECOND CHALLENGE」と出ていては食い違う。
+  const tag = $('siteTagline');
+  if (tag) tag.textContent = conf().tagline;
+
   score     = 0;
   combo     = 0;
   maxCombo  = 0;
-  timeLeft  = TOTAL_TIME;
+  timeLeft  = conf().time;
   isPlaying = true;
   isTapping = false;
 
@@ -284,7 +335,7 @@ function handleTap(value, tileEl) {
       if      (timeLeft <= 5)  bonus = 1.2;
       else if (timeLeft >= 20) bonus = 0.8;
       else                     bonus = 1.0;
-      timeLeft = Math.min(TOTAL_TIME, timeLeft + bonus);
+      timeLeft = Math.min(conf().time, timeLeft + bonus);
       updateGauge();
       spawnComboEmoji();
     }
@@ -422,14 +473,14 @@ function updateGauge() {
    * なお 404 ページの進捗バーは元から scaleX を使っている。
    * サイト内で実装を揃えた形になる。
    */
-  bar.style.transform = `scaleX(${Math.max(0, timeLeft / TOTAL_TIME)})`;
+  bar.style.transform = `scaleX(${Math.max(0, timeLeft / conf().time)})`;
 
   /*
    * 色と aria は「変わったときだけ」書き換える。
    * 毎フレーム同じ値を代入しても結果は同じだが、無駄な処理になる。
    * aria-valuenow は毎フレーム書き換えると支援技術に過剰な通知が飛ぶ。
    */
-  const warn = timeLeft <= GAUGE_WARN_SEC;
+  const warn = timeLeft <= conf().warn;
   if (warn !== gaugeIsWarn) {
     gaugeIsWarn = warn;
     bar.style.backgroundColor = warn ? 'var(--gauge-warn)' : 'var(--gauge-full)';
@@ -465,7 +516,7 @@ function endGame() {
   isNewRecord = score > highScore;
   if (isNewRecord) {
     highScore = score;
-    saveHighScore(highScore);  // 変更: 直接呼び出しをやめ、try/catch 付きヘルパー経由に
+    saveHighScore(conf().hiKey, highScore);  // モードごとに別のキーへ保存する
   }
 
   // わずかな間を置いてリザルト画面に切り替え、遷移を自然に見せる
@@ -474,6 +525,10 @@ function endGame() {
     $('resultScore').textContent   = score;
     $('resultMessage').textContent = getResultMessage(score);
     $('resultCombo').textContent   = maxCombo >= 2 ? `MAX COMBO: ${maxCombo} 🔥` : '';
+
+    // どちらのモードの結果かを示す。10秒と30秒のスコアは比べられないため
+    const modeEl = $('resultMode');
+    if (modeEl) modeEl.textContent = conf().label;
 
     // 新記録時は緑色でアニメーション付きのスタイルを適用する
     const hiEl = $('resultHi');
@@ -578,15 +633,27 @@ function playSound(type) {
 // ボタンイベントのバインド
 // ================================================================
 
-/** スタートボタン：ゲームを最初から開始してゲーム画面へ遷移 */
-document.getElementById('btn-start').addEventListener('click', startGame);
+/*
+ * 変更: addEventListener('click', startGame) と書くと、
+ * クリックイベントのオブジェクトが第1引数として渡ってしまう。
+ * startGame がモード名を受け取るようになったので、明示的に呼び分ける。
+ */
 
-/** もう一度ボタン：スコアをリセットしてゲームを再開 */
-document.getElementById('btn-retry').addEventListener('click', startGame);
+/** 30秒モードで開始 */
+$('btn-start').addEventListener('click', () => startGame('normal'));
+
+/** 10秒（Blitz）モードで開始 */
+$('btn-blitz').addEventListener('click', () => startGame('blitz'));
+
+/** もう一度ボタン：同じモードのまま再開する（引数なしで現在のモードを維持） */
+$('btn-retry').addEventListener('click', () => startGame());
 
 /** タイトルへ戻るボタン：タイマーを止めてトップ画面を表示 */
-document.getElementById('btn-top').addEventListener('click', () => {
+$('btn-top').addEventListener('click', () => {
   isPlaying = false;
+  document.body.classList.remove('mode-blitz');  // タイトルへ戻るので配色を戻す
+  const tag = $('siteTagline');
+  if (tag) tag.textContent = MODES.normal.tagline;  // 副題も既定に戻す
   if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   if (nextStepTimer) { clearTimeout(nextStepTimer); nextStepTimer = null; }
   showScreen('top');
