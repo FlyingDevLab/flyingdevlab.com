@@ -361,3 +361,29 @@ body {
   .how-to-play-list li { font-size: 0.92rem; }
   .result-scores { padding: 22px 32px; }
 }
+
+/*
+  ★ アニメーションを減らす設定への配慮 ★
+  OS 側で「視差効果を減らす」を有効にしている利用者には、
+  勝手に動き続けるものが不快になることがあります。
+  前庭障害のある方にとっては、めまいや吐き気の原因にもなります。
+
+  同じ kids/ 配下の ten-puzzle・whack-a-mole と同じ書き方にしています。
+  animation: none ではなく duration を極小にしているのは、
+  アニメーションを「一瞬で完了させる」ためです。
+  none にすると forwards / both の最終状態が適用されず、
+  要素が初期状態のまま（場合によっては見えないまま）残ることがあります。
+
+  ■ このページは canvas ゲームです
+    盤面の動きは JavaScript が canvas に描いているため、
+    CSS のこの指定では止まりません。止めてしまうとゲームが成立しないので、
+    それが正しい挙動です。ここで抑えるのは、結果表示の演出など
+    画面まわりの装飾だけです。
+*/
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
