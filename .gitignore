@@ -131,8 +131,8 @@ sounds/
 # ウェブフォントは、ライセンスによって再配布の可否が大きく分かれる。
 # セルフホストするなら、必ず配布条件を確認すること。
 #
-# このプロジェクトで使用している3書体
-# （Nunito / Boogaloo / Orbitron）はいずれも
+# このプロジェクトで使用している4書体
+# （Nunito / Boogaloo / Orbitron / Outfit）はいずれも
 # OFL（SIL Open Font License）で再配布が許可されている。
 # よって除外せず、リポジトリで公開管理している。
 #
@@ -140,6 +140,14 @@ sounds/
 #   OFL.txt          → Nunito
 #   OFL-boogaloo.txt → Boogaloo
 #   OFL-orbitron.txt → Orbitron
+#   OFL-outfit.txt   → Outfit
+#
+# 書体を追加するときは、ライセンス全文も必ず一緒に置くこと。
+# OFL は条件を1つでも欠くと失効する（TERMINATION 条項）。
+# 守るべきことは fonts/README.md にまとめた。
+#
+# なお OFL は「他のライセンスで配布してはならない」と定めている（条文5）。
+# そのためルートの LICENSE（MIT）は fonts/ を対象外にしている。
 #
 # ※ Google Fonts のすべてが OFL というわけではない。
 #    Apache 2.0 の書体も含まれるため、書体ごとに確認すること。

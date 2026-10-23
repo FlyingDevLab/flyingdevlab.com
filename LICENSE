@@ -1,0 +1,131 @@
+MIT License
+
+Copyright (c) 2026 空飛ぶ研究室 / Flying Dev Lab
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+================================================================
+ 適用範囲
+================================================================
+
+このライセンスが対象とするのは、このリポジトリのコードです。
+HTML の構造、CSS、JavaScript、設定ファイル、そして解説コメント。
+どうぞ自由に読んで、真似して、自分のものにしてください。
+
+以下は対象外です。
+
+
+■ 1. fonts/ 配下のフォント
+
+各書体の提供元が定める SIL Open Font License (OFL) に従います。
+
+OFL は条文5で「他のライセンスで配布してはならない」と定めています。
+MIT を重ねると条件違反となり、OFL 自体が失効します。
+失効すると、フォントを使う権利そのものを失います。
+
+再配布は OFL が許可しています。条件を守れば持っていって構いません。
+守るべきことは fonts/README.md にまとめました。
+
+
+■ 2. 誓いとポリシーの文章
+
+    pledge.html
+    privacy-policy.html
+    privacy-policy/ 配下
+    tokusho.html
+
+書き方や構成を参考にするのは歓迎します。
+多言語の切り替え方、同意の記録の取り方、読みやすくする工夫。
+そこに学ぶものがあるなら、遠慮なく持っていってください。
+
+文章そのものは、MIT の対象に含めていません。
+
+よく知らない人が書いた文章を、自分で考えないまま掲げることは、
+あなたの中で本当に正しいと言えますか。
+
+ポリシーや誓い、約束などは、自分の言葉で発信するから意味を持ちます。
+
+借りてきた言葉に価値はありますか？
+
+せっかく、発信する手段と場所があるのなら、自分の言葉で発信しましょう。
+
+
+■ 3. 「空飛ぶ研究室」「Flying Dev Lab」の名称とロゴ
+
+MIT が対象とするのは著作権であって、商標権ではありません。
+
+ロゴ等の画像は images/ にあり、.gitignore で除外しているため
+このリポジトリには含まれていません。
+
+
+================================================================
+ Scope
+================================================================
+
+This license covers the code in this repository: the HTML structure,
+the CSS, the JavaScript, the configuration files, and the explanatory
+comments. Read them, copy them, make them yours.
+
+The following are not covered.
+
+
+1. Fonts under fonts/
+
+They remain under the SIL Open Font License (OFL) set by their authors.
+
+Section 5 of the OFL states that the Font Software must not be
+distributed under any other license. Layering MIT on top would breach
+that condition, and the OFL would become null and void — taking the
+right to use the fonts with it.
+
+Redistribution is permitted by the OFL itself. Take them if you keep to
+its conditions. They are summarised in fonts/README.md.
+
+
+2. The pledge and the policies
+
+    pledge.html
+    privacy-policy.html
+    everything under privacy-policy/
+    tokusho.html
+
+You are welcome to study how they are built — how the languages are
+switched, how consent is recorded, how the text is kept readable.
+If there is something to learn there, take it.
+
+The words themselves are not covered by the MIT license.
+
+Would you stand behind words written by someone you have never met,
+put up without thinking them through yourself?
+
+A policy, a pledge, a promise — these carry weight because they are
+said in your own voice.
+
+Is there any value in borrowed words?
+
+If you have the means and the place to speak, speak as yourself.
+
+
+3. The names "空飛ぶ研究室" and "Flying Dev Lab", and the logo
+
+The MIT license covers copyright, not trademarks.
+
+The logo and other images live in images/, which is excluded by
+.gitignore and is therefore not part of this repository.

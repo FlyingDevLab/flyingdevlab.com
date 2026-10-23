@@ -133,3 +133,18 @@ This repository is fully open.
 You are free to view, learn from, and reference it.
 
 What we protect is not our code — it's children.
+
+---
+
+コードは [MIT ライセンス](LICENSE)です。
+
+ただし次の2つは対象が異なります。詳しくは [LICENSE](LICENSE) をご覧ください。
+
+| 対象 | 扱い |
+|---|---|
+| `fonts/` 配下のフォント | 各提供元の **SIL Open Font License (OFL)**。条件は [fonts/README.md](fonts/README.md) にまとめています |
+| 誓い・ポリシーの文章 | MIT の対象外。構成を参考にするのは歓迎しますが、文章は自分の言葉で書いてください |
+
+The code is under the [MIT License](LICENSE).
+Fonts stay under their own OFL, and the pledge and policy texts are not
+covered — see [LICENSE](LICENSE) for why.
