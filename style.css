@@ -1186,22 +1186,33 @@ header h1 {
   padding: 48px 24px 80px;
 }
 
-/* 雲と家をまとめて上下に浮遊させる外枠
- * animation: floatCloud 4s ease-in-out infinite
- *   4s          → 1サイクル4秒
+/* 雲と家をまとめて漂わせる外枠
+ * animation: floatCloud 5.5s ease-in-out infinite
+ *   5.5s        → 1サイクル5.5秒
  *   ease-in-out → 始まりと終わりが緩く、中間が速い緩急
- *   infinite    → 無限ループ */
+ *   infinite    → 無限ループ
+ *
+ * 変更: 上下12pxの穏やかな浮き沈みから、上下左右に大きく漂う動きにした。
+ *       「迷子になって流されている」感じを出すため。 */
 .lost-house {
   position: relative;
   display: inline-block;
   margin-bottom: 32px;
-  animation: floatCloud 4s ease-in-out infinite;
+  animation: floatCloud 5.5s ease-in-out infinite;
 }
 
-/* 上下に緩やかに浮き沈みするアニメーション */
+/* 上下だけでなく左右にも流れる漂流アニメーション。
+ * translate(X, Y) は translateX と translateY をまとめて書く記法です。
+ *
+ * 中間点を 25% / 50% / 75% の3つ置き、しかも左右の振れ幅を
+ * 不均等（-10px → +7px → +13px）にしています。
+ * 等間隔・左右対称にすると「規則正しい往復」に見えてしまい、
+ * 漂っている感じが出ないためです。 */
 @keyframes floatCloud {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(-10px, -20px); }
+  50%      { transform: translate(7px, -34px); }
+  75%      { transform: translate(13px, -15px); }
 }
 
 /* 雲の絵文字（家の土台として下に敷く装飾） */
@@ -1222,17 +1233,23 @@ header h1 {
   left: 50%;
   transform: translateX(-50%);
   line-height: 1;
-  animation: wobble 3s ease-in-out infinite;
+  animation: wobble 2.3s ease-in-out infinite;
 }
 
-/* 家が左右にゆらゆら揺れるアニメーション
+/* 家が大きく傾くアニメーション
  * rotate(角度)：要素を回転させます。deg は角度の単位（度）です。
  * translateX(-50%) を保持したまま rotate だけ変化させるため、
- * translateX も毎フレームに含めて書く必要があります。 */
+ * translateX も毎フレームに含めて書く必要があります。
+ *
+ * 変更: ±4度 → -14度／+12度／-7度。振り幅を広げ、左右を不均等にした。
+ *       あわせて translateX も -53% / -46% / -51% と動かしている。
+ *       中心がずれることで「雲から滑り落ちそう」に見える。
+ *       周期も3秒から2.3秒に縮めて、落ち着かない速さにしている。 */
 @keyframes wobble {
   0%, 100% { transform: translateX(-50%) rotate(0deg); }
-  25%       { transform: translateX(-50%) rotate(-4deg); }
-  75%       { transform: translateX(-50%) rotate(4deg); }
+  20%      { transform: translateX(-53%) rotate(-14deg); }
+  55%      { transform: translateX(-46%) rotate(12deg); }
+  80%      { transform: translateX(-51%) rotate(-7deg); }
 }
 
 /* 家の絵文字の右上に絶対配置して重ねるバッジ */
@@ -1241,14 +1258,25 @@ header h1 {
   top: -4px;
   right: -12px;
   font-size: 28px;
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse 1.1s ease-in-out infinite;
 }
 
 /* scale(倍率)：要素を拡大・縮小します。
- * 1.0 が等倍、1.25 は25%拡大。中心点を基準に拡縮します。 */
+ * 1.0 が等倍、1.4 は40%拡大、0.92 は8%縮小です。中心点を基準に拡縮します。
+ *
+ * 変更: 拡大だけだった動きに、縮小と回転を足した。
+ *       大きくなるだけなら「脈打つ」だが、縮んで傾くと「慌てている」に見える。
+ *
+ * ■ 3つの周期をわざと揃えていない
+ *   floatCloud 5.5秒 / wobble 2.3秒 / pulse 1.1秒。
+ *   割り切れない組み合わせにしてあるため、3つの動きの重なり方が
+ *   毎回変わり、見た目のループが揃うまでに非常に長い時間がかかる。
+ *   「次にどう動くか読めない」状態が、落ち着かなさの正体です。
+ *   揃った周期にすると、すぐに規則性を見抜かれて安心して見られてしまう。 */
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50%       { transform: scale(1.25); }
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  30%      { transform: scale(1.4) rotate(10deg); }
+  65%      { transform: scale(0.92) rotate(-8deg); }
 }
 
 /* 大きな「404」の数字 */

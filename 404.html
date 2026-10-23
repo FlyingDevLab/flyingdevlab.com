@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- DOCTYPE宣言：「これはHTML5のページです」とブラウザに伝える必須の宣言 -->
 <!-- lang="ja"：主要言語が日本語であることを宣言。スクリーンリーダーや翻訳ツールが正しく動作します。 -->
-<html lang="ja">
+<html lang="en">
 <head>
   <!-- 文字コード宣言：UTF-8は日本語・英語・絵文字をすべて扱える文字コード。
        先頭近くに書かないと文字化けの原因になります。 -->
@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- ページタイトル：ブラウザのタブに表示される文字列。
        ユーモアのあるタイトルにすることで、ユーザーが迷子になっても温かく迎えられます。 -->
-  <title>404 - 雲の上で迷子 | 空飛ぶ研究室</title>
+  <title>404 – Lost in the Clouds | Flying Dev Lab</title>
   <!-- エラーページのため検索エンジンにインデックスさせない。
        noindex → 検索結果への登録を禁止
        nofollow → このページ内のリンクをたどらないよう指示
@@ -41,17 +41,24 @@
   <!-- header-inner：コンテンツを中央に固定幅で配置するためのレイアウト用ラッパー -->
   <div class="header-inner">
     <!-- site-logo：雲と家の絵文字を重ねて表示するロゴエリア。
-         aria-hidden="true" → 絵文字ロゴは装飾目的のため、スクリーンリーダーに読ませません。 -->
-    <div class="site-logo" aria-hidden="true">
-      <span class="logo-cloud">☁️</span>
-      <span class="logo-house">🏠</span>
+         変更: 雲と家の絵文字（☁️🏠）から、index.html と同じロゴ画像に置き換えた。
+         絵文字のままだった理由は移行漏れで、style.css からは既に
+         .logo-cloud / .logo-house の定義が削除されていた（style.css の該当箇所参照）。
+         つまりスタイルの当たっていない素の絵文字が表示されている状態だった。
+
+         aria-hidden は付けない。絵文字は装飾だったが、これはブランドロゴなので
+         alt にブランド名を入れ、スクリーンリーダーにも伝わるようにしている。 -->
+    <div class="site-logo">
+      <img src="/images/fdl-logo-anim-320.gif" alt="Flying Dev Lab" width="160" height="160">
     </div>
-    <!-- サイト名とサブタイトル。
+    <!-- サイト名。
          index.html では <h1> を使っていますが、このページでは
          404の見出し（h1）がmain内にあるため、ここは <p> を使っています。
-         1ページに <h1> は1つだけというルールを守るための設計です。 -->
+         1ページに <h1> は1つだけというルールを守るための設計です。
+
+         変更: サブタイトル（空飛ぶ研究室）を削除した。
+         このページを英語に統一したため、すぐ上の site-name と役割が重複する。 -->
     <p class="site-name">Flying <span>Dev</span> Lab</p>
-    <p class="site-sub">空飛ぶ研究室</p>
   </div>
 </header>
 
@@ -81,15 +88,15 @@
        aria-hidden な装飾数字の後にこの <h1> を置くことで、
        視覚ユーザーには「404」の大きな数字が見え、
        読み上げユーザーには「雲の上で迷子になりました。」が読まれます。 -->
-  <h1 class="error-title">雲の上で迷子になりました。</h1>
+  <h1 class="error-title">Lost somewhere in the clouds.</h1>
 
   <!-- エラーの補足説明とトップページへの案内。
        <br> で改行を入れてモバイルでも読みやすい行割りにしています。
        aria-hidden="true" の絵文字は装飾のみです。 -->
   <p class="error-desc">
-    このページは雲の上のどこかに飛んでいってしまったようです。<br>
-    URLのつづりを確認するか、<br>
-    おうちに戻りましょう<span aria-hidden="true">☁️</span>
+    The page you are looking for seems to have drifted off somewhere above the clouds.<br>
+    Check the spelling of the URL,<br>
+    or head back home<span aria-hidden="true">☁️</span>
   </p>
 
   <!-- 自動リダイレクトのカウントダウンと一時停止ボタン。
@@ -100,13 +107,14 @@
     <!-- visually-hidden：CSSで画面外に配置して視覚的には見えないが、
          スクリーンリーダーには読み上げられる見出しです。
          「自動リダイレクト」という文脈をスクリーンリーダーユーザーに伝えます。 -->
-    <h2 id="countdown-heading" class="visually-hidden">自動リダイレクト</h2>
+    <h2 id="countdown-heading" class="visually-hidden">Automatic redirect</h2>
     <!-- aria-live="polite"：この要素の内容が変化したとき（JSが秒数を書き換えたとき）、
          スクリーンリーダーが現在の読み上げを終えてから変化を通知します（割り込まない）。
          aria-atomic="true"：要素全体をひとかたまりとして読み上げます。
-         「10 秒後にTOPへ移動します」を丸ごと読むため、秒数だけでなく文脈も伝わります。 -->
+         「Returning to the top page in 10 seconds」を丸ごと読むため、
+         秒数だけでなく文脈も伝わります。 -->
     <p class="countdown-text" aria-live="polite" aria-atomic="true">
-      <strong id="count">10</strong> 秒後にTOPへ移動します
+      Returning to the top page in <strong id="count">10</strong> seconds
     </p>
     <!-- role="progressbar"：この要素がプログレスバーであることをスクリーンリーダーに伝えます。
          aria-valuemin / aria-valuemax → 最小値と最大値（0〜10秒）
@@ -117,20 +125,15 @@
     </div>
     <!-- type="button"：<button> がフォーム内にある場合にsubmitを起こさないための明示的な指定。
          aria-label：ボタンの目的をスクリーンリーダーに伝えます（絵文字だけでは不明確なため）。 -->
-    <button type="button" class="countdown-pause" id="pause-btn" aria-label="カウントダウンを一時停止">⏸ 一時停止</button>
+    <button type="button" class="countdown-pause" id="pause-btn" aria-label="Pause the countdown">⏸ Pause</button>
   </section>
 
   <!-- トップページへ即時移動するリンクボタン。
        href="/" → ドメインのルート（トップページ）へのリンク。
        <a> タグをボタン風にスタイリングしています（クリックでページ遷移するため <button> ではなくリンクが適切）。 -->
   <a href="/" class="home-btn">
-    <span aria-hidden="true">🏠</span> 今すぐTOPへ帰る
+    <span aria-hidden="true">🏠</span> Go home now
   </a>
-
-  <!-- 英語ユーザー向けの補足テキスト。
-       lang="en" を付けてスクリーンリーダーが英語で読み上げられるようにしています。
-       <span id="count-en"> の数字はJSが1秒ごとに書き換えます。 -->
-  <p class="error-sub-en" lang="en">Lost in the clouds. Heading home in <span id="count-en">10</span>s…</p>
 
 </main>
 
@@ -138,8 +141,7 @@
      href="/" → ルートへのリンク。aria-label でリンクの目的を伝えています。
      © はHTMLエンティティで © （著作権マーク）を表示しています。 -->
 <footer>
-  <a href="/" class="footer-top" aria-label="トップページへ戻る">↑ TOP</a>
-  <p class="footer-copy">© 2026 空飛ぶ研究室 / Flying Dev Lab</p>
+  <p class="footer-copy">© 2026 Flying Dev Lab</p>
 </footer>
 
 <!-- ===== JavaScript =====
@@ -168,7 +170,6 @@
        getElementById("id名") → id属性で要素を1つ取得するDOM操作です。
        まとめて変数に入れておくことで、毎回検索せず効率よく参照できます。 */
     var countEl   = document.getElementById("count");
-    var countEnEl = document.getElementById("count-en");
     var barEl     = document.getElementById("progress-bar");
     var barWrap   = document.getElementById("progress-bar-wrap");
     var pauseBtn  = document.getElementById("pause-btn");
@@ -188,10 +189,8 @@
       /* -- （デクリメント）：変数を1ずつ減らす演算子。remaining-- は remaining = remaining - 1 と同じ。 */
       remaining--;
 
-      /* textContent：要素のテキストを書き換えます（HTMLタグは無効化される安全な方法）。
-         日本語・英語それぞれの残り秒数テキストを更新します。 */
-      countEl.textContent   = remaining;
-      countEnEl.textContent = remaining;
+      /* textContent：要素のテキストを書き換えます（HTMLタグは無効化される安全な方法）。 */
+      countEl.textContent = remaining;
 
       /* 残り割合（0.0〜1.0）を計算してプログレスバーを左端へ向けて縮小する。
          例：remaining=5, SECONDS=10 のとき ratio=0.5 → バーが50%の幅になります。 */
@@ -220,11 +219,11 @@
       /* 状態に合わせてボタンのラベルテキストとaria-labelを切り替えます。
          aria-label を動的に更新することでスクリーンリーダーにも現在の状態が伝わります。 */
       if (paused) {
-        pauseBtn.textContent = "▶ 再開";
-        pauseBtn.setAttribute("aria-label", "カウントダウンを再開");
+        pauseBtn.textContent = "▶ Resume";
+        pauseBtn.setAttribute("aria-label", "Resume the countdown");
       } else {
-        pauseBtn.textContent = "⏸ 一時停止";
-        pauseBtn.setAttribute("aria-label", "カウントダウンを一時停止");
+        pauseBtn.textContent = "⏸ Pause";
+        pauseBtn.setAttribute("aria-label", "Pause the countdown");
       }
     });
 
@@ -245,10 +244,9 @@
          ここでは <strong id="count"> の親の <p> を取得して
          段落全体のテキストを書き換えています。 */
       countEl.textContent = "";
-      countEnEl.textContent = "";
       var textEl = countEl.parentElement;
       if (textEl) {
-        textEl.textContent = "下のボタンからTOPへ移動できます";
+        textEl.textContent = "Use the button below to go to the top page.";
       }
     }
   })();
