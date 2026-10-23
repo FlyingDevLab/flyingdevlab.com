@@ -16,6 +16,22 @@ const MOUSE_SPD  = 1.05;
 const SW_EXPAND  = 7;
 const SW_COOL    = 180;
 const DMG_COOL   = 60;
+
+/*
+ * ── レーザー ────────────────────────────────────────────────
+ * iOS アプリから移植。
+ *
+ * 以前はタップした場所にいきなり衝撃波が出ていた。撃った本人と
+ * 爆発のあいだに何の関係もなく、「自分が撃った」感じが薄かった。
+ * プレイヤーからタップ地点へ光線が伸び、その通り道にいる敵を倒し、
+ * 届いた先で衝撃波がはじける形にする。
+ *
+ * 射線を意識する遊びが増える。並んでいる敵はまとめて倒せるし、
+ * 壁ぎわに隠れている敵には当たらない。
+ */
+const LASER_TRAVEL = 6;          // タップ地点まで届くフレーム数（60fps なので 0.1秒）
+const LASER_FADE   = 12;         // 届いてから消えるまでのフレーム数（0.2秒）
+const LASER_HALF_W = T * 0.15;   // 光線の太さの半分。当たり判定にも使う
 const MOVE_STEPS = 4;
 
 /*
@@ -183,6 +199,7 @@ let shockwave      = { active: false, r: 0, cool: 0, cx: 0, cy: 0 };
  * 必然的に迷路を端から端まで歩くことになる。
  */
 let cheeses        = [];
+let lasers         = [];   // 飛んでいる最中のレーザー
 let spawnTimer     = 0;
 /* このステージで出した敵の数。WALL_FOLLOWER_FROM 匹目から巡回型に切り替わる */
 let spawnedThisStage = 0;
@@ -343,6 +360,7 @@ function startStage() {
   ];
   mice      = [];
   particles = [];
+  lasers    = [];
   shockwave = { active: false, r: 0, cool: 0, cx: 0, cy: 0 };
   const { spawnInt } = getDifficulty(score);
   spawnTimer = spawnInt;
@@ -519,29 +537,125 @@ function updateMice() {
 // ────────────────────────────────────────────────────────────────
 // ■ 衝撃波
 // ────────────────────────────────────────────────────────────────
+/**
+ * タップされた場所へレーザーを撃つ。
+ *
+ * 変更: 以前はここで直接ドカンと衝撃波を起こしていたが、
+ * プレイヤーからレーザーを飛ばし、届いた先で衝撃波を起こす形にした。
+ * 爆発そのものは explodeShockwave に分けてある。
+ */
 function fireShockwave(x, y) {
   if (shockwave.cool > 0) return;
+  lasers.push({
+    fromX: player.x, fromY: player.y,   // 撃った瞬間の位置で固定する
+    toX: x, toY: y,
+    tip: 0,        // 先っぽの進み具合（0=根元 → 1=到達）
+    fade: 0,       // 届いたあと、消えるまでの残りフレーム
+    didKill: false // このレーザーで1匹でも倒したか（撃破音を1回だけ鳴らすため）
+  });
+  shockwave.cool = SW_COOL;   // ためは撃った瞬間から数え直す
+  playSound('shot');
+  vibrate(40);
+}
+
+/**
+ * 指定した場所で衝撃波をはじけさせる。近い敵は倒し、外側は吹き飛ばす。
+ * @returns {boolean} 1匹でも倒したか
+ */
+function explodeShockwave(x, y) {
   const swMaxR = getSwMaxR(player.hp);
   const killR  = swMaxR * 0.55;
-  shockwave = { active: true, r: 5, cool: SW_COOL, cx: x, cy: y };
-  // 衝撃波発射：ドン！という爆発音 ＋ 短い振動
+  shockwave = { active: true, r: 5, cool: shockwave.cool, cx: x, cy: y };
+  // 衝撃波：ドン！という爆発音 ＋ 短い振動
   playSound('shockwave');
   vibrate(60);
+  let didKill = false;
   for (let i = mice.length - 1; i >= 0; i--) {
     const m = mice[i];
     const d = Math.hypot(m.x - x, m.y - y);
     if (d > swMaxR) continue;
     if (d < killR) {
       spawnParticles(m.x, m.y);
-      // ネズミ撃破：軽いポップ音（連発するため振動なし）
-      playSound('kill');
       mice.splice(i, 1);
+      didKill = true;
     } else {
       const angle = Math.atan2(m.y - y, m.x - x);
       const force = (1 - d / swMaxR) * 14;
       m.vx = Math.cos(angle) * force;
       m.vy = Math.sin(angle) * force;
       m.kb = 22;
+    }
+  }
+  return didKill;
+}
+
+/**
+ * 点(px,py) から線分(ax,ay)-(bx,by) までの、いちばん近い距離。
+ *
+ * ★ 考え方 ★
+ *   線分の上を 0.0（a側）〜1.0（b側）の割合 t で表し、
+ *   点にいちばん近い t を求める。t が 0 未満や 1 超のときは
+ *   線分の外なので、端（a か b）までの距離になる。
+ */
+function distToSegment(px, py, ax, ay, bx, by) {
+  const abx = bx - ax, aby = by - ay;
+  const len2 = abx * abx + aby * aby;
+  if (len2 === 0) return Math.hypot(px - ax, py - ay);   // 長さ0なら点との距離
+  const t = Math.min(1, Math.max(0, ((px - ax) * abx + (py - ay) * aby) / len2));
+  return Math.hypot(px - (ax + abx * t), py - (ay + aby * t));
+}
+
+/**
+ * 飛んでいるレーザーを1フレームぶん進める。
+ * 通り道にいる敵を倒し、届いたらそこで衝撃波をはじけさせる。
+ */
+function updateLasers() {
+  for (let i = lasers.length - 1; i >= 0; i--) {
+    const L = lasers[i];
+
+    if (L.tip < 1) {
+      // ── 飛んでいる途中 ──
+      const before = L.tip;
+      L.tip = Math.min(1, before + 1 / LASER_TRAVEL);
+
+      if (state === 'playing') {
+        /*
+         * このフレームで先っぽが通った区間（before → tip）だけを調べる。
+         * 根元から先っぽまで全部を毎フレーム調べると、
+         * まだ届いていない先の敵まで倒してしまう。
+         */
+        const dx = L.toX - L.fromX, dy = L.toY - L.fromY;
+        const ax = L.fromX + dx * before, ay = L.fromY + dy * before;
+        const bx = L.fromX + dx * L.tip,  by = L.fromY + dy * L.tip;
+        const hitR = LASER_HALF_W + MOUSE_R;
+
+        for (let k = mice.length - 1; k >= 0; k--) {
+          const m = mice[k];
+          if (distToSegment(m.x, m.y, ax, ay, bx, by) < hitR) {
+            spawnParticles(m.x, m.y);
+            mice.splice(k, 1);
+            L.didKill = true;
+          }
+        }
+
+        // 届いた：その場で衝撃波
+        if (L.tip >= 1 && explodeShockwave(L.toX, L.toY)) L.didKill = true;
+      }
+
+      if (L.tip >= 1) {
+        L.fade = LASER_FADE;
+        /*
+         * 撃破音は、このレーザーで1匹でも倒したときに1回だけ鳴らす。
+         * 倒すたびに鳴らすと、連続した音が互いを打ち消して
+         * 結局1回ぶんしか聞こえない（iOS 版と同じ理由）。
+         */
+        if (L.didKill) playSound('kill');
+      }
+
+    } else {
+      // ── 届いたあと、だんだん消える ──
+      L.fade--;
+      if (L.fade <= 0) lasers.splice(i, 1);
     }
   }
 }
@@ -790,6 +904,42 @@ function drawMice() {
   }
 }
 
+/*
+ * 飛んでいるレーザーを描く。
+ *
+ * 先っぽ（tip）までの線を引くだけだが、2本重ねている。
+ *   太く半透明の線 … 光のにじみ
+ *   細く明るい線   … 芯
+ * canvas には発光の機能がないので、重ね方で「光っている」ように見せる。
+ */
+function drawLasers() {
+  for (const L of lasers) {
+    // 届いたあとは fade に合わせて薄くする
+    const alpha = L.tip < 1 ? 1 : Math.max(0, L.fade / LASER_FADE);
+    if (alpha <= 0) continue;
+
+    const ex = L.fromX + (L.toX - L.fromX) * L.tip;
+    const ey = L.fromY + (L.toY - L.fromY) * L.tip;
+
+    ctx.save();
+    ctx.lineCap = 'round';
+
+    // にじみ
+    ctx.globalAlpha = alpha * 0.35;
+    ctx.strokeStyle = '#FFD54F';
+    ctx.lineWidth = LASER_HALF_W * 2.6;
+    ctx.beginPath(); ctx.moveTo(L.fromX, L.fromY); ctx.lineTo(ex, ey); ctx.stroke();
+
+    // 芯
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = '#FFF9C4';
+    ctx.lineWidth = LASER_HALF_W;
+    ctx.beginPath(); ctx.moveTo(L.fromX, L.fromY); ctx.lineTo(ex, ey); ctx.stroke();
+
+    ctx.restore();
+  }
+}
+
 function drawShockwave() {
   if (!shockwave.active) return;
   const { r, cx, cy } = shockwave;
@@ -916,6 +1066,7 @@ function loop() {
     const { spawnInt } = getDifficulty(score);
     if (--spawnTimer <= 0) { spawnMouse(); spawnTimer = spawnInt; }
     updateMice();
+    updateLasers();     // 敵を倒しうるので、敵の更新のあとに置く
     updateShockwave();
     updateParticles();
     // チーズの回収判定。触れたものから順に消えていく
@@ -945,6 +1096,7 @@ function loop() {
   }
 
   drawCheeses();
+  drawLasers();
   drawShockwave();
   drawParticles();
   drawMice();
@@ -1028,6 +1180,18 @@ function playSound(type) {
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.start(now);
         osc.stop(now + 0.3);
+
+      } else if (type === 'shot') {
+        /* レーザー発射：高いところから一瞬で落ちる短い音。
+           爆発音より軽くして、発射と着弾を聞き分けられるようにする */
+        const o = ctx2.createOscillator(), g = ctx2.createGain();
+        o.type = 'square';
+        o.frequency.setValueAtTime(1400, t0);
+        o.frequency.exponentialRampToValueAtTime(420, t0 + 0.09);
+        g.gain.setValueAtTime(0.12, t0);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.1);
+        o.connect(g); g.connect(ctx2.destination);
+        o.start(t0); o.stop(t0 + 0.11);
 
       } else if (type === 'pickup') {
         /* チーズ回収：短く高い2音。拾えたことが一瞬で分かる軽さにする */
