@@ -12,6 +12,20 @@ const WRONG_PENALTY   = 1;    // 不正解ペナルティ（秒）
 const TILE_COUNT      = 4;    // 選択肢タイル数
 const COMBO_THRESHOLD = 5;    // タイムボーナス発動コンボ数
 const COMBO_EMOJIS    = ['🔥','⚡','💥','🌟','✨','🎯','💫','🚀','🎉','👏'];
+const GAUGE_WARN_SEC  = 8;    // 残りこの秒数以下でゲージを警告色にする
+
+/*
+ * 1フレームで減らせる時間の上限（秒）。
+ *
+ * requestAnimationFrame は、タブが非表示になると呼ばれなくなる。
+ * そして表示に戻った最初のフレームには、離れていた時間をまるごと含んだ
+ * timestamp が渡ってくる。上限を設けないと、その差分がそのまま
+ * 残り時間から引かれ、30秒離れて戻った瞬間にゲームオーバーになる。
+ *
+ * 0.1秒は、60fps（約0.017秒）に対して十分な余裕がありつつ、
+ * 数フレーム落ちた程度なら正しく追従できる値。
+ */
+const MAX_DELTA = 0.1;
 
 
 // ── ハイスコアの保存・読み込み ───────────────────────────────────
@@ -48,7 +62,16 @@ const COMBO_EMOJIS    = ['🔥','⚡','💥','🌟','✨','🎯','💫','🚀','
  */
 function loadHighScore() {
   try {
-    return parseInt(localStorage.getItem('make10_hi') || '0', 10);
+    /*
+     * 変更: parseInt の結果をそのまま返していたが、保存値が数値でない場合に
+     * NaN が返っていた。NaN は比較が常に false になるため
+     * （score > NaN は必ず false）、endGame の新記録判定が通らなくなり、
+     * 一度壊れると二度とハイスコアを更新できない状態に陥る。
+     * しかも表示は空のままなので、プレイヤーは不具合に気づけない。
+     * 数値として妥当なときだけ採用する。
+     */
+    const n = parseInt(localStorage.getItem('make10_hi'), 10);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
   } catch (e) {
     return 0;  // 読めない環境ではハイスコアなしとして扱う
   }
@@ -84,7 +107,10 @@ let timeLeft      = TOTAL_TIME;
 let currentNum    = 0;        // 現在の問題の数字
 let nextNum       = 0;        // 次の問題の数字（プレビュー表示用）
 let correctAnswer = 0;        // 現在の正解（= 10 - currentNum）
-let timerInterval = null;     // requestAnimationFrame の戻り値（キャンセル用）
+let rafId         = null;     // requestAnimationFrame の ID（キャンセル用）
+let nextStepTimer = null;     // タップ後の遅延処理の ID（ゲーム終了時に取り消す）
+let gaugeIsWarn   = null;     // 直前のゲージ警告状態（色の書き換えを減らすため）
+let gaugeLastSec  = null;     // 直前に通知した残り秒数（aria の更新を減らすため）
 let isPlaying     = false;    // ゲーム進行中フラグ
 let isTapping     = false;    // 連打防止フラグ（タップ処理中は true）
 let lastTimestamp = 0;        // 前フレームのタイムスタンプ（delta 計算用）
@@ -144,6 +170,14 @@ function startGame() {
   isPlaying = true;
   isTapping = false;
 
+  // 前回のゲームの遅延処理が残っていれば取り消す。
+  // 残したままだと、新しいゲームの最中に発火して問題が差し替わる。
+  if (nextStepTimer) { clearTimeout(nextStepTimer); nextStepTimer = null; }
+
+  // ゲージの記憶をリセットし、色と aria を確実に初期状態から書き直させる
+  gaugeIsWarn  = null;
+  gaugeLastSec = null;
+
   $('scoreValue').textContent   = '0';
   $('comboDisplay').textContent = '';
   updateGauge();
@@ -196,13 +230,25 @@ function generateQuestion() {
   // タイルを DOM に追加する。出現アニメーションの delay をずらして波状に表示する
   const grid = $('tilesGrid');
   grid.innerHTML = '';
+  /*
+   * 変更: div + role="button" から、本物の <button> 要素にした。
+   *
+   * 以前は role="button" だけが付いていて tabindex が無く、
+   * キーボードで focus できなかった。keydown も拾っていないため
+   * Enter / Space でも反応しない。ゲーム画面には他に focus できる要素が
+   * 無いので、キーボードだけの利用者はこのゲームを一切遊べなかった。
+   * 支援技術には「ボタン」と案内されるのに押せない、という状態だった。
+   *
+   * <button> にすれば、focus も Enter / Space も標準で付いてくる。
+   * role と aria-label も不要になる（要素の意味と中の数字で伝わる）。
+   * 自前で tabindex と keydown を足すより、壊れにくい。
+   */
   answers.forEach((val, i) => {
-    const tile = document.createElement('div');
+    const tile = document.createElement('button');
+    tile.type = 'button';   // フォーム内に置かれても submit しないようにする
     tile.className = 'tile appear';
     tile.style.animationDelay = `${i * 0.05}s`;
     tile.textContent = val;
-    tile.setAttribute('role', 'button');
-    tile.setAttribute('aria-label', `${val}`);
     tile.addEventListener('click', () => handleTap(val, tile));
     grid.appendChild(tile);
   });
@@ -243,8 +289,10 @@ function handleTap(value, tileEl) {
       spawnComboEmoji();
     }
 
-    // 正解アニメーションを見せてから次の問題を表示し、タップロックを解除する
-    setTimeout(() => {
+    // 正解アニメーションを見せてから次の問題を表示し、タップロックを解除する。
+    // ID を保持しておき、途中でゲームが終わった場合は endGame 側で取り消す。
+    nextStepTimer = setTimeout(() => {
+      nextStepTimer = null;
       currentNum = nextNum;
       nextNum = randomNumExcluding(1, 9, currentNum);
       generateQuestion();
@@ -266,7 +314,8 @@ function handleTap(value, tileEl) {
     if (timeLeft <= 0) { endGame(); return; }
 
     // 誤答アニメーションが落ち着いてからタップロックを解除する
-    setTimeout(() => {
+    nextStepTimer = setTimeout(() => {
+      nextStepTimer = null;
       isTapping = false;
     }, 300);
   }
@@ -327,7 +376,7 @@ function spawnComboEmoji() {
  */
 function startTimer() {
   lastTimestamp = performance.now();
-  timerInterval = requestAnimationFrame(timerTick);
+  rafId = requestAnimationFrame(timerTick);
 }
 
 /**
@@ -337,14 +386,17 @@ function startTimer() {
 function timerTick(timestamp) {
   if (!isPlaying) return;
 
-  const delta   = (timestamp - lastTimestamp) / 1000;
+  // 変更: 差分に上限を設けた。
+  // 非表示だったタブに戻ると、離れていた時間がまるごと差分として渡ってくる。
+  // 上限が無いと、35秒離れて戻った瞬間に残り0秒・スコア0でゲームオーバーになる。
+  const delta   = Math.min((timestamp - lastTimestamp) / 1000, MAX_DELTA);
   lastTimestamp = timestamp;
   timeLeft      = Math.max(0, timeLeft - delta);
   updateGauge();
 
   if (timeLeft <= 0) { endGame(); return; }
 
-  timerInterval = requestAnimationFrame(timerTick);
+  rafId = requestAnimationFrame(timerTick);
 }
 
 /**
@@ -353,13 +405,42 @@ function timerTick(timestamp) {
  */
 function updateGauge() {
   const bar = $('gaugeBar');
-  const pct = (timeLeft / TOTAL_TIME) * 100;
-  bar.style.width           = `${pct}%`;
-  bar.style.backgroundColor = timeLeft <= 8 ? 'var(--gauge-warn)' : 'var(--gauge-full)';
 
-  // aria-valuenow を更新してスクリーンリーダーに残り時間を通知する
-  const wrapper = $('gaugeWrapper');
-  if (wrapper) wrapper.setAttribute('aria-valuenow', Math.round(timeLeft));
+  /*
+   * 変更: width の書き換えから transform: scaleX() に変えた。
+   *
+   * width を変えるとブラウザはレイアウトを計算し直す。
+   * この関数は requestAnimationFrame から毎フレーム（約60回/秒）呼ばれるため、
+   * そのたびにレイアウトが走っていた。
+   * transform は合成だけで済むので、レイアウトを発生させない。
+   *
+   * あわせて CSS 側の transition も外した。
+   * 16msごとに値が変わるのに 0.08秒の遷移を掛けていたため、
+   * 遷移が終わる前に次の値が来て、滑らかにするつもりが引っかかっていた。
+   * 毎フレーム更新しているのだから、遷移は不要である。
+   *
+   * なお 404 ページの進捗バーは元から scaleX を使っている。
+   * サイト内で実装を揃えた形になる。
+   */
+  bar.style.transform = `scaleX(${Math.max(0, timeLeft / TOTAL_TIME)})`;
+
+  /*
+   * 色と aria は「変わったときだけ」書き換える。
+   * 毎フレーム同じ値を代入しても結果は同じだが、無駄な処理になる。
+   * aria-valuenow は毎フレーム書き換えると支援技術に過剰な通知が飛ぶ。
+   */
+  const warn = timeLeft <= GAUGE_WARN_SEC;
+  if (warn !== gaugeIsWarn) {
+    gaugeIsWarn = warn;
+    bar.style.backgroundColor = warn ? 'var(--gauge-warn)' : 'var(--gauge-full)';
+  }
+
+  const sec = Math.round(timeLeft);
+  if (sec !== gaugeLastSec) {
+    gaugeLastSec = sec;
+    const wrapper = $('gaugeWrapper');
+    if (wrapper) wrapper.setAttribute('aria-valuenow', sec);
+  }
 }
 
 
@@ -374,7 +455,11 @@ function updateGauge() {
 function endGame() {
   isPlaying = false;
   isTapping = false;
-  if (timerInterval) cancelAnimationFrame(timerInterval);
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+
+  // 変更: タップ後の遅延処理が残っていると、ゲーム終了後に発火して
+  // generateQuestion() が走り、見えていない画面を書き換えてしまう。取り消す。
+  if (nextStepTimer) { clearTimeout(nextStepTimer); nextStepTimer = null; }
 
   // 新記録の場合のみ localStorage に保存する
   isNewRecord = score > highScore;
@@ -502,8 +587,32 @@ document.getElementById('btn-retry').addEventListener('click', startGame);
 /** タイトルへ戻るボタン：タイマーを止めてトップ画面を表示 */
 document.getElementById('btn-top').addEventListener('click', () => {
   isPlaying = false;
-  if (timerInterval) cancelAnimationFrame(timerInterval);
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  if (nextStepTimer) { clearTimeout(nextStepTimer); nextStepTimer = null; }
   showScreen('top');
+});
+
+
+// ================================================================
+// タブの表示・非表示への対応
+// ================================================================
+
+/*
+ * タブが表示に戻ったとき、基準時刻を今に引き直す。
+ *
+ * timerTick の delta には MAX_DELTA で上限を掛けてあるので、
+ * これが無くてもゲームオーバーにはならない。
+ * ただし上限ぶん（0.1秒）は引かれてしまうため、ここで基準を合わせ直して
+ * 「離れていた時間は一切減らない」状態にしている。
+ *
+ * 上限と合わせて二重の守りにしているのは、役割が違うからである。
+ *   MAX_DELTA         … 原因を問わず、1フレームの減りを抑える安全弁
+ *   visibilitychange  … 離席という既知の原因に対する、意図の明示
+ */
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && isPlaying) {
+    lastTimestamp = performance.now();
+  }
 });
 
 

@@ -90,7 +90,10 @@
       <!-- ── ゲーム画面：実際のゲームプレイ ── -->
       <section class="screen" id="screen-game" aria-label="Game Screen / ゲームプレイ画面">
 
-        <!-- ヘッダー行：ホームボタン・スコア・コンボ表示 -->
+        <!-- ヘッダー行：スコアとコンボの表示。
+             以前はここに左上のホームボタンがあったが、こども向け領域を
+             袋小路にする方針で削除した。戻り導線はフッターの /kids/ のみ。
+             コメントだけ「ホームボタン」と書かれたまま残っていたので直した。 -->
         <div class="play-header">
           <div class="score-display" aria-label="Score">
             SCORE <span id="scoreValue" aria-live="polite">0</span>
@@ -113,18 +116,26 @@
           aria-valuenow="30"
           id="gaugeWrapper"
         >
-          <div class="gauge-bar" id="gaugeBar" style="width:100%;"></div>
+          <!-- 幅と初期状態は style.css 側で指定している。
+               JS は transform: scaleX() を書き換えて残り時間を表す。 -->
+          <div class="gauge-bar" id="gaugeBar"></div>
         </div>
 
         <!-- 問題エリア：現在の数字・ヒント・次の数字プレビューを表示する -->
         <div class="question-area" id="questionArea" aria-label="Question">
           <div class="question-card">
             <div class="question-label">MAKE 10!</div>
+            <!-- 変更: aria-live を assertive から polite にした。
+                 assertive は読み上げ中の内容に割り込む。正解するたびに
+                 数字が変わるこのゲームでは、スコアやコンボの読み上げを
+                 毎回中断してしまい、かえって何も聞き取れなくなる。
+                 polite なら、今の読み上げが終わってから伝えられる。
+
+                 aria-label は中の数字と同じ内容で重複していたため外した。 -->
             <div
               class="question-number"
               id="questionNumber"
-              aria-live="assertive"
-              aria-label="Current number"
+              aria-live="polite"
             >5</div>
             <div class="question-hint">
               <span id="questionPlus" aria-hidden="true">5</span> + ? = 10
