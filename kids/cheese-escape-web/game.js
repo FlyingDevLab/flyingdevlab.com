@@ -14,7 +14,23 @@ const CHEESE_R   = T * 0.38;   // 集めるチーズ1個の大きさ
 const MOUSE_R    = T * 0.33;
 const MOUSE_SPD  = 1.05;
 const SW_EXPAND  = 7;
-const SW_COOL    = 180;
+const SW_CHARGE  = 180;   // 1発たまるまでのフレーム数（60fps なので3秒）
+
+/*
+ * ためておける衝撃波の数は、残りライフで変わる。
+ *
+ * ★ なぜ追い詰められるほど強くするのか ★
+ *   ライフが減るほど不利になるだけだと、一度崩れたら立て直せない。
+ *   「追い詰められているときほど強く撃てる」という逆転の目を残すと、
+ *   最後まであきらめずに済む。
+ *   衝撃波の届く距離（SW_RANGE_BY_HP）が HP で変わるのも同じ考え方で、
+ *   こちらは iOS 版の swMaxStockByHp を移植したもの。
+ */
+function swMaxStockByHp(hp) {
+  if (hp >= 3) return 1;
+  if (hp === 2) return 2;
+  return 3;
+}
 const DMG_COOL   = 60;
 
 /*
@@ -185,7 +201,13 @@ let grid           = [];
 let player         = { x: 0, y: 0, hp: 3, flash: 0, dmgCool: 0, angle: 0 };
 let mice           = [];
 let particles      = [];
-let shockwave      = { active: false, r: 0, cool: 0, cx: 0, cy: 0 };
+/*
+ * 広がっている最中の衝撃波。続けて撃つと複数が同時に広がりうるので配列。
+ * （以前は1つしか持てず、2発目を撃つと1発目が消えていた）
+ */
+let shockwaves     = [];
+let swStock        = 0;   // いま撃てる数
+let swCharge       = 0;   // 次の1発がたまるまでの進み具合（0〜SW_CHARGE）
 /*
  * 集める対象のチーズ3個。{ x, y, collected } の配列。
  *
@@ -361,7 +383,10 @@ function startStage() {
   mice      = [];
   particles = [];
   lasers    = [];
-  shockwave = { active: false, r: 0, cool: 0, cx: 0, cy: 0 };
+  /* ステージが始まったらすぐ撃てるよう、ためられるだけためた状態にする */
+  shockwaves = [];
+  swStock    = swMaxStockByHp(prevHp);
+  swCharge   = 0;
   const { spawnInt } = getDifficulty(score);
   spawnTimer = spawnInt;
   spawnedThisStage = 0;   // ステージが変わったら敵の種類も最初から数え直す
@@ -405,6 +430,7 @@ function spawnMouse() {
       // 巡回型が使う情報。targetX が -1 のあいだは「行き先が未定」を表す
       targetX: -1, targetY: -1,
       dir: 0,            // 0=右 1=下 2=左 3=上
+      spotted: 0,        // 変身した直後の閃光（フレーム数）
       touchesWall: false // まだ手を壁につけていない
     });
     break;
@@ -423,6 +449,25 @@ function nextMouseKind() {
 }
 
 /** タイル(x,y)が通路かどうか。盤の外は壁として扱う */
+/**
+ * (ax,ay) から (bx,by) まで、壁にさえぎられずに見通せるか。
+ *
+ * 線の上を細かく刻んで、どこか1点でも壁の上に乗ったら「見えない」と判定する。
+ * 刻み幅はタイルの 1/4。これより粗いと、斜めに走る線が壁の角をすり抜けて、
+ * 見えないはずの相手が見えたことになってしまう。
+ */
+function hasLineOfSight(ax, ay, bx, by) {
+  const dist  = Math.hypot(bx - ax, by - ay);
+  const steps = Math.max(1, Math.ceil(dist / (T * 0.25)));
+  for (let i = 1; i < steps; i++) {
+    const t = i / steps;
+    const x = ax + (bx - ax) * t;
+    const y = ay + (by - ay) * t;
+    if (!isPath(Math.floor(x / T), Math.floor(y / T))) return false;
+  }
+  return true;
+}
+
 function isPath(x, y) {
   return x >= 0 && y >= 0 && x < GW && y < GW && grid[y][x] === 1;
 }
@@ -510,8 +555,25 @@ function updateMice() {
       m.targetX = -1;
       m.touchesWall = false;
     } else if (m.kind !== 'chaser') {
-      // 赤・青：壁に沿って巡回する。プレイヤーは追わない
-      updateWallFollower(m);
+      /*
+       * 赤・青：壁に沿って巡回する。プレイヤーは追わない。
+       *
+       * ただし、壁にさえぎられない一直線でプレイヤーを捉えたら、
+       * その場で灰色（追跡型）に変身する。一度見つかったら元には戻らない。
+       *
+       * ★ なぜ変身させるのか ★
+       *   巡回型は追ってこないぶん、プレイヤーは油断できてしまう。
+       *   「見通しの利く通路に不用意に出ると追われる」という規則を足すと、
+       *   どの道を通るかそのものが駆け引きになる。
+       *   曲がり角から様子をうかがう、という遊び方が生まれる。
+       */
+      if (hasLineOfSight(m.x, m.y, player.x, player.y)) {
+        m.kind    = 'chaser';
+        m.spotted = 14;        // 変身の閃光を出すフレーム数
+        playSound('spot');
+      } else {
+        updateWallFollower(m);
+      }
     } else {
       const dx = player.x - m.x, dy = player.y - m.y;
       const jitter = (Math.random() - 0.5) * 1.0;
@@ -522,6 +584,9 @@ function updateMice() {
       m.x = moved.x; m.y = moved.y;
       m.vx = vx; m.vy = vy;
     }
+
+    if (m.spotted > 0) m.spotted--;   // 変身の閃光
+
     if (Math.hypot(m.x - player.x, m.y - player.y) < PLAYER_R + MOUSE_R && player.dmgCool === 0) {
       player.hp--;
       player.flash   = 30;
@@ -545,7 +610,7 @@ function updateMice() {
  * 爆発そのものは explodeShockwave に分けてある。
  */
 function fireShockwave(x, y) {
-  if (shockwave.cool > 0) return;
+  if (swStock <= 0) return;   // たまっていなければ撃てない
   lasers.push({
     fromX: player.x, fromY: player.y,   // 撃った瞬間の位置で固定する
     toX: x, toY: y,
@@ -553,7 +618,7 @@ function fireShockwave(x, y) {
     fade: 0,       // 届いたあと、消えるまでの残りフレーム
     didKill: false // このレーザーで1匹でも倒したか（撃破音を1回だけ鳴らすため）
   });
-  shockwave.cool = SW_COOL;   // ためは撃った瞬間から数え直す
+  swStock--;   // 1発消費する
   playSound('shot');
   vibrate(40);
 }
@@ -565,7 +630,7 @@ function fireShockwave(x, y) {
 function explodeShockwave(x, y) {
   const swMaxR = getSwMaxR(player.hp);
   const killR  = swMaxR * 0.55;
-  shockwave = { active: true, r: 5, cool: shockwave.cool, cx: x, cy: y };
+  shockwaves.push({ r: 5, cx: x, cy: y });
   // 衝撃波：ドン！という爆発音 ＋ 短い振動
   playSound('shockwave');
   vibrate(60);
@@ -661,10 +726,21 @@ function updateLasers() {
 }
 
 function updateShockwave() {
-  if (shockwave.cool > 0) shockwave.cool--;
-  if (!shockwave.active) return;
-  shockwave.r += SW_EXPAND;
-  if (shockwave.r >= getSwMaxR(player.hp)) shockwave.active = false;
+  // ためる：ためられる数に届いていなければ、ためていく
+  const maxStock = swMaxStockByHp(player.hp);
+  if (swStock < maxStock) {
+    swCharge++;
+    if (swCharge >= SW_CHARGE) { swStock++; swCharge = 0; }
+  } else {
+    swCharge = 0;
+  }
+
+  // 広がっている衝撃波を進める。最大まで広がったものから消す
+  const maxR = getSwMaxR(player.hp);
+  for (let i = shockwaves.length - 1; i >= 0; i--) {
+    shockwaves[i].r += SW_EXPAND;
+    if (shockwaves[i].r >= maxR) shockwaves.splice(i, 1);
+  }
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -816,15 +892,17 @@ function drawCheeses() {
  *   HUD にも HP は出ているが、操作している手元から目を離さずに
  *   分かることには意味がある。白 → 薄桃 → 桃 と濃くしていく。
  */
-const PLAYER_COLORS = [
-  { body: '#FFCDD2', line: '#C62828', head: '#FFE5E5' },  // HP1：桃
-  { body: '#FFEBEE', line: '#AD5555', head: '#FFF5F5' },  // HP2：薄桃
-  { body: '#FFFFFF', line: '#8D6E63', head: '#FAFAFA' },  // HP3：白
-];
+/*
+ * 変更: HP に応じて体の色を変えるのをやめた。
+ * 残りライフは画面上部の ❤️ / 💔 で示している。
+ * 同じことを2か所で表すと、どちらを見ればよいか迷う。
+ * プレイヤーは常に白ネズミとして描く。
+ */
+const PLAYER_COLOR = { body: '#FFFFFF', line: '#8D6E63', head: '#FAFAFA' };
 
 function drawPlayer() {
-  const { x, y, hp, flash, angle } = player;
-  const col = PLAYER_COLORS[Math.max(0, Math.min(2, hp - 1))];
+  const { x, y, flash, angle } = player;
+  const col = PLAYER_COLOR;
   const r = PLAYER_R;
 
   ctx.save();
@@ -885,6 +963,17 @@ function drawMice() {
       ? Math.atan2(m.vy, m.vx)
       : Math.atan2(player.y - y, player.x - x);
     ctx.save();
+
+    // 変身した直後は白い輪を広げて「見つかった」ことを伝える
+    if (m.spotted > 0) {
+      const t = 1 - m.spotted / 14;
+      ctx.beginPath();
+      ctx.arc(x, y, r * (1.2 + t * 2.2), 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,255,255,${(1 - t) * 0.9})`;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+
     ctx.translate(x, y); ctx.rotate(angle);
     ctx.beginPath(); ctx.ellipse(0, 0, r * 1.4, r * 0.9, 0, 0, Math.PI * 2);
     ctx.fillStyle = col.body; ctx.strokeStyle = col.line; ctx.lineWidth = 1;
@@ -940,21 +1029,22 @@ function drawLasers() {
   }
 }
 
+/* 広がっている衝撃波をすべて描く（同時に複数ありうる） */
 function drawShockwave() {
-  if (!shockwave.active) return;
-  const { r, cx, cy } = shockwave;
-  const swMaxR   = getSwMaxR(player.hp);
-  const progress = r / swMaxR;
-  const alpha    = (1 - progress) * 0.6;
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.strokeStyle = `rgba(255,235,59,${alpha})`;
-  ctx.lineWidth   = (1 - progress) * 10 + 1;
-  ctx.stroke();
-  const grd = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r);
-  grd.addColorStop(0, `rgba(255,255,255,${alpha * 0.35})`);
-  grd.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.fillStyle = grd; ctx.fill();
+  const swMaxR = getSwMaxR(player.hp);
+  for (const { r, cx, cy } of shockwaves) {
+    const progress = r / swMaxR;
+    const alpha    = (1 - progress) * 0.6;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(255,235,59,${alpha})`;
+    ctx.lineWidth   = (1 - progress) * 10 + 1;
+    ctx.stroke();
+    const grd = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r);
+    grd.addColorStop(0, `rgba(255,255,255,${alpha * 0.35})`);
+    grd.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = grd; ctx.fill();
+  }
 }
 
 function drawParticles() {
@@ -966,71 +1056,65 @@ function drawParticles() {
 }
 
 // ─── HUD ─────────────────────────────────────────────────────
-function drawHUD() {
-  // 左上：HP ▲ × 3
-  const iconSize = 12, iconY = 20;
-  for (let i = 0; i < 3; i++) {
-    const cx = 18 + i * (iconSize * 2 + 5);
-    ctx.beginPath();
-    ctx.moveTo(cx, iconY - iconSize);
-    ctx.lineTo(cx + iconSize, iconY + iconSize * 0.65);
-    ctx.lineTo(cx - iconSize, iconY + iconSize * 0.65);
-    ctx.closePath();
-    ctx.fillStyle   = i < player.hp ? '#FFD600' : '#444';
-    ctx.strokeStyle = '#795548'; ctx.lineWidth = 1.2;
-    ctx.fill(); ctx.stroke();
+/*
+ * 画面上下の帯を更新する。
+ *
+ * 変更: 以前は canvas の中に ctx.fillText で描いていた（drawHUD）。
+ * iOS アプリと同じく盤面の外の HTML に移した。理由は style.css 側に書いた。
+ *
+ * ここは毎フレーム呼ばれるので、値が変わったときだけ DOM を書き換える。
+ * 同じ文字列を毎フレーム代入しても結果は同じだが、無駄な処理になる。
+ */
+let hudCache = { lives: null, score: null, stock: null, ready: null, gauge: null };
+
+function updateHud() {
+  // ライフ：残りは ❤️、失ったぶんは 💔
+  const lives = '❤️'.repeat(Math.max(0, player.hp)) + '💔'.repeat(Math.max(0, 3 - player.hp));
+  if (lives !== hudCache.lives) {
+    hudCache.lives = lives;
+    const el = document.getElementById('mazeLives');
+    if (el) {
+      el.textContent = lives;
+      el.setAttribute('aria-label', `${Math.max(0, player.hp)} / 3`);
+    }
   }
 
-  /*
-   * 左上：このステージのチーズ回収状況と、いま何ステージ目か。
-   *
-   * 変更: 以前は「🧀 ×スコア」で、ゴールへ運んだチーズの数を表していた。
-   * 集める方式に変わったので、同じ表記のままだと
-   * 「いま何個持っているのか」と読み違える。
-   * 残りが一目で分かる 2/3 の形にした。
-   */
-  const got = cheeses.filter(c => c.collected).length;
-  ctx.font = `bold ${T * 0.62}px sans-serif`;
-  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  const hudText = `🧀 ${got}/${cheeses.length}`;
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.fillText(hudText, 89, iconY + 1);
-  ctx.fillStyle = '#FFD600';
-  ctx.fillText(hudText, 88, iconY);
+  // スコア（集めたチーズの数 ＝ クリアしたステージ数）
+  const sc = `🧀 × ${score}`;
+  if (sc !== hudCache.score) {
+    hudCache.score = sc;
+    const el = document.getElementById('mazeScore');
+    if (el) el.textContent = sc;
+  }
 
-  // その右に、いま何ステージ目か
-  const stageText = `STAGE ${score + 1}`;
-  ctx.font = `bold ${T * 0.5}px sans-serif`;
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.fillText(stageText, 186, iconY + 1);
-  ctx.fillStyle = '#B0BEC5';
-  ctx.fillText(stageText, 185, iconY);
+  // 下の帯：撃てる数と、次の1発のチャージ具合
+  const maxStock = swMaxStockByHp(player.hp);
+  const ready    = swStock > 0;
+  const stock    = '💥'.repeat(Math.max(1, swStock));   // 0発のときも薄く1つ出す
+  const progress = swStock >= maxStock ? 1 : swCharge / SW_CHARGE;
 
-  // 右上：衝撃波チャージバー
-  const barW = 90, barH = 9;
-  const bx = BASE - barW - 14, by = 15;
-  const ready = shockwave.cool === 0;
-  const fill  = ready ? 1 : 1 - shockwave.cool / SW_COOL;
-  ctx.fillStyle = '#2a2a2a';
-  ctx.beginPath(); ctx.roundRect(bx, by, barW, barH, 4); ctx.fill();
-  ctx.fillStyle = ready ? '#FFEB3B' : '#FFA726';
-  if (fill > 0) { ctx.beginPath(); ctx.roundRect(bx, by, barW * fill, barH, 4); ctx.fill(); }
+  if (stock !== hudCache.stock) {
+    hudCache.stock = stock;
+    const el = document.getElementById('mazeBlastStock');
+    if (el) el.textContent = stock;
+  }
+  if (ready !== hudCache.ready) {
+    hudCache.ready = ready;
+    const bar = document.querySelector('.maze-bar--bottom');
+    if (bar) bar.classList.toggle('is-ready', ready);
+    const label = document.getElementById('mazeBlastLabel');
+    if (label) label.textContent = ready ? 'TAP TO BLAST!' : 'Charging…';
+  }
 
-  // バーラベル（英語のみ。スペースの都合上）
-  const swMaxR  = getSwMaxR(player.hp);
-  const swLabel = swMaxR === T * 8 ? '💥💥💥' : swMaxR === T * 6.5 ? '💥💥' : '💥';
-  ctx.font = 'bold 9px sans-serif';
-  ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
-  ctx.fillStyle = ready ? '#FFF' : '#AAA';
-  ctx.fillText(ready ? `BLAST ${swLabel}` : 'Charging…', bx - 4, by + barH + 1);
-
-  // 右下：ハイスコア
-  ctx.font = `bold ${T * 0.52}px sans-serif`;
-  ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.fillText(`HI 🧀×${highScore}`, BASE - 13, BASE - 11);
-  ctx.fillStyle = '#FFD600';
-  ctx.fillText(`HI 🧀×${highScore}`, BASE - 14, BASE - 12);
+  // ゲージは 1% 刻みでだけ書き換える（毎フレームの微差は目に見えない）
+  const pct = Math.round(progress * 100);
+  if (pct !== hudCache.gauge) {
+    hudCache.gauge = pct;
+    const fill = document.getElementById('mazeGaugeFill');
+    if (fill) fill.style.transform = `scaleX(${progress})`;
+    const g = document.getElementById('mazeGauge');
+    if (g) g.setAttribute('aria-valuenow', pct);
+  }
 }
 
 // ─── ゴール到達演出 ───────────────────────────────────────────
@@ -1102,8 +1186,8 @@ function loop() {
   drawMice();
   drawPlayer();
 
-  if (state === 'playing')   drawHUD();
-  if (state === 'delivered') { drawHUD(); drawDelivered(); }
+  if (state === 'playing')   updateHud();
+  if (state === 'delivered') { updateHud(); drawDelivered(); }
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1180,6 +1264,17 @@ function playSound(type) {
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.start(now);
         osc.stop(now + 0.3);
+
+      } else if (type === 'spot') {
+        /* 見つかった：短く鋭い2音を上げる。「気づかれた」緊張を伝える */
+        const o = ctx2.createOscillator(), g = ctx2.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(520, t0);
+        o.frequency.setValueAtTime(780, t0 + 0.06);
+        g.gain.setValueAtTime(0.16, t0);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.18);
+        o.connect(g); g.connect(ctx2.destination);
+        o.start(t0); o.stop(t0 + 0.19);
 
       } else if (type === 'shot') {
         /* レーザー発射：高いところから一瞬で落ちる短い音。
