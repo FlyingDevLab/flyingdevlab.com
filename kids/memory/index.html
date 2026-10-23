@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>Animal Match / どうぶつめくり – Memory Card Game</title>
+  <meta name="description" content="Flip the cards and find the pairs. 12 animals, no ads, no sign-up. カードをめくって同じどうぶつを見つけよう。12組の神経衰弱。広告なし・登録なし・外部送信なし。">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="Animal Match / どうぶつめくり">
+  <meta property="og:description" content="Flip the cards and find the pairs. カードをめくって同じどうぶつを見つけよう。">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/memory/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="Animal Match / どうぶつめくり">
+  <meta name="twitter:description" content="Flip the cards and find the pairs. / 同じどうぶつを見つけよう。">
+
+  <!-- ===== フォント =====
+       他のゲームと同じ方針。Google Fonts への外部リンクは張らず、
+       Nunito を style.css の @font-face から /fonts/ の woff2 として
+       自己ホストで読み込む。/kids* の CSP は font-src 'self' しか
+       許可していないため、外部から読もうとしても届かない。 -->
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== ヘッダー：全画面共通のタイトルバー ===== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <h1 class="site-title">
+        <span aria-hidden="true">🐘</span> ANIMAL<span class="title-accent">MATCH</span>
+      </h1>
+      <p class="site-tagline">FIND THE PAIRS&ensp;/&ensp;<span lang="ja">おなじ どうぶつを さがそう</span></p>
+    </div>
+  </header>
+
+  <main id="main-content" role="main">
+    <div class="game-container">
+
+      <!-- ── タイトル画面 ── -->
+      <section class="screen active" id="screen-top" aria-label="Title Screen / タイトル画面">
+        <div class="glass-card">
+          <h2 class="rule-heading">How to Play&ensp;/&ensp;<span lang="ja">あそびかた</span></h2>
+          <p class="title-rule">
+            Flip two cards. If they match, they stay!<br>
+            <span class="tip-ja" lang="ja">カードを2まいめくって、おなじ どうぶつを さがそう！</span>
+          </p>
+          <p class="title-note">
+            <span aria-hidden="true">🐾</span> 12 pairs&ensp;/&ensp;<span lang="ja">12組</span>
+          </p>
+          <button class="btn btn-primary" id="btn-start" aria-label="Start the game">
+            <span aria-hidden="true">▶</span> START&ensp;/&ensp;<span lang="ja">スタート</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ── ゲーム画面 ── -->
+      <section class="screen" id="screen-game" aria-label="Game Screen / ゲーム画面">
+
+        <!-- 上の帯：そろった組数とめくった回数 -->
+        <div class="memory-bar">
+          <div class="memory-pairs" id="memoryPairs" role="status"
+               aria-label="Pairs found / そろった組">🐾 0 / 12</div>
+          <div class="memory-flips" id="memoryFlips"
+               aria-label="Flips / めくった回数">0</div>
+        </div>
+
+        <!-- 盤面。カードは JS が作る。
+             5×5 のうち中央の1マスだけはカードではなく飾りになる
+             （12組＝24枚 ＋ 中央1マス ＝ 25マス）。 -->
+        <div class="memory-board" id="memoryBoard"
+             role="group" aria-label="Cards / カード"></div>
+      </section>
+
+      <!-- ── リザルト画面 ── -->
+      <section class="screen" id="screen-result" aria-label="Result Screen / リザルト画面"
+               aria-live="polite">
+        <div class="glass-card">
+          <p class="result-emoji" aria-hidden="true">🎉</p>
+          <h2 class="result-message">Well done!&ensp;/&ensp;<span lang="ja">よくできました！</span></h2>
+          <p class="result-detail" id="resultDetail"></p>
+          <button class="btn btn-primary" id="btn-retry" aria-label="Play again">
+            <span aria-hidden="true">🔄</span> Retry&ensp;/&ensp;<span lang="ja">もういちど</span>
+          </button>
+          <button class="btn btn-secondary" id="btn-top" aria-label="Back to title">
+            <span aria-hidden="true">←</span> Title&ensp;/&ensp;<span lang="ja">タイトルへ</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== フッター ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <!-- 戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
+         こども向け領域の外（TOP・SNS・App Store など）へは繋がない方針。 -->
+    <p class="footer-copy">
+      <a href="/kids/" class="footer-link">&larr; Playing Dev Lab&ensp;/&ensp;<span lang="ja">遊びの研究室</span></a>
+    </p>
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
+    </p>
+  </footer>
+
+  <script src="game.js"></script>
+</body>
+</html>

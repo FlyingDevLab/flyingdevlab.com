@@ -1,0 +1,313 @@
+/* ================================================================
+   ANIMAL MATCH（どうぶつめくり）
+   ================================================================
+   iOS アプリ（FDL-TenBlitz）の Memory を Web へ移植したもの。
+
+   ■ フォントは自己ホスト
+     Google Fonts への外部リンクは張らない。
+     /kids* の CSP は font-src 'self' しか許可していないため、
+     外から読もうとしても届かない。他のゲームと同じ方針。
+   ================================================================ */
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-900.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* ================================================================
+   style.css – MAKE10 全スタイル
+   構成:
+   01. CSS カスタムプロパティ（カラーパレット）
+   02. リセット & ベース
+   03. 背景アニメーション（光球）
+   04. レイアウト（header / main / footer）
+   05. 画面切り替え（.screen / .active）
+   06. ガラスカード
+   07. ヘッダー
+   08. フッター
+   09. トップ画面
+   10. ボタン共通・バリアント
+   11. ゲーム画面：ヘッダー行
+   12. ゲーム画面：タイムゲージ
+   13. ゲーム画面：問題カード
+   14. ゲーム画面：選択肢タイル
+   15. フィードバック演出
+   16. リザルト画面
+   17. ハイスコア表示
+   18. アニメーション一覧
+   19. レスポンシブ
+   ================================================================ */
+
+
+/* ──────────────────────────────────────────────────────────────
+   01. CSS カスタムプロパティ
+   ゲーム全体の色・影・ガラス効果を一元管理する CSS 変数
+────────────────────────────────────────────────────────────── */
+
+:root {
+  --bg:           #f5f0e6;
+  --card:         #ffffff;
+  --card-back:    #7fb2e5;   /* カードの裏。空の色に寄せた明るい青 */
+  --card-back-2:  #5f93cf;
+  --primary:      #4d80d1;
+  --accent:       #9a6bc7;
+  --text:         #383843;
+  --muted:        #858588;
+  --glass:        rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --shadow:       rgba(56, 56, 67, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito', system-ui, -apple-system, 'Hiragino Sans',
+               'Hiragino Kaku Gothic ProN', 'Yu Gothic', YuGothic,
+               'Noto Sans JP', Meiryo, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── ヘッダー ───────────────────────────────────────────── */
+.site-header { padding: 18px 16px 10px; text-align: center; }
+.site-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.title-accent { color: var(--primary); }
+.site-tagline {
+  margin: 4px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* ── 画面の切り替え ──────────────────────────────────────── */
+main { flex: 1; display: flex; justify-content: center; padding: 0 16px 24px; }
+.game-container { width: 100%; max-width: 440px; }
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.glass-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 8px 28px var(--shadow);
+}
+
+.rule-heading { margin: 0 0 10px; font-size: 16px; font-weight: 900; }
+.title-rule   { margin: 0 0 14px; font-size: 15px; line-height: 1.7; }
+.tip-ja       { color: var(--muted); font-size: 14px; }
+.title-note   { margin: 0 0 18px; font-size: 14px; font-weight: 700; color: var(--muted); }
+
+/* ── ボタン ──────────────────────────────────────────────── */
+.btn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 16px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(77, 128, 209, 0.3);
+}
+.btn-secondary {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+}
+
+/* ── 上の帯 ──────────────────────────────────────────────── */
+.memory-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  font-weight: 900;
+}
+.memory-pairs { font-size: 16px; color: var(--primary); }
+/* めくった回数。桁が増えても幅が揺れないようにする */
+.memory-flips {
+  font-size: 15px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 盤面 ────────────────────────────────────────────────── */
+/*
+ * 5列の正方グリッド。12組＝24枚に中央の飾りを足して25マスになる。
+ * aspect-ratio を使うと、幅が決まれば高さが自動で決まるので
+ * 端末ごとの計算が要らない。
+ */
+.memory-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.memory-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  font-size: 22px;
+  opacity: 0.25;
+}
+
+/* ── カード ──────────────────────────────────────────────── */
+/*
+ * カードは <button>。role や tabindex を自分で足すより、
+ * 本物のボタンにした方が focus も Enter / Space も標準で付いてくる。
+ * ボタンの既定スタイルはここで打ち消す。
+ */
+.memory-card {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  aspect-ratio: 1;
+  cursor: pointer;
+  perspective: 600px;   /* 子要素の回転に奥行きを与える */
+}
+.memory-card:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.memory-card:disabled { cursor: default; }
+
+/*
+ * 表と裏を重ね、Y軸で回して入れ替える。
+ * 画像を差し替えるのではなく回しているので、
+ * 「めくった」という手応えが出る。
+ */
+.memory-card-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease;
+}
+.memory-card.is-up .memory-card-inner { transform: rotateY(180deg); }
+
+.memory-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;   /* 1辺が65px前後なので、共通の大きな角丸は使わない */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  font-size: clamp(22px, 7vw, 34px);
+  line-height: 1;
+}
+
+.memory-face--back {
+  background: linear-gradient(140deg, var(--card-back), var(--card-back-2));
+  color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 3px 10px var(--shadow);
+}
+
+.memory-face--front {
+  background: var(--card);
+  border: 2px solid var(--glass-border);
+  transform: rotateY(180deg);   /* 裏返した状態を正面にする */
+  box-shadow: 0 3px 10px var(--shadow);
+}
+
+/*
+ * そろったカード。表向きのまま薄くして、残りのカードを目立たせる。
+ * 消してしまわないのは、どこに何があったかを見返せるようにするため。
+ */
+.memory-card.is-matched .memory-card-inner { opacity: 0.55; }
+
+/* 全部そろったら、濃さを戻して盤面を見せる */
+.memory-board.is-clear .memory-card.is-matched .memory-card-inner {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* ── リザルト ────────────────────────────────────────────── */
+.result-emoji   { margin: 0; font-size: 46px; line-height: 1; }
+.result-message { margin: 8px 0 6px; font-size: 18px; font-weight: 900; }
+.result-detail  { margin: 0 0 16px; font-size: 14px; color: var(--muted); }
+
+/* ── フッター ────────────────────────────────────────────── */
+.site-footer { padding: 14px 16px 22px; text-align: center; }
+.footer-copy { margin: 4px 0; font-size: 12px; color: var(--muted); }
+.footer-link { color: var(--primary); font-weight: 700; text-decoration: none; }
+.footer-link:hover { text-decoration: underline; }
+
+/*
+  ★ アニメーションを減らす設定への配慮 ★
+  kids/ 配下の他の5本と同じ書き方に揃えている。
+  animation: none ではなく duration を極小にしているのは、
+  最終状態をきちんと適用させるため（none だと初期状態のまま残る）。
+*/
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
