@@ -16,14 +16,44 @@
 | Orbitron | `orbitron-latin-400/700/900.woff2` | `OFL-orbitron.txt` |
 | Outfit | `outfit-latin-400/600/700/800.woff2` | `OFL-outfit.txt` |
 
-いずれも Latin サブセット版です。これは OFL の言う **Modified Version**
-（改変版）にあたります。条文の定義にこうあります。
+### ライセンス文について
+
+`OFL.txt` `OFL-boogaloo.txt` `OFL-orbitron.txt` の3つは、**中身が完全に同一**です。
+Google が配布している汎用の OFL 本文で、冒頭が `Google Inc.` とだけ書かれており、
+**書体名を含みません**。どの書体のものかは、ファイル名でのみ区別しています。
+
+`OFL-outfit.txt` だけは、書体と作者を特定できる形になっています。
+
+```
+Copyright 2021 The Outfit Project Authors (https://github.com/Outfitio/Outfit-Fonts)
+```
+
+OFL の条件2が求めるのは「上記の著作権表示とこのライセンス」の同梱です。
+配布元が付けてきた本文をそのまま同梱しているため条件は満たしていますが、
+Outfit のように書体ごとの表示が入っている方が、読む人には親切です。
+
+**書体を追加するときは、配布元の本文をそのまま持ってきてください。**
+汎用の本文を使い回さない方が、あとから辿れます。
+
+### Original Version か Modified Version か
+
+いずれも Latin サブセット版です。
+
+OFL は「Original Version（著作権者が配布したままのもの）」と
+「Modified Version（改変したもの）」を区別しており、
+形式の変換やサブセット化も改変に含まれます。
 
 > "Modified Version" refers to any derivative made by adding to, deleting,
 > or substituting ... **by changing formats** or by porting the Font Software
 > to a new environment.
 
-形式の変換やサブセット化も改変に含まれる、ということです。
+ただしこれらのファイルは、配布元が生成したものをそのまま持ってきています。
+その場合は「著作権者が配布したもの」にあたるため、**どちらになるかは
+厳密には判然としません。**
+
+そして今回は、**どちらでも結果が変わりません。**
+この区別が効いてくるのは次の Reserved Font Name だけで、
+この4書体はいずれも宣言していないためです。
 
 ---
 
@@ -88,11 +118,12 @@ OFL-orbitron.txt  Reserved Font Name: なし
 OFL-outfit.txt    Reserved Font Name: なし
 ```
 
-そのため、サブセット版であっても `font-family: 'Nunito'` のように
-元の名前をそのまま使えます。もし RFN が宣言されていたら、
-現在の CSS は違反になっていました。
+そのため `font-family: 'Nunito'` のように、元の名前をそのまま使えます。
+改変版にあたるかどうかを気にする必要もありません。
 
-書体を追加するときは、**まず RFN の有無を確認してください。**
+**RFN が宣言されている書体を改変して使う場合は、元の名前を名乗れません。**
+サブセット化も改変に含まれうるため、書体を追加するときは
+**まず RFN の有無を確認してください。**
 
 ---
 
