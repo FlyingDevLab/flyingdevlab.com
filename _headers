@@ -79,6 +79,56 @@
 #  明確に切り分けることで、子ども向けページの安全性は担保される。
 #
 #  ※ このブロックを意図的にファイルの先頭に置いている（理由は上記参照）。
+#
+#  ■ Strict-Transport-Security（HSTS）について
+#
+#    「このドメインには今後 HTTPS でしか接続するな」とブラウザに覚えさせる。
+#    HTTP でのアクセスは 301 で HTTPS に転送しているが、その最初の1往復は
+#    平文であり、公衆Wi-Fi などで転送先を書き換えられる余地が残る。
+#    HSTS を覚えたブラウザは、サーバーに問い合わせる前に自分で HTTPS へ
+#    切り替えるため、その隙が無くなる。
+#
+#    【301 と同じ注意が要る】
+#    max-age の間、ブラウザは指示を覚え続ける。
+#    ヘッダーを消しても、既に覚えたブラウザはその期間 HTTP を拒み続ける。
+#    「間に合わせで長い値を入れて、後で戻す」ができない。
+#
+#    そのため段階を踏んだ。
+#      第1段階: max-age=300（5分）で実測（2026-10-23）
+#        ・Cloudflare Pages は _headers 経由の HSTS を通す → 確認できた
+#        ・/kids* など ! で打ち消していないブロックにも継承される → 確認できた
+#        ・pages.dev（<id>.flyingdevlab-github-io.pages.dev）にも効く → 確認できた
+#          ※ Cloudflare ダッシュボード側で設定すると、別ゾーンのため
+#            pages.dev はカバーできない。_headers を選んだのはこのため。
+#      第2段階: max-age=31536000; includeSubDomains ← 現在の設定
+#
+#    【includeSubDomains を付けた判断】
+#    全サブドメインが HTTPS 必須になる。採用した根拠は以下。
+#      ・*.flyingdevlab.com のワイルドカード証明書が既に発行済み。
+#        新しいサブドメインを作った瞬間から HTTPS が使える。
+#      ・現存するサブドメインは www のみで、Cloudflare 経由の HTTPS。
+#      ・ローカル開発は localhost を使っており、独自ドメインを
+#        127.0.0.1 に向ける運用をしていない。
+#
+#    困るのは「自宅の機器（NAS・ルーター等）を xxx.flyingdevlab.com で
+#    開きたい」という場面だけ。その種の機器は HTTP のみか自己署名証明書が
+#    多く、HSTS 配下では証明書エラーを無視して進むことができなくなる。
+#    includeSubDomains は階層の深さに関係なく及ぶため、
+#    nas.home.flyingdevlab.com のように深くしても回避できない。
+#
+#    → その用途には別のドメインを使うこと。これを決めておけば支障はない。
+#
+#    【preload は付けない】
+#    preload を付けて専用サイトに申請すると、ブラウザ本体に焼き込まれる。
+#    解除申請から実際に外れるまで数ヶ月かかり、その間ドメインの扱いを
+#    変えられない。得られるのは「そのブラウザが一度も訪問していない
+#    状態での初回アクセス」の防御だけで、代償に見合わない。
+#
+#    【このブロックに置く理由】
+#    /kids* や privacy-policy の厳格ブロックは、CSP などを ! で打ち消して
+#    から自前の値を入れているが、打ち消していないヘッダーはここから
+#    継承される（Permissions-Policy が実際にそうなっている）。
+#    よってここに1行置けば、サイト全体に行き渡る。
 
 /*
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://platform.x.com https://platform.twitter.com https://www.instagram.com https://www.threads.com https://*.twitter.com https://*.x.com; style-src 'self' 'unsafe-inline' https://platform.twitter.com https://*.twitter.com https://*.x.com; img-src 'self' data: https:; frame-src https://x.com https://twitter.com https://platform.twitter.com https://platform.x.com https://www.instagram.com https://instagram.com https://www.threads.com https://threads.com; connect-src 'self' https://platform.x.com https://platform.twitter.com https://www.instagram.com https://graph.instagram.com https://www.threads.com; font-src 'self'; base-uri 'none'; form-action 'self' https://forms.gle; frame-ancestors 'none'
@@ -86,6 +136,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), midi=(), accelerometer=(), gyroscope=(), magnetometer=(), display-capture=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
 
 
 # ================================================================
