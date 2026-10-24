@@ -284,13 +284,25 @@ main { flex: 1; display: flex; justify-content: center; padding: 0 16px 24px; }
 }
 
 /*
- * そろったカード。表向きのまま薄くして、残りのカードを目立たせる。
+ * そろったカード。表向きのまま少し薄くして、残りのカードを目立たせる。
  * 消してしまわないのは、どこに何があったかを見返せるようにするため。
+ *
+ * ⚠️ 薄くするのは .memory-face であって .memory-card-inner ではない。
+ *   inner に opacity を当てると、そろえた瞬間に裏面（🐾）へ戻って見える。
+ *   opacity は 1 未満になると、その要素の transform-style を
+ *   preserve-3d から flat に強制するためである（filter や overflow:hidden も同じ）。
+ *   平面化されると inner の rotateY(180deg) が子に伝わらず、
+ *   表面が自分の rotateY(180deg) だけで裏向き判定になり、
+ *   backface-visibility: hidden で消える。結果、裏面だけが残る。
+ *   face は 3D の葉なので、そこに掛けても回転には影響しない。
+ *
+ * 0.55 から 0.75 に上げたのは、0.55 では動物が薄すぎて
+ * 何が揃ったのか読み取れなかったため。
  */
-.memory-card.is-matched .memory-card-inner { opacity: 0.55; }
+.memory-card.is-matched .memory-face { opacity: 0.75; }
 
 /* 全部そろったら、濃さを戻して盤面を見せる */
-.memory-board.is-clear .memory-card.is-matched .memory-card-inner {
+.memory-board.is-clear .memory-card.is-matched .memory-face {
   opacity: 1;
   transition: opacity 0.4s ease;
 }
