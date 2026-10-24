@@ -342,6 +342,69 @@ h1 {
   display: block;
 }
 
+/* リンクフリーの案内に続く「URLをコピー」。
+   文面は常に見せておく。何がコピーされるかが分かり、
+   コピーできない環境では、そのまま選択して手でコピーできる。 */
+.copy-url {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.copy-text {
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid rgba(77, 128, 209, 0.18);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;   /* 狭い画面でも長い URL ではみ出さない */
+  user-select: all;          /* タップ1回で全体が選ばれる */
+  -webkit-user-select: all;
+}
+
+/* ハッシュタグは1語として扱い、# の直後で折り返さない */
+.copy-text .nobr { white-space: nowrap; }
+
+.copy-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+}
+
+.copy-btn .ja {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.copy-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.copy-btn[hidden] { display: none; }
+
+.copy-status {
+  min-height: 1.4em;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
 
 /* ----------------------------------------------------------------
    フッター

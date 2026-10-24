@@ -46,9 +46,18 @@
     「読み込み」を止めるが、<a href> による「遷移」は CSP の管轄外である。
     守るのは人の注意力と、.github/workflows/ の自動検査。
 
-  ■ JavaScript を使っていない
-    言語切替も開閉もないため、スクリプトは1行も読み込まない。
-    ゲームへのリンクが並ぶだけのページに動く要素を足す理由がない。
+  ■ JavaScript はこのページの中に2つだけ
+    ・ゲーム一覧の並べ替え（</ul> の直後）
+    ・保護者向けの「URLをコピー」ボタン（.promise の末尾）
+    どちらも外部ファイルを読まず、通信もしない。JS が動かなくても
+    一覧は HTML の順で表示され、コピーする文面は選択してコピーできる。
+
+  ■ リンクフリー
+    外から /kids/ へ入ってくるリンクは歓迎する。上の「外部リンクを置かない」
+    は、ここから外へ出るリンクの話であり、入ってくるリンクは対象外。
+    条件は「連絡不要」「枠（iframe）の中での表示はお断り」の2つだけ。
+    枠の中での表示は _headers の frame-ancestors 'none' がすでに止めている。
+    連絡を求めないのは、連絡先を書くとそれが外へのリンクになるため。
 
   ■ ゲームへのリンクは相対パス
     make10/ のように書いている。/kids/make10/ と絶対パスで書いても
@@ -418,6 +427,82 @@
                描画されてしまうため1行で書いている。 -->
           <span class="ja" lang="ja">保護者の方へ：このページと各ゲームは、互いの間だけでリンクしています。こどもが他のサイト・SNS・アプリストアへ移動できるリンクは置いていません。</span>
         </p>
+
+        <!-- リンクフリーの案内と、URLのコピー。
+             保護者向けの段落の最後に置き、こどもの目に入るゲーム一覧からは離している。
+             コピーするだけで、共有先（SNS・メール・OS の共有メニュー）は開かない。
+             拡散を促す文言も書かない。 -->
+        <p class="note">
+          Feel free to link to this page or any game. No need to ask.
+          Please don&rsquo;t show them inside a frame on another site.
+          <span class="ja" lang="ja">このページや各ゲームへのリンクはご自由にどうぞ。ご連絡は不要です。ほかのサイトの枠の中での表示はご遠慮ください。</span>
+        </p>
+
+        <div class="copy-url">
+          <!-- コピーする文面。ここに書いたものを JS がそのまま読んでコピーする
+               （文面を JS 側に二重に持たないため）。
+               JS が動かない・コピーできない環境では、この欄を選択して手でコピーできる。
+               .nobr はハッシュタグの途中（# の直後）で折り返さないための印で、
+               コピーされる文字には影響しない。 -->
+          <pre class="copy-text" id="copyText">Playing Dev Lab / 遊びの研究室
+https://flyingdevlab.com/kids/
+<span class="nobr">#PlayingDevLab</span> <span class="nobr">#FlyingDevLab</span> <span class="nobr">#遊びの研究室</span></pre>
+          <!-- JS が動くときだけ表示する（動かないと押しても何も起きないため） -->
+          <button type="button" class="copy-btn" id="copyBtn" hidden>
+            <span aria-hidden="true">📋</span> Copy this page&rsquo;s URL
+            <span class="ja" lang="ja">このページのURLをコピー</span>
+          </button>
+          <p class="copy-status" id="copyStatus" role="status"></p>
+        </div>
+
+        <!-- コピーボタンの処理。
+             navigator.clipboard は通信をしないので、CSP（connect-src を開けていない）
+             のままで動く。使えない環境（古いブラウザ・権限の拒否）では、
+             文面を選択した状態にして、手でコピーしてもらう。
+             alert / prompt は画面を止めるので使わない。 -->
+        <script>
+        (function () {
+          'use strict';
+
+          var btn    = document.getElementById('copyBtn');
+          var text   = document.getElementById('copyText');
+          var status = document.getElementById('copyStatus');
+          if (!btn || !text || !status) return;
+
+          var timer = null;
+
+          function say(message) {
+            status.textContent = message;
+            clearTimeout(timer);
+            timer = setTimeout(function () { status.textContent = ''; }, 3000);
+          }
+
+          // 文面を選択状態にする。コピーできなかったときの手動コピー用
+          function selectText() {
+            var range = document.createRange();
+            range.selectNodeContents(text);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+
+          function fallback() {
+            selectText();
+            say('Please copy the selected text. / 選択された文字をコピーしてください。');
+          }
+
+          btn.hidden = false;
+          btn.addEventListener('click', function () {
+            if (!navigator.clipboard || !navigator.clipboard.writeText) {
+              fallback();
+              return;
+            }
+            navigator.clipboard.writeText(text.textContent).then(function () {
+              say('Copied! / コピーしました');
+            }, fallback);
+          });
+        })();
+        </script>
       </section>
 
     </main>
