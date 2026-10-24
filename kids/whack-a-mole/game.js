@@ -44,6 +44,28 @@ const SPAWN_INTERVAL_MAX = 900;
 /** 同時に出現できるモグラの最大数 / Max moles visible at the same time */
 const MAX_SIMULTANEOUS_MOLES = 3;
 
+/**
+ * 穴の番号（0〜8）と、叩くときに押す数字の対応表。
+ * Maps each hole index (0-8) to the number key used to whack it.
+ *
+ * ★ なぜ 1〜9 を順番に振らないのか ★
+ *   テンキーは 1 が左下、7 が左上に並んでいる。
+ *
+ *     画面の穴            押すキー
+ *     ┌─┬─┬─┐        ┌─┬─┬─┐
+ *     │0│1│2│        │7│8│9│
+ *     ├─┼─┼─┤        ├─┼─┼─┤
+ *     │3│4│5│   →   │4│5│6│
+ *     ├─┼─┼─┤        ├─┼─┼─┤
+ *     │6│7│8│        │1│2│3│
+ *     └─┴─┴─┘        └─┴─┴─┘
+ *
+ *   左上から素直に 1〜9 を振ると、左下のモグラを叩くのに
+ *   右上のキーを押すことになり、指と目が食い違う。
+ *   キーの並びをそのまま画面に写した方が、迷わず押せる。
+ */
+const KEYPAD = [7, 8, 9, 4, 5, 6, 1, 2, 3];
+
 /** 残り時間の警告しきい値（秒） / Timer warning threshold in seconds */
 const TIMER_WARNING_THRESHOLD = 10;
 
@@ -118,6 +140,9 @@ function init() {
   // グリッドを生成 / Build the mole grid
   buildGrid();
 
+  // テンキー・数字キーでの操作を受け付ける / Enable number-key whacking
+  document.addEventListener('keydown', onNumberKey);
+
   // ハイスコアを読み込んでトップ画面に反映 / Load and display high score
   topHighscore.textContent = loadHighScore();
 
@@ -178,10 +203,14 @@ function buildGrid() {
 
   for (let i = 0; i < HOLE_COUNT; i++) {
     // 穴のコンテナ要素 / Hole container
+    // 読み上げの番号は、画面に出している数字（押すキー）に揃える。
+    // i + 1 のままだと、見えている数字と読まれる数字が食い違う。
+    const key = KEYPAD[i];
+
     const hole = document.createElement('div');
     hole.classList.add('hole');
     hole.setAttribute('role', 'gridcell');
-    hole.setAttribute('aria-label', `Hole ${i + 1} / 穴 ${i + 1}`);
+    hole.setAttribute('aria-label', `Hole ${key} / 穴 ${key}`);
     hole.dataset.index = i;
 
     // モグラのクリッピングコンテナ（overflow:hidden でモグラを穴の中に隠す）
@@ -193,14 +222,16 @@ function buildGrid() {
     const mole = document.createElement('div');
     mole.classList.add('mole');
     mole.setAttribute('role', 'button');
-    mole.setAttribute('aria-label', `Mole ${i + 1} / モグラ ${i + 1}`);
+    mole.setAttribute('aria-label', `Mole ${key} / モグラ ${key}`);
     mole.setAttribute('tabindex', '0');
     mole.dataset.index = i;
 
     // モグラのボディパーツをCSSで構成 / Mole body parts via CSS
+    // mole-num は頭に載せる数字。押すキーを示す。
     mole.innerHTML = `
       <div class="mole-body" aria-hidden="true">
         <div class="mole-head">
+          <div class="mole-num">${key}</div>
           <div class="mole-nose"></div>
         </div>
         <div class="mole-torso"></div>
@@ -211,10 +242,11 @@ function buildGrid() {
     // クリック・タップでモグラを叩く / Click/tap to whack the mole
     mole.addEventListener('click', onMoleClick);
     // キーボードアクセシビリティ / Keyboard accessibility (Enter/Space)
+    // 座標が無いので null を渡し、ポップアップはモグラの位置から出す
     mole.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        onMoleClick.call(mole, e);
+        whackMole(i, null);
       }
     });
 
@@ -479,11 +511,60 @@ function getMoleElement(index) {
  * @param {Event} event - クリックイベント / Click event
  */
 function onMoleClick(event) {
+  const holeIndex = parseInt(event.currentTarget.dataset.index, 10);
+  // クリック位置をそのまま渡して、押したところにポップアップを出す
+  whackMole(holeIndex, event);
+}
+
+/**
+ * 数字キーが押されたときの処理。押された数字の穴のモグラを叩く。
+ * Whack the mole whose number matches the pressed key.
+ *
+ * ★ e.key で見ている理由 ★
+ *   e.code だと Numpad7 と Digit7 を別物として書き分けることになる。
+ *   e.key はどちらも "7" を返すので、テンキーでも数字キー列でも
+ *   画面に出ている数字をそのまま押せばよくなる。
+ *   （テンキーは NumLock が入っているときだけ数字を返す。
+ *     切れていると "Home" などになり、ここには当たらない）
+ *
+ * @param {KeyboardEvent} e
+ */
+function onNumberKey(e) {
+  // ゲーム中だけ受け付ける / Only while playing
+  if (!isPlaying) return;
+
+  // 押しっぱなしの連打は無視する / Ignore auto-repeat
+  if (e.repeat) return;
+
+  // 修飾キーと一緒に押されたものは、ブラウザの操作なので触らない
+  // Leave browser shortcuts alone
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+  const holeIndex = KEYPAD.indexOf(Number(e.key));
+  if (holeIndex < 0) return;   // 1〜9 以外のキー
+
+  e.preventDefault();
+  // 座標が無いので null を渡す。ポップアップはモグラの位置から出る
+  whackMole(holeIndex, null);
+}
+
+/**
+ * 指定した穴のモグラを叩く。クリックからもキーボードからも呼ばれる。
+ * Whack the mole in the given hole. Called from both click and keyboard.
+ *
+ * @param {number} holeIndex - 穴のインデックス / Hole index
+ * @param {Event|null} event - ポップアップの位置に使うイベント。
+ *                             キーボードのときは null を渡し、
+ *                             モグラの位置から出す。
+ *                             Event used to place the score popup;
+ *                             pass null for keyboard input.
+ */
+function whackMole(holeIndex, event) {
   // ゲーム中でない場合は無効 / Ignore if game is not running
   if (!isPlaying) return;
 
-  const mole = event.currentTarget;
-  const holeIndex = parseInt(mole.dataset.index, 10);
+  const mole = getMoleElement(holeIndex);
+  if (!mole) return;
 
   // 出現中のモグラのみ叩ける / Only whackable if currently visible
   if (!activeMoles.has(holeIndex)) return;
@@ -510,11 +591,14 @@ function onMoleClick(event) {
   addScore();
 
   // スコアポップアップを表示 / Show score popup
-  showScorePopup(event);
+  showScorePopup(event, mole);
 
   // 叩いた！→ 短く振動と音
   playSound("hit") // 叩いた時に音を出す
-  navigator.vibrate(80); // 命中した時に振動する
+  // 変更: ?. を足した。Vibration API を持たないブラウザ（Safari など）では
+  // navigator.vibrate が undefined で、叩くたびに TypeError になっていた。
+  // 同じファイルの playSound 内では既に ?. 付きで呼んでいる。
+  navigator.vibrate?.(80); // 命中した時に振動する
 }
 
 /**
@@ -612,7 +696,7 @@ function checkAndSaveHighScore(currentScore) {
  * Show a "+1 Point" popup at the position where the mole was whacked
  * @param {Event} event - クリックイベント / Click event
  */
-function showScorePopup(event) {
+function showScorePopup(event, mole) {
   const popup = document.createElement('div');
   popup.classList.add('score-popup');
 
@@ -621,16 +705,17 @@ function showScorePopup(event) {
 
   // クリック位置に表示する / Position near the click point
   let x, y;
-  if (event.touches && event.touches.length > 0) {
+  if (event && event.touches && event.touches.length > 0) {
     // タッチイベント対応 / Touch event position
     x = event.touches[0].clientX;
     y = event.touches[0].clientY;
-  } else if (event.clientX !== undefined) {
+  } else if (event && event.clientX !== undefined) {
     x = event.clientX;
     y = event.clientY;
   } else {
-    // フォールバック（中央表示） / Fallback position
-    const rect = event.currentTarget.getBoundingClientRect();
+    // キーボードで叩いたときなど、押した座標が無い場合は
+    // モグラの頭の上に出す / No pointer position (keyboard): use the mole
+    const rect = mole.getBoundingClientRect();
     x = rect.left + rect.width / 2;
     y = rect.top;
   }

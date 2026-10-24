@@ -629,6 +629,38 @@ main {
   box-shadow: 0 2px 5px rgba(0,0,0,0.4);
 }
 
+/* ========================================
+   モグラの頭の数字 / Number on the mole's head
+   ========================================
+   キーボードで叩くときに押す数字。並びはテンキーと同じ
+   （7 8 9 / 4 5 6 / 1 2 3。対応表は game.js の KEYPAD）。
+
+   目は .mole-head の ::before / ::after なので、数字は
+   実要素として額に置いている（疑似要素はもう使えない）。
+
+   大きさを vw で決めているのは、穴の大きさが画面幅で変わるため。
+   グリッドは max-width: 480px で頭打ちになるので、clamp の上限が
+   広い画面での上限として効く。 */
+.mole-num {
+  position: absolute;
+  top: 1%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 30%;
+  padding: 0 4%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #4a2d18;
+  border-radius: 999px;
+  font-size: clamp(10px, 2.9vw, 16px);
+  font-weight: 900;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  /* 数字が指やマウスの当たり判定を食わないようにする。
+     親の .mole がクリックを受けるので、ここは透かしておく */
+  pointer-events: none;
+}
+
 /* モグラのボディ下部（胴体） / Lower body / torso */
 .mole-torso {
   width: 68%;
