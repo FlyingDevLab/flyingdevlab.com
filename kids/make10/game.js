@@ -23,8 +23,8 @@
  * このモードしか無かった頃の記録を引き継ぐため。
  */
 const MODES = {
-  normal: { time: 30, warn: 6, hiKey: 'make10_hi',       tagline: '30-SECOND CHALLENGE', label: '⏱️ 30 SEC'       },
-  blitz:  { time: 10, warn: 3, hiKey: 'make10_hi_blitz', tagline: '10-SECOND BLITZ',    label: '⚡ 10 SEC BLITZ' },
+  normal: { time: 30, warn: 6, hiKey: 'make10_hi',       label: '⏱️ 30 SEC'       },
+  blitz:  { time: 10, warn: 3, hiKey: 'make10_hi_blitz', label: '⚡ 10 SEC BLITZ' },
 };
 
 /** 現在のモード名（'normal' | 'blitz'）。リトライ時も同じモードを保つ */
@@ -208,11 +208,6 @@ function startGame(name) {
   // ゲージの最大値をモードに合わせる（支援技術に正しい残り時間を伝えるため）
   const gw = $('gaugeWrapper');
   if (gw) gw.setAttribute('aria-valuemax', conf().time);
-
-  // ヘッダーの副題もモードに合わせる。
-  // 10秒で遊んでいるのに「30-SECOND CHALLENGE」と出ていては食い違う。
-  const tag = $('siteTagline');
-  if (tag) tag.textContent = conf().tagline;
 
   score     = 0;
   combo     = 0;
@@ -652,8 +647,6 @@ $('btn-retry').addEventListener('click', () => startGame());
 $('btn-top').addEventListener('click', () => {
   isPlaying = false;
   document.body.classList.remove('mode-blitz');  // タイトルへ戻るので配色を戻す
-  const tag = $('siteTagline');
-  if (tag) tag.textContent = MODES.normal.tagline;  // 副題も既定に戻す
   if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   if (nextStepTimer) { clearTimeout(nextStepTimer); nextStepTimer = null; }
   showScreen('top');

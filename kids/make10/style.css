@@ -258,14 +258,6 @@ body {
   background-clip: text;
 }
 
-/* [FIX] ヘッダーのサブタイトル（30-SECOND CHALLENGE）のスタイル */
-.site-tagline {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-  margin-top: 2px;
-}
 
 
 /* ──────────────────────────────────────────────────────────────
