@@ -258,7 +258,7 @@ function updateTopHighscoreUI() {
        </div>`;
   } else {
     topHighscoreEl.innerHTML =
-      `<p class="no-record">No record yet&ensp;</p>`;
+      `<p class="no-record">No record yet</p>`;
   }
 }
 

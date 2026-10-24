@@ -95,18 +95,6 @@ body {
 
 .title-emoji { font-size: 1.15em; }
 
-/* 日本語サブタイトルをスラッシュで区切って英語の後ろに並べる */
-.title-sub {
-  font-size: 0.55em;
-  font-weight: 700;
-  color: var(--clr-gold-light);
-  letter-spacing: 0.08em;
-}
-.title-sub::before {
-  content: '/ ';
-  opacity: 0.6;
-}
-
 /* ── 06. フッター ──────────────────────────────────────────── */
 .site-footer {
   width: 100%;

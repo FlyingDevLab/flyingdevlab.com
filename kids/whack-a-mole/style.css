@@ -145,19 +145,9 @@ h1 {
   line-height: 1.2;
 }
 
-.title-ja {
-  color: var(--color-accent);
-  text-shadow: 0 0 12px rgba(255,215,0,0.5);
-}
-
 .title-en {
   color: var(--color-accent2);
   text-shadow: 0 0 12px rgba(0,229,255,0.4);
-}
-
-.title-sep {
-  color: var(--color-text-muted);
-  font-weight: 300;
 }
 
 /* ========================================
