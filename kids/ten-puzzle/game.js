@@ -14,8 +14,20 @@
 // App Store への導線は持たない。
 // /kids/ 配下はこども向け領域として外部リンクを一切置かない方針のため、
 // 以前あった APP_STORE_URL 定数とボタンへの href 設定を削除した。
-const PROBLEMS_PER_SESSION  = 10;   // 1プレイの出題数
-const HINT_PENALTY          = true; // ヒントを使った問題は加点しない
+// ★ スコアと出題数の決まり ★
+//   スコアは「ヒントを使わずに続けて正解した数」。
+//   ヒントを使った時点でカウントが止まり、以後は正解しても増えない。
+//   まちがえた（こたえあわせで 10 にならなかった）だけでは止まらない。
+//
+//   ヒントを使っても MIN_QUESTIONS 問目までは必ず遊べる。
+//   その時点でまだヒントを使っていなければ、使うまで出題が続く。
+//   上限を設けていないのは、連続正解をどこまでも伸ばせるようにするため。
+const MIN_QUESTIONS = 10;
+
+// Challenge で 10 問ごとに混ぜる「作れない問題」の数。
+// 毎回ちょうど 3 問だと、数えれば最後の数問が読めてしまうので 2〜4 問で揺らす。
+const IMPOSSIBLE_PER_10_MIN = 2;
+const IMPOSSIBLE_PER_10_MAX = 4;
 
 // 演算子・括弧ボタンの並び。表示文字をそのまま式に積む。
 // ★ マイナスは U+2212（−）を使っています ★
@@ -63,14 +75,45 @@ function toProblem(row) {
   };
 }
 
-// モードごとの出題範囲。難易度コードの配列で指定する。
-// 画面に出す名前は Normal / Hard / Challenge の3段階。
-// Normal は内部の easy と normal をまとめた範囲（合計505問）で、
-// 難易度コード（e / n / h / x）は問題データ側の分類なので別物。
+/**
+ * ＋ と − だけで 10 を作れるか調べる。
+ *
+ * 単項マイナスは使えないので、先頭に来る数字は必ず＋側になる。
+ * 括弧で 9−(3−4) のように書いても 9−3＋4 と同じなので、
+ * 結局「4つの数字を＋側と−側に分けて、差が 10 になるか」を見ればよい。
+ * ＋側が空（全部マイナス）の分け方は、先頭に置ける数字が無いので除く。
+ *
+ * @param {number[]} digits
+ * @returns {boolean}
+ */
+function canMakeWithPlusMinus(digits) {
+  for (let mask = 1; mask < (1 << digits.length); mask++) {
+    let sum = 0;
+    digits.forEach(function (d, i) { sum += (mask & (1 << i)) ? d : -d; });
+    if (sum === 10) return true;
+  }
+  return false;
+}
+
+/** 生データ1件が ＋ − だけで解けるか。 */
+function isPlusMinusRow(row) {
+  return row[1] > 0 && canMakeWithPlusMinus(row[0].split('').map(Number));
+}
+
+// モードごとの出題範囲。
+// 難易度コード（e / n / h / x）は問題データ側の分類で、モードとは別物。
+//   Normal    … ＋ − だけで作れる問題（175問）
+//   Hard      … 10 を作れる問題すべて（552問）
+//   Challenge … ＋ − だけでは作れない問題（377問）に、
+//                作れない問題（163問）を 10 問中 2〜4 問混ぜる
 const MODES = {
-  A: { name: 'Normal',    levels: ['e', 'n'], allowImpossible: false },
-  B: { name: 'Hard',          levels: ['h'],      allowImpossible: false },
-  C: { name: 'Challenge',     levels: ['h', 'x'], allowImpossible: true  }
+  A: { name: 'Normal',    allowImpossible: false,
+       pool: RAW_PROBLEMS.filter(isPlusMinusRow) },
+  B: { name: 'Hard',      allowImpossible: false,
+       pool: RAW_PROBLEMS.filter(function (row) { return row[1] > 0; }) },
+  C: { name: 'Challenge', allowImpossible: true,
+       pool: RAW_PROBLEMS.filter(function (row) { return row[1] > 0 && !isPlusMinusRow(row); }),
+       impossiblePool: RAW_PROBLEMS.filter(function (row) { return row[1] === 0; }) }
 };
 
 
@@ -115,10 +158,11 @@ function saveHighScore(mode, value) {
 
 // ── ゲーム状態変数 ───────────────────────────────────────────────
 let currentMode    = 'A';   // 選択中のモード
-let queue          = [];    // このセッションで出す問題の配列
-let questionIndex  = 0;     // 何問目か（0始まり）
+let nextProblem    = null;  // 次の問題を1つ返す関数（startGame で作る）
+let questionNumber = 0;     // 何問目か（1始まり。出題した時点で増える）
 let problem        = null;  // 現在の問題（toProblem の戻り値）
-let score          = 0;     // 正解数
+let score          = 0;     // ヒントなしで続けて正解した数
+let streakActive   = true;  // まだヒントを使っていないか（false で加点が止まる）
 let hintUsedCount  = 0;     // ヒントを使った回数
 let hintUsed       = false; // 今の問題でヒントを使ったか
 let tokens         = [];    // 組み立て中の式。{ kind, text, slot } の配列
@@ -136,8 +180,10 @@ const opsGrid       = document.getElementById('opsGrid');
 const exprDisplay   = document.getElementById('exprDisplay');
 const hintText      = document.getElementById('hintText');
 const judgeText     = document.getElementById('judgeText');
+const exprPreview   = document.getElementById('exprPreview');
 const progressValue = document.getElementById('progressValue');
 const scoreValue    = document.getElementById('scoreValue');
+const scoreDisplay  = document.getElementById('scoreDisplay');
 const btnImpossible = document.getElementById('btn-impossible');
 const btnHint       = document.getElementById('btn-hint');
 
@@ -184,24 +230,66 @@ function shuffle(arr) {
 }
 
 /**
- * モードに合う問題を集め、シャッフルして出題キューを作る。
- * @param {string} mode
+ * 問題の袋を作る。引くたびに1問ずつ出し、空になったら混ぜ直して補充する。
+ * 出題数に上限が無いので、範囲を使い切っても続けられるようにしている。
+ * @param {Array} rows - RAW_PROBLEMS の部分集合
+ * @returns {function(): Array} 1問（生データ）を返す関数
  */
-function buildQueue(mode) {
-  const levels = MODES[mode].levels;
-  const pool = RAW_PROBLEMS.filter(function (row) {
-    return levels.indexOf(row[2]) !== -1;
-  });
-  queue = shuffle(pool.slice()).slice(0, PROBLEMS_PER_SESSION).map(toProblem);
+function makeBag(rows) {
+  let items = [];
+  return function draw() {
+    if (items.length === 0) items = shuffle(rows.slice());
+    return items.pop();
+  };
+}
+
+/**
+ * min 以上 max 以下の整数をランダムに1つ選ぶ。
+ * @param {number} min
+ * @param {number} max
+ * @returns {number} min 以上 max 以下
+ */
+function randomInt(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+/**
+ * モードに合った「次の問題を返す関数」を作る。
+ *
+ * Challenge では 10 問を1区切りにして、その中に作れない問題を
+ * 2〜4 問ちらばらせる。1問ごとに確率で決めると、作れない問題が
+ * 0 問の回や 7 問の回が出てしまい、割合が安定しないため。
+ *
+ * @param {string} mode
+ * @returns {function(): Object} toProblem の戻り値を返す関数
+ */
+function makeProblemSupplier(mode) {
+  const conf = MODES[mode];
+  const drawSolvable = makeBag(conf.pool);
+  if (!conf.allowImpossible) {
+    return function () { return toProblem(drawSolvable()); };
+  }
+
+  const drawImpossible = makeBag(conf.impossiblePool);
+  let schedule = [];  // true = 作れない問題を出す
+  return function () {
+    if (schedule.length === 0) {
+      const count = randomInt(IMPOSSIBLE_PER_10_MIN, IMPOSSIBLE_PER_10_MAX);
+      for (let i = 0; i < 10; i++) schedule.push(i < count);
+      shuffle(schedule);
+    }
+    return toProblem(schedule.pop() ? drawImpossible() : drawSolvable());
+  };
 }
 
 /** 選択されたモードでゲームを開始する。 */
 function startGame(mode) {
-  currentMode   = mode;
-  score         = 0;
-  hintUsedCount = 0;
-  questionIndex = 0;
-  buildQueue(mode);
+  currentMode    = mode;
+  score          = 0;
+  streakActive   = true;
+  hintUsedCount  = 0;
+  questionNumber = 0;
+  nextProblem    = makeProblemSupplier(mode);
 
   // チャレンジモードのときだけ「作れない！」ボタンを出す
   btnImpossible.hidden = !MODES[mode].allowImpossible;
@@ -212,13 +300,17 @@ function startGame(mode) {
 
 /** 次の問題を画面に出す。 */
 function loadQuestion() {
-  problem  = queue[questionIndex];
+  questionNumber++;
+  problem  = nextProblem();
   tokens   = [];
   hintUsed = false;
   locked   = false;
 
-  progressValue.textContent = (questionIndex + 1) + ' / ' + queue.length;
-  scoreValue.textContent    = score;
+  // 10問目までは「n / 10」。その先は上限が無いので問題番号だけを出す。
+  progressValue.textContent = questionNumber <= MIN_QUESTIONS
+    ? questionNumber + ' / ' + MIN_QUESTIONS
+    : 'No. ' + questionNumber;
+  renderScore();
   hintText.textContent      = '';
   judgeText.textContent     = '';
   judgeText.className       = 'judge-text';
@@ -256,13 +348,37 @@ function updateDigitStates() {
   });
 }
 
-/** 組み立て中の式を表示エリアに描く。 */
+/** スコア表示を描き直す。ヒントで加点が止まったら薄くして伝える。 */
+function renderScore() {
+  scoreValue.textContent = score;
+  scoreDisplay.classList.toggle('is-stopped', !streakActive);
+}
+
+/** 組み立て中の式を表示エリアに描く。途中の計算結果もあわせて出す。 */
 function renderExpr() {
+  renderPreview();
   if (tokens.length === 0) {
     exprDisplay.innerHTML = '<span class="expr-placeholder">Tap the digits and symbols</span>';
     return;
   }
   exprDisplay.textContent = tokens.map(function (t) { return t.text; }).join(' ');
+}
+
+/** 式の下に「= 7」のような途中の計算結果を出す。計算できない形なら空にする。 */
+function renderPreview() {
+  const value = previewValue();
+  exprPreview.className = 'expr-preview';
+
+  if (value === null) {
+    exprPreview.textContent = '';
+  } else if (!isFinite(value)) {
+    // 0 で割ると Infinity / NaN になる
+    exprPreview.textContent = 'Can’t divide by 0 / 0 では割れない';
+    exprPreview.classList.add('is-error');
+  } else {
+    exprPreview.textContent = '= ' + formatValue(value);
+    if (Math.abs(value - 10) < 1e-9) exprPreview.classList.add('is-ten');
+  }
 }
 
 
@@ -312,19 +428,27 @@ function clearJudge() {
   judgeText.className   = 'judge-text';
 }
 
-/** ヒント（解の例）を表示する。使うとその問題は加点されない。 */
+/**
+ * ヒント（解の例）を表示する。
+ * 初めて使ったときに連続正解のカウントが止まる。その問題も加点されない。
+ */
 function showHint() {
   if (locked || hintUsed) return;
   hintUsed = true;
   hintUsedCount++;
   btnHint.disabled = true;
 
-  if (problem.example) {
-    hintText.textContent = 'Hint: ' + problem.example;
-  } else {
-    // impossible 問題には解の例が存在しない
-    hintText.textContent = 'Hint: maybe 10 cannot be made from these four…?';
+  // impossible 問題には解の例が存在しない
+  let text = problem.example
+    ? 'Hint: ' + problem.example
+    : 'Hint: maybe 10 cannot be made from these four…?';
+
+  if (streakActive) {
+    streakActive = false;
+    text += '\nScore stops at ' + score + ' / スコアは ' + score + ' で止まります';
+    renderScore();
   }
+  hintText.textContent = text;
 }
 
 
@@ -444,6 +568,54 @@ function judgeExpression() {
   return Math.abs(value - 10) < 1e-9 ? 'correct' : 'wrongAnswer';
 }
 
+/**
+ * 組み立て途中の式を、いま計算できるところまで計算する。
+ *
+ * 入力の途中では「3 + 4 ×」や「(3 + 4」のように式が閉じていない。
+ * 末尾の記号と開き括弧はまだ書きかけなので外し、閉じていない括弧は
+ * 補って計算する。たとえば「(3 + 4 ×」は「(3 + 4)」として 7 を返す。
+ * 数字が2つ並んでいるなど、補っても式にならない形は null を返す。
+ *
+ * @returns {number|null}
+ */
+function previewValue() {
+  const list = toEvalTokens();
+  while (list.length > 0 && /^[-+*/(]$/.test(list[list.length - 1])) list.pop();
+  if (list.length === 0) return null;
+
+  let open = 0;
+  for (let i = 0; i < list.length; i++) {
+    if (list[i] === '(') open++;
+    if (list[i] === ')') open--;
+    if (open < 0) return null;  // 閉じ括弧が多すぎる
+  }
+  for (; open > 0; open--) list.push(')');
+
+  return evaluate(list);
+}
+
+/**
+ * 計算結果を表示用の文字列にする。割り切れないときは分数で出す。
+ *
+ * 0.3333333333333333 と出すより 1/3 の方が、こどもにも次の一手が考えやすい。
+ * 1桁の数字4つと四則演算で作れる分母は 9×9×9 = 729 までなので、
+ * 1000 までの分母を試せば必ず見つかる。
+ *
+ * @param {number} value - 有限の数
+ * @returns {string}
+ */
+function formatValue(value) {
+  const sign = value < 0 ? '−' : '';  // 表示に合わせて U+2212 を使う
+  const abs  = Math.abs(value);
+  for (let den = 1; den <= 1000; den++) {
+    const num = Math.round(abs * den);
+    if (Math.abs(abs * den - num) < 1e-9) {
+      return sign + (den === 1 ? num : num + '/' + den);
+    }
+  }
+  return sign + abs.toFixed(3);  // ここには来ない想定の保険
+}
+
 
 // ── 判定と進行 ──────────────────────────────────────────────────
 const JUDGE_MESSAGE = {
@@ -496,17 +668,18 @@ function showJudgeMessage(message, ok) {
 function finishQuestion(ok, message) {
   locked = true;
 
-  // ヒントを使った問題は加点しない（HINT_PENALTY が true のとき）
-  const scored = ok && !(HINT_PENALTY && hintUsed);
+  // ヒントを一度でも使っていたら加点しない（連続正解はそこで止まっている）
+  const scored = ok && streakActive;
   if (scored) score++;
 
-  showJudgeMessage(message + (scored ? '' : ' (hint used)'), ok);
-  scoreValue.textContent = score;
+  showJudgeMessage(message + (hintUsed ? ' (hint used)' : ''), ok);
+  renderScore();
 
-  // 少し余韻を置いてから次の問題へ
+  // 少し余韻を置いてから次の問題へ。
+  // ヒントを使っていても MIN_QUESTIONS 問目までは続ける。
+  // 使っていなければ、その先も使うまで続ける。
   setTimeout(function () {
-    questionIndex++;
-    if (questionIndex >= queue.length) {
+    if (!streakActive && questionNumber >= MIN_QUESTIONS) {
       showResult();
     } else {
       loadQuestion();
@@ -522,7 +695,7 @@ function showResult() {
   const isNewRecord = score > hi;
   if (isNewRecord) saveHighScore(currentMode, score);
 
-  document.getElementById('resultScore').textContent = score + ' / ' + queue.length;
+  document.getElementById('resultScore').textContent = score;
 
   const resultHi = document.getElementById('resultHi');
   if (isNewRecord) {
@@ -533,9 +706,9 @@ function showResult() {
     resultHi.className   = 'result-hi';
   }
 
-  document.getElementById('resultMessage').textContent = resultMessage(score, queue.length);
+  document.getElementById('resultMessage').textContent = resultMessage(score);
 
-  const detail = [MODES[currentMode].name + ' mode'];
+  const detail = [MODES[currentMode].name + ' mode', questionNumber + ' puzzles'];
   if (hintUsedCount > 0) detail.push('Hints used: ' + hintUsedCount);
   document.getElementById('resultDetail').textContent = detail.join(' / ');
 
@@ -544,17 +717,17 @@ function showResult() {
 }
 
 /**
- * スコアに応じた一言を返す。
+ * スコア（ヒントなしの連続正解数）に応じた一言を返す。
+ * 10 は「最初の10問をヒントなしで解き切った」ことを意味する。
  * @param {number} value
- * @param {number} total
  * @returns {string}
  */
-function resultMessage(value, total) {
-  const rate = total > 0 ? value / total : 0;
-  if (rate === 1)    return 'Perfect!';
-  if (rate >= 0.7)   return 'Great!';
-  if (rate >= 0.4)   return 'Nice work!';
-  if (rate > 0)      return 'Keep going!';
+function resultMessage(value) {
+  if (value >= 20) return 'Amazing!';
+  if (value >= 10) return 'Perfect!';
+  if (value >= 7)  return 'Great!';
+  if (value >= 4)  return 'Nice work!';
+  if (value > 0)   return 'Keep going!';
   return 'Try again!';
 }
 
@@ -603,32 +776,86 @@ function init() {
     showScreen('top');
   });
 
-  // キーボード操作（PC 向けのおまけ）
-  // 数字キーで該当する数字タイルを、記号キーで演算子を入力できる。
-  document.addEventListener('keydown', function (e) {
-    if (!screens.game.classList.contains('active')) return;
+  document.addEventListener('keydown', onKeyDown);
+}
 
-    if (e.key === 'Enter')     { onJudge();   return; }
-    if (e.key === 'Backspace') { popToken();  e.preventDefault(); return; }
-    if (e.key === 'Escape')    { clearTokens(); return; }
 
-    if (/^[0-9]$/.test(e.key)) {
-      // まだ使っていないタイルのうち、押された数字と一致する最初のものを使う
-      const usedSlots = tokens
-        .filter(function (t) { return t.kind === 'digit'; })
-        .map(function (t) { return t.slot; });
-      for (let slot = 0; slot < problem.digits.length; slot++) {
-        if (problem.digits[slot] === Number(e.key) && usedSlots.indexOf(slot) === -1) {
-          pushDigit(problem.digits[slot], slot);
-          return;
-        }
-      }
+// ── キーボード・テンキー ─────────────────────────────────────────
+/*
+ * e.key で判定しているので、テンキーでも数字キー列でも同じ入力になる。
+ * テンキーの + − * / Enter もそのまま使える。
+ *
+ * ★ 無視するもの ★
+ *   押しっぱなしの連打（e.repeat）… 数字や記号が勝手に何個も入るため
+ *   Ctrl / ⌘ / Alt 付き … ブラウザの操作（再読み込みなど）を奪わないため
+ *   日本語入力の変換中（isComposing）… 確定前のキーを拾わないため
+ *   Shift は除外しない。日本語・英語配列とも + * ( ) は Shift で打つため。
+ */
+
+/** 数字キーに対応する、まだ使っていない数字タイルを式に入れる。 */
+function pushDigitByKey(value) {
+  const usedSlots = tokens
+    .filter(function (t) { return t.kind === 'digit'; })
+    .map(function (t) { return t.slot; });
+  for (let slot = 0; slot < problem.digits.length; slot++) {
+    if (problem.digits[slot] === value && usedSlots.indexOf(slot) === -1) {
+      pushDigit(value, slot);
       return;
     }
+  }
+}
 
-    const keyToOp = { '+': '+', '-': '−', '*': '×', '/': '÷', '(': '(', ')': ')' };
-    if (keyToOp[e.key]) pushOp(keyToOp[e.key]);
-  });
+// 記号キーと、式に積む表示文字の対応。x は × の代わりに打てるようにしている。
+const KEY_TO_OP = {
+  '+': '+', '-': '−', '*': '×', 'x': '×', 'X': '×', '/': '÷', '(': '(', ')': ')'
+};
+
+/** 画面ごとのキー操作を振り分ける。 */
+function onKeyDown(e) {
+  if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+
+  const key = e.key;
+
+  // トップ画面：1 / 2 / 3 でモードを選ぶ
+  if (screens.top.classList.contains('active')) {
+    const mode = { '1': 'A', '2': 'B', '3': 'C' }[key];
+    if (mode) { e.preventDefault(); startGame(mode); }
+    return;
+  }
+
+  // リザルト画面：Enter でもう一度、Esc でモード選択へ。
+  // ボタンにフォーカスがあるときの Enter は、そのボタンの操作に任せる。
+  if (screens.result.classList.contains('active')) {
+    if (key === 'Enter' && !(e.target instanceof HTMLButtonElement)) {
+      e.preventDefault();
+      startGame(currentMode);
+    } else if (key === 'Escape') {
+      showScreen('top');
+    }
+    return;
+  }
+
+  if (!screens.game.classList.contains('active')) return;
+
+  if (key === 'Enter' || key === '=') {
+    // フォーカス中のボタンが Enter で押されて二重に動くのを防ぐ
+    e.preventDefault();
+    onJudge();
+  } else if (key === 'Backspace') {
+    e.preventDefault();
+    popToken();
+  } else if (key === 'Escape' || key === 'Delete') {
+    clearTokens();
+  } else if (key === 'h' || key === 'H') {
+    showHint();
+  } else if ((key === 'n' || key === 'N') && MODES[currentMode].allowImpossible) {
+    onDeclareImpossible();
+  } else if (/^[0-9]$/.test(key)) {
+    pushDigitByKey(Number(key));
+  } else if (KEY_TO_OP[key]) {
+    e.preventDefault();  // テンキーの / が Firefox のクイック検索を開かないように
+    pushOp(KEY_TO_OP[key]);
+  }
 }
 
 init();

@@ -7,7 +7,7 @@
 
   <!-- ===== SEO：ページタイトル・説明 ===== -->
   <title>Ten Puzzle / テンパズル – Make 10 with + − × ÷</title>
-  <meta name="description" content="Use all four digits and + − × ÷ to make 10. Three modes: Easy/Normal, Hard, and Challenge. 4つの数字と ＋ − × ÷ で10をつくる無料ブラウザパズル。">
+  <meta name="description" content="Use all four digits and + − × ÷ to make 10. Three modes: Normal, Hard, and Challenge. 4つの数字と ＋ − × ÷ で10をつくる無料ブラウザパズル。">
 
   <!-- ===== OGP：SNS シェア用メタタグ ===== -->
   <meta property="og:type"        content="website">
@@ -71,7 +71,7 @@
               <span class="mode-icon" aria-hidden="true">⭐️</span>
               <span class="mode-text">
                 <span class="mode-title">Normal</span>
-                <span class="mode-sub">Every puzzle can be solved. Take your time.</span>
+                <span class="mode-sub">You can make 10 with just + and −.<br><span class="tip-ja" lang="ja">＋と−だけで作れる問題</span></span>
               </span>
               <!-- ハイスコアは JS が注入する -->
               <span class="mode-hi" id="hi-A" aria-live="polite"></span>
@@ -81,7 +81,7 @@
               <span class="mode-icon" aria-hidden="true">⭐️⭐️</span>
               <span class="mode-text">
                 <span class="mode-title">Hard</span>
-                <span class="mode-sub">Only a few solutions. Use a hint if you get stuck.</span>
+                <span class="mode-sub">Every puzzle can make 10. Try × and ÷ too.<br><span class="tip-ja" lang="ja">どの問題も10を作れる。×÷も使ってみよう</span></span>
               </span>
               <span class="mode-hi" id="hi-B" aria-live="polite"></span>
             </button>
@@ -90,12 +90,29 @@
               <span class="mode-icon" aria-hidden="true">⭐️⭐️⭐️</span>
               <span class="mode-text">
                 <span class="mode-title">Challenge</span>
-                <span class="mode-sub">Some puzzles cannot make 10. Spot them to score.</span>
+                <span class="mode-sub">Some puzzles cannot make 10. Spot them!<br><span class="tip-ja" lang="ja">10を作れない問題もまざっている。見やぶって「作れない！」を押そう</span></span>
               </span>
               <span class="mode-hi" id="hi-C" aria-live="polite"></span>
             </button>
 
           </div>
+
+          <!-- スコアと出題数の決まり。モードのボタンを先に見せたいので、その下に置く。
+               キー操作の行はタッチ端末では CSS で隠す -->
+          <ul class="rule-list">
+            <li>
+              Score = puzzles solved in a row without a hint. A hint stops the count. A wrong answer does not.<br>
+              <span class="tip-ja" lang="ja">スコアは、ヒントを使わずに続けて正解した数。ヒントを使うとそこで止まる。まちがえても止まらない。</span>
+            </li>
+            <li>
+              You always play 10 puzzles. No hint yet? Keep going past 10!<br>
+              <span class="tip-ja" lang="ja">10問はかならず遊べる。ヒントを使っていなければ、11問目からも続く。</span>
+            </li>
+            <li class="rule-keys">
+              Keys: 1&nbsp;2&nbsp;3 = mode, digits, + − * / ( ), Enter = check, Backspace = undo, Esc = clear, H = hint, N = can&rsquo;t make 10<br>
+              <span class="tip-ja" lang="ja">キー：1 2 3＝モード、数字、+ − * / ( )、Enter＝こたえあわせ、Backspace＝ひとつ戻す、Esc＝ぜんぶ消す、H＝ヒント、N＝作れない！</span>
+            </li>
+          </ul>
         </div>
       </section><!-- /#screen-top -->
 
@@ -108,7 +125,7 @@
           <div class="progress-display" aria-label="Progress">
             <span id="progressValue" aria-live="polite">1 / 10</span>
           </div>
-          <div class="score-display" aria-label="Score">
+          <div class="score-display" id="scoreDisplay" aria-label="Score">
             SCORE <span id="scoreValue" aria-live="polite">0</span>
           </div>
         </div>
@@ -121,6 +138,8 @@
           <div class="expr-display" id="exprDisplay" aria-live="polite" aria-label="Your expression">
             <span class="expr-placeholder">Tap the digits and symbols</span>
           </div>
+          <!-- 途中の計算結果（「= 7」など）。式をいじるたびに JS が書き換える -->
+          <div class="expr-preview" id="exprPreview" aria-live="polite"></div>
           <!-- ヒントの式（💡 を押したときだけ表示） -->
           <div class="hint-text" id="hintText" aria-live="polite"></div>
           <!-- 判定メッセージ -->
@@ -154,7 +173,7 @@
       <section class="screen" id="screen-result" aria-label="Result Screen / リザルト画面" aria-live="assertive">
         <div class="glass-card" style="text-align:center;">
 
-          <p class="result-score-label">YOUR SCORE</p>
+          <p class="result-score-label">IN A ROW&ensp;/&ensp;<span lang="ja">連続正解</span></p>
           <div class="result-score" id="resultScore" aria-label="Your score">0</div>
 
           <div class="result-hi" id="resultHi" aria-live="polite"></div>
