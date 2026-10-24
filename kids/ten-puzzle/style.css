@@ -194,6 +194,13 @@ body {
 
 .screen.active { display: flex; }
 
+/* トップ画面は説明が増えたので、収まらない画面では縦スクロールさせる。
+   safe を付けないと、はみ出した上端がスクロールでも見えなくなる。 */
+#screen-top {
+  overflow-y: auto;
+  justify-content: safe center;
+}
+
 /* ゲーム画面は上から順に積む。要素が多いので縦スクロールを許可する。 */
 #screen-game {
   justify-content: flex-start;
@@ -324,6 +331,23 @@ body {
 */
 .tip-ja {
   font-size: 0.9em;
+}
+
+/* スコアと出題数の決まり（トップ画面の箇条書き） */
+.rule-list {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 16px;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* キー操作の説明は、キーボードの無いタッチ端末では出さない */
+@media (hover: none) and (pointer: coarse) {
+  .rule-keys { display: none; }
 }
 
 /* モード選択ボタンの縦並び */
@@ -499,6 +523,12 @@ body {
   margin-left: 4px;
 }
 
+/* ヒントを使って加点が止まったスコア。打ち消し線だと
+   「取り消された」と読めてしまうので、色を落とすだけにする。 */
+.score-display.is-stopped span {
+  color: var(--muted);
+}
+
 
 /* ──────────────────────────────────────────────────────────────
    12. ゲーム画面：数字タイル
@@ -575,8 +605,23 @@ body {
   letter-spacing: 0;
 }
 
-/* ヒントの式。💡 を押すまで空。 */
+/* 途中の計算結果（「= 7」など）。10 になったら緑で知らせる。 */
+.expr-preview {
+  min-height: 22px;
+  margin-top: 4px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--muted);
+}
+
+.expr-preview.is-ten   { color: var(--gauge-full); }
+.expr-preview.is-error { font-size: 13px; color: var(--gauge-warn); }
+
+/* ヒントの式。💡 を押すまで空。
+   スコアが止まったお知らせを2行目に出すので改行を活かす。 */
 .hint-text {
+  white-space: pre-line;
   min-height: 18px;
   margin-top: 6px;
   text-align: center;
@@ -684,6 +729,10 @@ body {
   padding: 12px 20px;
   font-size: 15px;
 }
+
+/* Normal / Hard では JS が hidden を付けて隠す。
+   .btn が display を指定しているため、hidden 属性だけでは消えない。 */
+.btn-impossible[hidden] { display: none; }
 
 
 /* ──────────────────────────────────────────────────────────────
