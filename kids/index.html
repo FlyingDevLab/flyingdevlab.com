@@ -115,8 +115,8 @@
     <main id="main">
 
       <!-- ゲーム一覧
-           <ul> にしているのは「5件の並び」という構造を
-           補助技術に伝えるため。読み上げ時に「リスト、5項目」と案内される。
+           <ul> にしているのは「6件の並び」という構造を
+           補助技術に伝えるため。読み上げ時に「リスト、6項目」と案内される。
 
            各ゲームの絵文字は、そのゲームのページ内で既に使われているものを
            流用している（遊ぶ前と遊んだ後で同じ記号になるため迷わない）。
@@ -125,6 +125,7 @@
              🐭 モグラ叩きのモグラ
              🎯 ピンボールのターゲット
              💡 テンパズルのヒント
+             🐘 どうぶつめくりのカード
       -->
       <ul class="games">
         <li>
@@ -144,8 +145,8 @@
             <span class="g-en">MAZE</span>
             <span class="g-ja" lang="ja">迷路</span>
             <span class="g-tip">
-              Carry the cheese to the goal
-              <span class="ja" lang="ja">チーズをゴールへ運ぼう</span>
+              Collect the cheese and dodge the mice
+              <span class="ja" lang="ja">ネズミをよけてチーズを集めよう</span>
             </span>
           </a>
         </li>
@@ -182,7 +183,188 @@
             </span>
           </a>
         </li>
+        <!-- 追加（2026-10-23）: どうぶつめくり。
+             iOS アプリ（FDL-TenBlitz）の Memory から移植した6本目。 -->
+        <li>
+          <a href="memory/">
+            <span class="g-icon" aria-hidden="true">🐘</span>
+            <span class="g-en">ANIMAL MATCH</span>
+            <span class="g-ja" lang="ja">どうぶつめくり</span>
+            <span class="g-tip">
+              Flip the cards and find the pairs
+              <span class="ja" lang="ja">おなじ どうぶつを さがそう</span>
+            </span>
+          </a>
+        </li>
       </ul>
+
+      <!-- ================================================================
+           ゲーム一覧の並べ替え
+           ================================================================
+
+           最後に遊んだゲームを上に出す。新しく増えたゲームはその更に上に出す。
+
+           ■ なぜ </ul> の直後に置くのか
+             この位置なら、一覧が組み上がった直後・まだ描画される前に
+             並べ替えが終わる。<head> や末尾に置くと、HTML の順で一度
+             表示してから並び替わる「ちらつき」が出る。
+
+           ■ 外部ファイルにしない理由
+             この処理はこのページ専用で、他のどこからも使わない。
+             1ファイル増やすより、使う場所に置いた方が追いやすい。
+             /kids* の CSP は script-src に 'unsafe-inline' を含めてあるので
+             インラインで動く（connect-src は閉じたまま。外へは出ない）。
+
+           ■ 動かなかったときにどうなるか
+             JS を切っている・プライベートモードで localStorage が例外を
+             投げる・保存値が壊れている、のいずれでも HTML に書いた順で
+             そのまま表示される。並び順は便利さの話であって、
+             遊べるかどうかには関わらない。
+           ================================================================ -->
+      <script>
+      (function () {
+        'use strict';
+
+        // 保存キー。将来この形を変えるときは v2 にして、古い値を無視する
+        var KEY  = 'kids_games_v1';
+        var list = document.querySelector('ul.games');
+        if (!list) return;
+
+        /* ゲームの ID は href から作る（"make10/" → "make10"）。
+           カードに data-id を書く方式にしなかったのは、書き忘れても
+           何の警告も出ないため。href は必ずあり、必ず一意で、
+           カードを1枚足すだけで自動的に並べ替えの対象になる。 */
+        function idOf(li) {
+          var a = li.querySelector('a[href]');
+          return a ? a.getAttribute('href').replace(/\/+$/, '') : '';
+        }
+
+        /* 保存値の読み込み。
+           ここに入っているのは「自分がいつ何を押したか」だけだが、
+           壊れた値や手で書き換えられた値が入っていても落ちないように、
+           型を1つずつ確かめて、通らないものは捨てる。 */
+        function load() {
+          try {
+            var raw = localStorage.getItem(KEY);
+            if (!raw) return null;              // 初回訪問
+            var o = JSON.parse(raw);
+            if (!o || typeof o !== 'object') return null;
+
+            var played = {};
+            if (o.played && typeof o.played === 'object') {
+              Object.keys(o.played).forEach(function (k) {
+                var t = o.played[k];
+                if (typeof t === 'number' && isFinite(t) && t > 0) played[k] = t;
+              });
+            }
+            var onlyStrings = function (v) { return typeof v === 'string'; };
+            return {
+              played: played,
+              seen:   Array.isArray(o.seen)  ? o.seen.filter(onlyStrings)  : [],
+              fresh:  Array.isArray(o.fresh) ? o.fresh.filter(onlyStrings) : []
+            };
+          } catch (e) {
+            return null;   // プライベートモードなど。並べ替えずに素通りする
+          }
+        }
+
+        function save(state) {
+          try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+        }
+
+        var items  = Array.prototype.slice.call(list.children);
+        var stored = load();
+
+        /* 初回訪問では、全部を「見たことがある」として記録するだけにして、
+           HTML の順のまま出す。
+           ここで全部を新作あつかいにすると、はじめて来た人にも
+           「新しい順」で並んでしまい、MAKE10 が一番下に落ちる。
+           新作として上げたいのは「前に見たときには無かったもの」だけ。
+
+           seen が空のときも初回あつかいにする。
+           JSON としては読めるが中身が壊れている保存値（手で書き換えた、
+           別の版の残骸など）は load() が中身を捨てて空で返してくる。
+           これを「2回目以降」と見なすと、前回なにを見たか分からないまま
+           全部を新作と判定して、全カードに NEW が付いてしまう。 */
+        var firstVisit = (stored === null || stored.seen.length === 0);
+        var state = stored || { played: {}, seen: [], fresh: [] };
+
+        var seen  = {};
+        var fresh = {};
+        state.seen.forEach(function (id) { seen[id] = true; });
+        state.fresh.forEach(function (id) { fresh[id] = true; });
+
+        items.forEach(function (li) {
+          var id = idOf(li);
+          if (!id || seen[id]) return;
+          seen[id] = true;
+          state.seen.push(id);
+          // 初回訪問でなければ、前回は無かった＝今回増えたゲーム
+          if (!firstVisit && !state.played[id]) {
+            fresh[id] = true;
+            state.fresh.push(id);
+          }
+        });
+
+        // HTML に書いた順。同じ段の中での並び順に使う
+        var htmlOrder = {};
+        items.forEach(function (li, i) { htmlOrder[idOf(li)] = i; });
+
+        /* 並べ替えは3段。
+             0 … 今回増えたゲーム（まだ遊んでいない）
+             1 … 遊んだことがあるゲーム
+             2 … 残り
+           同じ段どうしは、1段目だけ「最後に遊んだ順」、
+           ほかは HTML に書いた順で並べる。 */
+        function rank(li) {
+          var id = idOf(li);
+          if (fresh[id])         return 0;
+          if (state.played[id])  return 1;
+          return 2;
+        }
+
+        items.slice().sort(function (a, b) {
+          var ra = rank(a), rb = rank(b);
+          if (ra !== rb) return ra - rb;
+          if (ra === 1)  return state.played[idOf(b)] - state.played[idOf(a)];
+          return htmlOrder[idOf(a)] - htmlOrder[idOf(b)];
+        }).forEach(function (li) {
+          // appendChild は「移動」になる。並べ替えた順に末尾へ送れば並ぶ
+          list.appendChild(li);
+        });
+
+        /* NEW の印を付ける。
+           カードの先頭に挿すので、読み上げでも名前より先に伝わる。
+           見た目の位置（右上）は CSS の .g-new が決めている。 */
+        items.forEach(function (li) {
+          if (!fresh[idOf(li)]) return;
+          var a = li.querySelector('a');
+          if (!a || a.querySelector('.g-new')) return;
+          var tag = document.createElement('span');
+          tag.className   = 'g-new';
+          tag.textContent = 'NEW';
+          a.insertBefore(tag, a.firstChild);
+        });
+
+        /* カードを押したら、その時刻を控える。
+           各ゲームのページ側ではなくここで記録しているのは、
+           この1か所だけで全部のゲームを見られるため。ゲームを足したときに
+           記録の処理を書き足す必要がなく、書き忘れも起きない。
+           （そのかわり、ブックマークから直接開いた場合は記録されない） */
+        list.addEventListener('click', function (ev) {
+          var a = ev.target.closest('a[href]');
+          if (!a || !list.contains(a)) return;
+          var id = idOf(a.parentNode);
+          if (!id) return;
+          state.played[id] = Date.now();
+          // 遊んだら新作あつかいを終える（次に来たときは「遊んだ順」の側に入る）
+          state.fresh = state.fresh.filter(function (f) { return f !== id; });
+          save(state);
+        });
+
+        save(state);
+      })();
+      </script>
 
       <!-- 約束
            保護者が読む部分。リンクを置かない方針のため、
@@ -209,27 +391,13 @@
             <span class="ja" lang="ja">課金はありません。すべて無料です。</span>
           </li>
           <li>
-            Nothing is sent anywhere. Scores stay on this device.
-            <span class="ja" lang="ja">データを外部へ送りません。スコアはこの端末の中だけに残ります。</span>
+            Nothing is sent anywhere. Your play record stays on this device.
+            <span class="ja" lang="ja">データを外部へ送りません。遊んだ記録はこの端末の中だけに残ります。</span>
           </li>
           <li>
             No links that lead away from the games.
             <span class="ja" lang="ja">ゲームの外に出るリンクはありません。</span>
           </li>
-
-        <!-- 追加（2026-10-23）: どうぶつめくり。
-             iOS アプリ（FDL-TenBlitz）の Memory から移植した6本目。 -->
-        <li>
-          <a href="memory/">
-            <span class="g-icon" aria-hidden="true">🐘</span>
-            <span class="g-en">ANIMAL MATCH</span>
-            <span class="g-ja" lang="ja">どうぶつめくり</span>
-            <span class="g-tip">
-              Flip the cards and find the pairs
-              <span class="ja" lang="ja">おなじ どうぶつを さがそう</span>
-            </span>
-          </a>
-        </li>
         </ul>
         <p class="note">
           For parents: this page and the games link only to each other.

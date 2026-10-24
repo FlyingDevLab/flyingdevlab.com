@@ -188,6 +188,7 @@ h1 {
 /* カード全体を <a> にして、どこを押しても遊べるようにしている。
    こどもが使うため、当たり判定は大きいほどよい。 */
 .games a {
+  position: relative;   /* NEW の印を右上に置くための基準 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -244,6 +245,27 @@ h1 {
 
 .g-tip .ja {
   display: block;
+}
+
+/* 新しく増えたゲームに付く印。
+   JS が付け外しするため、HTML には書かれていない。
+   一度遊べば外れる（index.html 末尾の並べ替えスクリプトを参照）。
+
+   読み上げでも伝わるように、文字として置いている（::before の
+   疑似要素だと読み上げられない環境がある）。位置が右上に見えても、
+   DOM 上はカードの先頭に挿すので「NEW、どうぶつめくり」と読まれる。 */
+.g-new {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
 }
 
 
