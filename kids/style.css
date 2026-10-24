@@ -128,11 +128,15 @@ header {
   text-align: center;
 }
 
+/* ヘッダーのロゴ。絵文字から画像に変えたため、
+   font-size ではなく幅と高さで大きさを決めている。
+   margin: 0 auto で中央に置く（絵文字のときは display:block だけで
+   済んでいたが、画像は幅が決まるため自分で寄せる必要がある）。 */
 .h-icon {
-  font-size: 40px;
-  line-height: 1;
   display: block;
-  margin-bottom: 12px;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 12px;
 }
 
 /* 日英併記の見出し。英語を主、日本語を従として一段小さく表示する。

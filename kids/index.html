@@ -98,9 +98,20 @@
   <div class="wrap">
 
     <header>
-      <!-- 装飾の絵文字。aria-hidden で読み上げ対象から外す
-           （「ゲーム機」と読まれても情報が増えないため）。 -->
-      <span class="h-icon" aria-hidden="true">🎮</span>
+      <!-- ロゴ。旧: 🎮 の絵文字。
+           alt は TOP・404 と同じ「Flying Dev Lab」にしている。
+           このページの見出しは "Playing Dev Lab" なので、
+           読み上げでは発行元の名前が先に伝わる。
+
+           回るGIF（TOP・404 が使っているもの）ではなく静止画にしている。
+           こども向け領域は「動きを減らす」設定に配慮して作ってあるが、
+           アニメーションGIFはCSSから止められないため、ここだけ
+           その配慮の外に出てしまう。あわせて 828KB が 14KB で済む。
+
+           width / height を属性で書いているのは、読み込み前から
+           場所を確保して、下の見出しが跳ねないようにするため。 -->
+      <img class="h-icon" src="/images/fdl-logo-192.png"
+           alt="Flying Dev Lab" width="96" height="96">
       <h1>
         <span class="t-en">Playing Dev Lab</span>
         <span class="t-sep" aria-hidden="true">/</span>

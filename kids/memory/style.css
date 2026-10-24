@@ -205,13 +205,21 @@ main { flex: 1; display: flex; justify-content: center; padding: 0 16px 24px; }
   gap: 8px;
 }
 
+/* 中央の飾り（ロゴ）。押せない場所なので、カードより控えめにする。
+   opacity を 0.25 から 0.40 に上げたのは、絵文字より線の細い絵柄で、
+   0.25 のままだとほとんど見えなかったため。
+   幅を % にしてあるので、盤面が小さい画面でも比率を保って縮む。 */
 .memory-center {
   display: flex;
   align-items: center;
   justify-content: center;
   aspect-ratio: 1;
-  font-size: 22px;
-  opacity: 0.25;
+  opacity: 0.40;
+}
+
+.memory-center img {
+  width: 72%;
+  height: auto;
 }
 
 /* ── カード ──────────────────────────────────────────────── */

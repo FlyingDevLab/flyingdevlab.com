@@ -138,6 +138,13 @@ function startGame() {
    * 5×5 の 25マスに、24枚のカードと中央の飾りを置く。
    * 中央を飾りにしているのは、12組だと1マス余るため。
    * 空白にすると穴が開いて見えるので、ここだけ別のものを置く。
+   *
+   * 飾りは Flying Dev Lab のロゴ（旧: 🐾 の絵文字）。
+   * カードの裏が 🐾 なので、中央まで 🐾 だと「めくれる1枚」に
+   * 見えてしまう。別の絵柄にしておけば、押せない場所だと分かる。
+   *
+   * alt="" にしているのは、親の div に aria-hidden を付けてあるうえ、
+   * この飾りを読み上げても遊びに必要な情報が増えないため。
    */
   let deckIdx = 0;
   for (let cell = 0; cell < COLUMNS * 5; cell++) {
@@ -145,7 +152,12 @@ function startGame() {
       const deco = document.createElement('div');
       deco.className = 'memory-center';
       deco.setAttribute('aria-hidden', 'true');
-      deco.textContent = '🐾';
+      const mark = document.createElement('img');
+      mark.src = '/images/fdl-logo-192.png';
+      mark.alt = '';
+      mark.width  = 64;
+      mark.height = 64;
+      deco.appendChild(mark);
       board.appendChild(deco);
       continue;
     }
