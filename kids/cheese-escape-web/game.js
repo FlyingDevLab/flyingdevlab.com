@@ -88,11 +88,16 @@ const SW_RANGE_BY_HP = [
 // ────────────────────────────────────────────────────────────────
 // ■ 難易度計算
 // ────────────────────────────────────────────────────────────────
-function getDifficulty(score) {
-  const maxMice  = Math.max(2, score * 2);
-  const spawnInt = score >= 6 ? 120
-                 : score >= 4 ? 150
-                 : score >= 2 ? 180
+/*
+ * 難易度は「クリアしたステージ数」で決める。得点（チーズの数）ではない。
+ * 得点はチーズ1個ごとに増えるので、そちらを目盛りにすると
+ * 3倍の速さで難しくなってしまう。
+ */
+function getDifficulty(stage) {
+  const maxMice  = Math.max(2, stage * 2);
+  const spawnInt = stage >= 6 ? 120
+                 : stage >= 4 ? 150
+                 : stage >= 2 ? 180
                  : 210;
   return { maxMice, spawnInt };
 }
@@ -193,7 +198,18 @@ function saveHighScore(value) {
 // ■ ゲーム状態変数
 // ────────────────────────────────────────────────────────────────
 let state          = 'playing';
+/* 得点。チーズを1個とるごとに 1 増える */
 let score          = 0;
+/*
+ * クリアしたステージ数。難易度の目盛りとして使う。
+ *
+ * ★ なぜ score と分けているのか ★
+ *   以前は score がステージ数そのもので、得点と難易度を1つの数で
+ *   兼ねていた。チーズ1個ごとに得点する形へ変えたので、そのままだと
+ *   難易度が3倍の速さで上がり、6ステージ目の難しさが2ステージ目で
+ *   来てしまう。難易度はステージ数で測り続ける。
+ */
+let stage          = 0;
 let highScore      = loadHighScore();  // 変更: 直接呼び出しをやめ、try/catch 付きヘルパー経由に
 let isNewRecord    = false;
 let deliveredTimer = 0;
@@ -355,6 +371,7 @@ function slideMove(ox, oy, totalDx, totalDy, r) {
 // ────────────────────────────────────────────────────────────────
 function startGame() {
   score = 0;
+  stage = 0;
   player.hp = 3;
   startStage();
   showScreen('game');
@@ -387,7 +404,7 @@ function startStage() {
   shockwaves = [];
   swStock    = swMaxStockByHp(prevHp);
   swCharge   = 0;
-  const { spawnInt } = getDifficulty(score);
+  const { spawnInt } = getDifficulty(stage);
   spawnTimer = spawnInt;
   spawnedThisStage = 0;   // ステージが変わったら敵の種類も最初から数え直す
   drag       = false;
@@ -415,7 +432,7 @@ function triggerGameOver() {
 // ■ ネズミ
 // ────────────────────────────────────────────────────────────────
 function spawnMouse() {
-  const { maxMice } = getDifficulty(score);
+  const { maxMice } = getDifficulty(stage);
   if (mice.length >= maxMice) return;
   for (let attempts = 0; attempts < 200; attempts++) {
     const tx = Math.floor(Math.random() * GW);
@@ -1147,7 +1164,7 @@ function loop() {
   if (state === 'playing') {
     if (player.flash   > 0) player.flash--;
     if (player.dmgCool > 0) player.dmgCool--;
-    const { spawnInt } = getDifficulty(score);
+    const { spawnInt } = getDifficulty(stage);
     if (--spawnTimer <= 0) { spawnMouse(); spawnTimer = spawnInt; }
     updateMice();
     updateLasers();     // 敵を倒しうるので、敵の更新のあとに置く
@@ -1158,6 +1175,10 @@ function loop() {
       if (c.collected) continue;
       if (Math.hypot(player.x - c.x, player.y - c.y) < PLAYER_R + CHEESE_R) {
         c.collected = true;
+        // 1個とるごとに得点する。
+        // 以前はステージを全部そろえたときにまとめて 1 点だったが、
+        // 3個目に届く前にやられると、それまで歩いた分が何も残らなかった。
+        score++;
         playSound('pickup');
         vibrate(40);
       }
@@ -1165,7 +1186,9 @@ function loop() {
 
     // 3個すべて集めたらステージクリア
     if (cheeses.every(c => c.collected)) {
-      score++;
+      // 得点はチーズを取ったときに入っているので、ここでは加点しない。
+      // 増やすのは難易度の目盛りだけ。
+      stage++;
       deliveredTimer = 110;
       state = 'delivered';
       // ゴール到達：明るく上昇する3音 ＋ 長め1回の振動でクリア感を演出
