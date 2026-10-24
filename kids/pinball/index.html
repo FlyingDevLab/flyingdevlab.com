@@ -131,16 +131,6 @@
       -->
         <span class="en">Pinball</span>
         <!-- 英語タイトル（主）。 -->
-
-        <span class="sep" aria-hidden="true">/</span>
-        <!--
-          日英テキストを視覚的に区切るセパレーター。
-          aria-hidden="true" でスクリーンリーダーに読まれないようにする
-          （「スラッシュ」と読まれると不自然なため）。
-        -->
-
-        <span class="ja" lang="ja">ピンボール</span>
-        <!-- 日本語タイトル（従）。.ja は style.css で一段小さく表示される。 -->
       </h1>
 
       <span class="header-icon" aria-hidden="true">🎯</span>
@@ -284,8 +274,6 @@
         <div class="highscore-box">
           <p class="highscore-label">
             <span class="en">High Score</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">ハイスコア</span>
           </p>
           <p class="highscore-value" id="top-highscore">0</p>
           <!--
@@ -304,8 +292,6 @@
         ──────────────────────────────────────────────────── -->
         <button class="btn btn-primary" onclick="startGame()">
           <span class="en">Start Game</span>
-          <span class="sep">/</span>
-          <span class="ja" lang="ja">ゲームスタート</span>
         </button>
 
       </div>
@@ -418,8 +404,6 @@
         <!-- ① ゲーム終了見出し ──────────────────────────── -->
         <h2 class="section-title result-title">
           <span class="en">Game Over!</span>
-          <span class="sep">/</span>
-          <span class="ja" lang="ja">ゲーム終了！</span>
         </h2>
 
         <!-- ② 新記録バナー ─────────────────────────────────
@@ -432,8 +416,6 @@
         <div id="new-record-area" class="new-record" hidden aria-live="polite">
           <span aria-hidden="true">🎉</span>
           <span class="en">New High Score!</span>
-          <span class="sep">/</span>
-          <span class="ja" lang="ja">新記録達成！</span>
           <span aria-hidden="true">🎉</span>
         </div>
 
@@ -444,8 +426,6 @@
         <div class="result-score-box">
           <p class="result-label">
             <span class="en">Your Score</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">あなたのスコア</span>
           </p>
           <p class="result-value" id="result-score">0</p>
           <!-- id="result-score": game.js が今回プレイのスコアを書き込む。 -->
@@ -459,8 +439,6 @@
         <div class="result-hs-box">
           <p class="result-hs-label">
             <span class="en">High Score</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">ハイスコア</span>
           </p>
           <p class="result-hs-value" id="result-highscore">0</p>
           <!-- id="result-highscore": 保存済み（または更新後の）ハイスコアを表示。 -->
@@ -473,13 +451,9 @@
         <div class="result-buttons">
           <button class="btn btn-primary" onclick="startGame()">
             <span class="en">Play Again</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">もう一度</span>
           </button>
           <button class="btn btn-secondary" onclick="goToTop()">
             <span class="en">Back to Top</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">タイトルへ</span>
           </button>
         </div>
 

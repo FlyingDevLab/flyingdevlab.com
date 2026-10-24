@@ -700,8 +700,7 @@ function showScorePopup(event, mole) {
   const popup = document.createElement('div');
   popup.classList.add('score-popup');
 
-  // 日英併記テキスト / Bilingual text
-  popup.innerHTML = '<span class="en">+1 Point</span><span class="sep">/</span><span class="ja" lang="ja">+1 ポイント</span>';
+  popup.innerHTML = '<span class="en">+1 Point</span>';
 
   // クリック位置に表示する / Position near the click point
   let x, y;

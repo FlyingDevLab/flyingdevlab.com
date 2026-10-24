@@ -258,7 +258,7 @@ function updateTopHighscoreUI() {
        </div>`;
   } else {
     topHighscoreEl.innerHTML =
-      `<p class="no-record">No record yet&ensp;/&ensp;まだ記録がありません</p>`;
+      `<p class="no-record">No record yet&ensp;</p>`;
   }
 }
 

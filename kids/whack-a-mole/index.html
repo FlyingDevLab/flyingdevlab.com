@@ -45,8 +45,6 @@
       <span class="header-mole" aria-hidden="true">🐭</span>
       <h1>
         <span class="title-en">Whack-a-Mole</span>
-        <span class="title-sep" aria-hidden="true">/</span>
-        <span class="title-ja" lang="ja">モグラ叩き</span>
       </h1>
       <span class="header-mole" aria-hidden="true">🐭</span>
     </div>
@@ -115,8 +113,6 @@
           onclick="startGame()"
         >
           <span class="en">Start Game</span>
-          <span class="sep">/</span>
-          <span class="ja" lang="ja">ゲームスタート</span>
         </button>
 
       </div>
@@ -137,8 +133,6 @@
           <div class="status-item" aria-live="polite" aria-atomic="true">
             <span class="status-label">
               <span class="en">Score</span>
-              <span class="sep">/</span>
-              <span class="ja" lang="ja">スコア</span>
             </span>
             <span class="status-value" id="score-display">0</span>
           </div>
@@ -147,8 +141,6 @@
           <div class="status-item" aria-live="assertive" aria-atomic="true">
             <span class="status-label">
               <span class="en">Time Left</span>
-              <span class="sep">/</span>
-              <span class="ja" lang="ja">残り時間</span>
             </span>
             <span class="status-value" id="timer-display">30</span>
           </div>
@@ -181,23 +173,17 @@
 
         <h2 class="section-title result-title">
           <span class="en">Game Over!</span>
-          <span class="sep">/</span>
-          <span class="ja" lang="ja">ゲーム終了！</span>
         </h2>
 
         <!-- ハイスコア更新演出エリア / New High Score Area -->
         <div id="new-record-area" class="new-record" aria-live="assertive" hidden>
           <span class="en">New High Score!</span>
-          <span class="sep">/</span>
-          <span class="ja" lang="ja">🎉 新記録達成！</span>
         </div>
 
         <!-- 今回のスコア / Your Score -->
         <div class="result-score-box" role="region" aria-label="Your Score / 今回のスコア">
           <p class="result-label">
             <span class="en">Your Score</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">あなたのスコア</span>
           </p>
           <p class="result-value" id="result-score" aria-live="polite">0</p>
         </div>
@@ -206,8 +192,6 @@
         <div class="result-highscore-box" role="region" aria-label="High Score / ハイスコア">
           <p class="result-hs-label">
             <span class="en">High Score</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">ハイスコア</span>
           </p>
           <p class="result-hs-value" id="result-highscore">0</p>
         </div>
@@ -221,8 +205,6 @@
             onclick="startGame()"
           >
             <span class="en">Play Again</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">もう一度</span>
           </button>
           <button
             id="btn-top"
@@ -231,8 +213,6 @@
             onclick="goToTop()"
           >
             <span class="en">Back to Top</span>
-            <span class="sep">/</span>
-            <span class="ja" lang="ja">トップへ</span>
           </button>
         </div>
 

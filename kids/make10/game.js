@@ -548,14 +548,14 @@ function endGame() {
  * スコアが高いほど大げさな表現でプレイヤーを称える。
  */
 function getResultMessage(s) {
-  if (s >= 100) return '神！ / Godlike!';
-  if (s >= 50)  return '伝説！ / Legendary!';
-  if (s >= 20)  return '天才！ / Genius!';
-  if (s >= 10)  return 'すごすぎ！ / Amazing!';
-  if (s >= 5)   return 'すごい！ / Great!';
-  if (s >= 3)   return 'いいね！ / Nice!';
-  if (s >= 1)   return "次はいける！ / You'll get it!";
-  return 'もう一回！ / Try again!';
+  if (s >= 100) return 'Godlike! / 神！';
+  if (s >= 50)  return 'Legendary! / 伝説！';
+  if (s >= 20)  return 'Genius! / 天才！';
+  if (s >= 10)  return 'Amazing! / すごすぎ！';
+  if (s >= 5)   return 'Great! / すごい！';
+  if (s >= 3)   return 'Nice! / いいね！';
+  if (s >= 1)   return "You'll get it! / 次はいける！";
+  return 'Try again! / もう一回！';
 }
 
 
