@@ -190,6 +190,14 @@ window.KLOTSKI = (() => {
      * face が無ければ何も入れない（文字を持たない版のため）。
      * ruby があれば <ruby> で読みを振る。
      *
+     * 文字は <span class="text"> で1枚包む。縦書きにする版
+     * （箱入り娘・華容道）が writing-mode をこの span に掛けるため。
+     * .face 自身に掛けてはいけない。.face は height: 100% を持つ
+     * flex 容器であり、iOS Safari ではこの組み合わせに縦書きを足すと
+     * 高さがボタンではなく画面いっぱいまで伸び、駒が盤の外へ
+     * 細長くはみ出して下の文字やボタンを覆ってしまう。
+     * 中身だけを包んだ span なら内容ぶんの大きさしか持たない。
+     *
      * innerHTML を使わず DOM を組んでいるのは、文字列から要素を作る道を
      * 1本も残さないため。ここに来る値は game.js に書いた固定の文字だけだが、
      * 「ここは文字列を解釈しない」と決めておけば、後から何を足しても安全側に倒れる。
@@ -199,16 +207,19 @@ window.KLOTSKI = (() => {
       face.className = 'face';
       if (!p.face) return face;
 
+      const text = document.createElement('span');
+      text.className = 'text';
       if (p.ruby) {
         const ruby = document.createElement('ruby');
         ruby.appendChild(document.createTextNode(p.face));
         const rt = document.createElement('rt');
         rt.textContent = p.ruby;
         ruby.appendChild(rt);
-        face.appendChild(ruby);
+        text.appendChild(ruby);
       } else {
-        face.textContent = p.face;
+        text.textContent = p.face;
       }
+      face.appendChild(text);
       return face;
     }
 

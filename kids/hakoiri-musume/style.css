@@ -299,6 +299,9 @@ body {
     0 3px 0 rgba(0,0,0,.35),
     inset 0 2px 0 rgba(255,255,255,.35),
     inset 0 -4px 0 rgba(0,0,0,.15);
+  /* 何があっても駒の外へは描かせない。
+     文字の大きさの計算がどこかで狂っても、盤が壊れないようにする保険。 */
+  overflow: hidden;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: calc(var(--cell, 70px) * .3);
@@ -308,11 +311,21 @@ body {
 
 .face rt { font-family: var(--font-body); font-size: .42em; font-weight: 500; opacity: .75; }
 
+/* 文字を包む span。大きさは内容ぶんだけで、駒より大きくはならない。 */
+.face .text { max-width: 100%; max-height: 100%; }
+
 /* 駒の種類ごとの木。1マス＝檜、横2マス＝榧、縦2マス＝胡桃。
    縦駒だけ writing-mode: vertical-rl にして、駒の形に沿って縦書きにする。 */
 .small .face      { --wood: var(--hinoki); }
 .horizontal .face { --wood: var(--kaya);   --grain: 90deg; letter-spacing: .25em; }
-.vertical .face   { --wood: var(--walnut); --grain: 0deg; color: #fff4e2; writing-mode: vertical-rl; letter-spacing: .2em; }
+.vertical .face   { --wood: var(--walnut); --grain: 0deg; color: #fff4e2; }
+
+/* 縦に2マスの駒は、駒の形に沿って縦書きにする。
+   writing-mode を掛けるのは .face ではなく、中の .text であること。
+   .face は height: 100% を持つ flex 容器で、iOS Safari ではそこに
+   縦書きを足すと、高さがボタンではなく画面いっぱいまで伸びる。
+   駒が盤の外へ細長くはみ出し、下の文字やボタンを覆ってしまう。 */
+.vertical .text { writing-mode: vertical-rl; letter-spacing: .2em; }
 
 /* 娘だけ朱漆。内側に金の縁（4つめの inset）を回して、他の駒と区別する。 */
 .musume .face {
