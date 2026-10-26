@@ -157,14 +157,24 @@ body {
    ----------------------------------------------------------------
    幅の決め方は3本とも同じ。画面幅・380px・縦に収まる幅の最小値を取る。
    盤は 4:5（横:縦）なので、使える高さの 0.8 倍が盤の横幅になる。
-   330px は盤以外（ヘッダー・步數・操作・フッターと余白）の高さの実測値。
+   374px は盤以外（ヘッダー・步數・地名2つ・操作・フッターと余白）の
+   高さの実測値。375×667（画面の短い iPhone）で縦に収まるところまで
+   実測して決めた。他の2本より大きいのは、盤の上に地名を1行置いているため
+   （箱入り娘 356px / KLOTSKI 348px）。
+   この数を直し忘れると、背の低い画面で盤が下へはみ出す。
    dvh を使っているのは、iOS でアドレスバーが隠れるときに
    vh が古い値のまま残り、盤が画面からはみ出すため。
+
+   margin-top は、盤の上に出る「赤壁」の場所を空けるためのもの。
+   .stage の padding ではなく margin にしているのは、過關の表示が
+   inset: 0 で .stage に重なるため。padding にすると、
+   その表示が盤より上へはみ出してしまう。
 ---------------------------------------------------------------- */
 .stage {
   position: relative;
-  width: min(100%, 380px, calc((100dvh - 330px) * .8 + 2 * var(--rim-w)));
+  width: min(100%, 380px, calc((100dvh - 374px) * .8 + 2 * var(--rim-w)));
   min-width: 240px;
+  margin-top: 16px;
 }
 
 /* 紫檀の枠。木目と、上辺の光・下辺の影で面取りを作っている */
@@ -202,18 +212,24 @@ body {
   box-shadow: inset 0 3px 6px rgba(0,0,0,.55);
 }
 
-.gate-label {
+/* 盤の上下に出る地名。上が赤壁（逃げてきた場所）、下が江陵（目的地）。
+   2つを同じ見た目にして、盤を挟んで対に見えるようにしている。 */
+.gate-label,
+.wall-label {
   position: absolute;
   left: 50%;
-  bottom: -1.8em;
   transform: translateX(-50%);
   font-family: var(--font-display);
   font-size: .82rem;
   font-weight: 700;
   letter-spacing: .3em;
-  color: var(--gold);
   white-space: nowrap;
 }
+
+.gate-label { bottom: -1.8em; color: var(--gold); }
+
+/* 赤壁は通ってきた場所なので、目的地の江陵より一段おさえた色にする */
+.wall-label { top: -1.8em; color: var(--muted); }
 
 
 /* ----------------------------------------------------------------

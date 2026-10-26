@@ -28,6 +28,13 @@
     まだ漢字を習っていない子でも駒の名前が読めるようにしている。
     注音は台湾の子ども向けの本で使われている読み方の記号である。
 
+  ■ 盤の上下に地名を置いている
+    上が赤壁、下が江陵。曹操は赤壁で敗れたあと華容道を抜けて江陵へ逃げ込み、
+    そこを曹仁に守らせて自分は北へ帰った。盤の上辺から出発して下へ抜ける
+    動きが、そのまま逃げた道筋になる。
+    厳密な地理では、船が焼けた烏林から江陵へは西へ逃げている。
+    上下の配置は地図ではなく物語の図である。
+
   ■ 説明文は「曹丞相」、駒は「曹操」
     説明文では官職で呼んでいる。中国語は 姓＋官職 の順なので「曹丞相」
     （曹操丞相とは言わない）。華容道の時点（建安十三年）の曹操は
@@ -51,17 +58,17 @@
 
   <!-- ===== SEO：ページタイトル・説明 ===== -->
   <title>華容道 – 三國演義的滑塊遊戲</title>
-  <meta name="description" content="把曹丞相從下方的出口送出去。中國傳統的滑塊遊戲，最少81步就能過關。沒有廣告、不用註冊、不會傳送任何資料。">
+  <meta name="description" content="把曹丞相送到江陵去。中國傳統的滑塊遊戲，最少81步就能過關。沒有廣告、不用註冊、不會傳送任何資料。">
 
   <!-- ===== OGP：SNS シェア用メタタグ ===== -->
   <meta property="og:type"        content="website">
   <meta property="og:title"       content="華容道">
-  <meta property="og:description" content="把曹丞相從下方的出口送出去。中國傳統的滑塊遊戲，最少81步就能過關。">
+  <meta property="og:description" content="把曹丞相送到江陵去。中國傳統的滑塊遊戲，最少81步就能過關。">
   <meta property="og:url"         content="https://flyingdevlab.com/kids/huarongdao/">
   <meta property="og:site_name"   content="Flying Dev Lab">
   <meta name="twitter:card"       content="summary">
   <meta name="twitter:title"      content="華容道">
-  <meta name="twitter:description" content="把曹丞相從下方的出口送出去。">
+  <meta name="twitter:description" content="把曹丞相送到江陵去。">
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -73,7 +80,7 @@
     <h1 class="site-title">
       <ruby>華<rt>ㄏㄨㄚˊ</rt>容<rt>ㄖㄨㄥˊ</rt>道<rt>ㄉㄠˋ</rt></ruby>
     </h1>
-    <p class="site-tagline">把曹丞相從下方的出口送出去</p>
+    <p class="site-tagline">把曹丞相送到江陵去</p>
   </header>
 
   <!-- aria-live="polite" … 步數が変わったことを読み上げで追える。
@@ -85,11 +92,15 @@
 
   <div class="stage">
     <div class="frame">
+      <!-- 盤の上と下に置く地名。曹操は上（赤壁）から下（江陵）へ逃げる。
+           飾りなので読み上げからは隠す。どこへ運ぶのかは
+           ヘッダーの説明文（把曹丞相送到江陵去）が伝えている。 -->
+      <span class="wall-label" aria-hidden="true">赤壁</span>
       <div class="grid" id="grid" role="application"
            aria-label="4 乘 5 的棋盤。拖曳棋子來移動。">
       </div>
-      <!-- 盤の下枠を切り欠いた出口。飾りなので読み上げからは隠す -->
-      <div class="gate" aria-hidden="true"><span class="gate-label">出口</span></div>
+      <!-- 盤の下枠を切り欠いた出口 -->
+      <div class="gate" aria-hidden="true"><span class="gate-label">江陵</span></div>
     </div>
 
     <div class="clear" id="clear" hidden>
