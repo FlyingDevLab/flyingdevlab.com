@@ -12,12 +12,12 @@
 //   盤の動きを変えたいときは共有側を直すこと。3本すべてが変わる。
 //
 // ★ 配置 ★
-//   最短56手。左右対称の形から選んである。
-//   家族の位置は標準配置（橫刀立馬・81手）とまったく同じで、
-//   父・母・祖父・祖母は四隅の縦のまま。番頭を下段へ回し、
-//   女中2人を盤の中央に上げてある。同じ箱の、奉公人の並びだけが違う形。
+//   最短89手。3本の中でいちばん難しい。
+//   空き2マスが最下段にある形（定石と同じ始まりの形）の中では、これが最難である。
+//   盤そのものの最難は93手だが、その形は右上に空きが来るため、
+//   始まりの盤というより「誰かが一手動かしたあと」に見える。ここでは採らない。
 //
-//   この56手は盤面を総当たりで解いて確かめた値（同じ駒を続けて動かすのは
+//   この89手は盤面を総当たりで解いて確かめた値（同じ駒を続けて動かすのは
 //   1手と数える規則による）。配置を変えたら必ず解き直すこと。
 //   KLOTSKI は32手、華容道は橫刀立馬の81手。
 //
@@ -34,7 +34,7 @@ KLOTSKI.start({
 
   // 自己最少手数の保存キー。他のゲームと同じ fdl_ 接頭辞を付けている
   // 配置を変えたときはキーも変える。前の配置で出した手数と
-  // 比べられなくなるため（_v2 は 56手の配置になってからの記録）。
+  // 比べられなくなるため（_v2 は 89手の配置になってからの記録）。
   bestKey: 'fdl_hakoiri_best_v2',
 
   // 出口へ運ぶ駒と、その駒が収まるべき位置。
@@ -45,14 +45,14 @@ KLOTSKI.start({
   pieces: [
     { id: 'musume',  type: 'musume',     w: 2, h: 2, x: 1, y: 0, face: '娘',   ruby: 'むすめ',     label: 'むすめ' },
     { id: 'chichi',  type: 'vertical',   w: 1, h: 2, x: 0, y: 0, face: '父',   ruby: 'ちち',       label: 'ちち' },
-    { id: 'haha',    type: 'vertical',   w: 1, h: 2, x: 3, y: 0, face: '母',   ruby: 'はは',       label: 'はは' },
+    { id: 'haha',    type: 'vertical',   w: 1, h: 2, x: 3, y: 1, face: '母',   ruby: 'はは',       label: 'はは' },
     { id: 'sofu',    type: 'vertical',   w: 1, h: 2, x: 0, y: 2, face: '祖父', ruby: 'そふ',       label: 'そふ' },
-    { id: 'sobo',    type: 'vertical',   w: 1, h: 2, x: 3, y: 2, face: '祖母', ruby: 'そぼ',       label: 'そぼ' },
-    { id: 'banto',   type: 'horizontal', w: 2, h: 1, x: 1, y: 4, face: '番頭', ruby: 'ばんとう',   label: 'ばんとう' },
+    { id: 'sobo',    type: 'vertical',   w: 1, h: 2, x: 2, y: 3, face: '祖母', ruby: 'そぼ',       label: 'そぼ' },
+    { id: 'banto',   type: 'horizontal', w: 2, h: 1, x: 1, y: 2, face: '番頭', ruby: 'ばんとう',   label: 'ばんとう' },
     { id: 'decchi1', type: 'small',      w: 1, h: 1, x: 1, y: 3, face: '丁稚', ruby: 'でっち',     label: 'でっち' },
-    { id: 'decchi2', type: 'small',      w: 1, h: 1, x: 2, y: 3, face: '丁稚', ruby: 'でっち',     label: 'でっち' },
-    { id: 'jochu1',  type: 'small',      w: 1, h: 1, x: 1, y: 2, face: '女中', ruby: 'じょちゅう', label: 'じょちゅう' },
-    { id: 'jochu2',  type: 'small',      w: 1, h: 1, x: 2, y: 2, face: '女中', ruby: 'じょちゅう', label: 'じょちゅう' }
+    { id: 'decchi2', type: 'small',      w: 1, h: 1, x: 3, y: 3, face: '丁稚', ruby: 'でっち',     label: 'でっち' },
+    { id: 'jochu1',  type: 'small',      w: 1, h: 1, x: 3, y: 0, face: '女中', ruby: 'じょちゅう', label: 'じょちゅう' },
+    { id: 'jochu2',  type: 'small',      w: 1, h: 1, x: 0, y: 4, face: '女中', ruby: 'じょちゅう', label: 'じょちゅう' }
   ],
 
   // リザルト画面に出す文言。画面に出る日本語はここと index.html にしかない。
