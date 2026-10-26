@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!--
+  ============================================================
+  【設計メモ: 華容道 / HUARONG DAO】
+
+  ■ 同じパズルの3本目
+    箱入り娘（/kids/hakoiri-musume/）・KLOTSKI（/kids/klotski/）と
+    盤も駒の構成も最短手数（81手）もまったく同じである。
+      2×2 が1つ   娘      → 大きい四角 → 曹操
+      2×1 が1つ   番頭    → 横長       → 關羽
+      1×2 が4つ   父母祖父祖母 → 縦長  → 張飛・趙雲・馬超・黃忠
+      1×1 が4つ   丁稚女中 → 小さい四角 → 兵
+    違うのは名札と色と文言だけなので、盤を動かす仕組みは
+    /kids/shared/klotski.js に1本だけ置いて3本で共有している。
+
+  ■ 繁體字で書いている
+    台湾・香港で読まれる字体に揃えた。lang="zh-Hant"。
+    關羽・張飛・趙雲・馬超・黃忠。日本の新字体（関・黄）は使わない。
+
+  ■ 注音符號を振っている
+    箱入り娘の駒にふりがなを振っているのと同じ理由で、
+    まだ漢字を習っていない子でも駒の名前が読めるようにしている。
+    注音は台湾の子ども向けの本で使われている読み方の記号である。
+
+  ■ 三國演義の話であって史実ではない
+    黃忠と馬超がこの場面に揃うのは物語の都合であり、
+    版によっては別の武将に差し替わる。遊びの約束事として扱う。
+
+  ■ フォントを読み込んでいない
+    画面の文字が漢字と注音だけなので、/fonts/ のラテン文字フォントは
+    描画に関与しない。OS に入っている書体だけで表示する。
+    /kids* の CSP は default-src 'none' で、
+    .github/workflows/no-external-links.yml が外部URLの混入を検査する。
+  ============================================================
+  -->
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>華容道 – 三國演義的滑塊遊戲</title>
+  <meta name="description" content="把曹操從下方的出口移出去。中國傳統的滑塊遊戲，最少81步就能過關。沒有廣告、不用註冊、不會傳送任何資料。">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="華容道">
+  <meta property="og:description" content="把曹操從下方的出口移出去。中國傳統的滑塊遊戲，最少81步就能過關。">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/huarongdao/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="華容道">
+  <meta name="twitter:description" content="把曹操從下方的出口移出去。">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app">
+
+  <header class="site-header" role="banner">
+    <h1 class="site-title">
+      <ruby>華<rt>ㄏㄨㄚˊ</rt>容<rt>ㄖㄨㄥˊ</rt>道<rt>ㄉㄠˋ</rt></ruby>
+    </h1>
+    <p class="site-tagline">把曹操從下方的出口移出去</p>
+  </header>
+
+  <!-- aria-live="polite" … 步數が変わったことを読み上げで追える。
+       assertive にすると操作のたびに読み上げを割り込ませてしまう。 -->
+  <div class="stats" aria-live="polite">
+    <div class="stat"><span>步數</span><strong id="moves">0</strong></div>
+    <div class="stat"><span>時間</span><strong id="time">0:00</strong></div>
+  </div>
+
+  <div class="stage">
+    <div class="frame">
+      <div class="grid" id="grid" role="application"
+           aria-label="4 乘 5 的棋盤。拖曳棋子來移動。">
+      </div>
+      <!-- 盤の下枠を切り欠いた出口。飾りなので読み上げからは隠す -->
+      <div class="gate" aria-hidden="true"><span class="gate-label">出口</span></div>
+    </div>
+
+    <div class="clear" id="clear" hidden>
+      <h2>過關！</h2>
+      <p class="result" id="result"></p>
+      <p class="best" id="best"></p>
+      <p class="note">最少只要 81 步。<br>再挑戰看看吧！</p>
+      <button class="btn primary" id="again" type="button">再玩一次</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="undo" type="button" disabled>
+      <span aria-hidden="true">↶</span> 復原
+    </button>
+    <button class="btn" id="reset" type="button">重來</button>
+  </div>
+
+  <!-- 戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。 -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      <a href="/kids/" class="footer-link"><span lang="en">&larr; Playing Dev Lab</span></a>
+    </p>
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
+    </p>
+  </footer>
+
+</main>
+
+<!-- 盤を動かす仕組み。箱入り娘・KLOTSKI と共有している。
+     game.js より先に読む必要がある（game.js が KLOTSKI.start を呼ぶため）。 -->
+<script src="/kids/shared/klotski.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

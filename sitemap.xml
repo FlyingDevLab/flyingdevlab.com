@@ -232,6 +232,52 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/memory/"/>
   </url>
 
+  <url>
+    <!-- 箱入り娘 / Hakoiri Musume（2026-10-26 追加） -->
+    <loc>https://flyingdevlab.com/kids/hakoiri-musume/</loc>
+    <lastmod>2026-10-26</lastmod>
+    <!-- ゲーム本体が頻繁に変わることはないため monthly -->
+    <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
+    <priority>0.8</priority>
+    <!-- ここだけ hreflang の使い方が他と違う。
+         サイト内の他のURLは1ページに日英を併記しているため、
+         ja / en / x-default すべてが自分自身を指している。
+         この3本（箱入り娘・KLOTSKI・華容道）は、同じパズルを
+         言語ごとに別のページにした本物の言語違いなので、互いを指す。
+         x-default は、盤に文字が1つも無い KLOTSKI を指している。
+         組に入る3本とも、まったく同じ4行を申告する必要がある
+         （1本でも欠けると組として認識されない）。 -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/hakoiri-musume/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/klotski/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://flyingdevlab.com/kids/huarongdao/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/klotski/"/>
+  </url>
+
+  <url>
+    <!-- KLOTSKI（2026-10-26 追加・箱入り娘の英語版） -->
+    <loc>https://flyingdevlab.com/kids/klotski/</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/hakoiri-musume/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/klotski/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://flyingdevlab.com/kids/huarongdao/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/klotski/"/>
+  </url>
+
+  <url>
+    <!-- 華容道（2026-10-26 追加・箱入り娘の中国語版／繁体字） -->
+    <loc>https://flyingdevlab.com/kids/huarongdao/</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/hakoiri-musume/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/klotski/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://flyingdevlab.com/kids/huarongdao/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/klotski/"/>
+  </url>
+
   <!-- 
     ============================================================
     プライバシーポリシー（サイト共通・個人情報の取り扱い方針のページ）

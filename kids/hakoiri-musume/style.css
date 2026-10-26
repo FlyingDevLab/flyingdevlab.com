@@ -1,0 +1,436 @@
+/* ================================================================
+   style.css – 箱入り娘（HAKOIRI MUSUME）
+   ================================================================
+
+   ■ 目指している見た目
+     藍染めの布の上に置いた、日本製の木のパズル。
+     盤が主役で、操作するものは盤の下にまとめる。
+     木目・面取り・影だけで作っており、画像は1枚も使っていない。
+
+   ■ 他の6本と配色が違うのは意図である
+     kids 配下の他のゲームは、ハブと同じクリーム色（#f5f0e6）を
+     共有して「同じ場所にいる」感じを作っている。
+     このゲームだけは藍と木の色にしている。木のオモチャの質感を
+     出すことがこのゲームの主題であり、クリーム色の上に木の盤を
+     置くと、盤と背景が同じ明度帯に入って盤が浮かなくなる。
+     ハブとの繋がりは、フッターの戻り導線と文字の作法で保っている。
+
+   ■ Webフォントを1つも読み込んでいない
+     他のゲームは /fonts/ の Nunito を @font-face で自己ホストしている。
+     このゲームが読み込まないのは、画面に出る文字が漢字とかなだけで、
+     Nunito（ラテン文字のみ）が描画に関与しないため。
+     1バイトも読まずに済むなら読まない方がよい。
+     表示に使うのは OS に入っている明朝と丸ゴシックで、
+     どちらも無い環境では serif / sans-serif に落ちる。
+
+     デモ版は Google Fonts から Kaisei Decol と Zen Maru Gothic を
+     読んでいたが、/kids* の CSP（default-src 'none'; font-src 'self'）
+     では届かないため外した。同じ系統の OS フォントを指定している。
+
+   ■ 単位の方針
+     盤の中の寸法は % と、JS が実測して入れる --cell だけで作っている。
+     px で書くと、盤の大きさが変わったときに駒と文字の比率が崩れる。
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   01. 配色と書体
+---------------------------------------------------------------- */
+:root {
+  /* color-scheme: dark … スクロールバーや選択範囲の色を暗い前提に揃える */
+  color-scheme: dark;
+
+  --ai:        #1c2842;   /* 藍：背景 */
+  --ai-deep:   #121a2e;   /* 濃藍：影・パネル・ボタン */
+  --ink:       #f2ebdb;   /* 生成り：文字 */
+  --muted:     #a7b1c8;   /* 薄藍：補助の文字 */
+  --rim:       #a9743f;   /* 盤の枠（欅） */
+  --rim-hi:    #cf9a5f;   /* 枠の光が当たる側 */
+  --recess:    #2b1d13;   /* 盤の底 */
+  --hinoki:    #e2c08f;   /* 小駒（檜） */
+  --kaya:      #c99a63;   /* 横駒（榧） */
+  --walnut:    #9a6a40;   /* 縦駒（胡桃） */
+  --shu:       #c0432d;   /* 娘（朱漆） */
+  --gold:      #ecc96c;   /* 金：強調 */
+  --wood-ink:  #3a2414;   /* 木に乗せる文字 */
+
+  /* 明朝は「木に焼き印」の雰囲気に近い。丸ゴシックは本文用。
+     どちらも OS 搭載フォントだけで組んでおり、外部からは読まない。 */
+  --font-display: 'Hiragino Mincho ProN', 'Yu Mincho', YuMincho,
+                  'Noto Serif JP', 'MS PMincho', serif;
+  --font-body:    'Hiragino Maru Gothic ProN', 'Hiragino Sans',
+                  'Yu Gothic', YuGothic, Meiryo, sans-serif;
+
+  /* 盤の枠の太さ。出口の幅もこの値から計算している */
+  --rim-w: clamp(10px, 3.4vw, 16px);
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+/* 背景は藍の布。
+   repeating-linear-gradient を直交する2本重ねて、織りの目を作っている。
+   画像を使わずに布の質感を出すための最小限の表現で、
+   線は 1px 未満の濃さにしてあるため、模様としては認識されない。 */
+body {
+  margin: 0;
+  background:
+    repeating-linear-gradient(0deg,   rgba(255,255,255,.022) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg,  rgba(0,0,0,.030)       0 1px, transparent 1px 3px),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,.06), transparent 70%),
+    var(--ai);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  /* 駒を押したときに青い矩形が出ないようにする */
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ----------------------------------------------------------------
+   02. レイアウト
+   ----------------------------------------------------------------
+   縦1列に並べ、フッターだけ margin-top: auto で下へ送る。
+   左右の余白に env(safe-area-inset-*) を足しているのは、
+   横向きの iPhone でノッチの下に盤が隠れないようにするため。
+---------------------------------------------------------------- */
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: max(14px, env(safe-area-inset-top, 0px));
+  padding-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+
+/* ----------------------------------------------------------------
+   03. ヘッダー
+---------------------------------------------------------------- */
+.site-header { text-align: center; }
+
+.site-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 7vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.5;
+}
+
+/* ふりがなは本文書体の方が読みやすい。明朝のまま小さくすると線が消える */
+.site-title rt {
+  font-family: var(--font-body);
+  font-size: .32em;
+  font-weight: 500;
+  letter-spacing: .3em;
+  color: var(--muted);
+}
+
+.site-tagline {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.site-tagline rt { font-size: .5em; letter-spacing: .1em; }
+
+
+/* ----------------------------------------------------------------
+   04. 手数と時間
+   ----------------------------------------------------------------
+   font-variant-numeric: tabular-nums … 数字の幅を揃える。
+   これが無いと、時間が 1:08 → 1:09 と進むだけで桁が横に動く。
+---------------------------------------------------------------- */
+.stats {
+  display: flex;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat {
+  min-width: 104px;
+  display: grid;
+  justify-items: center;
+  padding: 4px 14px;
+  background: var(--ai-deep);
+  border-radius: 12px;
+  line-height: 1.4;
+}
+
+.stat span   { font-size: .78rem; color: var(--muted); letter-spacing: .14em; }
+.stat strong { font-size: 1.45rem; font-weight: 700; }
+
+
+/* ----------------------------------------------------------------
+   05. 盤
+   ----------------------------------------------------------------
+   .stage の幅の決め方：
+     ・画面幅いっぱい（100%）
+     ・でも 380px より大きくしない（大画面で盤が間延びしないように）
+     ・そして「縦に収まる幅」を超えない
+   3つ目が calc((100dvh - 330px) * .8 + 2 * var(--rim-w)) である。
+   盤は 4:5（横:縦）なので、使える高さの 0.8 倍が盤の横幅になる。
+   330px は盤以外（ヘッダー・手数・操作・フッターと余白）の高さの実測値。
+   dvh を使っているのは、iOS でアドレスバーが隠れるときに
+   vh が古い値のまま残り、盤が画面からはみ出すため。
+---------------------------------------------------------------- */
+.stage {
+  position: relative;
+  width: min(100%, 380px, calc((100dvh - 330px) * .8 + 2 * var(--rim-w)));
+  min-width: 240px;
+}
+
+/* 盤の枠。木目（repeating-linear-gradient）＋ 木目に沿った色の流れ ＋
+   上辺の光と下辺の影（inset）で、面取りした木の縁に見せている。 */
+.frame {
+  position: relative;
+  padding: var(--rim-w);
+  border-radius: 16px;
+  background:
+    repeating-linear-gradient(92deg, rgba(0,0,0,.05) 0 3px, transparent 3px 11px),
+    linear-gradient(160deg, var(--rim-hi), var(--rim) 55%, #8a5a2f);
+  box-shadow:
+    0 18px 36px rgba(0,0,0,.45),
+    inset 0 2px 0 rgba(255,255,255,.25),
+    inset 0 -3px 0 rgba(0,0,0,.25);
+}
+
+/* 盤の底。駒はこの中に position: absolute で置かれる。
+   touch-action: none … 駒をなぞったときに画面がスクロールしないように。
+   これが無いと、縦に駒を動かそうとするとページが動く。 */
+.grid {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--recess);
+  border-radius: 6px;
+  box-shadow: inset 0 3px 10px rgba(0,0,0,.6);
+  touch-action: none;
+}
+
+/* 出口。下の枠を 2マスぶん切り欠いて、盤の底の色で塗っている。
+   left と width を --rim-w から計算しているので、枠の太さが
+   変わっても出口は盤の中央2マスに合い続ける。 */
+.gate {
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--rim-w) + (100% - 2 * var(--rim-w)) * .25);
+  width: calc((100% - 2 * var(--rim-w)) * .5);
+  height: var(--rim-w);
+  background: var(--recess);
+  box-shadow: inset 0 3px 6px rgba(0,0,0,.5);
+}
+
+.gate-label {
+  position: absolute;
+  left: 50%;
+  bottom: -1.8em;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+
+/* ----------------------------------------------------------------
+   06. 駒
+   ----------------------------------------------------------------
+   駒は <button> である。<div> にすると、キーボードで選べず、
+   読み上げでも「押せるもの」として扱われない。
+   位置と大きさは % で与える（JS が left / top を書き換える）。
+
+   transition は left / top だけに掛けている。all にすると、
+   指で動かしている最中の座標更新まで補間されて遅れて追いてくる。
+---------------------------------------------------------------- */
+.piece {
+  position: absolute;
+  margin: 0;
+  border: 0;
+  padding: calc(var(--cell, 70px) * .04);   /* 駒と駒の隙間 */
+  background: none;
+  font: inherit;
+  color: var(--wood-ink);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: left .16s cubic-bezier(.3,.7,.4,1), top .16s cubic-bezier(.3,.7,.4,1);
+  z-index: 1;
+}
+
+/* 枠線はボタン自身ではなく木の面（.face）に出す。
+   ボタンには隙間ぶんの padding があるため、そこに枠が出ると駒から浮く。 */
+.piece:focus { outline: none; }
+.piece:focus-visible .face { outline: 3px solid var(--gold); outline-offset: 1px; }
+
+/* つかんでいる間。transition を切って指に完全に追従させ、
+   影を伸ばして1枚だけ持ち上がって見えるようにする。 */
+.piece.lift { cursor: grabbing; transition: none; z-index: 3; }
+.piece.lift .face {
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 14px rgba(0,0,0,.5),
+    inset 0 2px 0 rgba(255,255,255,.4),
+    inset 0 -4px 0 rgba(0,0,0,.18);
+}
+
+/* 木の面。木目の向き（--grain）と色（--wood）を駒の種類ごとに差し替える。
+   下向きの濃い inset が木口の厚み、上向きの白い inset が面取りの光。 */
+.face {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--cell, 70px) * .12);
+  background:
+    repeating-linear-gradient(var(--grain, 100deg), rgba(0,0,0,.045) 0 2px, transparent 2px 9px),
+    linear-gradient(150deg, rgba(255,255,255,.28), transparent 45%),
+    var(--wood);
+  box-shadow:
+    0 3px 0 rgba(0,0,0,.35),
+    inset 0 2px 0 rgba(255,255,255,.35),
+    inset 0 -4px 0 rgba(0,0,0,.15);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(var(--cell, 70px) * .3);
+  line-height: 1.1;
+  transition: transform .12s, box-shadow .12s;
+}
+
+.face rt { font-family: var(--font-body); font-size: .42em; font-weight: 500; opacity: .75; }
+
+/* 駒の種類ごとの木。1マス＝檜、横2マス＝榧、縦2マス＝胡桃。
+   縦駒だけ writing-mode: vertical-rl にして、駒の形に沿って縦書きにする。 */
+.small .face      { --wood: var(--hinoki); }
+.horizontal .face { --wood: var(--kaya);   --grain: 90deg; letter-spacing: .25em; }
+.vertical .face   { --wood: var(--walnut); --grain: 0deg; color: #fff4e2; writing-mode: vertical-rl; letter-spacing: .2em; }
+
+/* 娘だけ朱漆。内側に金の縁（4つめの inset）を回して、他の駒と区別する。 */
+.musume .face {
+  --wood: var(--shu);
+  color: var(--gold);
+  font-size: calc(var(--cell, 70px) * .62);
+  box-shadow:
+    0 3px 0 rgba(0,0,0,.4),
+    inset 0 2px 0 rgba(255,220,190,.35),
+    inset 0 -5px 0 rgba(0,0,0,.2),
+    inset 0 0 0 calc(var(--cell, 70px) * .06) rgba(236,201,108,.35);
+}
+
+.musume .face rt { color: var(--ink); }
+
+/* 出口から出ていく動き。盤の外へ落として消す。
+   opacity の遅延（.6s）は、娘が枠を抜けきってから薄くなるように合わせた値。 */
+.musume.escape {
+  transition: top .9s cubic-bezier(.5,0,.7,.4), opacity .4s .6s;
+  opacity: 0;
+}
+
+
+/* ----------------------------------------------------------------
+   07. ボタン
+   ----------------------------------------------------------------
+   min-height: 48px は、指で押す的の最小の大きさとして広く使われている値。
+   :active で2px 沈ませ、影を薄くして、押した手応えを出している。
+---------------------------------------------------------------- */
+.controls { display: flex; gap: 10px; margin-top: 16px; }
+
+.btn {
+  min-width: 128px;
+  min-height: 48px;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--ai-deep);
+  box-shadow: 0 3px 0 rgba(0,0,0,.4);
+  cursor: pointer;
+}
+
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.4); }
+.btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.btn:disabled { opacity: .4; cursor: default; transform: none; }
+.btn.primary { background: var(--gold); color: var(--wood-ink); }
+
+
+/* ----------------------------------------------------------------
+   08. クリア表示
+   ----------------------------------------------------------------
+   盤の上に重ねる（inset: 0）。別の画面に切り替えないのは、
+   解けた盤面を見せたまま結果を出したいため。
+---------------------------------------------------------------- */
+/* hidden 属性が付いている間は出さない。
+   .clear に display: grid を指定しているため、ブラウザ標準の
+   [hidden] { display: none } が負けて、常に表示されてしまう。
+   クラス付きのセレクタで打ち消しておく必要がある。 */
+.clear[hidden] { display: none; }
+
+.clear {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(18, 26, 46, .92);
+  text-align: center;
+  z-index: 10;
+  animation: rise .4s ease-out;
+}
+
+.clear h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--gold);
+}
+
+.clear h2 rt { font-family: var(--font-body); font-size: .3em; font-weight: 500; color: var(--muted); letter-spacing: .2em; }
+
+.clear .result { margin: 0; font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.clear .best   { margin: 0; font-size: .95rem; font-weight: 700; color: var(--gold); font-variant-numeric: tabular-nums; }
+.clear .note   { margin: 0 0 4px; font-size: .9rem; line-height: 1.6; color: var(--muted); }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* ----------------------------------------------------------------
+   09. フッター
+---------------------------------------------------------------- */
+.site-footer { margin-top: auto; padding-top: 10px; text-align: center; }
+.footer-copy { margin: 3px 0; font-size: .75rem; color: var(--muted); line-height: 1.6; }
+.footer-link { color: var(--gold); font-weight: 700; text-decoration: none; }
+.footer-link:hover { text-decoration: underline; }
+.footer-link:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+
+/* ----------------------------------------------------------------
+   10. 動きを減らす設定
+   ----------------------------------------------------------------
+   OS で「視差効果を減らす」を選んでいる人には動きを出さない。
+   駒は transition なしで即座に移動し、娘は出口で消えずにその場に残る。
+   クリア表示も動かさずに出す。遊べるかどうかには影響しない。
+---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .piece, .face, .musume.escape { transition: none !important; }
+  .clear { animation: none; }
+}

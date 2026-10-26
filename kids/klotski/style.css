@@ -1,0 +1,378 @@
+/* ================================================================
+   style.css – KLOTSKI
+   ================================================================
+
+   ■ 目指している見た目
+     クリーム色の机の上に置いた、塗り分けた積み木。
+     箱入り娘（藍と木）・華容道（漆と紫檀）と並べたときに、
+     一目で別のオモチャだと分かるようにしている。
+     画像は1枚も使っていない。
+
+   ■ 配色はハブと同じ
+     背景・文字・影の値は /kids/style.css と同じものを使っている。
+     3本のうち1本はサイト共通の色でいてほしいため、この版を合わせた。
+
+   ■ フォントは自己ホスト
+     画面の文字が英語だけなので、Nunito（ラテン文字のみ）が効く。
+     /fonts/ の woff2 を @font-face で読む。他のゲームと同じ方針で、
+     Google Fonts などの外部 CDN は使わない。
+     /kids* の CSP は font-src 'self' しか許可していないため、
+     外から読もうとしても届かない。
+
+   ■ パスは絶対で書く
+     url('/fonts/...')。相対 '../fonts/' だと /kids/fonts/ を指してしまう。
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   01. フォント（自己ホスト）
+---------------------------------------------------------------- */
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/nunito-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/nunito-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/nunito-latin-900.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* ----------------------------------------------------------------
+   02. 配色
+---------------------------------------------------------------- */
+:root {
+  --bg:      #f5f0e6;   /* クリーム：背景。ハブと同じ値 */
+  --card:    #ffffff;   /* 盤のまわり */
+  --tray:    #e6ded0;   /* 盤の底。積み木を置く浅い受け皿 */
+  --text:    #383843;
+  --muted:   #858588;
+  --primary: #4d80d1;
+  --shadow:  rgba(56, 56, 67, .08);
+
+  /* 積み木の色。大きさごとに1色ずつ。
+     色だけで区別させるのではなく、大きさがすでに違うため、
+     色が見分けにくい人でも形で判断できる。 */
+  --big:   #e2674f;   /* 2×2 */
+  --tall:  #4d80d1;   /* 1×2 */
+  --wide:  #5aa96a;   /* 2×1 */
+  --unit:  #edb94a;   /* 1×1 */
+
+  /* 盤の縁の太さ。出口の幅もこの値から計算している */
+  --rim-w: clamp(10px, 3.2vw, 15px);
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  /* 駒を押したときに青い矩形が出ないようにする */
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ----------------------------------------------------------------
+   03. レイアウト
+   ----------------------------------------------------------------
+   縦1列に並べ、フッターだけ margin-top: auto で下へ送る。
+   左右の余白に env(safe-area-inset-*) を足しているのは、
+   横向きの iPhone でノッチの下に盤が隠れないようにするため。
+---------------------------------------------------------------- */
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: max(14px, env(safe-area-inset-top, 0px));
+  padding-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+
+/* ----------------------------------------------------------------
+   04. ヘッダー
+---------------------------------------------------------------- */
+.site-header { text-align: center; }
+
+.site-title {
+  margin: 0;
+  font-size: clamp(1.8rem, 8vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+.site-tagline {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .95rem;
+  font-weight: 700;
+}
+
+
+/* ----------------------------------------------------------------
+   05. 手数と時間
+   ----------------------------------------------------------------
+   font-variant-numeric: tabular-nums … 数字の幅を揃える。
+   これが無いと、時間が 1:08 → 1:09 と進むだけで桁が横に動く。
+---------------------------------------------------------------- */
+.stats {
+  display: flex;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat {
+  min-width: 104px;
+  display: grid;
+  justify-items: center;
+  padding: 4px 14px;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px var(--shadow);
+  line-height: 1.4;
+}
+
+.stat span   { font-size: .74rem; font-weight: 700; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.stat strong { font-size: 1.45rem; font-weight: 900; }
+
+
+/* ----------------------------------------------------------------
+   06. 盤
+   ----------------------------------------------------------------
+   .stage の幅の決め方：
+     ・画面幅いっぱい（100%）
+     ・でも 380px より大きくしない（大画面で盤が間延びしないように）
+     ・そして「縦に収まる幅」を超えない
+   3つ目が calc((100dvh - 330px) * .8 + 2 * var(--rim-w)) である。
+   盤は 4:5（横:縦）なので、使える高さの 0.8 倍が盤の横幅になる。
+   330px は盤以外（ヘッダー・手数・操作・フッターと余白）の高さの実測値。
+   dvh を使っているのは、iOS でアドレスバーが隠れるときに
+   vh が古い値のまま残り、盤が画面からはみ出すため。
+---------------------------------------------------------------- */
+.stage {
+  position: relative;
+  width: min(100%, 380px, calc((100dvh - 330px) * .8 + 2 * var(--rim-w)));
+  min-width: 240px;
+}
+
+/* 積み木を置く浅い受け皿。白いカードの中に一段くぼみを作る */
+.tray {
+  position: relative;
+  padding: var(--rim-w);
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: 0 10px 24px var(--shadow);
+}
+
+.grid {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--tray);
+  border-radius: 10px;
+  /* touch-action: none … 駒をなぞったときに画面がスクロールしないように。
+     これが無いと、縦に駒を動かそうとするとページが動く。 */
+  touch-action: none;
+}
+
+/* 出口。下の縁を2マスぶん切り欠いて、受け皿の色で塗っている。
+   left と width を --rim-w から計算しているので、縁の太さが
+   変わっても出口は盤の中央2マスに合い続ける。 */
+.gate {
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--rim-w) + (100% - 2 * var(--rim-w)) * .25);
+  width: calc((100% - 2 * var(--rim-w)) * .5);
+  height: var(--rim-w);
+  background: var(--tray);
+}
+
+.gate-label {
+  position: absolute;
+  left: 50%;
+  bottom: -1.9em;
+  transform: translateX(-50%);
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .24em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+
+/* ----------------------------------------------------------------
+   07. 積み木
+   ----------------------------------------------------------------
+   駒は <button> である。<div> にすると、キーボードで選べず、
+   読み上げでも「押せるもの」として扱われない。
+   位置と大きさは % で与える（共有エンジンが left / top を書き換える）。
+
+   transition は left / top だけに掛けている。all にすると、
+   指で動かしている最中の座標更新まで補間されて遅れて追いてくる。
+---------------------------------------------------------------- */
+.piece {
+  position: absolute;
+  margin: 0;
+  border: 0;
+  padding: calc(var(--cell, 70px) * .045);   /* 駒と駒の隙間 */
+  background: none;
+  font: inherit;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: left .16s cubic-bezier(.3,.7,.4,1), top .16s cubic-bezier(.3,.7,.4,1);
+  z-index: 1;
+}
+
+/* 枠線はボタン自身ではなく積み木の面（.face）に出す。
+   ボタンには隙間ぶんの padding があるため、そこに枠が出ると駒から浮く。 */
+.piece:focus { outline: none; }
+.piece:focus-visible .face { outline: 3px solid var(--text); outline-offset: 2px; }
+
+/* つかんでいる間。transition を切って指に完全に追従させ、
+   影を伸ばして1枚だけ持ち上がって見えるようにする。 */
+.piece.lift { cursor: grabbing; transition: none; z-index: 3; }
+.piece.lift .face { transform: translateY(-2px); box-shadow: 0 10px 18px rgba(56,56,67,.28), inset 0 -4px 0 rgba(0,0,0,.14); }
+
+/* 塗った木の面。下向きの濃い inset が木口の厚み、
+   上からの白いかぶせが塗りの艶。 */
+.face {
+  /* display: block を書かないと、<span> は inline のままで
+     width と height が効かず、積み木が 0×0 になって見えなくなる。
+     文字を持たない版なので、中身を並べる必要はない。 */
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--cell, 70px) * .16);
+  background:
+    linear-gradient(165deg, rgba(255,255,255,.3), rgba(255,255,255,0) 55%),
+    var(--paint);
+  box-shadow: 0 3px 0 rgba(0,0,0,.12), inset 0 -4px 0 rgba(0,0,0,.14);
+  transition: transform .12s, box-shadow .12s;
+}
+
+/* 大きさごとの色。形がすでに違うので、色は見分けの補助でしかない */
+.big  .face { --paint: var(--big); }
+.tall .face { --paint: var(--tall); }
+.wide .face { --paint: var(--wide); }
+.unit .face { --paint: var(--unit); }
+
+/* 出口から出ていく動き。盤の外へ落として消す。
+   opacity の遅延（.6s）は、縁を抜けきってから薄くなるように合わせた値。 */
+.big.escape {
+  transition: top .9s cubic-bezier(.5,0,.7,.4), opacity .4s .6s;
+  opacity: 0;
+}
+
+
+/* ----------------------------------------------------------------
+   08. ボタン
+   ----------------------------------------------------------------
+   min-height: 48px は、指で押す的の最小の大きさとして広く使われている値。
+   :active で2px 沈ませ、影を薄くして、押した手応えを出している。
+---------------------------------------------------------------- */
+.controls { display: flex; gap: 10px; margin-top: 16px; }
+
+.btn {
+  min-width: 128px;
+  min-height: 48px;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--text);
+  background: var(--card);
+  box-shadow: 0 3px 0 rgba(56,56,67,.12);
+  cursor: pointer;
+}
+
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(56,56,67,.12); }
+.btn:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.btn:disabled { opacity: .45; cursor: default; transform: none; }
+.btn.primary { background: var(--primary); color: #ffffff; }
+
+
+/* ----------------------------------------------------------------
+   09. クリア表示
+   ----------------------------------------------------------------
+   盤の上に重ねる（inset: 0）。別の画面に切り替えないのは、
+   解けた盤面を見せたまま結果を出したいため。
+
+   hidden 属性が付いている間は出さない。.clear に display: grid を
+   指定しているため、ブラウザ標準の [hidden] { display: none } が
+   負けて、常に表示されてしまう。クラス付きで打ち消す必要がある。
+---------------------------------------------------------------- */
+.clear[hidden] { display: none; }
+
+.clear {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .94);
+  text-align: center;
+  z-index: 10;
+  animation: rise .4s ease-out;
+}
+
+.clear h2     { margin: 0; font-size: 1.9rem; font-weight: 900; color: var(--primary); }
+.clear .result { margin: 0; font-size: 1.25rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.clear .best   { margin: 0; font-size: .95rem; font-weight: 700; color: var(--big); font-variant-numeric: tabular-nums; }
+.clear .note   { margin: 0 0 4px; font-size: .88rem; line-height: 1.6; color: var(--muted); }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* ----------------------------------------------------------------
+   10. フッター
+---------------------------------------------------------------- */
+.site-footer { margin-top: auto; padding-top: 10px; text-align: center; }
+.footer-copy { margin: 3px 0; font-size: .75rem; color: var(--muted); line-height: 1.6; }
+.footer-link { color: var(--primary); font-weight: 700; text-decoration: none; }
+.footer-link:hover { text-decoration: underline; }
+.footer-link:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+
+
+/* ----------------------------------------------------------------
+   11. 動きを減らす設定
+   ----------------------------------------------------------------
+   OS で「視差効果を減らす」を選んでいる人には動きを出さない。
+   駒は transition なしで即座に移動し、出口では消えずにその場に残る
+   （共有エンジンが escape を付けない）。クリア表示も動かさずに出す。
+---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .piece, .face, .big.escape { transition: none !important; }
+  .clear { animation: none; }
+}

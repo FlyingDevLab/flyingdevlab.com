@@ -64,13 +64,18 @@ Our children's apps are built with **no ads, no in-app purchases, and no data se
 | `favicon-512.png` | 高解像度ファビコン（512×512） |
 | `apple-touch-icon.png` | iOS ホーム画面用アイコン |
 | `ogp.png` | OGP / SNS シェア用画像 |
-| `kids/` | こども向け領域。ハブ1枚とブラウザゲーム5本 |
+| `kids/` | こども向け領域。ハブ1枚とブラウザゲーム9本 |
 | `kids/index.html` | ハブ「Playing Dev Lab / 遊びの研究室」 |
 | `kids/make10/` | ブラウザゲーム：MAKE10（10をつくろう） |
 | `kids/cheese-escape-web/` | ブラウザゲーム：MAZE（迷路） |
 | `kids/whack-a-mole/` | ブラウザゲーム：Whack-a-Mole（モグラ叩き） |
 | `kids/pinball/` | ブラウザゲーム：Pinball（ピンボール） |
 | `kids/ten-puzzle/` | ブラウザゲーム：Ten Puzzle（テンパズル） |
+| `kids/memory/` | ブラウザゲーム：Animal Match（どうぶつめくり） |
+| `kids/hakoiri-musume/` | ブラウザゲーム：箱入り娘（日本語版） |
+| `kids/klotski/` | ブラウザゲーム：KLOTSKI（箱入り娘の英語版） |
+| `kids/huarongdao/` | ブラウザゲーム：華容道（箱入り娘の中国語版・繁体字） |
+| `kids/shared/` | 上記3本が共有する盤面エンジン（`klotski.js`） |
 | `privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
 
 ### この表に無いもの
@@ -94,6 +99,22 @@ Git連携デプロイに切り替えると画像が 404 になります。
 
 ブラウザゲームのページは英語をメイン、日本語をサブとして表示しています。
 `html` の `lang` は `en`（`ja/` のみ `ja`）で、日本語の行には個別に `lang="ja"` を付けています。
+
+例外が3本あります。箱入り娘・KLOTSKI・華容道は、同じパズルを言語ごとに
+別のページに分けたもので、それぞれ1言語だけで書かれています。
+
+| ページ | `lang` | 画面の文字 |
+|---|---|---|
+| `kids/hakoiri-musume/` | `ja` | 日本語だけ（娘・父・母・番頭・丁稚・女中） |
+| `kids/klotski/` | `en` | 英語だけ。駒には文字を書いていない |
+| `kids/huarongdao/` | `zh-Hant` | 繁体字だけ（曹操・關羽・張飛・趙雲・馬超・黃忠・兵） |
+
+盤も駒の構成も最短手数（81手）も3本とも同じです。違うのは名札と色と文言だけなので、
+盤を動かす仕組みは `kids/shared/klotski.js` に1本だけ置いて共有しています。
+**ここを直すと3本すべてが変わります。** 直したら3本とも開いて確かめてください。
+
+sitemap では、この3本だけが互いを `hreflang` の代替として申告しています
+（サイト内の他のURLは1ページに日英を併記しているため、自分自身を指しています）。
 
 ---
 

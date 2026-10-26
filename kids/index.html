@@ -14,7 +14,7 @@
   【設計メモ: 遊びの研究室 / Playing Dev Lab（こども向けハブ）】
 
   ■ このページの役割
-    ブラウザゲーム5本の入口をひとつにまとめたページ。
+    ブラウザゲーム9本の入口をひとつにまとめたページ。
     こども向けコンテンツを /kids/ 配下の1箇所に集約するために作った。
 
   ■ 名前について
@@ -135,8 +135,8 @@
     <main id="main">
 
       <!-- ゲーム一覧
-           <ul> にしているのは「6件の並び」という構造を
-           補助技術に伝えるため。読み上げ時に「リスト、6項目」と案内される。
+           <ul> にしているのは「9件の並び」という構造を
+           補助技術に伝えるため。読み上げ時に「リスト、9項目」と案内される。
 
            各ゲームの絵文字は、そのゲームのページ内で既に使われているものを
            流用している（遊ぶ前と遊んだ後で同じ記号になるため迷わない）。
@@ -146,6 +146,14 @@
              🎯 ピンボールのターゲット
              💡 テンパズルのヒント
              🐘 どうぶつめくりのカード
+             🧩 箱入り娘
+             🟥 KLOTSKI
+             🏮 華容道
+
+             末尾の3本（同じパズルの日本語版・英語版・中国語版）だけは例外で、
+             ゲームのページ内に絵文字を置いていない。盤に絵文字が1つ入ると、
+             そこだけ別の素材に見えるため。一覧の体裁を揃える必要があるのは
+             このページだけなので、この3つはここでしか使われない。
       -->
       <ul class="games">
         <li>
@@ -213,6 +221,52 @@
             <span class="g-tip">
               Flip the cards and find the pairs
               <span class="ja" lang="ja">おなじ どうぶつを さがそう</span>
+            </span>
+          </a>
+        </li>
+        <!-- 追加（2026-10-26）: 箱入り娘。
+             1枚もののHTMLとして作った試作を、他のゲームと同じ
+             index.html / style.css / game.js の3枚に分けて移した7本目。
+             このゲームだけ画面の文字を日本語（漢字）だけにしている。
+             理由は kids/hakoiri-musume/index.html の設計メモに書いた。 -->
+        <li>
+          <a href="hakoiri-musume/">
+            <span class="g-icon" aria-hidden="true">🧩</span>
+            <span class="g-en">HAKOIRI MUSUME</span>
+            <span class="g-ja" lang="ja">箱入り娘</span>
+            <span class="g-tip">
+              Japanese edition. Let the daughter out
+              <span class="ja" lang="ja">日本語版。娘を下の出口から出してあげよう</span>
+            </span>
+          </a>
+        </li>
+        <!-- 追加（2026-10-26）: KLOTSKI と 華容道。
+             箱入り娘とまったく同じパズルの、英語版と中国語版（繁体字）。
+             盤も駒の構成も最短手数（81手）も同じで、違うのは名札と色と文言だけ。
+             3本が同じ仕組み（/kids/shared/klotski.js）を共有している。
+
+             1枚のページに3言語を詰めず、別のページに分けたのは、
+             このパズルが文化ごとに別の物語を持っているため。
+             日本は家族と奉公人、中国は三國演義の武将、西洋は名前のないブロック。 -->
+        <li>
+          <a href="klotski/">
+            <span class="g-icon" aria-hidden="true">🟥</span>
+            <span class="g-en">KLOTSKI</span>
+            <span class="g-ja" lang="ja">クロツキ</span>
+            <span class="g-tip">
+              English edition. Set the big block free
+              <span class="ja" lang="ja">英語版。大きい駒を出口から出そう</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="huarongdao/">
+            <span class="g-icon" aria-hidden="true">🏮</span>
+            <span class="g-en" lang="zh-Hant">華容道</span>
+            <span class="g-ja" lang="ja">かようどう</span>
+            <span class="g-tip">
+              Chinese edition. Set Cao Cao free
+              <span class="ja" lang="ja">中国語版（繁体字）。曹操を出口から出そう</span>
             </span>
           </a>
         </li>
@@ -411,12 +465,12 @@
             <span class="ja" lang="ja">課金はありません。すべて無料です。</span>
           </li>
           <li>
-            Nothing is sent anywhere. Your play record stays on this device.
+            No data is sent anywhere. Your play record stays on this device.
             <span class="ja" lang="ja">データを外部へ送りません。遊んだ記録はこの端末の中だけに残ります。</span>
           </li>
           <li>
-            No links that lead away from the Lab.
-            <span class="ja" lang="ja">研究室の外に出るリンクはありません。</span>
+            No way out of the Lab.
+            <span class="ja" lang="ja">研究室から外に出る手段はありません。</span>
           </li>
         </ul>
         <p class="note">

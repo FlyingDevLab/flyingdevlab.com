@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!--
+  ============================================================
+  【設計メモ: KLOTSKI】
+
+  ■ 同じパズルの3本目のうちの1本
+    箱入り娘（/kids/hakoiri-musume/）・華容道（/kids/huarongdao/）と
+    盤も駒の構成も最短手数（81手）もまったく同じである。
+    違うのは駒の名札と色と文言だけで、盤を動かす仕組みは
+    /kids/shared/klotski.js に1本だけ置いて3本で共有している。
+
+  ■ このページだけ英語である
+    他の6本は EN/JA 併記、箱入り娘は日本語だけ。このページは英語だけ。
+    同じ盤を、それぞれの言語で遊び切れる形にするのが3本に分けた理由であり、
+    1枚のページに2言語を詰めると、盤に重ねるリザルト画面が縦に伸びて
+    盤そのものの余白が無くなる。
+
+  ■ 駒に文字を書かない
+    箱入り娘は家族と奉公人、華容道は三國演義の武将という名前を持つが、
+    この版の駒は大きさと色だけで区別する。盤の上に言語が1文字も無くなり、
+    どの言語の人でも同じように遊べる。
+    読み上げ用の名前（Big block など）は aria-label に入れてある。
+
+  ■ 配色はこのサイトのクリーム色に合わせてある
+    箱入り娘は藍と木、華容道は漆と紫檀。この版はハブ（/kids/）と
+    同じクリーム色の上に、塗り分けた積み木を置いた見た目にしている。
+    3本が並んだときに、一目で別のオモチャだと分かるようにするため。
+
+  ■ 外部リンク・外部読み込みは1つもない
+    フォントは /fonts/ の Nunito を自己ホストしている（他のゲームと同じ）。
+    /kids* の CSP は default-src 'none' で、
+    .github/workflows/no-external-links.yml が外部URLの混入を検査する。
+  ============================================================
+  -->
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>KLOTSKI – Sliding Block Puzzle for Kids</title>
+  <meta name="description" content="Slide the blocks and set the big one free. The classic sliding block puzzle, solvable in 81 moves. No ads, no sign-up, nothing sent.">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="KLOTSKI">
+  <meta property="og:description" content="Slide the blocks and set the big one free. The classic sliding block puzzle.">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/klotski/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="KLOTSKI">
+  <meta name="twitter:description" content="Slide the blocks and set the big one free.">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app">
+
+  <header class="site-header" role="banner">
+    <h1 class="site-title">KLOTSKI</h1>
+    <p class="site-tagline">Slide the blocks and set the big one free</p>
+  </header>
+
+  <!-- aria-live="polite" … 手数が変わったことを読み上げで追える。
+       assertive にすると操作のたびに読み上げを割り込ませてしまう。 -->
+  <div class="stats" aria-live="polite">
+    <div class="stat"><span>Moves</span><strong id="moves">0</strong></div>
+    <div class="stat"><span>Time</span><strong id="time">0:00</strong></div>
+  </div>
+
+  <div class="stage">
+    <div class="tray">
+      <div class="grid" id="grid" role="application"
+           aria-label="A 4 by 5 board. Drag the blocks to move them.">
+      </div>
+      <!-- 盤の下枠を切り欠いた出口。飾りなので読み上げからは隠す -->
+      <div class="gate" aria-hidden="true"><span class="gate-label">EXIT</span></div>
+    </div>
+
+    <div class="clear" id="clear" hidden>
+      <h2>Escaped!</h2>
+      <p class="result" id="result"></p>
+      <p class="best" id="best"></p>
+      <p class="note">The shortest solution is 81 moves.<br>Give it a try!</p>
+      <button class="btn primary" id="again" type="button">Play again</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="undo" type="button" disabled>
+      <span aria-hidden="true">↶</span> Undo
+    </button>
+    <button class="btn" id="reset" type="button">Give up</button>
+  </div>
+
+  <!-- 戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。 -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      <a href="/kids/" class="footer-link">&larr; Playing Dev Lab</a>
+    </p>
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
+    </p>
+  </footer>
+
+</main>
+
+<!-- 盤を動かす仕組み。箱入り娘・華容道と共有している。
+     game.js より先に読む必要がある（game.js が KLOTSKI.start を呼ぶため）。 -->
+<script src="/kids/shared/klotski.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

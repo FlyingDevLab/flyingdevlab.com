@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!--
+  ============================================================
+  【設計メモ: 箱入り娘 / HAKOIRI MUSUME】
+
+  ■ このゲームだけ日本語表記にしている
+    他の6本は画面の文字をすべて EN/JA 併記にしているが、
+    このゲームは「日本製の木のオモチャ」の印象を出すため、
+    画面に出す文字を漢字だけに揃えている。
+      手数 ・ 時間 ・ 戻す ・ 諦める ・ 出口 ・ 脱出
+    英語は2か所にだけ残している。
+      ・<title> と OGP … 検索結果とシェア時の表示。画面には出ない
+      ・aria-label      … 読み上げ用。画面には出ない
+    そのため <html lang="ja"> にしている。他のゲームは lang="en" だが、
+    画面に出る文字が日本語だけなら、読み上げの言語も日本語が正しい。
+
+  ■ 絵文字を使わない
+    他の6本はヘッダーに絵文字を置いているが、このゲームには置かない。
+    木と漆の盤の中に絵文字が1つ入ると、そこだけ別の素材に見える。
+    ハブ（/kids/）のカードだけは一覧の体裁を揃えるため 🧩 を使っており、
+    ゲーム側に同じ絵文字が出てこないのは意図的である。
+
+  ■ canonical を置いていない
+    他のゲームページと同じ。og:url だけを持たせている。
+    検索からの着地点になるハブ（/kids/index.html）だけが canonical を持つ。
+
+  ■ 盤を動かす仕組みは3本で共有している
+    このパズルは、英語版（/kids/klotski/）と中国語版（/kids/huarongdao/）でも
+    まったく同じ盤・同じ駒の構成・同じ最短81手である。
+    そこで仕組みは /kids/shared/klotski.js に1本だけ置き、
+    game.js には駒の名札と文言しか書いていない。
+    盤の動きを変えたいときは共有側を直すこと。3本すべてが変わる。
+
+  ■ 外部リンク・外部読み込みは1つもない
+    フォントも読み込んでいない（理由は style.css の冒頭に書いた）。
+    /kids* の CSP は default-src 'none' で、
+    .github/workflows/no-external-links.yml が外部URLの混入を検査する。
+  ============================================================
+  -->
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>箱入り娘 / Hakoiri Musume – Sliding Block Puzzle</title>
+  <meta name="description" content="娘を下の出口から出してあげよう。江戸から伝わる木のスライドパズル。広告なし・登録なし・外部送信なし。A Japanese wooden sliding block puzzle. Slide the blocks and let the daughter out. No ads, no sign-up, nothing sent.">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="箱入り娘 / Hakoiri Musume">
+  <meta property="og:description" content="娘を下の出口から出してあげよう。江戸から伝わる木のスライドパズル。A Japanese wooden sliding block puzzle.">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/hakoiri-musume/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="箱入り娘 / Hakoiri Musume">
+  <meta name="twitter:description" content="娘を下の出口から出してあげよう。／ Slide the blocks and let the daughter out.">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app">
+
+  <!-- ===== ヘッダー =====
+       h1 にふりがなを振っている。「箱入り娘」は漢字4文字のうち
+       3文字が小学校で習わない読みを含むため、読みを添える。
+       <rt></rt> が空なのは「り」に読みが要らないため。
+       ruby は rb と rt を同じ数だけ並べる必要があるので、空の rt を置く。 -->
+  <header class="site-header" role="banner">
+    <h1 class="site-title">
+      <ruby>箱入<rt>はこい</rt>り<rt></rt>娘<rt>むすめ</rt></ruby>
+    </h1>
+    <p class="site-tagline">
+      <ruby>娘<rt>むすめ</rt></ruby>を<ruby>下<rt>した</rt></ruby>の<ruby>出口<rt>でぐち</rt></ruby>から<ruby>出<rt>だ</rt></ruby>してあげよう
+    </p>
+  </header>
+
+  <!-- ===== 手数と時間 =====
+       aria-live="polite" を付けているのは、駒を動かすたびに
+       手数が変わったことを読み上げで追えるようにするため。
+       assertive にすると操作のたびに読み上げを割り込ませてしまう。 -->
+  <div class="stats" aria-live="polite">
+    <div class="stat"><span>手数</span><strong id="moves">0</strong></div>
+    <div class="stat"><span>時間</span><strong id="time">0:00</strong></div>
+  </div>
+
+  <!-- ===== 盤 =====
+       駒は game.js が作る。HTML には空の盤だけを置いている。
+       role="application" は、矢印キーをブラウザのスクロールではなく
+       このゲームの操作として扱ってほしいと補助技術に伝えるため。 -->
+  <div class="stage">
+    <div class="frame">
+      <div class="grid" id="grid" role="application"
+           aria-label="4マス×5マスの盤。駒をドラッグして動かします">
+      </div>
+      <!-- 盤の下枠を切り欠いた出口。飾りなので読み上げからは隠す -->
+      <div class="gate" aria-hidden="true"><span class="gate-label">出口</span></div>
+    </div>
+
+    <!-- クリア表示。盤の上に重ねる -->
+    <div class="clear" id="clear" hidden>
+      <h2><ruby>脱出<rt>だっしゅつ</rt></ruby>！</h2>
+      <p class="result" id="result"></p>
+      <p class="best" id="best"></p>
+      <p class="note">最短は81手。<br>挑戦してみよう。</p>
+      <button class="btn primary" id="again" type="button">もう一度</button>
+    </div>
+  </div>
+
+  <!-- ===== 操作 =====
+       盤の下にまとめている。盤の上や横に置くと、駒を動かしている指が
+       そのままボタンに届いてしまう位置に入る。 -->
+  <div class="controls">
+    <button class="btn" id="undo" type="button" disabled aria-label="Undo / 手を戻す">
+      <span aria-hidden="true">↶</span> 戻す
+    </button>
+    <button class="btn" id="reset" type="button" aria-label="Reset / はじめからやり直す">
+      諦める
+    </button>
+  </div>
+
+  <!-- ===== フッター =====
+       戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
+       こども向け領域の外（TOP・SNS・App Store など）へは繋がない方針。 -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      <a href="/kids/" class="footer-link"><span lang="en">&larr; Playing Dev Lab</span>&ensp;/&ensp;遊びの研究室</a>
+    </p>
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
+    </p>
+  </footer>
+
+</main>
+
+<!-- 盤を動かす仕組み。英語版・中国語版と共有している。
+     game.js より先に読む必要がある（game.js が KLOTSKI.start を呼ぶため）。
+     絶対パスで書いているのは、/kids/ 配下のどこから読んでも同じ1本を指すため。 -->
+<script src="/kids/shared/klotski.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
