@@ -16,7 +16,7 @@
 //
 //   /kids/klotski/          最短32手   いちばんやさしい
 //   /kids/huarongdao/       最短81手   橫刀立馬
-//   /kids/hakoiri-musume/   最短89手   いちばん難しい
+//   /kids/hakoiri-musume/   81〜120手  むずかしさを4段から選べる
 //
 // この手数は盤面を総当たりで解いて確かめた値である（数え方は下記）。
 // 配置を変えたら必ず解き直し、各ゲームの注記も書き換えること。
@@ -78,6 +78,18 @@
 //
 // HTML 側に必要な id は9つ。3本とも同じ名前を使っている。
 //   grid moves time undo reset clear result best again
+//
+// ── 難易度を選べるようにするとき ──────────────────────────────
+//
+//   start() は盤を入れ替える口を返す。
+//     const game = KLOTSKI.start(cfg);
+//     game.setLayout(pieces, bestKey);   // 盤を入れ替えて最初から
+//
+//   cfg.onClear を渡しておくと、上がったときに呼ばれる。
+//     onClear({ moves, time, isNew, previous })
+//   これを使うと、クリアした瞬間に次の難易度を開くといったことが、
+//   エンジンの側を1行も変えずに各ゲームの game.js で書ける。
+//   箱入り娘だけがこの2つを使っている。
 // ================================================================
 
 window.KLOTSKI = (() => {
@@ -319,6 +331,10 @@ window.KLOTSKI = (() => {
       else if (isNew)      bestEl.textContent = cfg.text.bestNew(prev);
       else                 bestEl.textContent = cfg.text.bestKept(prev);
 
+      // クリアを game.js に知らせる。クリア表示を出す前に呼ぶので、
+      // 受け取った側は、表示の中身（開放の知らせなど）をここで足せる。
+      if (cfg.onClear) cfg.onClear({ moves: moves, time: t, isNew: isNew, previous: prev });
+
       if (reduceMotion) {
         // 動きを減らす設定のときは駒を飛び出させず、その場に置いたまま結果を出す
         clearEl.hidden = false;
@@ -498,6 +514,16 @@ window.KLOTSKI = (() => {
     if (window.ResizeObserver) new ResizeObserver(updateCellVar).observe(grid);
 
     reset();
+
+    // 盤を入れ替える口。難易度を選べるゲーム（箱入り娘）が使う。
+    // 他の2本は戻り値を使わないので、何も変わらない。
+    return {
+      setLayout: function (pieces, bestKey) {
+        cfg.pieces = pieces;
+        if (bestKey) cfg.bestKey = bestKey;
+        reset();
+      }
+    };
   }
 
   return { start };
