@@ -32,7 +32,8 @@
 
   ■ 盤を動かす仕組みは3本で共有している
     このパズルは、英語版（/kids/klotski/）と中国語版（/kids/huarongdao/）でも
-    まったく同じ盤・同じ駒の構成・同じ最短81手である。
+    盤も駒の構成もまったく同じである。違うのは名札と色と文言、
+    そして始まりの配置だけ（この版は56手、KLOTSKI は32手、華容道は81手）。
     そこで仕組みは /kids/shared/klotski.js に1本だけ置き、
     game.js には駒の名札と文言しか書いていない。
     盤の動きを変えたいときは共有側を直すこと。3本すべてが変わる。
@@ -105,7 +106,7 @@
       <h2><ruby>脱出<rt>だっしゅつ</rt></ruby>！</h2>
       <p class="result" id="result"></p>
       <p class="best" id="best"></p>
-      <p class="note">最短は81手。<br>挑戦してみよう。</p>
+      <p class="note">最短は56手。<br>挑戦してみよう。</p>
       <button class="btn primary" id="again" type="button">もう一度</button>
     </div>
   </div>

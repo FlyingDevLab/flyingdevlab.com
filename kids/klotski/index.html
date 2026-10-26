@@ -11,9 +11,15 @@
 
   ■ 同じパズルの3本目のうちの1本
     箱入り娘（/kids/hakoiri-musume/）・華容道（/kids/huarongdao/）と
-    盤も駒の構成も最短手数（81手）もまったく同じである。
-    違うのは駒の名札と色と文言だけで、盤を動かす仕組みは
+    盤も駒の構成もまったく同じである。違うのは駒の名札と色と文言、
+    そして始まりの配置だけで、盤を動かす仕組みは
     /kids/shared/klotski.js に1本だけ置いて3本で共有している。
+
+  ■ 3本でいちばんやさしい配置にしている
+    この版が最短32手、箱入り娘が56手、華容道が81手（橫刀立馬）。
+    駒に文字が無く、どの言語の人でも入れるのがこの版なので、
+    3本の中では入口の役をあてている。
+    手数はいずれも盤面を総当たりで解いて確かめた値である。
 
   ■ このページだけ英語である
     他の6本は EN/JA 併記、箱入り娘は日本語だけ。このページは英語だけ。
@@ -41,7 +47,7 @@
 
   <!-- ===== SEO：ページタイトル・説明 ===== -->
   <title>KLOTSKI – Sliding Block Puzzle for Kids</title>
-  <meta name="description" content="Slide the blocks and set the big one free. The classic sliding block puzzle, solvable in 81 moves. No ads, no sign-up, nothing sent.">
+  <meta name="description" content="Slide the blocks and set the big one free. The classic sliding block puzzle, solvable in 32 moves. No ads, no sign-up, nothing sent.">
 
   <!-- ===== OGP：SNS シェア用メタタグ ===== -->
   <meta property="og:type"        content="website">
@@ -84,7 +90,7 @@
       <h2>Escaped!</h2>
       <p class="result" id="result"></p>
       <p class="best" id="best"></p>
-      <p class="note">The shortest solution is 81 moves.<br>Give it a try!</p>
+      <p class="note">The shortest solution is 32 moves.<br>Give it a try!</p>
       <button class="btn primary" id="again" type="button">Play again</button>
     </div>
   </div>

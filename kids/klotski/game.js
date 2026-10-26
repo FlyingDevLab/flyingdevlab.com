@@ -12,13 +12,21 @@
 //   共有エンジンは face が無ければ駒の中身を空のままにする。
 //   読み上げ用の名前は label にだけ入れてある。
 //
-// ★ 配置は3本とも同じ ★
-//   標準配置（最短81手）。箱入り娘の娘、華容道の曹操に当たるのが big。
+// ★ 配置 ★
+//   最短32手。3本の中でいちばんやさしい配置で、初めて触る人の入口にしている。
+//   空き2マスが出口の真上にあるので、何をすればいいかが見た瞬間に分かる。
+//   左右対称の形を選んである。対称な盤は「誰かが作った問題」に見える。
+//
+//   この32手は盤面を総当たりで解いて確かめた値（同じ駒を続けて動かすのは
+//   1手と数える規則による）。配置を変えたら必ず解き直すこと。
+//   箱入り娘は56手、華容道は橫刀立馬の81手。
 // ================================================================
 
 KLOTSKI.start({
 
-  bestKey: 'fdl_klotski_best',
+  // 配置を変えたときはキーも変える。前の配置で出した手数と
+  // 比べられなくなるため（_v2 は 32手の配置になってからの記録）。
+  bestKey: 'fdl_klotski_best_v2',
 
   // 出口へ運ぶ駒と、その駒が収まるべき位置。
   // 出口は下辺の中央2マスなので x = 1、2マスの高さが最下段に収まる y = 3。
@@ -28,15 +36,15 @@ KLOTSKI.start({
   // label は読み上げ専用。同じ形が4つ並ぶため、番号を振って区別している。
   pieces: [
     { id: 'big',   type: 'big',  w: 2, h: 2, x: 1, y: 0, label: 'Big block' },
-    { id: 'tall1', type: 'tall', w: 1, h: 2, x: 0, y: 0, label: 'Tall block 1' },
-    { id: 'tall2', type: 'tall', w: 1, h: 2, x: 3, y: 0, label: 'Tall block 2' },
-    { id: 'tall3', type: 'tall', w: 1, h: 2, x: 0, y: 2, label: 'Tall block 3' },
-    { id: 'tall4', type: 'tall', w: 1, h: 2, x: 3, y: 2, label: 'Tall block 4' },
-    { id: 'wide',  type: 'wide', w: 2, h: 1, x: 1, y: 2, label: 'Wide block' },
-    { id: 'unit1', type: 'unit', w: 1, h: 1, x: 1, y: 3, label: 'Small block 1' },
-    { id: 'unit2', type: 'unit', w: 1, h: 1, x: 2, y: 3, label: 'Small block 2' },
-    { id: 'unit3', type: 'unit', w: 1, h: 1, x: 0, y: 4, label: 'Small block 3' },
-    { id: 'unit4', type: 'unit', w: 1, h: 1, x: 3, y: 4, label: 'Small block 4' }
+    { id: 'tall1', type: 'tall', w: 1, h: 2, x: 0, y: 1, label: 'Tall block 1' },
+    { id: 'tall2', type: 'tall', w: 1, h: 2, x: 3, y: 1, label: 'Tall block 2' },
+    { id: 'tall3', type: 'tall', w: 1, h: 2, x: 0, y: 3, label: 'Tall block 3' },
+    { id: 'tall4', type: 'tall', w: 1, h: 2, x: 3, y: 3, label: 'Tall block 4' },
+    { id: 'wide',  type: 'wide', w: 2, h: 1, x: 1, y: 3, label: 'Wide block' },
+    { id: 'unit1', type: 'unit', w: 1, h: 1, x: 0, y: 0, label: 'Small block 1' },
+    { id: 'unit2', type: 'unit', w: 1, h: 1, x: 3, y: 0, label: 'Small block 2' },
+    { id: 'unit3', type: 'unit', w: 1, h: 1, x: 1, y: 2, label: 'Small block 3' },
+    { id: 'unit4', type: 'unit', w: 1, h: 1, x: 2, y: 2, label: 'Small block 4' }
   ],
 
   // リザルト画面に出す文言。単数と複数を出し分ける
