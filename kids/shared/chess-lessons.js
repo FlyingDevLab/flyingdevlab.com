@@ -37,8 +37,12 @@
 //   「逃げる的の読み」が主題になってしまう。
 //   棋譜の章は、白と黒の両方を自分で指す。
 //
-//   自動で相手が動くのは20「ひきわけと とうりょう」だけ。
-//   それも考えてはいない。「次に自分が動ける数がいちばん多い所へ逃げる」
+//   自動で相手が動くのは2回だけ。
+//   ・20「ひきわけと とうりょう」 … 黒のキングが逃げる（fleeMove）
+//   ・おまけ「コンピュータと さす」 … 黒が決まりごとで指す（/kids/shared/chess-cpu.js）
+//   どちらも先は読まない。
+//
+//   20のほうは「次に自分が動ける数がいちばん多い所へ逃げる」
 //   という決まりごとを1つ当てているだけである（fleeMove）。
 //   あの回は詰みの形が存在しない駒組みなので、でたらめに動かしても成立する。
 //   決まりごとを置いたのはステイルメイトを避けるためで、
@@ -674,10 +678,14 @@
     return need - have;
   }
 
-  // 駒のくみあわせを選ぶボタン。追いかけ回だけ出す
+  // 駒のくみあわせを選ぶボタン。追いかけ回と、おまけ（相手の選択）で出す
+  var SETS_LABEL = ui.sets ? ui.sets.getAttribute('aria-label') : '';
   function paintSets() {
     var g = goal();
     if (!g.sets) { ui.sets.hidden = true; return; }
+    // 見出しは回ごとに変えられる。HTML に書いた「駒のくみあわせ」は
+    // 追いかけ回の言葉なので、おまけで読み上げるとちがう話になる
+    ui.sets.setAttribute('aria-label', g.setsLabel || SETS_LABEL);
     ui.sets.hidden = false;
     ui.sets.innerHTML = '';
     g.sets.forEach(function (set, i) {
@@ -926,19 +934,48 @@
     return best;
   }
 
+  // おまけで「コンピュータと さす」を選んでいるか。
+  // 選びは goal.sets に cpu: true を付けて持つ（追いかけ回の駒の選びと同じ置き場）
+  function cpuOn() {
+    var g = goal();
+    var set = g.kind === 'free' && g.sets && g.sets[S.setAt];
+    return !!(set && set.cpu && window.ChessCpu);
+  }
+
   // 黒を動かして見せる。白の手が盤に乗ってから少し置く。
   // すぐ動かすと、自分の手と相手の手が同時に起きたように見える
-  function letBlackRun() {
+  // lastMove … 白が直前に指した手。CPU の「取り返す」が使う
+  function letBlackRun(lastMove) {
     S.waitBlack = true;
     paint();
     // 待っているあいだに目次を押されたら、この手は捨てる。
     // 片付けないと、次のレッスンの盤に黒の手が落ちる
     // （レッスン18を開いた瞬間に白が1手動く、という壊れ方をしていた）
     var mine = S.index;
+    var setWas = S.setAt;
     S.timer = window.setTimeout(function () {
       S.timer = 0;
       S.waitBlack = false;
-      if (S.index !== mine || goal().kind !== 'chase') return;
+      if (S.index !== mine) return;
+
+      // おまけ：CPU が指す
+      if (goal().kind === 'free') {
+        // 待っているあいだに「ふたりで さす」へ切り替えられたら指さない
+        if (S.setAt !== setWas || !cpuOn()) return;
+        var r = window.ChessCpu.choose(S.pos, lastMove);
+        if (!r) { paint(); return reportFree(S.pos); }
+        var csan = C.toSan(S.pos, r.move);
+        S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased });
+        S.record.push({ san: csan, color: S.pos.turn });
+        S.pos = C.apply(S.pos, r.move);
+        writeRecord();
+        paint();
+        updateButtons();
+        reportFree(S.pos);
+        return;
+      }
+
+      if (goal().kind !== 'chase') return;
       var m = fleeMove(S.pos);
       if (!m) { paint(); return chaseReport(); }
       var san = C.toSan(S.pos, m);
@@ -1003,6 +1040,27 @@
   // 09. できたかどうか
   // ----------------------------------------------------------------
 
+  // おまけ：盤の状態を一言で伝える（決着・チェック・ひきわけ）
+  function reportFree(pos) {
+    var st = C.status(pos);
+    if (st.kind === 'checkmate') {
+      say('Checkmate. ' + (st.winner === 'w' ? 'White' : 'Black') + ' wins.',
+          'チェックメイト。' + (st.winner === 'w' ? '白' : '黒') + 'の かち。', 'good');
+    } else if (st.kind === 'stalemate') {
+      say('Stalemate. A draw.', 'ステイルメイト。ひきわけ。', 'good');
+    } else if (st.kind === 'material') {
+      say('Neither side can mate. A draw.', 'もう どちらも 詰ませられない。ひきわけ。', 'good');
+    } else if (st.kind === 'repetition5' || st.kind === 'seventyfive') {
+      say('Automatic draw.', 'じどうで ひきわけ。', 'good');
+    } else if (st.claimable) {
+      say('A draw can be claimed here.', 'いま「ひきわけに しよう」と 言える ばんめん。');
+    } else if (C.inCheck(pos, pos.turn)) {
+      say('Check.', 'チェック。' + (pos.turn === 'w' ? '白' : '黒') + 'の キングが ねらわれて いる。');
+    } else {
+      clearSay();
+    }
+  }
+
   function judge(move, san, way) {
     var w = win();
     var pos = S.pos;
@@ -1017,23 +1075,9 @@
     }
 
     if (kind === 'free') {
-      var st = C.status(pos);
-      if (st.kind === 'checkmate') {
-        say('Checkmate. ' + (st.winner === 'w' ? 'White' : 'Black') + ' wins.',
-            'チェックメイト。' + (st.winner === 'w' ? '白' : '黒') + 'の かち。', 'good');
-      } else if (st.kind === 'stalemate') {
-        say('Stalemate. A draw.', 'ステイルメイト。ひきわけ。', 'good');
-      } else if (st.kind === 'material') {
-        say('Neither side can mate. A draw.', 'もう どちらも 詰ませられない。ひきわけ。', 'good');
-      } else if (st.kind === 'repetition5' || st.kind === 'seventyfive') {
-        say('Automatic draw.', 'じどうで ひきわけ。', 'good');
-      } else if (st.claimable) {
-        say('A draw can be claimed here.', 'いま「ひきわけに しよう」と 言える ばんめん。');
-      } else if (C.inCheck(pos, pos.turn)) {
-        say('Check.', 'チェック。' + (pos.turn === 'w' ? '白' : '黒') + 'の キングが ねらわれて いる。');
-      } else {
-        clearSay();
-      }
+      reportFree(pos);
+      // コンピュータと さす：白が指して、まだ続くなら黒の番
+      if (cpuOn() && pos.turn === 'b' && !C.status(pos).over) letBlackRun(move);
       return;
     }
 
@@ -1293,9 +1337,9 @@
     if (goal().kind === 'replay') return replayGo(-1);
     if (!S.past.length) return;
     var back = S.past.pop();
-    // 追いかけ回は、黒の手と自分の手が1組で1手に見える。
+    // 追いかけ回と「コンピュータと さす」は、黒の手と自分の手が1組で1手に見える。
     // 1つだけ戻すと相手の手番で止まり、盤を触れないまま固まる
-    if (goal().kind === 'chase' && S.past.length && back.pos.turn !== S.start.turn) {
+    if ((goal().kind === 'chase' || cpuOn()) && S.past.length && back.pos.turn !== S.start.turn) {
       back = S.past.pop();
     }
     S.pos = back.pos;

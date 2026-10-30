@@ -58,7 +58,7 @@
 //        sets は駒のくみあわせ。どれも詰みの形が存在しないことを
 //        総当たりで確かめてある（chess.js の insufficientMaterial の注記）。
 //     { kind:'free' }
-//        ふたりで さす。ルールは全部きいている
+//        コンピュータと さす（ふたりでも さす）。ルールは全部きいている
 //
 // ★ 盤と棋譜は機械で確かめてある ★
 //   23レッスンすべてについて、次を確認した（2026-10-30）。
@@ -708,23 +708,38 @@ window.CHESS_LESSONS = {
 
     {
       chapter: 7,
-      en: 'Play with someone',
-      ja: 'ふたりで さす',
+      en: 'Play the computer',
+      ja: 'コンピュータと さす',
       fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       body: [
-        { t: 'p', en: 'No lesson here. Two players, one screen, all the rules on.',
-          ja: 'ここは レッスンでは ない。1つの がめんで ふたりで さす ところ。1巻で ならった きまりは ぜんぶ きいて いる。プロモーション・アンパッサン・キャスリング・チェックメイト・ステイルメイト・ひきわけ、ぜんぶ。' },
+        { t: 'p', en: 'No lesson here. You play White and the computer plays Black. All the rules are on.',
+          ja: 'ここは レッスンでは ない。白が きみで、黒は コンピュータが さす。1巻で ならった きまりは ぜんぶ きいて いる。プロモーション・アンパッサン・キャスリング・チェックメイト・ステイルメイト・ひきわけ、ぜんぶ。' },
+        { t: 'p', en: 'Black stays near its own side. But it takes a piece nobody protects, and it takes back when it can.',
+          ja: '黒は あまり 前に 出て こない。でも、まもられて いない こまは とりに くるし、とられた ときは とりかえせるなら とりかえす。' },
+        { t: 'p', en: 'Checkmate wins. If Black has no move and is not in check, it is a stalemate — a draw.',
+          ja: '黒を 詰ませたら きみの かち。黒が 動けなく なっても チェックされて いなければ ステイルメイトで ひきわけ。レッスン19の とおり。' },
         { t: 'p', en: 'Illegal moves simply will not go.',
           ja: 'ルールに ない 手は させない ように なって いる。だから 「これは さして いいのかな」と 思ったら、ためしに さわってみれば わかる。行ける マスに しるしが 出る。' },
         { t: 'p', en: 'Your moves pile up as notation below. You can copy it.',
           ja: 'さした 手は 下に きふに なって つみあがる。コピーも できる。おもしろい たいきょくに なったら、自分の ところに 書きうつして おこう。この ページを とじると きえて しまう から。' },
+        { t: 'p', en: 'Want to play with a friend instead? Press the button below the lesson.',
+          ja: 'ともだちと ふたりで さしたい ときは、下の ボタンで 切りかえられる。' },
         { t: 'key',
-          en: 'White moves first. One move each, turn by turn.',
-          ja: '白が さきに さす。こうたいに 1手ずつ。' }
+          en: 'A piece nobody protects can be taken.',
+          ja: 'まもられて いない こまは とられる。' }
       ],
       task: { en: 'White moves first.',
               ja: '白から どうぞ。' },
-      goal: { kind: 'free' }
+      // 相手の選び。cpu: true のほうは、黒を /kids/shared/chess-cpu.js が指す。
+      // 切りかえると盤は最初に戻る（追いかけ回の駒の選びと同じ動き）
+      goal: { kind: 'free',
+              setsLabel: 'Who plays Black / 黒を さす 人',
+              sets: [
+                { en: 'Computer', ja: 'コンピュータ', cpu: true,
+                  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' },
+                { en: 'Two players', ja: 'ふたりで', cpu: false,
+                  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' }
+              ] }
     }
 
   ]
