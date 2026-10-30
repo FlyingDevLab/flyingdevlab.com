@@ -36,7 +36,8 @@ window.CHESS_LESSONS = {
 
   chapters: [
     { en: 'Three rules',   ja: 'じょばんの 3つの きまり' },
-    { en: 'Three mistakes', ja: 'やっては いけない こと' }
+    { en: 'Three mistakes', ja: 'やっては いけない こと' },
+    { en: 'Openings with names', ja: '名前の ある じょばん' }
   ],
 
   lessons: [
@@ -192,6 +193,157 @@ window.CHESS_LESSONS = {
       goal: { kind: 'moves', win: { line: [
         'a4', 'e5', 'h4', 'd5', 'a5', 'Nf6', 'h5', 'Bc5'
       ] } }
+    },
+
+    // ===== 3章 名前の ある じょばん ===================================
+    //
+    // 名前の付いた序盤を7つ。どれも最初の数手だけで、そこで止めてある。
+    // 10手より先は解析と流行で変わるので書かない（この巻の決めごと）。
+    //
+    // 名前の由来は、記録のはっきりしているものだけ書いた。
+    // ルイロペス（1561年の本）・フレンチ（1834年のロンドン対パリ）・
+    // カロカン（1886年のカロとカン）はそれで、ほかは
+    // 「古くからある」までにしてある。逸話は出典が曖昧なものが多い。
+    //
+    // どれが良いかは書かない。「これがこの序盤です」までにする。
+
+    {
+      chapter: 2,
+      en: 'The Italian Game',
+      ja: 'イタリアン',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'White points a bishop straight at f7.',
+          ja: 'ビショップを c4 に 出す かたち。この ビショップは、黒の キングの 前の f7 を まっすぐ 見て いる。f7 は、はじめ キングしか まもって いない マス。1巻の スカラーズメイトでも ねらわれて いた ところ。' },
+        { t: 'p', en: 'Both sides just follow the three rules.',
+          ja: '1章で ならった 3つの きまりを、白も 黒も そのまま やって いる だけの かたち。中央に ポーンを 出し、ナイトを 出し、ビショップを 出す。だから いちばん 分かりやすい。イタリアの 人たちが 書き のこした ので この 名前。' },
+        { t: 'key',
+          en: 'The oldest and plainest way to follow the rules.',
+          ja: 'きまりを そのまま やると、この かたちに なる。' }
+      ],
+      task: { en: 'Play the Italian Game.',
+              ja: 'イタリアンを さしてみよう。' },
+      goal: { kind: 'moves', win: { line: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6'] } }
+    },
+    {
+      chapter: 2,
+      en: 'The Ruy Lopez',
+      ja: 'ルイロペス',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'The bishop goes to b5 instead, aiming at the knight.',
+          ja: 'ビショップを c4 では なく b5 に 出す かたち。ねらって いるのは f7 では なく、c6 の ナイト。その ナイトは、黒の 中央の ポーン e5 を まもって いる こま。' },
+        { t: 'p', en: 'Attack the guard, not the thing it guards.',
+          ja: '2巻の「まもって いる こまを どかせる」話に にて いる。まもり手を ねらうと、まもられて いる ほうが ぐらつく。すぐに 取れる わけでは ないけれど、ずっと 気に なる。' },
+        { t: 'p', en: 'Named after a Spanish priest who wrote about it in 1561.',
+          ja: 'スペインの ルイ・ロペスと いう ひとが 1561年の 本に 書いた ので、その 名前が ついて いる。スパニッシュとも よばれる。' },
+        { t: 'key',
+          en: 'Aim at the piece that is doing the guarding.',
+          ja: 'まもって いる こまの ほうを ねらう。' }
+      ],
+      task: { en: 'Play the Ruy Lopez.',
+              ja: 'ルイロペスを さしてみよう。' },
+      goal: { kind: 'moves', win: { line: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6'] } }
+    },
+    {
+      chapter: 2,
+      en: 'The Sicilian Defence',
+      ja: 'シシリアン',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'Black answers 1.e4 with the c-pawn, not the e-pawn.',
+          ja: '白の e4 に、黒が e5 では なく c5 と こたえる かたち。おなじ 中央の とりあいでも、左右が そろわない。' },
+        { t: 'p', en: 'The two sides end up wanting different things.',
+          ja: '白と 黒が 鏡の ように 同じ ことを する かたちでは なく なるので、おたがい 行く 先が ちがって くる。よく 指される こたえ方。' },
+        { t: 'p', en: 'Watch the 4th move: a capture with a knight.',
+          ja: 'この きふでは 4手めに ナイトで とり返して いる。cxd4 と Nxd4。1巻の「とる ときは x」が ここで 出て くる。' },
+        { t: 'key',
+          en: 'Meeting e4 with c5 makes the game lopsided on purpose.',
+          ja: 'わざと 左右を そろえない こたえ方。' }
+      ],
+      task: { en: 'Play the Sicilian Defence.',
+              ja: 'シシリアンを さしてみよう。' },
+      goal: { kind: 'moves', win: { line: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6'] } }
+    },
+    {
+      chapter: 2,
+      en: 'The French Defence',
+      ja: 'フレンチ',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'Black plays e6 first, planning d5 next.',
+          ja: '黒が まず e6 と 小さく 出て、つぎに d5 と 中央に ならべる かたち。e5 で ぶつけるのでは なく、1つ ずらして かまえる。' },
+        { t: 'p', en: 'One piece pays for it: the c8 bishop.',
+          ja: 'ただし、こまった ことが 1つ。e6 の ポーンが、c8 の ビショップの 道を ふさいで しまう。この きふを さしきった あと、c8 の ビショップを さわって みて。行ける マスは d7 の 1つだけ。しかも その 先も じぶんの ポーンに ふさがれて いる。' },
+        { t: 'p', en: 'Named after a match between London and Paris in 1834.',
+          ja: '1834年の ロンドン 対 パリの 対局で 使われた ので、フランスの 名前が ついて いる。' },
+        { t: 'key',
+          en: 'The e6 pawn shuts its own bishop in.',
+          ja: 'e6 の ポーンは、じぶんの ビショップの 道を ふさぐ。' }
+      ],
+      task: { en: 'Play the French, then try to move the c8 bishop.',
+              ja: 'フレンチを さしてみよう。さいごに c8 の ビショップを さわって みて。' },
+      goal: { kind: 'moves', win: { line: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4'] } }
+    },
+    {
+      chapter: 2,
+      en: 'The Caro-Kann',
+      ja: 'カロカン',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'Also preparing d5 — but with the c-pawn.',
+          ja: 'フレンチと 同じで、つぎに d5 と ならべる じゅんび。ちがうのは、e6 では なく c6 と 出す こと。' },
+        { t: 'p', en: 'This way the bishop gets out first.',
+          ja: 'たった 1マス ちがう だけで、c8 の ビショップの 道が ふさがらない。この きふの さいごの 手が それ。Bf5 で ビショップが そとに 出て いる。フレンチの ビショップと 見くらべて みて。' },
+        { t: 'p', en: 'Named after two players who wrote about it in 1886.',
+          ja: '1886年に カロと カンと いう ふたりが しらべた ので、ふたりの 名前を ならべて こう よばれる。' },
+        { t: 'key',
+          en: 'c6 instead of e6 keeps the bishop\u2019s road open.',
+          ja: 'e6 では なく c6。それだけで ビショップが 出られる。' }
+      ],
+      task: { en: 'Play the Caro-Kann and see where the bishop lands.',
+              ja: 'カロカンを さしてみよう。ビショップが どこに 出るか 見てね。' },
+      goal: { kind: 'moves', win: { line: ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5'] } }
+    },
+    {
+      chapter: 2,
+      en: 'The Queen\u2019s Gambit',
+      ja: 'クイーンズギャンビット',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'This time White starts with the d-pawn.',
+          ja: 'ここまでは ぜんぶ e4 から 始まって いた。こんどは d4 から。白が クイーンの 側の ポーンを 先に 出す かたち。' },
+        { t: 'p', en: 'A gambit means offering a pawn.',
+          ja: '2手めの c4 が この 序盤の 顔。黒の d5 の ポーンに ポーンを ぶつけて いる。「ギャンビット」とは ポーンを さし出す こと。黒は とっても いいし、とらなくても いい。この きふの 黒は とらずに e6 と ならべて いる。' },
+        { t: 'p', en: 'One of the oldest openings on record.',
+          ja: 'とても 古くから ある かたちで、いまも よく 指される。' },
+        { t: 'key',
+          en: 'A gambit is an offer. You can always decline it.',
+          ja: 'ギャンビットは「どうぞ」。とるか とらないかは あいてが きめる。' }
+      ],
+      task: { en: 'Play the Queen\u2019s Gambit.',
+              ja: 'クイーンズギャンビットを さしてみよう。' },
+      goal: { kind: 'moves', win: { line: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6'] } }
+    },
+    {
+      chapter: 2,
+      en: 'The London System',
+      ja: 'ロンドン',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'The bishop comes out before the pawn wall goes up.',
+          ja: 'd4 の つぎに、すぐ ビショップを f4 へ 出す かたち。あとから e3 と ポーンを 出す。' },
+        { t: 'p', en: 'Order matters: bishop first, then the pawn.',
+          ja: 'じゅんばんが 大事。先に e3 と して しまうと、フレンチの ビショップと 同じ ことに なる。じぶんの ポーンの うしろに とじこめられる。だから ビショップを 先に 外へ 出して おく。' },
+        { t: 'p', en: 'It is a shape, not a reply to one move.',
+          ja: 'この かたちは、黒が どう こたえても だいたい 同じ ように 組める。おぼえる ことが 少ないので、はじめの うちは 組みやすい。' },
+        { t: 'key',
+          en: 'Let the bishop out before you build the pawn wall.',
+          ja: 'ポーンの かべを 作る 前に、ビショップを 外へ。' }
+      ],
+      task: { en: 'Play the London System.',
+              ja: 'ロンドンを さしてみよう。' },
+      goal: { kind: 'moves', win: { line: ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'e6'] } }
     }
 
   ]
