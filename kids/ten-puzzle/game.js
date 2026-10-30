@@ -20,9 +20,40 @@
 //   まちがえた（こたえあわせで 10 にならなかった）だけでは止まらない。
 //
 //   ヒントを使っても MIN_QUESTIONS 問目までは必ず遊べる。
-//   その時点でまだヒントを使っていなければ、使うまで出題が続く。
-//   上限を設けていないのは、連続正解をどこまでも伸ばせるようにするため。
+//   その時点でまだヒントを使っていなければ、MAX_QUESTIONS 問目まで続く。
+//
+//   以前は上限が無く、ヒントを使わなければいつまでも出題が続いた。
+//   Normal は「＋側と−側に振り分けて差が 10 になる組を探す」とコツが分かると
+//   ほぼ全問解けてしまうため、記録が実力ではなく根気の記録になっていた。
+//   上限を置くと MAX_QUESTIONS 点が満点になり、Normal を取り切ったら
+//   Hard へ、という3モードの階段がはじめて機能する。
+//
+// ★ 満点とクリアタイム ★
+//   MAX_QUESTIONS 問すべてをヒントなしで正解すると「クリア」。
+//   ヒントを使うと MIN_QUESTIONS 問目で終わるので、MAX_QUESTIONS 問目に
+//   到達した時点でノーヒントは確定している。不正解では問題が進まないので、
+//   あきらめずに粘れば必ず満点になる。
+//   クリアしたときだけ所要タイムを記録し、連続正解数のかわりに表示する。
+//   プレイ中は時間を見せない。画面に時計があると、計測のつもりでも
+//   制限時間と同じ焦りを生むため。
 const MIN_QUESTIONS = 10;
+const MAX_QUESTIONS = 20;
+
+// 「作れない！」を空振りしたときにクリアタイムへ足す秒数。
+//
+// ★ なぜ代償が必要か ★
+//   「作れない！」は外しても問題が進まないので、代償が無いと
+//   「まず押して、作れると分かってから解を探す」のが最適手になる。
+//   Challenge の山場（解が無いと確信するまで探す判断）が丸ごと消えて、
+//   クリアタイムが Hard の速さの記録になってしまう。
+//   タイムにだけ効かせるので、記録を狙わない子には何も起きない。
+//   足すのは1問につき1回だけ。防ぎたい攻略法は1問に1回押せば成立するので、
+//   1回に絞っても抑止力は変わらない。いっぽう、ダブルタップや連打が
+//   そのまま倍の代償になるのは、まちがいに寛容という他のルールと噛み合わない。
+//   こたえあわせの不正解には代償を付けない。式が 10 にならないのは
+//   作りかけの試行で、途中の計算結果は式の下にすでに出ている。
+//   いっぽう「作れない！」は結論の宣言なので、外せば代償がある。
+const IMPOSSIBLE_MISS_PENALTY_SEC = 60;
 
 // Challenge で 10 問ごとに混ぜる「作れない問題」の数。
 // 毎回ちょうど 3 問だと、数えれば最後の数問が読めてしまうので 2〜4 問で揺らす。
@@ -155,6 +186,47 @@ function saveHighScore(mode, value) {
   }
 }
 
+/**
+ * 指定モードのベストタイムを読み込む。
+ * 連続正解の記録とは別のキーに入れる。クリアしたモードの記録はこちらだけを
+ * 読むので、旧版で MAX_QUESTIONS を超えて伸ばした連続正解の記録は、
+ * 一度クリアすれば表示から外れる（保存値は残るが二度と読まない）。
+ * @param {string} mode - 'A' | 'B' | 'C'
+ * @returns {number} 秒。0 は「記録なし」
+ */
+function loadBestTime(mode) {
+  try {
+    return parseInt(localStorage.getItem('tenpuzzle_time_' + mode) || '0', 10);
+  } catch (e) {
+    return 0;  // 読めない環境では記録なしとして扱う
+  }
+}
+
+/**
+ * 指定モードのベストタイムを保存する。保存できない環境では何もしない。
+ * @param {string} mode
+ * @param {number} value - 秒
+ */
+function saveBestTime(mode, value) {
+  try {
+    localStorage.setItem('tenpuzzle_time_' + mode, Math.round(value));
+  } catch (e) {
+    /* 保存できなくても続行する（記録は今回のセッション限りになる） */
+  }
+}
+
+/**
+ * 秒を m:ss の形にする。
+ * 1/100 秒まで出すと競技的になりすぎるので秒までにしている。
+ * @param {number} sec
+ * @returns {string} 例: '2:14'
+ */
+function formatTime(sec) {
+  const total = Math.round(sec);
+  const s = total % 60;
+  return Math.floor(total / 60) + ':' + (s < 10 ? '0' + s : s);
+}
+
 
 // ── ゲーム状態変数 ───────────────────────────────────────────────
 let currentMode    = 'A';   // 選択中のモード
@@ -165,6 +237,10 @@ let score          = 0;     // ヒントなしで続けて正解した数
 let streakActive   = true;  // まだヒントを使っていないか（false で加点が止まる）
 let hintUsedCount  = 0;     // ヒントを使った回数
 let hintUsed       = false; // 今の問題でヒントを使ったか
+let missDeclared   = false; // 今の問題で「作れない！」を空振りしたか
+let startedAt      = 0;     // ゲーム開始時刻（performance.now の値）
+let clearSeconds   = 0;     // クリアタイム（秒）。満点で終わったときだけ入る
+let penaltySeconds = 0;     // 「作れない！」の空振りで足された秒数
 let tokens         = [];    // 組み立て中の式。{ kind, text, slot } の配列
 let locked         = false; // 判定後の待ち時間中は入力を止める
 
@@ -204,10 +280,22 @@ function showScreen(name) {
 /** モードごとのベスト記録をトップ画面に表示する。 */
 function renderHighScores() {
   ['A', 'B', 'C'].forEach(function (mode) {
-    const hi = loadHighScore(mode);
-    const el = document.getElementById('hi-' + mode);
+    const el   = document.getElementById('hi-' + mode);
+    const best = loadBestTime(mode);
+
+    // クリア済みのモードはタイムに切り替える。
+    // 満点は必ず MAX_QUESTIONS 点なので、数字を出しても差が見えない。
+    if (best > 0) {
+      el.textContent = '🏆 ' + formatTime(best);
+      el.className   = 'mode-hi is-clear';
+      return;
+    }
+
+    // まだクリアしていないモードは連続正解のベストを出す。
     // 記録がない場合は何も出さない（初回プレイで 0 が並ぶのを避ける）
+    const hi = loadHighScore(mode);
     el.textContent = hi > 0 ? '★ ' + hi : '';
+    el.className   = 'mode-hi';
   });
 }
 
@@ -290,6 +378,9 @@ function startGame(mode) {
   hintUsedCount  = 0;
   questionNumber = 0;
   nextProblem    = makeProblemSupplier(mode);
+  startedAt      = performance.now();
+  clearSeconds   = 0;
+  penaltySeconds = 0;
 
   // チャレンジモードのときだけ「作れない！」ボタンを出す
   btnImpossible.hidden = !MODES[mode].allowImpossible;
@@ -301,15 +392,13 @@ function startGame(mode) {
 /** 次の問題を画面に出す。 */
 function loadQuestion() {
   questionNumber++;
-  problem  = nextProblem();
-  tokens   = [];
-  hintUsed = false;
-  locked   = false;
+  problem      = nextProblem();
+  tokens       = [];
+  hintUsed     = false;
+  missDeclared = false;
+  locked       = false;
 
-  // 10問目までは「n / 10」。その先は上限が無いので問題番号だけを出す。
-  progressValue.textContent = questionNumber <= MIN_QUESTIONS
-    ? questionNumber + ' / ' + MIN_QUESTIONS
-    : 'No. ' + questionNumber;
+  renderProgress();
   renderScore();
   hintText.textContent      = '';
   judgeText.textContent     = '';
@@ -346,6 +435,25 @@ function updateDigitStates() {
     btn.classList.toggle('used', used);
     btn.disabled = used;
   });
+}
+
+/**
+ * 進行状況（n / 総数）を描き直す。
+ *
+ * 分母は「この先いくつ遊べるか」をそのまま出す。
+ *   ノーヒントで続いている … MAX_QUESTIONS 問目まで遊べる
+ *   ヒントを使った         … MIN_QUESTIONS 問目までは遊べる。
+ *                            それを越えていたら、今の問題が最後
+ *
+ * 分母を MAX_QUESTIONS に固定していると、11 問目で「11 / 20」と出した直後に
+ * ヒントを使った人がその問題で終わってしまい、打ち切られたように見える。
+ * ヒントで連続が止まった時点で呼び直すので、分母はその場で正しくなる。
+ */
+function renderProgress() {
+  const total = streakActive
+    ? MAX_QUESTIONS
+    : Math.max(MIN_QUESTIONS, questionNumber);
+  progressValue.textContent = questionNumber + ' / ' + total;
 }
 
 /** スコア表示を描き直す。ヒントで加点が止まったら薄くして伝える。 */
@@ -447,6 +555,7 @@ function showHint() {
     streakActive = false;
     text += '\nScore stops at ' + score + ' / スコアは ' + score + ' で止まります';
     renderScore();
+    renderProgress();  // 残り何問かが変わるので、分母を出し直す
   }
   hintText.textContent = text;
 }
@@ -646,7 +755,17 @@ function onDeclareImpossible() {
   if (problem.solutionCount === 0) {
     finishQuestion(true, 'Correct! It was unsolvable / 正解！ 作れない問題でした');
   } else {
-    showJudgeMessage('This one is solvable / この問題は作れるよ', false);
+    // 空振り。問題は進めないしスコアも減らないが、クリアタイムには足す。
+    // 同じ問題で何度押しても足すのは1回だけ（誤タップで倍にしないため）。
+    // 秒数をその場で見せるのは、タイムを狙う人に理由が伝わるようにするため。
+    // 2回目以降は何も足さないので、秒数も出さない。
+    let text = 'This one is solvable / この問題は作れるよ';
+    if (!missDeclared) {
+      missDeclared = true;
+      penaltySeconds += IMPOSSIBLE_MISS_PENALTY_SEC;
+      text += '（+' + formatTime(IMPOSSIBLE_MISS_PENALTY_SEC) + '）';
+    }
+    showJudgeMessage(text, false);
   }
 }
 
@@ -675,11 +794,21 @@ function finishQuestion(ok, message) {
   showJudgeMessage(message + (hintUsed ? ' (hint used)' : ''), ok);
   renderScore();
 
+  // 上限に達したか、ヒントを使ったうえで MIN_QUESTIONS 問目まで来たら終わり。
+  const done = questionNumber >= MAX_QUESTIONS
+            || (!streakActive && questionNumber >= MIN_QUESTIONS);
+
+  // 満点で終わったときだけタイムを確定させる。
+  // score が MAX_QUESTIONS に届くのは全問ノーヒント正解のときだけ
+  // （ヒントを使うと加点が止まり、不正解では問題が進まない）。
+  // 正解した瞬間に止めるので、このあとの余韻 900ms は記録に入らない。
+  if (score >= MAX_QUESTIONS) {
+    clearSeconds = (performance.now() - startedAt) / 1000 + penaltySeconds;
+  }
+
   // 少し余韻を置いてから次の問題へ。
-  // ヒントを使っていても MIN_QUESTIONS 問目までは続ける。
-  // 使っていなければ、その先も使うまで続ける。
   setTimeout(function () {
-    if (!streakActive && questionNumber >= MIN_QUESTIONS) {
+    if (done) {
       showResult();
     } else {
       loadQuestion();
@@ -691,43 +820,83 @@ function finishQuestion(ok, message) {
 // ── リザルト ────────────────────────────────────────────────────
 /** 結果画面を表示し、必要ならベスト記録を更新する。 */
 function showResult() {
-  const hi = loadHighScore(currentMode);
-  const isNewRecord = score > hi;
-  if (isNewRecord) saveHighScore(currentMode, score);
-
-  document.getElementById('resultScore').textContent = score;
-
+  const cleared  = clearSeconds > 0;
+  const labelEl  = document.getElementById('resultScoreLabel');
+  const scoreEl  = document.getElementById('resultScore');
   const resultHi = document.getElementById('resultHi');
-  if (isNewRecord) {
-    resultHi.textContent = '🎉 New best! / ベスト更新！';
-    resultHi.className   = 'result-hi new-record';
+  const detail   = [MODES[currentMode].name + ' mode'];
+
+  if (cleared) {
+    // クリア（満点）はタイム勝負にする。満点は必ず MAX_QUESTIONS 点なので、
+    // 連続正解の数字を出しても人による差が見えない。
+    const best = loadBestTime(currentMode);
+    const isNewRecord = best === 0 || clearSeconds < best;
+    if (isNewRecord) saveBestTime(currentMode, clearSeconds);
+
+    labelEl.innerHTML   = 'CLEAR TIME&ensp;/&ensp;<span lang="ja">クリアタイム</span>';
+    scoreEl.textContent = formatTime(clearSeconds);
+    scoreEl.className   = 'result-score is-time';
+    scoreEl.setAttribute('aria-label', 'Your clear time');
+
+    resultHi.textContent = isNewRecord
+      ? '🎉 New best time! / ベストタイム更新！'
+      : 'Best ' + formatTime(best);
+    resultHi.className = 'result-hi' + (isNewRecord ? ' new-record' : '');
+
+    document.getElementById('resultMessage').textContent = 'Cleared! / クリア！';
+
+    detail.push(MAX_QUESTIONS + ' / ' + MAX_QUESTIONS + ' no hints');
+    if (penaltySeconds > 0) detail.push('Penalty +' + formatTime(penaltySeconds));
+
   } else {
-    resultHi.textContent = hi > 0 ? 'Best ' + hi : '';
-    resultHi.className   = 'result-hi';
+    // 満点に届かなかったとき。ここに来るのは必ずヒントを使った場合。
+    const hi = loadHighScore(currentMode);
+    const isNewRecord = score > hi;
+    if (isNewRecord) saveHighScore(currentMode, score);
+
+    labelEl.innerHTML   = 'IN A ROW&ensp;/&ensp;<span lang="ja">連続正解</span>';
+    scoreEl.textContent = score;
+    scoreEl.className   = 'result-score';
+    scoreEl.setAttribute('aria-label', 'Your score');
+
+    // 一度クリアしたモードなら、更新すべき記録はもうタイムだけ。
+    // 連続正解のベストを出しても追う目標にならないので、タイムを出す。
+    const best = loadBestTime(currentMode);
+    if (best > 0) {
+      resultHi.textContent = 'Best time ' + formatTime(best);
+      resultHi.className   = 'result-hi';
+    } else if (isNewRecord) {
+      resultHi.textContent = '🎉 New best! / ベスト更新！';
+      resultHi.className   = 'result-hi new-record';
+    } else {
+      resultHi.textContent = hi > 0 ? 'Best ' + hi : '';
+      resultHi.className   = 'result-hi';
+    }
+
+    document.getElementById('resultMessage').textContent = resultMessage(score);
+
+    detail.push(questionNumber + ' puzzles');
+    if (hintUsedCount > 0) detail.push('Hints used: ' + hintUsedCount);
   }
 
-  document.getElementById('resultMessage').textContent = resultMessage(score);
-
-  const detail = [MODES[currentMode].name + ' mode', questionNumber + ' puzzles'];
-  if (hintUsedCount > 0) detail.push('Hints used: ' + hintUsedCount);
   document.getElementById('resultDetail').textContent = detail.join(' / ');
-
   renderHighScores();
   showScreen('result');
 }
 
 /**
  * スコア（ヒントなしの連続正解数）に応じた一言を返す。
- * 10 は「最初の10問をヒントなしで解き切った」ことを意味する。
+ * 満点はクリア扱いで別の一言を出すので、ここに来るのは MAX_QUESTIONS 未満。
+ * あと何問で満点かが伝わるように段を切っている。
  * @param {number} value
  * @returns {string}
  */
 function resultMessage(value) {
-  if (value >= 20) return 'Amazing!';
-  if (value >= 10) return 'Perfect!';
-  if (value >= 7)  return 'Great!';
-  if (value >= 4)  return 'Nice work!';
-  if (value > 0)   return 'Keep going!';
+  if (value >= 17) return 'So close!';
+  if (value >= 13) return 'Almost there!';
+  if (value >= 10) return 'Great!';
+  if (value >= 7)  return 'Nice work!';
+  if (value >= 4)  return 'Keep going!';
   return 'Try again!';
 }
 

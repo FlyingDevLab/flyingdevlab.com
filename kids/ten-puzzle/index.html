@@ -105,8 +105,16 @@
               <span class="tip-ja" lang="ja">スコアは、ヒントを使わずに続けて正解した数。ヒントを使うとそこで止まる。まちがえても止まらない。</span>
             </li>
             <li>
-              You always play 10 puzzles. No hint yet? Keep going past 10!<br>
-              <span class="tip-ja" lang="ja">10問はかならず遊べる。ヒントを使っていなければ、11問目からも続く。</span>
+              You always play 10 puzzles. No hint yet? Keep going up to 20!<br>
+              <span class="tip-ja" lang="ja">10問はかならず遊べる。ヒントを使っていなければ、20問目まで続く。</span>
+            </li>
+            <li>
+              Solve all 20 with no hint to clear the mode. Then your clear time becomes the record.<br>
+              <span class="tip-ja" lang="ja">20問ぜんぶをヒントなしで正解するとクリア。クリアすると、記録はクリアタイムにかわる。</span>
+            </li>
+            <li>
+              Challenge only: a wrong &ldquo;Can&rsquo;t make 10!&rdquo; adds +1:00 to your clear time. Your score is safe.<br>
+              <span class="tip-ja" lang="ja">チャレンジだけ：「作れない！」を外すと、クリアタイムに1分たされる。スコアは減らない。</span>
             </li>
             <li class="rule-keys">
               Keys: 1&nbsp;2&nbsp;3 = mode, digits, + − * / ( ), Enter = check, Backspace = undo, Esc = clear, H = hint, N = can&rsquo;t make 10<br>
@@ -123,7 +131,7 @@
         <div class="play-header">
           <button class="btn-home" id="btn-home" aria-label="Back to title">🏠</button>
           <div class="progress-display" aria-label="Progress">
-            <span id="progressValue" aria-live="polite">1 / 10</span>
+            <span id="progressValue" aria-live="polite">1 / 20</span>
           </div>
           <div class="score-display" id="scoreDisplay" aria-label="Score">
             SCORE <span id="scoreValue" aria-live="polite">0</span>
@@ -173,7 +181,9 @@
       <section class="screen" id="screen-result" aria-label="Result Screen / リザルト画面" aria-live="assertive">
         <div class="glass-card" style="text-align:center;">
 
-          <p class="result-score-label">IN A ROW&ensp;/&ensp;<span lang="ja">連続正解</span></p>
+          <!-- 見出しと数字は、満点クリアのときだけ JS が
+               「CLEAR TIME / クリアタイム」とタイムに差し替える -->
+          <p class="result-score-label" id="resultScoreLabel">IN A ROW&ensp;/&ensp;<span lang="ja">連続正解</span></p>
           <div class="result-score" id="resultScore" aria-label="Your score">0</div>
 
           <div class="result-hi" id="resultHi" aria-live="polite"></div>
