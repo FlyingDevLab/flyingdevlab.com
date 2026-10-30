@@ -213,6 +213,16 @@
   function goal() { return S.lesson.goal; }
   function win() { return goal().win || {}; }
 
+  // いま解いている問題のこたえ。
+  // くみあわせを選べる回（おまけ）では、選んだものに こたえが付いている。
+  // win.answer を直に見ると、問題を切り替えても最初のこたえのままになる
+  function answerNow() {
+    var g = goal();
+    var set = g.sets && g.sets[S.setAt];
+    if (set && set.answer) return set.answer;
+    return (g.win || {}).answer;
+  }
+
 
   // ----------------------------------------------------------------
   // 04. 目次
@@ -761,9 +771,10 @@
 
     // 自分で手を見つける課題。ちがう手は盤に乗せず、なぜ違うかだけ返す。
     // いったん動かしてから戻すと、まちがいが盤の上の事実になってしまう
-    if (w.answer) {
+    var want = answerNow();
+    if (want) {
       var tried = C.toSan(pos, move);
-      if (!sameSan(tried, w.answer)) {
+      if (!sameSan(tried, want)) {
         shake(move.to);
         tellWrong(pos, move, tried);
         S.pick = -1;
@@ -838,8 +849,8 @@
     // こたえが「とる手」かどうかで変える。1章は ただ取りを さがす回なので
     // 「とれる こまを 見てみて」で合うが、2章の フォークは
     // とる手が こたえでは ない。同じ文を返すと、さがす場所をまちがえさせる
-    var want = C.parseSan(pos, win().answer);
-    if (want && want.captured) {
+    var right = C.parseSan(pos, answerNow());
+    if (right && right.captured) {
       return say('Not that move. Look at what you can take.',
                  'ちがう手だよ。とれる こまを 見てみて。', 'bad');
     }
@@ -1004,7 +1015,7 @@
       return;
     }
 
-    if (w.answer) return finish();
+    if (answerNow()) return finish();
 
     if (w.line) {
       if (S.lineAt >= w.line.length) return finish();
@@ -1349,7 +1360,7 @@
     }
     ui.reset.disabled = false;
     if (ui.hint) {
-      ui.hint.hidden = !win().answer;
+      ui.hint.hidden = !answerNow();
       ui.hint.disabled = S.done || S.hinted;
     }
   }
@@ -1357,19 +1368,17 @@
   // ヒント。動かす駒だけを光らせる。行き先は出さない。
   // 答えを見せずに、探す範囲だけ狭める
   function showHint() {
-    var w = win();
-    if (!w.answer) return;
+    if (!answerNow()) return;
     S.hinted = true;
     paint();
-    var m = C.parseSan(S.pos, w.answer);
+    var m = C.parseSan(S.pos, answerNow());
     say('Move this piece.', 'この こまを うごかすよ。');
     void m;
   }
 
   function hintFrom() {
-    var w = win();
-    if (!S.hinted || !w.answer) return -1;
-    var m = C.parseSan(S.pos, w.answer);
+    if (!S.hinted || !answerNow()) return -1;
+    var m = C.parseSan(S.pos, answerNow());
     return m ? m.from : -1;
   }
 
@@ -1396,22 +1405,51 @@
     updateButtons();
     markSeen(S.index);
 
-    var last = S.index === DATA.lessons.length - 1;
+    // 「巻のおしまい」は、最後に終われる回のこと。
+    // 1巻の最後は「ふたりで さす」で、あれは終わりの知らせが出ない。
+    // 番号でいちばん後ろを おしまい にすると、巻をまたぐ案内が
+    // 一度も出ないまま終わる（実際そうなっていた）
+    var last = true;
+    for (var n = S.index + 1; n < DATA.lessons.length; n++) {
+      var k = DATA.lessons[n].goal.kind;
+      if (k !== 'free' && k !== 'read' && k !== 'replay') { last = false; break; }
+    }
     bi(ui.doneTitle, last ? 'Volume 1 complete!' : 'Done!',
        last ? 'これで 1かんは おわり！' : 'できた！');
 
     var chase = goal().kind === 'chase';
+
+    // この巻の次の巻。あれば、おしまいのボタンがそこへ繋がる
+    var next = null;
+    if (DATA.volumes && DATA.volume) {
+      for (var v = 0; v < DATA.volumes.length; v++) {
+        if (DATA.volumes[v].no === DATA.volume.no + 1) next = DATA.volumes[v];
+      }
+    }
+
     bi(ui.doneNote,
        lesson().en + ' — ' + (chase
          ? 'Keep playing as long as you like.'
-         : (last ? 'Volume 2 is about tactics: forks, pins and more.'
+         : (last ? (next ? 'Volume ' + next.no + ' is next: ' + next.en + '.'
+                         : 'That is the whole volume.')
                  : 'On to the next lesson.')),
        lesson().ja + ' — ' + (chase
          ? '気が すむまで つづけて いいよ。べつの くみあわせも ためしてみて。'
-         : (last ? 'つぎの 巻では、フォークや ピンなど「せんじゅつ」を ならうよ。'
+         : (last ? (next ? 'つぎは ' + next.no + '巻（' + next.ja + '）。'
+                         : 'この 巻は ここまで。')
                  : 'つぎの レッスンへ すすもう。')));
 
-    ui.advance.hidden = last;
+    // おしまいまで来たら、ボタンを「つぎの巻へ」に変える。
+    // 巻のボタンは上にもあるが、読み終えた流れのまま進める方が自然
+    if (last && next) {
+      ui.advance.hidden = false;
+      bi(ui.advance, 'Volume ' + next.no + ': ' + next.en, 'つぎの かんへ');
+      ui.advance.dataset.go = next.url;
+    } else {
+      ui.advance.hidden = last;
+      bi(ui.advance, 'Next lesson', 'つぎの レッスン');
+      delete ui.advance.dataset.go;
+    }
     ui.done.hidden = false;
 
     // 知らせを盤の下に出すようになったので、空の一言の行が
@@ -1460,7 +1498,11 @@
     ui.copy.addEventListener('click', copyRecord);
     if (ui.hint) ui.hint.addEventListener('click', showHint);
     ui.retry.addEventListener('click', function () { ui.done.hidden = true; restart(); });
-    ui.advance.addEventListener('click', function () { open(S.index + 1); });
+    ui.advance.addEventListener('click', function () {
+      // おしまいの回では、つぎの巻へ出ていく
+      if (ui.advance.dataset.go) { window.location.href = ui.advance.dataset.go; return; }
+      open(S.index + 1);
+    });
     ui.prev.addEventListener('click', function () { open(S.index - 1); });
     ui.next.addEventListener('click', function () { open(S.index + 1); });
 

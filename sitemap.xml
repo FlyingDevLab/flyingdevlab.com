@@ -308,6 +308,20 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/chess/"/>
   </url>
 
+  <url>
+    <!-- Chess vol.2 / チェス 第2巻 せんじゅつ（2026-10-31 追加） -->
+    <loc>https://flyingdevlab.com/kids/chess-tactics/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <!-- レッスンを足すとしたら新しい巻（別URL）になるため monthly -->
+    <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
+    <priority>0.8</priority>
+    <!-- 1ページに日英を併記しているため、すべて自分自身を指す。 -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/chess-tactics/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/chess-tactics/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/chess-tactics/"/>
+  </url>
+
   <!-- 
     ============================================================
     プライバシーポリシー（サイト共通・個人情報の取り扱い方針のページ）

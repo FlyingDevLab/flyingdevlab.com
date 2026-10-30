@@ -45,7 +45,9 @@ window.CHESS_LESSONS = {
     { en: 'Stuck on a line',  ja: 'うごけなく する' },
     { en: 'Hidden attacks',   ja: 'かくれた ねらい' },
     { en: 'Mating patterns',  ja: '詰みの かたち' },
-    { en: 'Giving a piece up', ja: 'すてる' }
+    { en: 'Giving a piece up', ja: 'すてる' },
+    { en: 'Spot it yourself',  ja: '見分ける' },
+    { en: 'More puzzles',      ja: 'おまけ' }
   ],
 
   lessons: [
@@ -516,6 +518,68 @@ window.CHESS_LESSONS = {
       task: { en: 'The queen is eyeing one black piece. Press the piece that guards it.',
               ja: '白の クイーンが ねらって いる 黒の こまが 1つ ある。それを まもって いる こまは どれ？ おそう。' },
       goal: { kind: 'squares', ask: ['c8'], ordered: false }
+    },
+
+    // ===== 7章 見分ける ================================================
+    //
+    // ここまでは「これはフォークの回」と題が教えてくれていた。
+    // 実際の盤には題が付いていない。この回だけ、何がひそんでいるかを
+    // 言わない。ならった中から自分でえらぶ。
+
+    {
+      chapter: 6,
+      en: 'No title this time',
+      ja: 'なにが ひそんで いる？',
+      fen: '1r4k1/5ppp/8/n7/8/8/3R1PPP/3R2K1 w - - 0 1',
+      body: [
+        { t: 'p', en: 'Until now the lesson title told you what to look for.',
+          ja: 'ここまでは、回の 題が こたえを 半分 教えて くれて いた。「フォークの 回」と 書いて あれば、フォークを さがせば よかった。' },
+        { t: 'p', en: 'A real board has no title.',
+          ja: 'でも ほんとうの 対局に 題は ない。盤を 見て、ならった ものの 中から じぶんで えらぶ ことに なる。この 回は それを やってみる。' },
+        { t: 'p', en: 'Two things you have learned fit together here.',
+          ja: 'ヒントを 1つだけ。この 盤には、ならった わざが 2つ つながって いる。1つめで あいての こまを どかし、2つめで 詰ます。6章と 5章を 思い出して。' },
+        { t: 'key',
+          en: 'Look for the piece doing a job, then ask what happens if it leaves.',
+          ja: '仕事を して いる こまを さがす。それが いなく なったら 何が おきる？' }
+      ],
+      task: { en: 'Find the move. It leads to mate in two.',
+              ja: 'この 盤で いちばん いい 手を 見つけよう。2手で 詰む。' },
+      goal: { kind: 'moves', win: { answer: 'Rd8+' } }
+    },
+
+    // ===== おまけ ======================================================
+    //
+    // 題を付けない問題を4つ。くみあわせのボタンで選べる。
+    // 1巻の「ふたりで さす」と同じ位置づけで、レッスンではなく
+    // 気がすむまで やる ところ。
+    // こたえはボタンごとに持たせてある（goal.sets[].answer）。
+
+    {
+      chapter: 7,
+      en: 'Four more, no titles',
+      ja: 'まざった もんだい',
+      fen: '6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1',
+      body: [
+        { t: 'p', en: 'Four problems. Nobody tells you which trick it is.',
+          ja: '題の ついて いない 問題が 4つ。どれも 1手。ならった ものの どれかが ひそんで いる。上の ボタンで えらべる。' },
+        { t: 'p', en: 'Stuck? The hint shows which piece to move.',
+          ja: 'わからなく なったら ヒントを おして。どの こまを うごかすかだけ 教えて くれる。行き先は 自分で さがす。' },
+        { t: 'key',
+          en: 'Ask three things: what can I take, what is undefended, what is lined up.',
+          ja: 'なにが とれる？ まもられて いない こまは？ 1本の 線に 2つ ならんで いない？' }
+      ],
+      task: { en: 'Pick a problem and find the move.',
+              ja: '問題を えらんで、いちばん いい 手を 見つけよう。' },
+      goal: { kind: 'moves', moves: 1, win: {}, sets: [
+        { en: 'Problem 1', ja: 'もんだい 1',
+          fen: '6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1', answer: 'Re8#' },
+        { en: 'Problem 2', ja: 'もんだい 2',
+          fen: '6k1/5ppp/8/3q1N2/8/8/PP4PP/6K1 w - - 0 1', answer: 'Ne7+' },
+        { en: 'Problem 3', ja: 'もんだい 3',
+          fen: '4k3/pp4pp/8/7n/8/8/PP4P1/4K2R w - - 0 1', answer: 'Rxh5' },
+        { en: 'Problem 4', ja: 'もんだい 4',
+          fen: '4k3/pp4pp/8/2q5/4N3/8/PP3PPP/4R1K1 w - - 0 1', answer: 'Nxc5+' }
+      ] }
     }
 
   ]
