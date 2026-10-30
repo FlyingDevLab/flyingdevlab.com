@@ -300,8 +300,15 @@
         <!-- 追加（2026-10-30）: チェス 第1巻。
              遊ぶゲームではなく、読んで試す教材として作った11本目。
              駒の動きと棋譜（SAN）の読み方を23のレッスンで覚える。
-             続きの巻を作ることが決まっている（02 戦術 / 03 序盤）ため、
-             ルールの判定は /kids/shared/chess.js に分けてある。
+
+             巻に分かれている（01 基礎知識 / 02 戦術 / 03 序盤）が、
+             ハブのカードは1枚だけにしてある。巻ごとにカードを並べると
+             一覧がチェスで埋まるため、巻はページの中で選ぶ。
+             カードの行き先は01巻で、そこに巻のボタンが出る。
+             だからカードには巻の番号を書いていない。
+
+             画面の仕組みと判定は /kids/shared/ に分けてあり、
+             巻をまたいで共有している。
 
              このゲームだけ鍵を掛けていない。23レッスン全部が最初から開く。
              進んだ記録はブラウザの中にしか置けず、消えることがある。
@@ -311,11 +318,11 @@
         <li>
           <a href="chess/">
             <span class="g-icon g-icon--row" aria-hidden="true">🐱🐘🚌👧👦</span>
-            <span class="g-en">CHESS vol.1</span>
-            <span class="g-ja" lang="ja">チェス 第1巻</span>
+            <span class="g-en">CHESS</span>
+            <span class="g-ja" lang="ja">チェス</span>
             <span class="g-tip">
-              How the pieces move and how to read notation, in 23 lessons
-              <span class="ja" lang="ja">駒の動きと棋譜の読み方。23レッスン</span>
+              How the pieces move and how to read notation
+              <span class="ja" lang="ja">駒の動きと棋譜の読み方</span>
             </span>
           </a>
         </li>

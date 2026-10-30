@@ -41,7 +41,8 @@ window.CHESS_LESSONS = {
 
   chapters: [
     { en: 'Value and trades', ja: 'ねうちと とりかえ' },
-    { en: 'Two at once',      ja: 'ふたつ いっぺんに' }
+    { en: 'Two at once',      ja: 'ふたつ いっぺんに' },
+    { en: 'Stuck on a line',  ja: 'うごけなく する' }
   ],
 
   lessons: [
@@ -200,6 +201,88 @@ window.CHESS_LESSONS = {
       task: { en: 'Push the pawn so it attacks both knights at once.',
               ja: 'ポーンを 1マス すすめて、ナイト 2まいを いっぺんに ねらおう。' },
       goal: { kind: 'moves', win: { answer: 'e5' } }
+    },
+
+    // ===== 3章 うごけなく する ========================================
+    //
+    // ピンを2回に分けてある。うしろが キングのとき（うごけない）と、
+    // ほかの こまのとき（うごけるが そんする）は、別のことだから。
+    // 同じ回にまとめると「うごけない」と覚えた子が、
+    // クイーンの前の こまが うごくのを見て混乱する。
+    //
+    // ピンの2回は「とる」課題にしていない。この章で分かってほしいのは
+    // 盤の上で何が起きているかで、取るのは そのあとの話である。
+    // スキュアだけ取る課題にしてあるのは、あの形は
+    // 「王手 → どく → とる」が1つながりで、途中で切れないため。
+
+    {
+      chapter: 2,
+      en: 'Pinned to the king',
+      ja: 'キングの 前の ピン',
+      fen: '3k4/pp2p3/3n4/8/2P5/8/PP6/3RK3 b - - 0 1',
+      body: [
+        { t: 'p', en: 'Two enemy pieces on one line, with the king behind.',
+          ja: '1本の 線の 上に、あいての こまが 2つ ならぶ ことが ある。d の れつを 見て。ルーク・ナイト・キングが たてに ならんで いる。' },
+        { t: 'pairs', items: [
+          { en: 'pin', ja: 'ピン（釘付け）', sym: '' }
+        ] },
+        { t: 'p', en: 'The piece in front cannot move at all.',
+          ja: 'この とき、まえに いる ナイトは **1マスも** うごけない。うごいた しゅんかん、うしろの キングが ルークに とられる かたちに なるから。じぶんの キングを あぶなく する 手は、ルールで さす ことが できない。' },
+        { t: 'p', en: 'A pinned piece is a piece that is there but cannot help.',
+          ja: 'だから この ナイトは、盤の 上に いるのに 何も できない。まもりにも 行けないし、にげる ことも できない。くぎで うちつけられた ように なる。これが ピン。' },
+        { t: 'key',
+          en: 'Pinned to the king means it cannot move at all.',
+          ja: 'うしろが キングの ピンは、ぜったいに うごけない。' }
+      ],
+      task: { en: 'One black piece cannot move at all. Press it.',
+              ja: 'この 盤に、1マスも うごけない こまが 1つ ある。どれか おそう。' },
+      goal: { kind: 'squares', ask: ['d6'], ordered: false }
+    },
+
+    {
+      chapter: 2,
+      en: 'Pinned to the queen',
+      ja: 'クイーンの 前の ピン',
+      fen: '3qk3/pp6/5n2/6B1/8/8/PP6/4K3 b - - 0 1',
+      body: [
+        { t: 'p', en: 'The piece behind does not have to be the king.',
+          ja: 'うしろに いるのが キングで なくても、ピンは かかる。この 盤では ビショップ・ナイト・クイーンが ななめに ならんで いる。' },
+        { t: 'p', en: 'This knight can move. It just should not.',
+          ja: 'ただし さっきとは ちがう。この ナイトは **うごける**。ルールは 止めない。ためしに 7とおり うごかせる。でも、どこへ うごいても、そのあと ビショップが クイーンを とって しまう。' },
+        { t: 'p', en: 'So it is stuck for a different reason.',
+          ja: 'つまり この ナイトは「うごけない」のでは なく「うごいたら そんする」。けっきょく うごけない のは 同じだけど、りゆうが ちがう。あいてが うっかり うごかして くれる ことも ある。' },
+        { t: 'key',
+          en: 'King behind: cannot move. Anything else behind: should not move.',
+          ja: 'うしろが キングなら「うごけない」。ほかの こまなら「うごくと そんする」。' }
+      ],
+      task: { en: 'Press the knight that can move but must not.',
+              ja: 'うごく ことは できる のに、うごいたら クイーンを とられて しまう こまが ある。おそう。' },
+      goal: { kind: 'squares', ask: ['f6'], ordered: false }
+    },
+
+    {
+      chapter: 2,
+      en: 'The skewer',
+      ja: 'スキュア',
+      fen: '5q2/pp2k3/8/8/8/8/P6P/2B1K3 w - - 0 1',
+      body: [
+        { t: 'p', en: 'A skewer is a pin turned around.',
+          ja: 'スキュアは ピンの うらがえし。ピンは、ねうちの 高い こまが **うしろ**に いた。スキュアは 高い こまが **まえ**に いる。' },
+        { t: 'pairs', items: [
+          { en: 'pin',    ja: 'ピン（釘付け）',   sym: 'うしろが 高い' },
+          { en: 'skewer', ja: 'スキュア（串刺し）', sym: 'まえが 高い' }
+        ] },
+        { t: 'p', en: 'Attack the front one, and it has to move.',
+          ja: 'まえの こまを ねらうと、それは うごくしか ない。とくに それが キングなら、王手に なるので ぜったいに うごく。そして どいた あと、うしろに いた こまが むき出しに なる。' },
+        { t: 'p', en: 'Pin holds it still. Skewer makes it move.',
+          ja: 'ピンは「うごかせない」ので つよい。スキュアは「うごかせる」ので つよい。まるで 反対だけど、どちらも 1本の 線に 2つ ならんで いる ことを つかって いる。' },
+        { t: 'key',
+          en: 'Pin holds it. Skewer moves it out of the way.',
+          ja: 'ピンは とめる。スキュアは どかす。' }
+      ],
+      task: { en: 'Check the king with your bishop, then take what was behind it.',
+              ja: 'ビショップで 王手を かけよう。キングが どいた あと、うしろに いる クイーンが とれる。' },
+      goal: { kind: 'moves', win: { answer: 'Ba3+' } }
     }
 
   ]

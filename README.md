@@ -76,7 +76,8 @@ Our children's apps are built with **no ads, no in-app purchases, and no data se
 | `kids/klotski/` | ブラウザゲーム：KLOTSKI（箱入り娘の英語版） |
 | `kids/huarongdao/` | ブラウザゲーム：華容道（箱入り娘の中国語版・繁体字） |
 | `kids/river-crossing/` | ブラウザゲーム：River Crossing（川渡り） |
-| `kids/chess/` | 教材：チェス 第1巻 きそ（駒の動きと棋譜の読み方・23レッスン） |
+| `kids/chess/` | 教材：チェス 01巻 きそ（駒の動きと棋譜の読み方・23レッスン） |
+| `kids/chess-tactics/` | 教材：チェス 02巻 せんじゅつ（作りかけ。7章のうち2章） |
 | `kids/shared/` | 複数のページが共有する判定（`klotski.js` と `chess.js`） |
 | `privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
 
