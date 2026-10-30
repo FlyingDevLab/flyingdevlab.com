@@ -20,6 +20,13 @@
 //   この32手は盤面を総当たりで解いて確かめた値（同じ駒を続けて動かすのは
 //   1手と数える規則による）。配置を変えたら必ず解き直すこと。
 //   華容道は橫刀立馬の81手、箱入り娘は4段で81〜120手。
+//
+// ★ クリアした回数 ★
+//   上がるたびに1つ足して、盤の上に 🏆 と出す。2回目からは数字も付く。
+//   数えているのは共有エンジンで、ここは保存キーと読み上げの言葉を渡すだけ。
+//   見せるだけの数字で、何かを開く条件には使っていない。
+//   ブラウザによっては、しばらく訪れないと保存を自動で消す。回数は黙って
+//   0 に戻ることがあるので、何かを開く条件には使えない。
 // ================================================================
 
 KLOTSKI.start({
@@ -27,6 +34,10 @@ KLOTSKI.start({
   // 配置を変えたときはキーも変える。前の配置で出した手数と
   // 比べられなくなるため（_v2 は 32手の配置になってからの記録）。
   bestKey: 'fdl_klotski_best_v2',
+
+  // クリアした回数。配置を変えても回数は数え直さないが、
+  // 手数のキーに合わせて _v2 を付けてある。
+  clearsKey: 'fdl_klotski_clears_v2',
 
   // 出口へ運ぶ駒と、その駒が収まるべき位置。
   // 出口は下辺の中央2マスなので x = 1、2マスの高さが最下段に収まる y = 3。
@@ -49,10 +60,14 @@ KLOTSKI.start({
 
   // リザルト画面に出す文言。単数と複数を出し分ける
   text: {
-    result:    (moves, time) => plural(moves) + ' · ' + time,
+    result:    (moves)       => plural(moves),
     bestFirst: (moves)       => 'Best ' + plural(moves),
     bestKept:  (best)        => 'Best ' + plural(best),
-    bestNew:   (prev)        => 'New record! Previously ' + plural(prev)
+    bestNew:   (prev)        => 'New record! Previously ' + plural(prev),
+    // 画面には 🏆 しか出ないので、読み上げ用の言葉をここで渡す
+    clears:    (n)           => n === 0 ? 'Not cleared yet'
+                              : n === 1 ? 'Cleared once'
+                              : 'Cleared ' + n + ' times'
   }
 });
 

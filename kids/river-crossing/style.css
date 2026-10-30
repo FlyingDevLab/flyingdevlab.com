@@ -1,0 +1,862 @@
+/* ================================================================
+   自己ホスト Nunito（latin, 400 / 700 / 900）
+   出典: @fontsource/nunito 5.2.5 — SIL Open Font License 1.1
+   フォントファイルの場所: /fonts/ （リポジトリルート）
+   make10 / ten-puzzle / ハブ と同じ定義です。外部リクエストは発生しません。
+   ================================================================ */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-900.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* ================================================================
+   style.css – 川渡り（RIVER CROSSING）
+   ================================================================
+
+   構成:
+   01. 配色
+   02. リセット & ベース
+   03. ヘッダー
+   04. ステージ選択
+   05. 決まりごと
+   06. 手数
+   07. 川と岸
+   08. 舟
+   09. 駒
+   10. 言いたいこと（メッセージ）
+   11. クリア
+   11b. 絵を置いたとき
+   12. ボタン
+   12b. フォーカスの輪郭
+   13. フッター
+   14. 広い画面（岸を左右に並べる）
+   15. 動きを減らす設定
+
+   ■ 背景はハブと同じクリーム色のまま
+     箱入り娘は背景まで藍に変えているが、あれは木のオモチャの質感が
+     主題であり、クリームの上に木の盤を置くと明度が近すぎて
+     盤が浮かなくなるため。このゲームにその事情は無い。
+     川・岸・舟の色は「場面」の中だけに閉じ込めて、
+     ページの地はハブと同じクリームに揃えてある。
+     行き来しても同じ場所にいる感じが保たれる。
+
+   ■ 画像を1枚も使っていない
+     川も岸も舟も、グラデーションと角丸と影だけで作っている。
+     /kids* の CSP は img-src も絞っているうえ、
+     この程度の絵に読み込みを増やす理由が無い。
+
+   ■ 岸の並びは画面の幅で変わる
+     狭いときは縦（むこう岸／川／こちら岸）、広いときは横。
+     理由は index.html の設計メモに書いた。
+     このファイルは狭い方を既定にして書き、14 で広い方に直している。
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   01. 配色
+   ----------------------------------------------------------------
+   前半はハブ・make10・ten-puzzle と同じ値。
+   後半（川・岸・舟）はこのゲームだけのもの。
+---------------------------------------------------------------- */
+:root {
+  --bg:        #f5f0e6;
+  --card:      #ffffff;
+  --primary:   #4d80d1;
+  --accent:    #9a6bc7;
+  --text:      #383843;
+  --muted:     #858588;
+  --shadow:    rgba(56, 56, 67, 0.08);
+  --radius:    20px;
+
+  --sky:       #dff0fa;   /* 場面の上の方（空） */
+  --grass:     #a9d879;   /* 岸の草 */
+  --grass-2:   #8cc457;
+  --grass-ink: #3c6b1b;   /* 岸の名前 */
+  --water:     #3f93c6;   /* 川 */
+  --water-2:   #2b7aab;
+  --water-3:   #79c0e4;   /* 流れの筋 */
+  --wood:      #c08a4e;   /* 舟 */
+  --wood-2:    #9c6a35;
+  --warn:      #c0432c;   /* 危ないことが起きかけたとき */
+}
+
+
+/* ----------------------------------------------------------------
+   02. リセット & ベース
+---------------------------------------------------------------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'Nunito', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+               'Yu Gothic', 'Meiryo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  /* 駒を続けて素早く押したときに、ブラウザが拡大だと受け取らないようにする */
+  touch-action: manipulation;
+}
+
+.app {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 14px 14px 28px;
+}
+
+/* 日本語の添え書き。英語より一段小さく、色を落とす */
+.ja {
+  font-size: 0.82em;
+  color: var(--muted);
+  font-style: normal;
+}
+
+
+/* ----------------------------------------------------------------
+   03. ヘッダー
+---------------------------------------------------------------- */
+.site-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.site-title {
+  font-size: clamp(22px, 7vw, 32px);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: var(--water-2);
+}
+
+/* 「CROSSING」だけ色を変えて、2語であることを見せる */
+.title-accent {
+  color: var(--accent);
+  margin-left: 0.18em;
+}
+
+.site-tagline {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.site-tagline .ja { display: block; }
+
+
+/* ----------------------------------------------------------------
+   04. ステージ選択
+   ----------------------------------------------------------------
+   4つとも最初から選べる。遊んでいる途中でも切り替えられるが、
+   切り替えると盤は最初からになる（途中の盤は保存しない）。
+
+   ■ ボタンに出すのは短い名前だけ
+     はじめは2×2に並べて正式な名前を入れていたが、
+     それだけで155pxを使い、狭い画面で川が画面の外へ出てしまった。
+     4つを1列に並べ、絵文字と短い名前だけにして62pxに収めている。
+     正式な名前は、すぐ下の決まりごとの見出しに出る。
+     読み上げには aria-label で正式な名前を渡しているので、
+     見えている文字が短くても伝わる内容は変わらない。
+---------------------------------------------------------------- */
+.stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.stage-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 2px 7px;
+  background: var(--card);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px var(--shadow);
+  font-family: inherit;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.stage-btn:hover { border-color: rgba(77, 128, 209, 0.4); }
+
+.stage-btn.is-on {
+  border-color: var(--primary);
+  background: #eef4fd;
+}
+
+/* 番号の丸。上に抜いた余白（padding-top: 15px）の左肩に置く */
+.stage-no {
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--muted);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 16px;
+  text-align: center;
+}
+.stage-btn.is-on .stage-no { background: var(--primary); }
+
+.stage-icon { font-size: 19px; line-height: 1.15; }
+
+.stage-en {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.stage-ja {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+.stage-btn.is-on .stage-en { color: var(--primary); }
+
+
+/* ----------------------------------------------------------------
+   05. 決まりごと
+   ----------------------------------------------------------------
+   見出しがステージの正式な名前。その下に、そのステージだけの決まり。
+   最後の1行は最短手数と自己記録で、上に点線を引いて
+   「これはルールではない」ことを見せている。
+---------------------------------------------------------------- */
+.brief {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px var(--shadow);
+  padding: 9px 13px 9px;
+  margin-bottom: 10px;
+}
+
+.brief-title span { display: block; }
+.brief-title span:first-child {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.3;
+}
+.brief-title .ja {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.rules {
+  list-style: none;
+  font-size: 11.5px;
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(56, 56, 67, 0.08);
+}
+
+.rules li {
+  padding: 3px 0 3px 12px;
+  position: relative;
+}
+
+.rules li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--water-3);
+}
+
+.rules li span { display: block; line-height: 1.4; }
+.rules li .ja  { font-size: 11.5px; color: var(--muted); }
+
+.rules-par {
+  border-top: 1px dashed rgba(56, 56, 67, 0.18);
+  margin-top: 3px;
+  padding-top: 6px !important;
+}
+.rules-par::before { display: none; }
+.rules-par span { font-size: 10.5px; color: var(--muted); }
+
+
+/* ----------------------------------------------------------------
+   06. 手数
+   ----------------------------------------------------------------
+   以前は手数と時間を横に並べていた。時間を外したので .stat は1つだけ。
+   幅いっぱいに伸ばし、左に名前・右に数字を置いている。
+---------------------------------------------------------------- */
+.stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.stat {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px var(--shadow);
+  padding: 5px 12px;
+}
+
+.stat > span {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  line-height: 1.2;
+}
+.stat .ja {
+  display: block;
+  font-size: 10px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.stat strong {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--water-2);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ----------------------------------------------------------------
+   07. 川と岸
+---------------------------------------------------------------- */
+.stage-wrap {
+  position: relative;   /* クリア表示を重ねるため */
+}
+
+.crossing {
+  display: flex;
+  flex-direction: column;   /* むこう岸 → 川 → こちら岸 */
+  gap: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 4px 14px var(--shadow);
+  background: var(--sky);
+}
+
+.bank {
+  flex: 0 0 auto;
+  padding: 8px 10px 10px;
+}
+
+/* 草の明暗を上下で逆にして、2つの岸を見分けられるようにする。
+   .bank だけに書いて .bank--far を省くこともできるが、
+   片方にしか名前が無いと、あとで読んだときに
+   「far には規則が無い」のか「書き忘れた」のかが分からない。 */
+.bank--far  { background: linear-gradient(180deg, var(--grass) 0%, var(--grass-2) 100%); }
+.bank--near { background: linear-gradient(0deg,   var(--grass) 0%, var(--grass-2) 100%); }
+
+.bank-name {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--grass-ink);
+  margin-bottom: 6px;
+  text-align: center;
+}
+.bank-name .ja {
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--grass-ink);
+  opacity: 0.85;
+}
+.bank-name .ja::before { content: ' / '; }
+
+.river {
+  position: relative;
+  flex: 0 0 152px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--water-2) 0%, var(--water) 45%, var(--water-2) 100%);
+}
+
+/* 川の流れ。斜めの筋をゆっくり流す。装飾だけなので読み上げからは隠してある */
+.stream {
+  position: absolute;
+  inset: -20% -40%;
+  background: repeating-linear-gradient(
+    102deg,
+    transparent 0 26px,
+    rgba(255, 255, 255, 0.10) 26px 32px,
+    transparent 32px 70px
+  );
+  animation: flow 9s linear infinite;
+}
+
+@keyframes flow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(70px); }
+}
+
+
+/* ----------------------------------------------------------------
+   08. 舟
+   ----------------------------------------------------------------
+   狭い画面では上下に、広い画面では左右に動く。
+   どちらも「端にぴったり寄せる」ために、位置（top / left）を
+   0 → 100% に動かしつつ、transform で自分の大きさ分だけ引き戻している。
+   こうすると、舟の幅や高さを CSS が知らなくても端に揃う。
+---------------------------------------------------------------- */
+.boat {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  padding: 7px 8px 11px;
+  border-radius: 10px 10px 26px 26px;
+  background: linear-gradient(180deg, var(--wood) 0%, var(--wood-2) 100%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: top 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              left 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.boat.at-far  { top: 8px;             transform: translateY(0); }
+.boat.at-near { top: calc(100% - 8px); transform: translateY(-100%); }
+
+/* 舟の底板。水に触れている線を1本入れるだけで舟らしくなる */
+.hull {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 4px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.tokens--boat { min-height: 0; align-items: stretch; }
+
+
+/* ----------------------------------------------------------------
+   09. 駒
+---------------------------------------------------------------- */
+.tokens {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  gap: 6px;
+  min-height: 62px;
+}
+
+.token {
+  width: 62px;
+  padding: 5px 2px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  background: var(--tint-bg, #ffffff);
+  border: 2px solid var(--tint, var(--muted));
+  border-radius: 13px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.token:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* 舟が着いていない岸の駒。押せないことを薄さで見せる */
+.token:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.token-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 27px;
+  font-size: 23px;
+  line-height: 1.15;
+}
+
+.token-en {
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+.token-ja {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+/* 役ごとの色。生き物・もの・おとな・こどもが一目で分かるようにする。
+   色だけに意味を持たせていないか注意すること。名前も絵文字も出ているので、
+   色が見分けられなくても困らない。 */
+.token--person,
+.token--adult    { --tint: #4d80d1; --tint-bg: #eef4fd; }
+.token--beast    { --tint: #c2742f; --tint-bg: #fdf2e4; }
+.token--thing    { --tint: #5fa33c; --tint-bg: #eff8e8; }
+.token--kid,
+.token--son,
+.token--daughter,
+.token--child    { --tint: #d4729b; --tint-bg: #fdeef4; }
+.token--parent   { --tint: #8a6bc7; --tint-bg: #f3eefb; }
+.token--dog      { --tint: #bb9120; --tint-bg: #fbf5e0; }
+
+/* 空いている席。あと何人乗れるかを見ただけで分かるようにする。
+   高さを決め打ちにせず伸ばしているのは、絵を置くと駒が高くなるため */
+.seat {
+  width: 62px;
+  min-height: 56px;
+  align-self: stretch;
+  border: 2px dashed rgba(255, 255, 255, 0.45);
+  border-radius: 13px;
+}
+
+
+/* ----------------------------------------------------------------
+   10. 言いたいこと（メッセージ）
+   ----------------------------------------------------------------
+   空でも場所を取ったままにしている。理由は index.html に書いた。
+---------------------------------------------------------------- */
+.message {
+  min-height: 40px;
+  margin: 10px 0 2px;
+  padding: 0 6px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--warn);
+}
+
+.message .ja {
+  display: block;
+  font-size: 12px;
+  color: var(--warn);
+  opacity: 0.85;
+}
+
+.message.is-on { animation: pop 0.25s ease-out; }
+
+@keyframes pop {
+  from { transform: scale(0.94); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+
+/* ----------------------------------------------------------------
+   11. クリア
+---------------------------------------------------------------- */
+.clear {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px 18px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.94);
+  text-align: center;
+  animation: pop 0.3s ease-out;
+}
+
+.clear h2 {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--water-2);
+  line-height: 1.2;
+}
+.clear h2 .ja { display: block; font-size: 15px; color: var(--accent); }
+
+.clear .result span { display: block; }
+.clear .best span   { display: block; }
+.clear .note span   { display: block; }
+
+.clear .result { font-size: 15px; font-weight: 700; }
+.clear .best   { font-size: 13px; color: var(--accent); font-weight: 700; }
+.clear .note   { font-size: 12px; color: var(--muted); }
+
+.clear-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/* ----------------------------------------------------------------
+   11b. 絵を置いたとき
+   ----------------------------------------------------------------
+   /images/river-crossing/ に絵が置いてあると、game.js が
+   駒の絵文字を <img> に差し替え、舟に .has-art を付ける。
+   置いていなければこの節は一切効かず、絵文字と CSS で描いた舟になる。
+   /images/ は .gitignore で除外しているので、クローンした人の手元では
+   いつも絵文字の側が出る。
+
+   ■ 舟だけ幅を固定している
+     絵文字のときの舟は川の幅いっぱいに広げている（ただの木の箱なので
+     伸びても困らない）。絵を入れると、狭い画面で 330px、広い画面で
+     152px まで伸び縮みして船の形が歪む。そこで絵のときだけ幅を固定し、
+     狭い画面では川の中央に置いている。
+
+   ■ 寸法は実物の船体に合わせてある
+     絵の舟は 560 × 183。舟べりの内側の線は上から 65px のあたりなので、
+     210px 幅で描くと舟底から 44px の高さに来る。padding-bottom を
+     その 44px にすると、駒の札の下端がちょうど舟べりに重なり、
+     札が舟の中に座って見える。絵を差し替えたら、この2つの数も直す。
+---------------------------------------------------------------- */
+.token-art {
+  display: block;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.stage-art {
+  display: block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.boat.has-art {
+  background: url('/images/river-crossing/boat.webp') no-repeat bottom center / contain;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0 14px 44px;
+}
+.boat.has-art .hull { display: none; }
+
+/* 空いた席の点線。絵文字の舟では席の高さいっぱいに引いていたが、
+   絵の舟だと水の上に四角が浮いて見える。高さは舟の箱を支えるために
+   そのまま残し、線だけを下端（＝舟べりの線）に寄せて短く引く */
+.boat.has-art .seat { border: 0; position: relative; }
+.boat.has-art .seat::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26px;
+  border: 2px dashed rgba(255, 255, 255, 0.45);
+  border-radius: 13px 13px 10px 10px;
+}
+
+/* 絵の舟は札を乗せると 117px になる。川が 152px のままだと舟が
+   ほとんど埋めてしまい、動いて見えない。絵が見つかったときだけ
+   game.js が <html> に .art-on を付けるので、そこで川を広げる */
+.art-on .river { flex-basis: 210px; }
+
+/* 狭い画面：川の中央に置き、上下に動かす */
+.boat.has-art         { left: 50%; right: auto; width: 210px; }
+.boat.has-art.at-far  { top: 0;    transform: translate(-50%, 0); }
+.boat.has-art.at-near { top: 100%; transform: translate(-50%, -100%); }
+
+
+/* ----------------------------------------------------------------
+   12. ボタン
+---------------------------------------------------------------- */
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.btn {
+  flex: 1 1 0;
+  padding: 10px 10px 8px;
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid rgba(56, 56, 67, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px var(--shadow);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.15s;
+}
+
+/* ボタンの中の日本語は英語の下に置く */
+.btn .ja { display: block; font-size: 11px; }
+
+.btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 10px var(--shadow); }
+.btn:active:not(:disabled) { transform: translateY(0); }
+
+.btn:disabled { opacity: 0.45; cursor: default; }
+
+.btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+.btn.primary .ja { color: rgba(255, 255, 255, 0.85); }
+
+.clear-buttons .btn { flex: 0 0 auto; min-width: 128px; }
+
+
+/* ----------------------------------------------------------------
+   12b. フォーカスの輪郭
+   ----------------------------------------------------------------
+   :focus ではなく :focus-visible に付けている。
+   マウスで押しただけのときは輪郭を出さず、キーボードで辿ったときだけ
+   出す。他のゲーム（make10 / 箱入り娘 など）と同じ作法。
+   色は紫（--accent）にしている。青（--primary）だと、選んでいる
+   ステージの枠と同じ色になり、どちらが居場所なのか分からなくなる。
+---------------------------------------------------------------- */
+.stage-btn:focus-visible,
+.token:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.footer-link:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+
+/* ----------------------------------------------------------------
+   13. フッター
+---------------------------------------------------------------- */
+.site-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.footer-copy { margin-top: 4px; }
+.footer-link { color: var(--primary); text-decoration: none; font-weight: 700; }
+.footer-link:hover { text-decoration: underline; }
+
+
+/* ----------------------------------------------------------------
+   14. 広い画面（岸を左右に並べる）
+   ----------------------------------------------------------------
+   HTML の並びは むこう岸・川・こちら岸 のまま、row-reverse で
+   こちら岸｜川｜むこう岸 の見た目にしている。
+   DOM をいじらないので、読み上げの順番は狭い画面と変わらない。
+---------------------------------------------------------------- */
+@media (min-width: 620px) {
+
+  /* 岸が横に並ぶぶん、1つの岸の幅が狭くなる。560px のままだと
+     岸が140px ほどになり、駒が1列しか入らず縦にずらりと並んでしまう。
+     760px まで広げると駒が3つずつ並び、8人のいかだでも3段で収まる。 */
+  .app { max-width: 760px; }
+
+  .stages { grid-template-columns: repeat(4, 1fr); }
+
+  .crossing {
+    flex-direction: row-reverse;
+    align-items: stretch;
+    min-height: 330px;
+  }
+
+  .bank {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 10px 8px;
+  }
+  /* 横並びでは明暗を左右で逆にする */
+  .bank--far  { background: linear-gradient(90deg,  var(--grass-2) 0%, var(--grass) 100%); }
+  .bank--near { background: linear-gradient(270deg, var(--grass-2) 0%, var(--grass) 100%); }
+
+  .river { flex: 0 0 38%; }
+  /* 横並びでは舟は左右に動く。絵の舟は 210px あるので、
+     38% のままだと動ける幅がほとんど残らない */
+  .art-on .river { flex-basis: 46%; }
+
+  /* 上下ではなく左右に動かす。top は中央で固定し、left だけを動かす。
+     top を .at-near / .at-far の側にも書いているのは、狭い画面用の
+     .boat.at-near { top: calc(100% - 8px) } の方が詳細度が高く、
+     .boat { top: 50% } では上書きできないため。
+     ここを1行にまとめると、広い画面でも舟が川の下端に貼り付く。 */
+  .boat {
+    left: 8px;
+    right: auto;
+    width: 152px;
+  }
+  .boat.at-near { top: 50%; left: 8px;              transform: translate(0, -50%); }
+  .boat.at-far  { top: 50%; left: calc(100% - 8px); transform: translate(-100%, -50%); }
+
+  /* 絵のときも横並び。狭い画面用の .boat.has-art.at-near と詳細度が
+     同じなので、ここに書かないと上下に動いたままになる */
+  .boat.has-art         { left: 8px; width: 210px; }
+  .boat.has-art.at-near { top: 50%; left: 8px;              transform: translate(0, -50%); }
+  .boat.has-art.at-far  { top: 50%; left: calc(100% - 8px); transform: translate(-100%, -50%); }
+}
+
+
+/* ----------------------------------------------------------------
+   15. 動きを減らす設定
+   ----------------------------------------------------------------
+   舟の移動も、川の流れも、出てくる動きも止める。
+   JS 側も同じ設定を見ていて、舟が着くのを待つ時間を 0 にしている。
+---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .boat   { transition: none !important; }
+  .stream { animation: none !important; }
+  .token, .btn { transition: none !important; }
+  .clear, .message.is-on { animation: none !important; }
+}

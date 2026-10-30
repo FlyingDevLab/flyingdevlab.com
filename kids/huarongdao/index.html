@@ -85,10 +85,15 @@
   </header>
 
   <!-- aria-live="polite" … 步數が変わったことを読み上げで追える。
-       assertive にすると操作のたびに読み上げを割り込ませてしまう。 -->
+       assertive にすると操作のたびに読み上げを割り込ませてしまう。
+
+       以前はここに経過時間も並べていたが、外した。
+       動いている時計は、こどもには「急げ」という合図に見える。 -->
   <div class="stats" aria-live="polite">
     <div class="stat"><span>步數</span><strong id="moves">0</strong></div>
-    <div class="stat"><span>時間</span><strong id="time">0:00</strong></div>
+    <!-- クリアした回数の印。1回も上がっていないうちは出さない。
+         中身と出し入れは共有エンジン（/kids/shared/klotski.js）が受け持つ。 -->
+    <div class="stat stat-clears" id="clears" hidden></div>
   </div>
 
   <div class="stage">

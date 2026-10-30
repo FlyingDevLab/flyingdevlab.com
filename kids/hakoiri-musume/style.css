@@ -148,7 +148,9 @@ body {
    まだ開いていないものは押せないが、薄く名前を見せたままにしてある。
    この先に何があるかが分かる方が、挑戦する気になる。
 ---------------------------------------------------------------- */
-.levels { display: flex; gap: 6px; }
+/* flex-wrap … むずかしさ4つにクリアの印が付くと、幅の狭い画面
+   （320px の端末など）で横に収まらなくなる。折り返して逃がす。 */
+.levels { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 
 .level {
   min-height: 38px;
@@ -165,6 +167,14 @@ body {
   cursor: pointer;
 }
 
+/* クリアした回数の印。🏆 だけ、2回目からは 🏆 2 と数字が付く。
+   ボタンの名前より一段小さくして、名前のほうが先に目に入るようにする。 */
+.level-clears {
+  margin-left: 4px;
+  font-size: .8em;
+  font-variant-numeric: tabular-nums;
+}
+
 .level[aria-current="true"] { color: var(--wood-ink); background: var(--gold); }
 .level:disabled { opacity: .3; cursor: default; }
 .level:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
@@ -179,13 +189,18 @@ body {
 
 
 /* ----------------------------------------------------------------
-   05. 手数と時間
+   05. 手数
    ----------------------------------------------------------------
    font-variant-numeric: tabular-nums … 数字の幅を揃える。
-   これが無いと、時間が 1:08 → 1:09 と進むだけで桁が横に動く。
+   これが無いと、9手から10手へ増えたときに数字の中心が横へ動く。
+
+   以前はここに時間も並べていた。外したので .stat は1つだけになり、
+   横に並べる必要は無くなったが、flex は残してある。
+   中央に置くために justify-content が要るため。
 ---------------------------------------------------------------- */
 .stats {
   display: flex;
+  justify-content: center;
   gap: 10px;
   font-variant-numeric: tabular-nums;
 }

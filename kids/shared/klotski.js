@@ -46,8 +46,15 @@
 //   この数え方による。1マスごとに数えると同じ解き方でも手数が倍以上になり、
 //   「81手」という目標が意味を持たなくなる。
 //
+// ★ 時間は計らない ★
+//   以前は手数の横に経過時間を出していたが、やめた。
+//   動いている時計は、こどもにとって「急がなければいけない」という
+//   合図になる。このパズルは急いで解くものではないし、
+//   じっと盤を眺めて考えている時間こそが中身である。
+//   記録に残すのも手数だけにしている。
+//
 // ★ 保存するもの ★
-//   自己最少手数だけ。盤面も時間も保存しない。
+//   自己最少手数だけ。盤面は保存しない。
 //   途中でやめたら盤面は捨てられ、次に入ったときは最初の配置から始まる。
 //   盤面を復元すると「解けない形で固まったまま再開する」ことがあり、
 //   やり直しのボタンを押すまで抜けられなくなるため、あえて保存しない。
@@ -56,7 +63,8 @@
 // ── 使い方 ────────────────────────────────────────────────────
 //
 //   KLOTSKI.start({
-//     bestKey: 'fdl_xxx_best',        // 自己最少手数の保存キー
+//     bestKey:   'fdl_xxx_best',      // 自己最少手数の保存キー
+//     clearsKey: 'fdl_xxx_clears',    // クリア回数の保存キー（省略可）
 //     goalId:  'musume',              // 出口へ運ぶ駒の id
 //     goal:    { x: 1, y: 3 },        // その駒が収まるべき左上のマス
 //     pieces: [
@@ -69,15 +77,31 @@
 //       //  ruby  … face に振るふりがな。省略すると振らない
 //     ],
 //     text: {
-//       result   (moves, time) {},    // 「12手 ・ 1:23」
+//       result   (moves)       {},    // 「12手」
 //       bestFirst(moves)       {},    // 初めてクリアしたとき
 //       bestKept (best)        {},    // 記録を更新しなかったとき
-//       bestNew  (prev)        {}     // 更新したとき（prev は更新前の記録）
+//       bestNew  (prev)        {},    // 更新したとき（prev は更新前の記録）
+//       clears   (n)           {}     // クリア回数の読み上げ（省略可）
 //     }
 //   });
 //
-// HTML 側に必要な id は9つ。3本とも同じ名前を使っている。
-//   grid moves time undo reset clear result best again
+// HTML 側に必要な id は8つ。3本とも同じ名前を使っている。
+//   grid moves undo reset clear result best again
+//
+// これに加えて id="clears" があれば、クリア回数の印をそこに出す。
+// 無ければ何もしない。箱入り娘は印をむずかしさのボタンに出すので置いていない。
+//
+// ── クリア回数 ────────────────────────────────────────────────
+//
+//   clearsKey を渡すと、上がるたびに1つ足して覚えておく。
+//     0回 … 何も出さない
+//     1回 … 🏆
+//     2回以上 … 🏆 2
+//
+//   回数は見せるだけで、何かを開く条件には使っていない。
+//   ブラウザによっては、しばらく訪れないと localStorage を自動で消すため、
+//   貯めた回数は黙って 0 に戻ることがある。消えても遊びに支障が出ない
+//   ようにしておく必要がある（開放の条件に使ってはいけない理由がこれ）。
 //
 // ── 難易度を選べるようにするとき ──────────────────────────────
 //
@@ -86,7 +110,7 @@
 //     game.setLayout(pieces, bestKey);   // 盤を入れ替えて最初から
 //
 //   cfg.onClear を渡しておくと、上がったときに呼ばれる。
-//     onClear({ moves, time, isNew, previous })
+//     onClear({ moves, isNew, previous })
 //   これを使うと、クリアした瞬間に次の難易度を開くといったことが、
 //   エンジンの側を1行も変えずに各ゲームの game.js で書ける。
 //   箱入り娘だけがこの2つを使っている。
@@ -108,7 +132,6 @@ window.KLOTSKI = (() => {
 
     const grid     = document.getElementById('grid');
     const movesEl  = document.getElementById('moves');
-    const timeEl   = document.getElementById('time');
     const undoBtn  = document.getElementById('undo');
     const resetBtn = document.getElementById('reset');
     const clearEl  = document.getElementById('clear');
@@ -117,7 +140,7 @@ window.KLOTSKI = (() => {
     const againBtn = document.getElementById('again');
 
     let pieces = [], moves = 0, lastId = null, history = [], won = false;
-    let startTime = 0, timerId = null, drag = null;
+    let drag = null;
 
 
     // ============================================================
@@ -147,6 +170,62 @@ window.KLOTSKI = (() => {
       } catch (e) {
         /* 保存できなくても続行する（記録は今回だけのものになる） */
       }
+    }
+
+    /**
+     * クリア回数を読む。手数と同じく、壊れた値は 0 として扱う。
+     * @param {string} key - 省略すると今の盤のキー
+     * @returns {number} 0 以上。0 は「まだクリアしていない」
+     */
+    function loadClears(key) {
+      const k = key || cfg.clearsKey;
+      if (!k) return 0;
+      try {
+        const n = parseInt(localStorage.getItem(k), 10);
+        return Number.isFinite(n) && n > 0 ? n : 0;
+      } catch (e) {
+        return 0;   // 読めない環境では0回として扱う
+      }
+    }
+
+    /**
+     * クリア回数を1つ足す。
+     * 書けない環境（Safari のプライベートブラウズなど）では保存されないが、
+     * 足した後の数は返すので、そのときの結果表示だけは正しく出る。
+     * @returns {number} 足した後の回数
+     */
+    function addClear() {
+      if (!cfg.clearsKey) return 0;
+      const next = loadClears() + 1;
+      try {
+        localStorage.setItem(cfg.clearsKey, String(next));
+      } catch (e) {
+        /* 保存できなくても続行する（回数は今回だけのものになる） */
+      }
+      return next;
+    }
+
+    /**
+     * クリア回数の印。1回目は数字を出さない。
+     * 数字に絵文字（1️⃣ など）を使わないのは、環境ごとに幅が変わって
+     * 桁が揃わないため。普通の文字で出す。
+     * @param {number} n
+     * @returns {string} '' / '🏆' / '🏆 2'
+     */
+    function clearsBadge(n) {
+      if (!n) return '';
+      return n === 1 ? '🏆' : '🏆 ' + n;
+    }
+
+    /** id="clears" があれば、そこに印を描く。無ければ何もしない。 */
+    function renderClears() {
+      const el = document.getElementById('clears');
+      if (!el) return;
+      const n = loadClears();
+      el.textContent = clearsBadge(n);
+      el.hidden = n === 0;
+      // 画面には絵文字しか出ないので、読み上げ用の言葉は各ゲームから受け取る
+      if (cfg.text && cfg.text.clears) el.setAttribute('aria-label', cfg.text.clears(n));
     }
 
 
@@ -272,29 +351,6 @@ window.KLOTSKI = (() => {
 
 
     // ============================================================
-    // 時間
-    // ============================================================
-    //
-    // 最初の1手が動いた瞬間に数え始める。ページを開いた時刻からにすると、
-    // 画面を見ながら考えている時間や、他のことをしていた時間まで入る。
-
-    function fmt(ms) {
-      const s = Math.floor(ms / 1000);
-      return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
-    }
-
-    function startTimer() {
-      if (timerId) return;
-      startTime = Date.now();
-      // 250ms ごとに描き替える。1000ms だと、表示が1秒ずつ飛んで
-      // 秒の変わり目が実際とずれて見える。
-      timerId = setInterval(() => { timeEl.textContent = fmt(Date.now() - startTime); }, 250);
-    }
-
-    function stopTimer() { clearInterval(timerId); timerId = null; }
-
-
-    // ============================================================
     // 手の確定
     // ============================================================
 
@@ -306,7 +362,6 @@ window.KLOTSKI = (() => {
         moves++;
         lastId = p.id;
       }
-      startTimer();
       refreshHud();
       checkWin();
     }
@@ -316,24 +371,25 @@ window.KLOTSKI = (() => {
       if (!m || m.x !== GOAL.x || m.y !== GOAL.y) return;
 
       won = true;
-      stopTimer();
-      const t = fmt(Date.now() - startTime);
-      timeEl.textContent = t;
       refreshHud();
 
-      // 記録の更新。手数で比べる（時間は考える長さで大きく変わるため）
       const prev = loadBest();
       const isNew = prev === 0 || moves < prev;
       if (isNew) saveBest(moves);
 
-      resultEl.textContent = cfg.text.result(moves, t);
+      const clears = addClear();
+      renderClears();
+
+      resultEl.textContent = cfg.text.result(moves);
       if (prev === 0)      bestEl.textContent = cfg.text.bestFirst(moves);
       else if (isNew)      bestEl.textContent = cfg.text.bestNew(prev);
       else                 bestEl.textContent = cfg.text.bestKept(prev);
 
       // クリアを game.js に知らせる。クリア表示を出す前に呼ぶので、
       // 受け取った側は、表示の中身（開放の知らせなど）をここで足せる。
-      if (cfg.onClear) cfg.onClear({ moves: moves, time: t, isNew: isNew, previous: prev });
+      if (cfg.onClear) {
+        cfg.onClear({ moves: moves, isNew: isNew, previous: prev, clears: clears });
+      }
 
       if (reduceMotion) {
         // 動きを減らす設定のときは駒を飛び出させず、その場に置いたまま結果を出す
@@ -487,20 +543,21 @@ window.KLOTSKI = (() => {
       pieces.forEach((p, i) => { p.x = s.pos[i][0]; p.y = s.pos[i][1]; setPos(p, p.x, p.y); });
       moves = s.moves; lastId = s.lastId;
       refreshHud();
-      // 時間は戻さない。考えていた時間は実際に経っているため
     }
 
     function reset() {
-      stopTimer();
       drag = null;
       // 配置表は複製してから使う。そのまま使うと、1回目の遊びで
       // x と y を書き換えてしまい、2回目が途中の盤面から始まる。
       pieces = cfg.pieces.map(p => ({ ...p }));
       moves = 0; lastId = null; history = []; won = false;
-      timeEl.textContent = '0:00';
       clearEl.hidden = true;
       build();
       refreshHud();
+      // 難易度を変えると回数も変わるので、盤を組み直すたびに描き直す。
+      // refreshHud ではなくここで呼ぶのは、1手ごとに localStorage を
+      // 読みに行かないようにするため。回数は上がった瞬間にしか増えない。
+      renderClears();
     }
 
     undoBtn.addEventListener('click', undo);
@@ -518,11 +575,17 @@ window.KLOTSKI = (() => {
     // 盤を入れ替える口。難易度を選べるゲーム（箱入り娘）が使う。
     // 他の2本は戻り値を使わないので、何も変わらない。
     return {
-      setLayout: function (pieces, bestKey) {
+      setLayout: function (pieces, bestKey, clearsKey) {
         cfg.pieces = pieces;
-        if (bestKey) cfg.bestKey = bestKey;
+        if (bestKey)   cfg.bestKey   = bestKey;
+        if (clearsKey) cfg.clearsKey = clearsKey;
         reset();
-      }
+      },
+
+      // 印の読み書きを外からも使えるようにする。箱入り娘が、まだ選んでいない
+      // むずかしさの回数まで含めて、ボタン4つぶんを描くのに使う。
+      getClears:   loadClears,
+      clearsBadge: clearsBadge
     };
   }
 

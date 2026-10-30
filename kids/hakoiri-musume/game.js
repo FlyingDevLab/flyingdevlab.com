@@ -41,9 +41,22 @@
 //   最初は標準と難関だけを選べる。どれか1つでもクリアすると、
 //   おこと激おこが開く。開いたものは閉じない。
 //
+// ★ クリアした回数 ★
+//   むずかしさごとに数えて、ボタンの中に 🏆 と出す。2回目からは数字も付く。
+//   4つ並んだボタンを見れば、どれを倒してどれが残っているかが一目で分かる。
+//   数えているのは共有エンジンで、ここは保存キーを渡して印を描くだけ。
+//
+//   見せるだけの数字で、開放の条件には使っていない。使ってはいけない。
+//   ブラウザによっては、しばらく訪れないと localStorage を自動で消すため、
+//   回数は黙って 0 に戻ることがある。開放の条件にすると、消えた人の
+//   おこ・激おこが閉じてしまう。開放は別のキーで持っている。
+//   （そのキーも同じように消える。消えたらもう一度クリアすれば開く）
+//
 // ★ 保存するもの ★
-//   どこまで開いたか、最後に選んだむずかしさ、むずかしさごとの自己最少手数。
-//   盤面も時間も保存しない。途中でやめたら盤面は捨てられる。
+//   どこまで開いたか、最後に選んだむずかしさ、むずかしさごとの自己最少手数、
+//   むずかしさごとのクリア回数。
+//   盤面は保存しない。途中でやめたら盤面は捨てられる。
+//   時間は計っていない（理由は共有エンジンの冒頭に書いた）。
 // ================================================================
 
 (() => {
@@ -146,6 +159,7 @@
   const KEY_OPEN  = 'fdl_hakoiri_open';    // おこ・激おこを開いたか
   const KEY_LEVEL = 'fdl_hakoiri_level';   // 最後に選んだむずかしさ
   const KEY_BEST  = 'fdl_hakoiri_best_';   // + むずかしさのid ＝ 自己最少手数
+  const KEY_CLEAR = 'fdl_hakoiri_clears_'; // + むずかしさのid ＝ クリアした回数
 
 
   // ================================================================
@@ -195,8 +209,22 @@
       el.type = 'button';
       el.className = 'level';
       el.textContent = level.label;
+
+      // クリアした回数の印。まだのものには何も付けない。
+      // 印は label の後ろに足すので、textContent ではなく要素で入れる
+      // （textContent で書くと、先に入れた名前が消える）。
+      const clears = game ? game.getClears(KEY_CLEAR + level.id) : 0;
+      if (clears > 0) {
+        const mark = document.createElement('span');
+        mark.className = 'level-clears';
+        mark.textContent = game.clearsBadge(clears);
+        el.appendChild(mark);
+      }
+
       // 読み上げには正式な名前と手数を渡す。画面には短い名前しか出さない
-      el.setAttribute('aria-label', level.name + ' 最短' + level.moves + '手');
+      el.setAttribute('aria-label',
+        level.name + ' 最短' + level.moves + '手'
+          + (clears > 0 ? ' クリア' + clears + '回' : ''));
       if (level === current) el.setAttribute('aria-current', 'true');
       if (!canPlay(level)) {
         // まだ開いていないものは押せない。名前は薄く見せたままにして、
@@ -219,7 +247,7 @@
     current = level;
     save(KEY_LEVEL, level.id);
     unlockEl.hidden = true;
-    game.setLayout(level.pieces, KEY_BEST + level.id);
+    game.setLayout(level.pieces, KEY_BEST + level.id, KEY_CLEAR + level.id);
     drawButtons();
     drawNote();
   }
@@ -230,11 +258,14 @@
   // ================================================================
 
   function onClear() {
-    if (isOpen()) return;          // もう開いている
-    markOpen();
-    drawButtons();                 // おこ・激おこを押せるようにする
-    unlockEl.textContent = 'おこ と 激おこ が ひらいた！';
-    unlockEl.hidden = false;
+    // クリア回数が増えたので、どちらにしてもボタンは描き直す
+    const first = !isOpen();
+    if (first) markOpen();
+    drawButtons();                 // 印を更新し、おこ・激おこを押せるようにする
+    if (first) {
+      unlockEl.textContent = 'おこ と 激おこ が ひらいた！';
+      unlockEl.hidden = false;
+    }
   }
 
 
@@ -248,7 +279,8 @@
   if (saved && canPlay(saved)) current = saved;
 
   game = KLOTSKI.start({
-    bestKey: KEY_BEST + current.id,
+    bestKey:   KEY_BEST + current.id,
+    clearsKey: KEY_CLEAR + current.id,
     goalId: 'musume',
     // 出口は下辺の中央2マスなので x = 1、2マスの高さが最下段に収まる y = 3
     goal: { x: 1, y: 3 },
@@ -257,7 +289,7 @@
 
     // リザルト画面に出す文言。画面に出る日本語はここと index.html にしかない。
     text: {
-      result:    (moves, time) => moves + '手 ・ ' + time,
+      result:    (moves)       => moves + '手',
       bestFirst: (moves)       => '自己最少 ' + moves + '手',
       bestKept:  (best)        => '自己最少 ' + best + '手',
       bestNew:   (prev)        => '新記録！ これまでは ' + prev + '手'

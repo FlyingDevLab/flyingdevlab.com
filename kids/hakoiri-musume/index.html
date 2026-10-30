@@ -13,7 +13,7 @@
     他の6本は画面の文字をすべて EN/JA 併記にしているが、
     このゲームは「日本製の木のオモチャ」の印象を出すため、
     画面に出す文字を漢字だけに揃えている。
-      手数 ・ 時間 ・ 戻す ・ 諦める ・ 出口 ・ 脱出
+      手数 ・ 戻す ・ 諦める ・ 出口 ・ 脱出
     英語は2か所にだけ残している。
       ・<title> と OGP … 検索結果とシェア時の表示。画面には出ない
       ・aria-label      … 読み上げ用。画面には出ない
@@ -93,13 +93,16 @@
   <div class="levels" id="levels" role="group" aria-label="むずかしさ"></div>
   <p class="level-note" id="levelNote"></p>
 
-  <!-- ===== 手数と時間 =====
+  <!-- ===== 手数 =====
        aria-live="polite" を付けているのは、駒を動かすたびに
        手数が変わったことを読み上げで追えるようにするため。
-       assertive にすると操作のたびに読み上げを割り込ませてしまう。 -->
+       assertive にすると操作のたびに読み上げを割り込ませてしまう。
+
+       以前はここに経過時間も並べていたが、外した。
+       動いている時計は、こどもには「急げ」という合図に見える。
+       このパズルは急いで解くものではない。 -->
   <div class="stats" aria-live="polite">
     <div class="stat"><span>手数</span><strong id="moves">0</strong></div>
-    <div class="stat"><span>時間</span><strong id="time">0:00</strong></div>
   </div>
 
   <!-- ===== 盤 =====

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!--
+  ============================================================
+  【設計メモ: 川渡り / RIVER CROSSING】
+
+  ■ 岸の並びが 画面の幅で変わる
+    広い画面では こちら岸｜川｜むこう岸 と横に並べ、
+    狭い画面では むこう岸／川／こちら岸 と縦に積む。
+
+    最初は横並びだけで作るつもりだったが、375px の画面で
+    8人のいかだ（駒が8つ）を置くと、片側の岸の幅が100px ほどになり、
+    駒が2列しか入らず名前も読めなくなった。縦に積めば岸が
+    画面いっぱいの幅になり、駒が5つ並ぶ。
+    HTML の並びは むこう岸・川・こちら岸 のままで、
+    広いときだけ CSS の flex-direction: row-reverse で左右に直している。
+    DOM をいじらないので、読み上げの順番はどちらでも
+    「むこう岸 → 舟 → こちら岸」で変わらない。
+
+  ■ 岸の呼び方を「左・右」にしていない
+    上の理由で並びが変わるため、画面の文字は
+    This side / こちらぎし と Far side / むこうぎし にしている。
+    どちらの並びでも意味が合う。
+
+  ■ 駒は button で作っている
+    div に click を付けると、キーボードでは触れない。
+    button にしておけば Tab で回って Enter で乗り降りできる。
+    そのため矢印キーの処理は書いていない。
+
+  ■ 舟が着いていない岸の駒は disabled にしている
+    押しても何も起きない駒を押せる状態にしておくと、
+    「押したのに動かない」になる。触れないようにした方が早く伝わる。
+
+  ■ わたる だけは押せたままにしている
+    漕げる人が乗っていなくても押せる。押すと理由が出る。
+    ここだけ disabled にしないのは、8人のいかだで
+    「こげるのは3人だけ」を押して覚えてもらうため。
+
+  ■ 絵文字を使っている
+    箱入り娘の3本は盤に絵文字を置いていないが、あれは
+    木の盤の中に絵文字が入ると そこだけ別の素材に見えるため。
+    このゲームは川と岸の絵なので、生き物を絵文字で出して問題ない。
+
+  ■ canonical を置いていない
+    他のゲームページと同じ。og:url だけを持たせている。
+    検索からの着地点になるハブ（/kids/index.html）だけが canonical を持つ。
+
+  ■ 駒と舟の絵は「あれば使う」
+    /images/river-crossing/ に絵を置くと、駒の絵文字と CSS で描いた舟が
+    その絵に入れ替わる。置かなければ絵文字のまま遊べる。
+
+    /images/ は .gitignore で除外しているため、リポジトリをクローンした
+    人の手元に絵は無い。それでもゲームは成立する。自分で描いた絵を
+    同じ名前で置けば、そちらが出る。ハブのロゴ（/images/fdl-logo-192.png）
+    と同じ置き方で、あちらは alt の文字が代わりを務めている。
+
+    絵が無いときの通信は boat.webp への1回だけで済ませている。
+    17枚ぶん試すと、置いていない人の画面に404が17本並ぶため。
+    名前と大きさの約束は game.js の ART_DIR の節に書いた。
+
+  ■ 外部リンク・外部読み込みは1つもない
+    フォントも読み込んでいない（理由は style.css の冒頭に書いた）。
+    /kids* の CSP は default-src 'none' で、
+    .github/workflows/no-external-links.yml が外部URLの混入を検査する。
+  ============================================================
+  -->
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>River Crossing / 川渡り – Classic River Puzzles for Kids</title>
+  <meta name="description" content="Take everyone across the river without leaving a dangerous pair behind. Four classic puzzles: wolf and goat, grown-ups and kids, three parents, eight on a raft. 舟でみんなを向こう岸へ運ぶ古典パズル4題。広告なし・登録なし・外部送信なし。">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="River Crossing / 川渡り">
+  <meta property="og:description" content="Take everyone across the river. Four classic puzzles, 7 to 17 crossings. 舟でみんなを向こう岸へ。古典パズル4題、最短7回から17回。">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/river-crossing/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="River Crossing / 川渡り">
+  <meta name="twitter:description" content="Take everyone across the river. / 舟でみんなを向こう岸へ。">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app">
+
+  <!-- ===== ヘッダー ===== -->
+  <header class="site-header" role="banner">
+    <h1 class="site-title">RIVER<span class="title-accent">CROSSING</span></h1>
+    <p class="site-tagline">
+      Take everyone to the far side
+      <span class="ja" lang="ja">みんなを むこうぎしへ はこぼう</span>
+    </p>
+  </header>
+
+  <!-- ===== ステージ =====
+       ボタンは game.js が作る。4つとも最初から選べるので、
+       HTML に書いても良いのだが、名前と番号を2か所に持たないために
+       ステージ表（game.js）だけを唯一の出どころにしている。 -->
+  <div class="stages" id="stages" role="group" aria-label="Stage / ステージ"></div>
+
+  <!-- ===== そのステージの決まりごと =====
+       中身は game.js が入れる。ステージごとに違うため。
+       見出しがステージの正式な名前で、上のボタンには短い名前しか出ない。
+       4つを狭い画面に横並べすると、正式な名前は入り切らないため。 -->
+  <section class="brief">
+    <h2 class="brief-title" id="stageTitle"></h2>
+    <ul class="rules" id="rules"></ul>
+  </section>
+
+  <!-- ===== 手数 =====
+       aria-live="polite" は、渡るたびに回数が変わったことを
+       読み上げで追えるようにするため。assertive にすると
+       操作のたびに読み上げを割り込ませてしまう。
+
+       以前はここに経過時間も並べていたが、外した。
+       動いている時計は、こどもには「急げ」という合図に見える。
+       川渡しは急いで解くものではない。 -->
+  <div class="stats" aria-live="polite">
+    <div class="stat">
+      <span>Crossings<i class="ja" lang="ja">わたった かいすう</i></span>
+      <strong id="moves">0</strong>
+    </div>
+  </div>
+
+  <!-- ===== 川 =====
+       駒は game.js が作る。HTML には空の岸と舟だけを置いている。
+       並びは むこう岸 → 川 → こちら岸。広い画面では CSS が左右に直す。 -->
+  <div class="stage-wrap">
+
+    <div class="crossing">
+
+      <section class="bank bank--far" aria-label="Far side / むこうぎし">
+        <p class="bank-name">Far side<i class="ja" lang="ja">むこうぎし</i></p>
+        <div class="tokens" id="tokensFar"></div>
+      </section>
+
+      <div class="river">
+        <!-- 川の流れ。飾りなので読み上げからは隠す -->
+        <div class="stream" aria-hidden="true"></div>
+        <div class="boat at-near" id="boat">
+          <div class="tokens tokens--boat" id="tokensBoat"></div>
+          <div class="hull" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <section class="bank bank--near" aria-label="This side / こちらぎし">
+        <p class="bank-name">This side<i class="ja" lang="ja">こちらぎし</i></p>
+        <div class="tokens" id="tokensNear"></div>
+      </section>
+
+    </div>
+
+    <!-- クリア表示。川の上に重ねる -->
+    <div class="clear" id="clear" hidden>
+      <h2>Everyone is across!<i class="ja" lang="ja">ぜんいん わたれた！</i></h2>
+      <p class="result" id="result"></p>
+      <p class="best" id="best"></p>
+      <p class="note" id="note"></p>
+      <div class="clear-buttons">
+        <button class="btn primary" id="again" type="button">
+          Again<i class="ja" lang="ja">もういちど</i>
+        </button>
+        <button class="btn" id="next" type="button" hidden>
+          Next stage<i class="ja" lang="ja">つぎの ステージ</i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 言いたいこと1つ分の場所 =====
+       「おおかみが やぎを ねらってる！」「ふねは いっぱいだよ。」など。
+       中身が空でも場所を取ったままにしているのは2つの理由から。
+         ・出たり消えたりで下のボタンが動くと、押そうとした指が外れる
+         ・読み上げの live 領域は、隠すと変化が伝わらなくなる -->
+  <p class="message" id="message" role="status" aria-live="polite"></p>
+
+  <!-- ===== 操作 =====
+       川の下にまとめている。川の上や横に置くと、駒を触っている指が
+       そのままボタンに届いてしまう位置に入る。 -->
+  <div class="controls">
+    <button class="btn primary" id="cross" type="button" disabled aria-label="Cross the river / 川をわたる">
+      <span aria-hidden="true">⇄</span> Cross<i class="ja" lang="ja">わたる</i>
+    </button>
+    <button class="btn" id="undo" type="button" disabled aria-label="Undo one crossing / ひとつ前にもどす">
+      <span aria-hidden="true">↶</span> Undo<i class="ja" lang="ja">もどす</i>
+    </button>
+    <button class="btn" id="reset" type="button" aria-label="Start this stage over / はじめからやり直す">
+      Reset<i class="ja" lang="ja">やりなおす</i>
+    </button>
+  </div>
+
+  <!-- ===== フッター =====
+       戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
+       こども向け領域の外（TOP・SNS・App Store など）へは繋がない方針。 -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      <a href="/kids/" class="footer-link"><span lang="en">&larr; Playing Dev Lab</span>&ensp;/&ensp;<span lang="ja">遊びの研究室</span></a>
+    </p>
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
+    </p>
+  </footer>
+
+</main>
+
+<script src="game.js"></script>
+</body>
+</html>

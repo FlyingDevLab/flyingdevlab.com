@@ -129,12 +129,13 @@ body {
 
 
 /* ----------------------------------------------------------------
-   04. 步數と時間
+   04. 步數
 ---------------------------------------------------------------- */
 .stats {
   display: flex;
+  justify-content: center;
   gap: 10px;
-  /* 数字の幅を揃える。これが無いと 1:08 → 1:09 で桁が横に動く */
+  /* 数字の幅を揃える。9步から10步で数字の中心が横へ動かないように */
   font-variant-numeric: tabular-nums;
 }
 
@@ -146,6 +147,14 @@ body {
   background: var(--ground-deep);
   border-radius: 12px;
   line-height: 1.4;
+}
+
+/* クリアした回数の印。🏆 だけ、2回目からは 🏆 2 と数字が付く。
+   「手数」の札と並べるので、同じ .stat の見た目を借りて中身だけ大きくする。 */
+.stat-clears {
+  align-content: center;
+  font-size: 1.2rem;
+  font-weight: 900;
 }
 
 .stat span   { font-size: .78rem; color: var(--muted); letter-spacing: .14em; }

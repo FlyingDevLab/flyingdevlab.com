@@ -278,6 +278,21 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/klotski/"/>
   </url>
 
+  <url>
+    <!-- River Crossing / 川渡り（2026-10-28 追加） -->
+    <loc>https://flyingdevlab.com/kids/river-crossing/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <!-- ゲーム本体が頻繁に変わることはないため monthly -->
+    <changefreq>monthly</changefreq>
+    <!-- 主要コンテンツなので法的文書より高い 0.8 -->
+    <priority>0.8</priority>
+    <!-- 1ページに日英を併記しているため、すべて自分自身を指す。
+         上の3本（箱入り娘・KLOTSKI・華容道）だけが互いを指す組である。 -->
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/river-crossing/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/river-crossing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/river-crossing/"/>
+  </url>
+
   <!-- 
     ============================================================
     プライバシーポリシー（サイト共通・個人情報の取り扱い方針のページ）
