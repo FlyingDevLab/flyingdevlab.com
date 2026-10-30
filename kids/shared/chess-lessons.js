@@ -834,8 +834,17 @@
       return say('That wins something, but there is more.',
                  'とくは するけど、もっと いい手が あるよ。', 'bad');
     }
-    say('Not that move. Look at what you can take.',
-        'ちがう手だよ。とれる こまを 見てみて。', 'bad');
+    // 取る手でないときの返し。
+    // こたえが「とる手」かどうかで変える。1章は ただ取りを さがす回なので
+    // 「とれる こまを 見てみて」で合うが、2章の フォークは
+    // とる手が こたえでは ない。同じ文を返すと、さがす場所をまちがえさせる
+    var want = C.parseSan(pos, win().answer);
+    if (want && want.captured) {
+      return say('Not that move. Look at what you can take.',
+                 'ちがう手だよ。とれる こまを 見てみて。', 'bad');
+    }
+    say('Not that move. Read the task again and look at the whole board.',
+        'ちがう手だよ。やる ことを もう一度 読んで、盤ぜんたいを 見てみて。', 'bad');
   }
 
   function sameSan(a, b) {

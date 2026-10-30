@@ -40,7 +40,8 @@ window.CHESS_LESSONS = {
   ],
 
   chapters: [
-    { en: 'Value and trades', ja: 'ねうちと とりかえ' }
+    { en: 'Value and trades', ja: 'ねうちと とりかえ' },
+    { en: 'Two at once',      ja: 'ふたつ いっぺんに' }
   ],
 
   lessons: [
@@ -147,6 +148,58 @@ window.CHESS_LESSONS = {
       task: { en: 'Press the three white pieces that attack d5.',
               ja: 'd5 を ねらって いる 白の こまを ぜんぶ おそう。3まい あるよ。' },
       goal: { kind: 'squares', ask: ['c4', 'f4', 'd1'], ordered: false }
+    },
+
+    // ===== 2章 ふたつ いっぺんに ======================================
+    //
+    // 1章で「得か損か」を数えられるようになった。ここからが戦術。
+    // フォークを最初に置くのは、いちばん形が見えやすいため。
+    // ピンやディスカバードは「動かせない」「かくれている」という
+    // 一段ぬけた話で、フォークだけは盤の上に理由がそのまま出ている。
+
+    {
+      chapter: 1,
+      en: 'The knight fork',
+      ja: 'ナイトの フォーク',
+      fen: '3q3k/pp6/8/4N3/8/8/PP6/4K3 w - - 0 1',
+      body: [
+        { t: 'p', en: 'One piece attacking two at the same time is a fork.',
+          ja: '1つの こまで、あいての こまを 2つ いっぺんに ねらう ことを フォークと いう。ねらわれた ほうは、どちらか 1つしか まもれない。' },
+        { t: 'pairs', items: [
+          { en: 'fork', ja: 'フォーク（両取り）', sym: '' }
+        ] },
+        { t: 'p', en: 'The knight is the best forker, because its move is hard to block.',
+          ja: 'フォークが いちばん うまいのは ナイト。たてでも よこでも ななめでも ない うごき方を するので、あいだに 入って ふせぐ ことが できない。しかも とびこえる ので、まわりを かためても 止められない。' },
+        { t: 'p', en: 'A fork with check is the strongest kind.',
+          ja: 'とくに つよいのが、王手と いっしょに かける フォーク。あいては 王手を 外す ことしか できない。もう ひとつの こまを まもって いる ひまが ない。だから かならず とれる。' },
+        { t: 'key',
+          en: 'A fork with check always wins the other piece.',
+          ja: '王手と いっしょの フォークは、かならず もう片方が とれる。' }
+      ],
+      task: { en: 'Fork the king and the queen with your knight.',
+              ja: 'ナイトで 王手を かけながら、クイーンも いっぺんに ねらおう。' },
+      goal: { kind: 'moves', win: { answer: 'Nf7+' } }
+    },
+
+    {
+      chapter: 1,
+      en: 'Even a pawn can fork',
+      ja: 'ポーンでも できる',
+      fen: '4k3/pp6/3n1n2/8/4P3/8/PP6/4K3 w - - 0 1',
+      body: [
+        { t: 'p', en: 'Any piece can fork, not just the knight.',
+          ja: 'フォークは ナイトだけの ものでは ない。どの こまでも できる。ビショップでも ルークでも クイーンでも、2つを いっぺんに ねらえば それは フォーク。' },
+        { t: 'p', en: 'A pawn fork is the hardest to answer.',
+          ja: 'そして いちばん きついのが、ポーンの フォーク。ねうちが 1しか ない こまに ねらわれると、3や 5の こまは とられる わけに いかない。どちらかを あきらめる しか なくなる。' },
+        { t: 'p', en: 'Right now your pawn is the one being attacked, twice.',
+          ja: 'この 盤は いま、こちらの e4 の ポーンが ナイト 2まいに ねらわれて いる。にげたく なる ところだけど、よく 見て。前に 1マス すすむと、こんどは こちらが 2まいを ねらう ことに なる。' },
+        { t: 'key',
+          en: 'The cheaper the forking piece, the worse it is to face.',
+          ja: '安い こまで ねらう ほど、あいては こまる。' }
+      ],
+      task: { en: 'Push the pawn so it attacks both knights at once.',
+              ja: 'ポーンを 1マス すすめて、ナイト 2まいを いっぺんに ねらおう。' },
+      goal: { kind: 'moves', win: { answer: 'e5' } }
     }
 
   ]
