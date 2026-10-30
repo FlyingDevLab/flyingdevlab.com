@@ -877,7 +877,11 @@ body {
   margin-top: 6px;
   padding: 8px 10px;
   min-height: 3.4em;
-  max-height: 9em;
+  /* 長い対局でも、ある程度まとまって読める高さを取る。
+     上限を置いているのは、80手を超える対局でページの大半が
+     棋譜になってしまうため。ここを超えた分はスクロールするが、
+     コピーは見えていない分も含めて全部を取る */
+  max-height: 15em;
   overflow: auto;
   background: var(--bg);
   border-radius: 10px;

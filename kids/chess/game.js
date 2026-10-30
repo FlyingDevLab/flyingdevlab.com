@@ -1150,10 +1150,15 @@
       sel.removeAllRanges();
       sel.addRange(range);
       ok = document.execCommand('copy');
-      sel.removeAllRanges();
+      // うまくいったときだけ選択を外す。
+      // 失敗したときに外してしまうと、「なぞってコピーしてね」と
+      // 言いながら、こちらで選択を消していることになる。
+      // 残しておけば、そのまま Ctrl+C / ⌘C を押すだけで済む
+      if (ok) sel.removeAllRanges();
     } catch (e) { ok = false; }
     if (ok) say('Notation copied.', 'きふを コピーしたよ。', 'good');
-    else say('Select the notation above and copy it.', '上の きふを なぞって コピーしてね。');
+    else say('The notation is selected — press Ctrl+C (or Cmd+C).',
+             'きふを えらんで おいたよ。Ctrl+C（Mac は ⌘+C）を おして ね。');
   }
 
 
