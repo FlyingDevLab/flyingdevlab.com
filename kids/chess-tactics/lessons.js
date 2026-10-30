@@ -44,7 +44,8 @@ window.CHESS_LESSONS = {
     { en: 'Two at once',      ja: 'ふたつ いっぺんに' },
     { en: 'Stuck on a line',  ja: 'うごけなく する' },
     { en: 'Hidden attacks',   ja: 'かくれた ねらい' },
-    { en: 'Mating patterns',  ja: '詰みの かたち' }
+    { en: 'Mating patterns',  ja: '詰みの かたち' },
+    { en: 'Giving a piece up', ja: 'すてる' }
   ],
 
   lessons: [
@@ -424,6 +425,97 @@ window.CHESS_LESSONS = {
       task: { en: 'Mate in one with the knight.',
               ja: 'ナイトで 1手で 詰ませよう。' },
       goal: { kind: 'moves', win: { answer: 'Nf7#' } }
+    },
+
+    // ===== 6章 すてる ==================================================
+    //
+    // 捨て駒の目的を3つに分けてある。詰ますため・おびき出すため・そらすため。
+    // 最初に「詰ますため」を置くのは、いちばん理由がはっきりしているから。
+    // 詰んだら そこで終わるので、残った駒の数に意味が無くなる。
+    //
+    // 3つめ（そらす）だけ見分ける回にしてある。そらす手で駒得する盤を
+    // 作ろうとすると、相手にほかの受けができたり、盤に別のねらいが
+    // 混ざったりした。実際、ルークをそらす盤を組んだつもりが、
+    // 相手のバックランクが弱くて Qxc6 がそのまま通る盤になっていた。
+    // この回で分かってほしいのは「仕事をしている こまを見つける」ことなので、
+    // 見分ける回にした。
+
+    {
+      chapter: 5,
+      en: 'Sacrifice for mate',
+      ja: '詰ますための サクリファイス',
+      fen: '5r1k/6pp/7N/8/8/1Q6/5PPP/6K1 w - - 0 1',
+      body: [
+        { t: 'p', en: 'Sometimes you give away your strongest piece on purpose.',
+          ja: 'いちばん つよい クイーンを、わざと とらせる ことが ある。ふつうなら とんでもない そんだけど、そのあと 詰むなら 話は べつ。' },
+        { t: 'pairs', items: [
+          { en: 'sacrifice', ja: 'サクリファイス（捨て駒）', sym: '' }
+        ] },
+        { t: 'p', en: 'Once it is mate, the pieces left do not matter.',
+          ja: '詰んだら そこで しょうぶは おわる。のこった こまを 数える ばめんが 来ない。だから「9の クイーンを すてて 詰ます」は、ちゃんと 得な 手。' },
+        { t: 'p', en: 'Look at who is guarding g8.',
+          ja: 'この 盤を 見て。h6 の ナイトが g8 を まもって いる。だから クイーンが g8 に 入っても、キングは とれない。とれるのは f8 の ルークだけ。' },
+        { t: 'p', en: 'And when the rook takes, it blocks the king in.',
+          ja: 'そして ルークが g8 に 来ると、キングの にげ道が ふさがる。まわりが じぶんの こまで うまる。前の 回で ならった あの かたちに なる。' },
+        { t: 'key',
+          en: 'If it is mate, the value of the piece does not matter.',
+          ja: '詰むなら、こまの ねうちは かんけい ない。' }
+      ],
+      task: { en: 'Give up the queen so the knight can mate.',
+              ja: 'クイーンを すてて、ナイトで 詰ませよう。2手で 詰む。' },
+      goal: { kind: 'moves', win: { answer: 'Qg8+' } }
+    },
+
+    {
+      chapter: 5,
+      en: 'Decoy',
+      ja: 'おびき出す',
+      fen: '7k/2q3pp/8/4N3/8/8/5PPP/3R2K1 w - - 0 1',
+      body: [
+        { t: 'p', en: 'The second reason to give a piece up: to drag an enemy piece somewhere.',
+          ja: 'すてる りゆうは もう1つ ある。あいての こまを、行かせたい マスへ ひっぱり出す ため。これを おびき出すと いう。' },
+        { t: 'pairs', items: [
+          { en: 'decoy', ja: 'おびき出す', sym: '' }
+        ] },
+        { t: 'p', en: 'Give it something it has no choice but to take.',
+          ja: 'こつは「とるしか ない」かたちに する こと。王手を かければ、あいては それを 外す ことしか できない。外す ほうほうが 1つだけなら、そこへ 行かせる ことが できる。' },
+        { t: 'p', en: 'And d8 happens to be a forking square.',
+          ja: 'この 盤で ルークを d8 に すてると、クイーンは とるしか なくなる。そして d8 という マスは、e5 の ナイトから 見ると、キングと いっしょに ねらえる マス。前に ならった フォークが 待って いる。' },
+        { t: 'key',
+          en: 'Throw it where you want them to go.',
+          ja: 'とらせたい マスへ、わざと すてる。' }
+      ],
+      task: { en: 'Sacrifice the rook to pull the queen onto a forking square.',
+              ja: 'ルークを すてて、クイーンを ナイトの フォークに かかる マスへ ひっぱり出そう。' },
+      goal: { kind: 'moves', win: { answer: 'Rd8+' } }
+    },
+
+    {
+      chapter: 5,
+      en: 'Deflection',
+      ja: 'そらす',
+      fen: '2r3k1/5pp1/2b4p/8/Q7/8/5PPP/3R2K1 w - - 0 1',
+      goals: ['c6'],
+      body: [
+        { t: 'p', en: 'The opposite of a decoy: drive a piece away from its job.',
+          ja: 'おびき出すの 反対が、そらす。あっちは「来させる」、こっちは「どかせる」。' },
+        { t: 'pairs', items: [
+          { en: 'decoy',      ja: 'おびき出す', sym: '来させる' },
+          { en: 'deflection', ja: 'そらす',     sym: 'どかせる' }
+        ] },
+        { t: 'p', en: 'Some pieces are doing a job.',
+          ja: '盤の 上の こまには、仕事を して いる ものが ある。だれかを まもって いたり、だいじな マスを おさえて いたり。見た目は じっと して いるけど、いなく なったら こまる こま。' },
+        { t: 'p', en: 'Give that piece something it must take.',
+          ja: 'その こまに、どうしても 取らなければ ならない ものを 出す。こまは 仕事を はなれて 取りに 行く。そのとき、まもられて いた ほうが 落ちる。' },
+        { t: 'p', en: 'First, learn to see the job.',
+          ja: 'そらす 手を 見つける より さきに、「だれが 何を まもって いるか」が 見える ように なる ほうが 大事。この 回は それを さがす。' },
+        { t: 'key',
+          en: 'Find the piece doing a job, then make it leave.',
+          ja: 'まもって いる こまを 見つけて、そこから どかせる。' }
+      ],
+      task: { en: 'The queen is eyeing one black piece. Press the piece that guards it.',
+              ja: '白の クイーンが ねらって いる 黒の こまが 1つ ある。それを まもって いる こまは どれ？ おそう。' },
+      goal: { kind: 'squares', ask: ['c8'], ordered: false }
     }
 
   ]
