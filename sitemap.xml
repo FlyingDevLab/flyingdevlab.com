@@ -333,6 +333,17 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/chess-openings/"/>
   </url>
 
+  <url>
+    <!-- Chess Play / チェス あそぶ（2026-10-31 追加）。巻ではなく、実際に指して遊ぶタブ -->
+    <loc>https://flyingdevlab.com/kids/chess-play/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/chess-play/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/chess-play/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/chess-play/"/>
+  </url>
+
   <!-- 
     ============================================================
     プライバシーポリシー（サイト共通・個人情報の取り扱い方針のページ）

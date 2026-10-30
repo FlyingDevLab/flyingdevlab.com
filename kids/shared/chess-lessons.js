@@ -202,6 +202,10 @@
     replay:  null,   // { list:[局面], sans:[], at:0 }
     chased:  0,      // 追いかけ回（chase）で自分が指した手数
     setAt:   0,      // 追いかけ回で選んでいる駒のくみあわせ
+    phase:   'setup',// ならべて あそぶ：'setup'（並べている）→ 'play'（指している）
+    vsCpu:   false,  // ならべて あそぶ：黒をコンピュータが指すか
+    arrFen:  '',     // ならべて あそぶ：並べ終えた盤（やりなおすと、ここへ戻る）
+    keepFen: '',     // やりなおしで並べ直しに戻るときだけ入る
     ansAt:   0,      // win.answers の何手めまで進んだか（偶数=白の番、奇数=黒が自動で指す番）
     waitBlack: false,// 黒が逃げるのを見せている最中。そのあいだ盤は触れない
     timer:   0,      // 黒を動かすまでの待ち。レッスンを変えたら必ず止める
@@ -251,7 +255,8 @@
       var node = document.createElement(here ? 'span' : 'a');
       if (!here) node.href = v.url;
       node.className = 'vol-btn' + (here ? ' current' : '');
-      bi(node, 'vol.' + v.no + ' ' + v.en, v.ja);
+      // 「あそぶ」は巻ではなくタブ。vol. を付けない
+      bi(node, (v.tab ? '' : 'vol.' + v.no + ' ') + v.en, v.ja);
       if (here) node.setAttribute('aria-current', 'page');
       ui.volumes.appendChild(node);
     });
@@ -522,6 +527,8 @@
       if (pos.board[i] && !S.placed[i]) return false;
       return !!(S.held || S.placed[i]);
     }
+    // 並べて あそぶ（並べているあいだ）：駒をつまんでいれば空きマス、置いた駒は取り除ける
+    if (kind === 'sandbox' && S.phase === 'setup') return !!(S.held || pos.board[i]);
     if (S.waiting || S.waitBlack) return false;
     // 行ける先として光っているマスは押せる
     if (S.pick >= 0) {
@@ -559,6 +566,7 @@
 
     if (kind === 'squares') return answerSquare(i);
     if (kind === 'setup')   return placePiece(i);
+    if (kind === 'sandbox' && S.phase === 'setup') return sandboxPlace(i);
     return touchPiece(i);
   }
 
@@ -629,6 +637,152 @@
     }
     if (left === 0) return finish();
     paint();
+  }
+
+  // --- ならべて あそぶ ---
+  //
+  // 好きな駒を白黒とも置いて、そこから指す。置く駒の数に上限は付けない
+  // （合法な盤でなくても並べられる）。ただし、指し始められない盤だけは
+  // 置く段階で止める：キングは1つずつ、ポーンは1〜8段に置けない、
+  // 1色16枚まで、ポーンは8枚まで。
+  // 「あそぶ」を押すと、黒が白からチェックされていない盤だけが始まる
+  // （白の番なのに黒が詰みの形では、指す手が決まらないため）。
+  var SANDBOX_PIECES = ['K', 'Q', 'R', 'B', 'N', 'P', 'k', 'q', 'r', 'b', 'n', 'p'];
+  var START_BOARD_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  function sandboxPlace(i) {
+    var b = S.pos.board;
+    // 置いた駒を押したら取り除く
+    if (b[i]) {
+      b[i] = '';
+      paintSandboxPalette();
+      paint();
+      clearSay();
+      return;
+    }
+    if (!S.held) {
+      say('Pick a piece from the shelf first.', 'まず 下から こまを えらんでね。');
+      return;
+    }
+    var color = C.colorOf(S.held), type = C.typeOf(S.held);
+    var total = 0, pawns = 0, kings = 0;
+    for (var k = 0; k < 64; k++) {
+      var q = b[k];
+      if (!q || C.colorOf(q) !== color) continue;
+      total++;
+      if (C.typeOf(q) === 'P') pawns++;
+      if (C.typeOf(q) === 'K') kings++;
+    }
+    var side = color === 'w' ? ['White', '白'] : ['Black', '黒'];
+    if (type === 'K' && kings >= 1) {
+      return say(side[0] + ' already has a king. There is one king each.',
+                 side[1] + 'の キングは もう いるよ。キングは 1つずつ。', 'bad');
+    }
+    if (type === 'P' && (C.rankOf(i) === 1 || C.rankOf(i) === 8)) {
+      return say('Pawns cannot stand on the first or last row.',
+                 'ポーンは いちばん 下と いちばん 上の だんには おけない。', 'bad');
+    }
+    if (type === 'P' && pawns >= 8) {
+      return say('There are only eight pawns each.', 'ポーンは 8つまで。', 'bad');
+    }
+    if (total >= 16) {
+      return say('Sixteen pieces each is the most.', 'こまは 1色 16まいまで。', 'bad');
+    }
+    b[i] = S.held;
+    paintSandboxPalette();
+    paint();
+    clearSay();
+  }
+
+  // 並べた盤で、キャスリングの権利を決める。キングとルークがはじめの場所に
+  // いる組だけ、できる。盤の外の履歴は無いので、場所だけで決めるしかない
+  function castleOfBoard(b) {
+    var out = '';
+    if (b[60] === 'K' && b[63] === 'R') out += 'K';
+    if (b[60] === 'K' && b[56] === 'R') out += 'Q';
+    if (b[4] === 'k' && b[7] === 'r') out += 'k';
+    if (b[4] === 'k' && b[0] === 'r') out += 'q';
+    return out;
+  }
+
+  function sandboxFill(fen) {
+    S.pos = C.fromFen(fen);
+    S.held = '';
+    paintSandboxPalette();
+    paint();
+    clearSay();
+  }
+
+  function sandboxStart(vsCpu) {
+    var b = S.pos.board;
+    var cand = { board: b.slice(), turn: 'w', castle: castleOfBoard(b), ep: -1, half: 0, full: 1, seen: {} };
+    if (C.findKing(cand, 'w') < 0 || C.findKing(cand, 'b') < 0) {
+      return say('Both kings are needed: one white, one black.',
+                 'キングが 白と 黒に 1つずつ ひつよう。', 'bad');
+    }
+    var fen = C.toFen(cand);
+    var pos = C.fromFen(fen);
+    if (C.inCheck(pos, 'b')) {
+      return say('It is White to move, but Black is already in check. Move the pieces.',
+                 '白の 番なのに 黒の キングが チェックされて いる。こまを おきなおしてね。', 'bad');
+    }
+    S.arrFen = fen;
+    S.vsCpu = !!vsCpu;
+    S.phase = 'play';
+    S.start = C.fromFen(fen);
+    S.pos = C.fromFen(fen);
+    S.past = [];
+    S.record = [];
+    S.held = '';
+    S.pick = -1;
+    ui.palette.hidden = true;
+    writeRecord();
+    paint();
+    updateButtons();
+    if (C.status(S.pos).over || C.inCheck(S.pos, 'w')) return reportFree(S.pos);
+    if (vsCpu) say('You play White; the computer plays Black. Your move.',
+                   '白が きみで、黒は コンピュータ。どうぞ。');
+    else say('White moves first.', '白から どうぞ。');
+  }
+
+  function paintSandboxPalette() {
+    ui.palette.hidden = false;
+    ui.paletteBox.innerHTML = '';
+    ui.paletteBox.className = 'palette-choices palette-choices--twelve';
+    SANDBOX_PIECES.forEach(function (piece) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'palette-btn' + (S.held === piece ? ' picked' : '');
+      b.appendChild(pieceSvg(piece));
+      b.setAttribute('aria-label',
+        (C.colorOf(piece) === 'w' ? 'White ' : 'Black ') + PIECE_EN[C.typeOf(piece)]);
+      if (S.held === piece) b.setAttribute('aria-pressed', 'true');
+      b.addEventListener('click', function () {
+        S.held = (S.held === piece) ? '' : piece;
+        paintSandboxPalette();
+        paint();
+      });
+      ui.paletteBox.appendChild(b);
+    });
+
+    // 並べ方の近道と、始めるボタン。棚のあとに置く
+    var old = ui.palette.querySelector('.palette-actions');
+    if (old) old.parentNode.removeChild(old);
+    var box = document.createElement('div');
+    box.className = 'palette-actions';
+    function act(en, ja, primary, fn) {
+      var a = document.createElement('button');
+      a.type = 'button';
+      a.className = 'btn' + (primary ? ' primary' : '');
+      bi(a, en, ja);
+      a.addEventListener('click', fn);
+      box.appendChild(a);
+    }
+    act('Starting position', 'はじめの ならび', false, function () { sandboxFill(START_BOARD_FEN); });
+    act('Clear the board', 'ぜんぶ けす', false, function () { sandboxFill(C.EMPTY_FEN); });
+    act('Play with a friend', 'ふたりで あそぶ', true, function () { sandboxStart(false); });
+    act('Play the computer', 'コンピュータと あそぶ', true, function () { sandboxStart(true); });
+    ui.palette.appendChild(box);
   }
 
   // --- 5章：駒を並べる ---
@@ -710,9 +864,11 @@
 
   function paintPalette() {
     var g = goal();
+    if (g.kind === 'sandbox' && S.phase === 'setup') return paintSandboxPalette();
     if (g.kind !== 'setup') { ui.palette.hidden = true; return; }
     ui.palette.hidden = false;
     ui.paletteBox.innerHTML = '';
+    ui.paletteBox.className = 'palette-choices';
     g.palette.forEach(function (type) {
       var b = document.createElement('button');
       b.type = 'button';
@@ -943,8 +1099,12 @@
   // 選びは goal.sets に cpu: true を付けて持つ（追いかけ回の駒の選びと同じ置き場）
   function cpuOn() {
     var g = goal();
-    var set = g.kind === 'free' && g.sets && g.sets[S.setAt];
-    return !!(set && set.cpu && window.ChessCpu);
+    if (!window.ChessCpu) return false;
+    // 並べて あそぶ：並べ終えて指しているあいだだけ
+    if (g.kind === 'sandbox') return S.phase === 'play' && S.vsCpu;
+    if (g.kind !== 'free') return false;
+    var set = g.sets && g.sets[S.setAt];
+    return !!(g.cpu || (set && set.cpu));
   }
 
   // 黒を動かして見せる。白の手が盤に乗ってから少し置く。
@@ -981,7 +1141,7 @@
       }
 
       // おまけ：CPU が指す
-      if (goal().kind === 'free') {
+      if (goal().kind === 'free' || goal().kind === 'sandbox') {
         // 待っているあいだに「ふたりで さす」へ切り替えられたら指さない
         if (S.setAt !== setWas || !cpuOn()) return;
         var r = window.ChessCpu.choose(S.pos, lastMove);
@@ -1102,7 +1262,7 @@
       return;
     }
 
-    if (kind === 'free') {
+    if (kind === 'free' || kind === 'sandbox') {
       reportFree(pos);
       // コンピュータと さす：白が指して、まだ続くなら黒の番
       if (cpuOn() && pos.turn === 'b' && !C.status(pos).over) letBlackRun(move);
@@ -1333,6 +1493,8 @@
     // 決着がついたら結果を足す。棋譜はここまで書いて1つの形になる
     var result = out ? resultOf(S.pos) : '';
     if (result) out += ' ' + result;
+    // 並べた盤から始めた棋譜は、はじめの盤が分からないと読み返せない
+    if (out && goal().kind === 'sandbox' && S.arrFen) out = '[FEN "' + S.arrFen + '"] ' + out;
 
     ui.record.textContent = out;
     ui.recordHint.hidden = out !== '';
@@ -1421,6 +1583,13 @@
     S.waitBlack = false;
     S.done = false;
 
+    // 並べて あそぶ：いつも並べる段階から始める。
+    // 指している途中の「やりなおす」だけは、並べた盤を残して戻る
+    S.phase = 'setup';
+    S.vsCpu = false;
+    if (kind === 'sandbox' && S.keepFen) S.pos = C.fromFen(S.keepFen);
+    S.keepFen = '';
+
     ui.promo.hidden = true;
     ui.done.hidden = true;
     ui.message.hidden = false;
@@ -1444,6 +1613,9 @@
     } else if (kind === 'chase') {
       say('You play White. Try to checkmate the black king.',
           '白が きみ。黒の キングを 詰ませられるか ためしてみよう。');
+    } else if (kind === 'sandbox') {
+      say('Pick a piece, tap a square, then press Play.',
+          'こまを えらんで、マスを おす。できたら「あそぶ」を おす。');
     } else if (kind === 'read') {
       var st = C.status(S.pos);
       if (st.kind === 'material') {
@@ -1606,7 +1778,11 @@
 
     ui.undo.addEventListener('click', undo);
     ui.forward.addEventListener('click', function () { replayGo(1); });
-    ui.reset.addEventListener('click', function () { restart(); });
+    ui.reset.addEventListener('click', function () {
+      // 並べて あそぶ：指している途中なら、並べた盤を残して並べ直しに戻る
+      if (goal().kind === 'sandbox' && S.phase === 'play') S.keepFen = S.arrFen;
+      restart();
+    });
     ui.copy.addEventListener('click', copyRecord);
     if (ui.hint) ui.hint.addEventListener('click', showHint);
     ui.retry.addEventListener('click', function () { ui.done.hidden = true; restart(); });

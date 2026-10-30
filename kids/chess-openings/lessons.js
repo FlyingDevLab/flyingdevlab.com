@@ -31,7 +31,8 @@ window.CHESS_LESSONS = {
   volumes: [
     { no: 1, en: 'Basics',   ja: 'きそ',       url: '/kids/chess/' },
     { no: 2, en: 'Tactics',  ja: 'せんじゅつ', url: '/kids/chess-tactics/' },
-    { no: 3, en: 'Openings', ja: 'じょばん',   url: '/kids/chess-openings/' }
+    { no: 3, en: 'Openings', ja: 'じょばん',   url: '/kids/chess-openings/' },
+    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess-play/', tab: true }
   ],
 
   chapters: [

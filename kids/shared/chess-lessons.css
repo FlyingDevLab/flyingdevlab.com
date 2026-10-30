@@ -769,6 +769,19 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
   outline-offset: 2px;
 }
 
+/* 「ならべて あそぶ」の近道と始めるボタン。棚の下に2×2で並べる */
+.palette-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.palette-actions .btn { flex: none; }
+
+/* 12個（白6・黒6）は、狭い画面でも白と黒が1行ずつになる大きさにする */
+.palette-choices--twelve { gap: 6px; }
+.palette-choices--twelve .palette-btn { width: 44px; height: 44px; }
+
 
 /* ----------------------------------------------------------------
    10. できたときの知らせ

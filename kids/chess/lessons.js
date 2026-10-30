@@ -58,7 +58,7 @@
 //        sets は駒のくみあわせ。どれも詰みの形が存在しないことを
 //        総当たりで確かめてある（chess.js の insufficientMaterial の注記）。
 //     { kind:'free' }
-//        コンピュータと さす（ふたりでも さす）。ルールは全部きいている
+//        コンピュータと さす。ルールは全部きいている
 //
 // ★ 盤と棋譜は機械で確かめてある ★
 //   23レッスンすべてについて、次を確認した（2026-10-30）。
@@ -81,7 +81,8 @@ window.CHESS_LESSONS = {
   volumes: [
     { no: 1, en: 'Basics',  ja: 'きそ',       url: '/kids/chess/' },
     { no: 2, en: 'Tactics', ja: 'せんじゅつ', url: '/kids/chess-tactics/' },
-    { no: 3, en: 'Openings', ja: 'じょばん', url: '/kids/chess-openings/' }
+    { no: 3, en: 'Openings', ja: 'じょばん', url: '/kids/chess-openings/' },
+    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess-play/', tab: true }
   ],
 
   // ----------------------------------------------------------------
@@ -722,24 +723,17 @@ window.CHESS_LESSONS = {
           ja: 'ルールに ない 手は させない ように なって いる。だから 「これは さして いいのかな」と 思ったら、ためしに さわってみれば わかる。行ける マスに しるしが 出る。' },
         { t: 'p', en: 'Your moves pile up as notation below. You can copy it.',
           ja: 'さした 手は 下に きふに なって つみあがる。コピーも できる。おもしろい たいきょくに なったら、自分の ところに 書きうつして おこう。この ページを とじると きえて しまう から。' },
-        { t: 'p', en: 'Want to play with a friend instead? Press the button below the lesson.',
-          ja: 'ともだちと ふたりで さしたい ときは、下の ボタンで 切りかえられる。' },
+        { t: 'p', en: 'To play with a friend, or to set up your own pieces, use the Play tab at the top.',
+          ja: 'ともだちと ふたりで さしたい ときや、好きな こまを ならべて あそびたい ときは、上の「あそぶ」タブへ。' },
         { t: 'key',
           en: 'A piece nobody protects can be taken.',
           ja: 'まもられて いない こまは とられる。' }
       ],
       task: { en: 'White moves first.',
               ja: '白から どうぞ。' },
-      // 相手の選び。cpu: true のほうは、黒を /kids/shared/chess-cpu.js が指す。
-      // 切りかえると盤は最初に戻る（追いかけ回の駒の選びと同じ動き）
-      goal: { kind: 'free',
-              setsLabel: 'Who plays Black / 黒を さす 人',
-              sets: [
-                { en: 'Computer', ja: 'コンピュータ', cpu: true,
-                  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' },
-                { en: 'Two players', ja: 'ふたりで', cpu: false,
-                  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' }
-              ] }
+      // 黒は /kids/shared/chess-cpu.js が指す（cpu: true）。
+      // ふたりで さす・ならべて あそぶ は、巻とは別の「あそぶ」タブ（/kids/chess-play/）
+      goal: { kind: 'free', cpu: true }
     }
 
   ]
