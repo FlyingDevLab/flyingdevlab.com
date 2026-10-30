@@ -284,8 +284,28 @@
         if (les.chapter !== ci) return;
         var b = document.createElement('button');
         b.type = 'button';
-        b.className = 'toc-btn';
-        b.textContent = String(li + 1);
+        // 用語の章（named）は、番号ではなく名前を出す。
+        //
+        // ★ 章ごとに分けている理由 ★
+        //   目次を番号だけにしてあるのは、レッスン名を狭い画面に並べると
+        //   目次だけで画面が1つ埋まるため（その判断は今も変えていない）。
+        //   ただし「名前の ある じょばん」のように、名前そのものが
+        //   教える中身である章だけは、番号にすると主題が目次から消える。
+        //   イタリアン・ルイロペスを覚える回が 7 8 としか出ていない形が それ。
+        //
+        //   出し分けの境目は、この巻の言語方針とそろえてある。
+        //     用語（駒の名前・序盤の名前）… 英語と日本語を並べる → 名前を出す
+        //     説明文（中央を とる 等）    … 日本語を主にする    → 番号のまま
+        //   章に named を付けるかどうかは、その章の題が用語かどうかで決める。
+        if (ch.named) {
+          b.className = 'toc-btn toc-btn--named';
+          bi(b, les.en, les.ja);
+        } else {
+          b.className = 'toc-btn';
+          b.textContent = String(li + 1);
+        }
+        // 読み上げは名前を出す章でも番号から言う。
+        // 「レッスン7のイタリアン」と、目次の中の居場所が先に分かる形にする
         b.setAttribute('aria-label', 'Lesson ' + (li + 1) + ': ' + les.en);
         b.addEventListener('click', function () { open(li); });
         row.appendChild(b);

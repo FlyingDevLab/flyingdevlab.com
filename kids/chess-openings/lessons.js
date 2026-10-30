@@ -35,10 +35,16 @@ window.CHESS_LESSONS = {
     { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess-play/', tab: true }
   ],
 
+  // ★ named を付けた章は、目次に番号ではなくレッスン名が並ぶ ★
+  //   この巻でそれを使うのは3章だけ。あの章は中身が序盤の名前そのもので、
+  //   番号にすると「イタリアンは何番だったか」を目次から辿れない。
+  //   1章・2章・4章は題が説明文（中央を とる／おなじ こまを 何度も）なので
+  //   付けない。付けると目次が縦に伸びるうえ、この巻の言語方針
+  //   （用語は英語と日本語を並べ、説明文は日本語を主にする）とも食い違う。
   chapters: [
-    { en: 'Three rules',   ja: 'じょばんの 3つの きまり' },
+    { en: 'Three rules',    ja: 'じょばんの 3つの きまり' },
     { en: 'Three mistakes', ja: 'やっては いけない こと' },
-    { en: 'Openings with names', ja: '名前の ある じょばん' },
+    { en: 'Openings with names', ja: '名前の ある じょばん', named: true },
     { en: 'A real game',         ja: '実戦の きふ' }
   ],
 

@@ -250,6 +250,13 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
    並べると、目次だけで画面が1つ埋まってしまうため。
    いま開いているレッスンの名前は、下の .lesson-title に大きく出る。
 
+   例外が1つある。名前そのものが教える中身である章
+   （lessons.js の chapters に named を付けた章。03巻の
+   「名前の ある じょばん」）だけは、番号ではなく名前が入る。
+   番号にすると、イタリアン・ルイロペスを覚える回が
+   7 8 としか出ず、章の主題が目次から消えるため。
+   → .toc-btn--named
+
    ✓ は「見たことがある」という印で、localStorage に置く。
    消えても開くところは変わらないので、消えて困らない。
 ---------------------------------------------------------------- */
@@ -299,6 +306,15 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
   transition: background 0.15s, border-color 0.15s, transform 0.12s;
 }
 .toc-btn:hover { transform: translateY(-1px); }
+
+/* 用語の章（chapters に named を付けた章）だけ、番号ではなく名前が入る。
+   英語の下に日本語を敷く形は .vol-btn / .set-btn と同じにしてある。
+   min-width を広げないのは、短い名前（ロンドン）の札が
+   むだに伸びて、長い名前（クイーンズギャンビット）と
+   同じ幅に見えてしまうのを避けるため */
+.toc-btn--named { padding: 5px 10px 4px; }
+.toc-btn--named .ja { display: block; font-size: 0.86em; font-weight: 700; }
+.toc-btn--named.current .ja { color: rgba(255, 255, 255, 0.85); }
 
 .toc-btn.current {
   background: var(--primary);
