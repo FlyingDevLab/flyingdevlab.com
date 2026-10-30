@@ -11,8 +11,10 @@
 // ★ 巻をまたいで共有している ★
 //   /kids/chess/           01巻 基礎知識
 //   /kids/chess-tactics/   02巻 戦術
+//   /kids/chess-openings/  03巻 序盤
+//   /kids/chess-play/      あそぶ（巻ではなくタブ）
 //
-//   同じ1300行を巻ごとに写すと、片方で見つけた不具合を何度も直すことになり、
+//   この1本を巻ごとに写すと、片方で見つけた不具合を何度も直すことになり、
 //   1つ直し忘れると「同じ作りなのに巻によって挙動が違う」という、
 //   いちばん気づきにくい壊れ方をする。箱入り娘の3本が klotski.js を
 //   共有しているのと同じ理屈である。
@@ -439,7 +441,9 @@
   function paint() {
     var kind = goal().kind;
     var pos = S.pos;
-    var marks = markSet();
+    // 指せる手は1回だけ集め、印を付けるのと押せるかどうかの両方で使う
+    var able = movesByFrom(pos);
+    var marks = markSet(able);
 
     for (var i = 0; i < 64; i++) {
       var b = squares[i];
@@ -462,7 +466,7 @@
       // 押せるかどうか。
       // 追いかけ回は「できた」のあとも触れたままにする。
       // 納得するまで動かす回なので、止めると目的と反対になる
-      b.disabled = (S.done && kind !== 'chase') ? true : !touchable(i, kind);
+      b.disabled = (S.done && kind !== 'chase') ? true : !touchable(i, kind, able);
 
       // 読み上げ。マスの名前を必ず先に言う（1章の目的がこれ）
       b.setAttribute('aria-label', C.nameOf(i) + ', ' +
@@ -472,8 +476,8 @@
 
   }
 
-  // 印を付けるマスを集める
-  function markSet() {
+  // 印を付けるマスを集める。able は movesByFrom が集めた「指せる手」
+  function markSet(able) {
     var out = { pick: -1, goto: {}, goal: {}, ask: {}, check: -1, hint: hintFrom() };
     var kind = goal().kind;
     var pos = S.pos;
@@ -502,9 +506,7 @@
 
     if (S.pick >= 0) {
       out.pick = S.pick;
-      C.movesFrom(pos, S.pick).forEach(function (m) {
-        if (allowed(m)) out.goto[m.to] = 1;
-      });
+      (able[S.pick] || []).forEach(function (m) { out.goto[m.to] = 1; });
     }
 
     // チェックされているキング。どちらの色でも出す
@@ -518,7 +520,7 @@
   // そのマスは押す意味があるか。
   // 押しても何も起きないマスを押せる状態にしておくと
   // 「押したのに動かない」になる（川渡りの駒と同じ考え方）
-  function touchable(i, kind) {
+  function touchable(i, kind, able) {
     var pos = S.pos;
     if (kind === 'read' || kind === 'replay') return false;
     if (kind === 'squares') return true;
@@ -532,17 +534,14 @@
     if (S.waiting || S.waitBlack) return false;
     // 行ける先として光っているマスは押せる
     if (S.pick >= 0) {
-      var ok = false;
-      C.movesFrom(pos, S.pick).forEach(function (m) { if (m.to === i && allowed(m)) ok = true; });
-      if (ok) return true;
+      var from = able[S.pick] || [];
+      for (var k = 0; k < from.length; k++) if (from[k].to === i) return true;
     }
-    // 自分の手番の駒で、動ける手があるもの
+    // 自分の手番の駒で、動ける手があるもの。
+    // only の縛りは able を作るときに掛けてあるので、ここでは見ない
     var p = pos.board[i];
     if (!p || C.colorOf(p) !== pos.turn) return false;
-    if (lesson().only && C.typeOf(p) !== lesson().only) return false;
-    var any = false;
-    C.movesFrom(pos, i).forEach(function (m) { if (allowed(m)) any = true; });
-    return any;
+    return !!(able[i] && able[i].length);
   }
 
   // そのレッスンで指してよい手か（only の縛り）
@@ -550,6 +549,33 @@
     var only = lesson().only;
     if (only && C.typeOf(m.piece) !== only) return false;
     return true;
+  }
+
+  // そのマスの駒が、このレッスンで指してよい手だけ。
+  // 「行ける先を光らせる」「押せるかどうか」「押された先はどの手か」が
+  // 同じ答えを使うように、縛りを掛ける場所を1か所にしてある
+  function allowedFrom(pos, from) {
+    return C.movesFrom(pos, from).filter(allowed);
+  }
+
+  // いまの局面で指せる手を、出発マスごとに1回だけ集める。
+  //
+  // ★ なぜ1回にまとめるのか ★
+  //   paint() は64マスそれぞれに touchable() で「押す意味があるか」を聞く。
+  //   その中で movesFrom を呼ぶと、movesFrom は中で合法手を丸ごと
+  //   作り直すので、1タップで合法手の生成が98回走っていた。
+  //   盤を塗っているあいだ局面は変わらないのだから、集めるのは1回でよい。
+  //   答えは変わらない。変わるのは速さだけである。
+  function movesByFrom(pos) {
+    var out = {};
+    var all = C.legalMoves(pos);
+    for (var i = 0; i < all.length; i++) {
+      var m = all[i];
+      if (!allowed(m)) continue;
+      if (!out[m.from]) out[m.from] = [];
+      out[m.from].push(m);
+    }
+    return out;
   }
 
 
@@ -896,11 +922,8 @@
 
     // 行ける先を押した → 指す
     if (S.pick >= 0) {
-      var picked = null;
-      C.movesFrom(pos, S.pick).forEach(function (m) {
-        if (m.to === i && allowed(m)) picked = picked || m;
-      });
-      if (picked) return tryMove(S.pick, i);
+      var goes = allowedFrom(pos, S.pick).some(function (m) { return m.to === i; });
+      if (goes) return tryMove(S.pick, i);
       if (i === S.pick) { S.pick = -1; paint(); clearSay(); return; }
     }
 
@@ -919,8 +942,7 @@
     }
     S.pick = i;
     paint();
-    var n = C.movesFrom(pos, i).filter(allowed).length;
-    if (n === 0) {
+    if (allowedFrom(pos, i).length === 0) {
       say('That ' + PIECE_EN[C.typeOf(p)] + ' has nowhere to go.',
           'その ' + PIECE_JA[C.typeOf(p)] + 'は、いま どこへも 行けない。');
     } else {
@@ -935,7 +957,7 @@
 
   function tryMove(from, to) {
     var pos = S.pos;
-    var list = C.movesFrom(pos, from).filter(function (m) { return m.to === to && allowed(m); });
+    var list = allowedFrom(pos, from).filter(function (m) { return m.to === to; });
     if (!list.length) return;
 
     // なる手が混ざっている（同じ from-to で4通り）
@@ -976,12 +998,12 @@
 
     // 棋譜どおりに指す課題。ちがう手は盤に乗せない
     if (w.line) {
-      var want = w.line[S.lineAt];
+      var wantLine = w.line[S.lineAt];
       var got = C.toSan(pos, move);
-      if (!sameSan(got, want)) {
+      if (!sameSan(got, wantLine)) {
         shake(move.to);
-        say('The notation says ' + want + '. That move is ' + got + '.',
-            'きふは ' + want + '。いま さそうと したのは ' + got + '。', 'bad');
+        say('The notation says ' + wantLine + '. That move is ' + got + '.',
+            'きふは ' + wantLine + '。いま さそうと したのは ' + got + '。', 'bad');
         S.pick = -1;
         paint();
         return;
@@ -1142,8 +1164,11 @@
 
       // おまけ：CPU が指す
       if (goal().kind === 'free' || goal().kind === 'sandbox') {
-        // 待っているあいだに「ふたりで さす」へ切り替えられたら指さない
-        if (S.setAt !== setWas || !cpuOn()) return;
+        // 待っているあいだに「ふたりで さす」へ切り替えられたら指さない。
+        // 抜けるときも必ず塗り直す。waitBlack のあいだ盤は
+        // 64マスすべてを押せなくしているので、塗り直さずに抜けると
+        // 黒が指しも しないまま、盤を触れない状態で残る
+        if (S.setAt !== setWas || !cpuOn()) { paint(); return; }
         var r = window.ChessCpu.choose(S.pos, lastMove);
         if (!r) { paint(); return reportFree(S.pos); }
         var csan = C.toSan(S.pos, r.move);
@@ -1157,7 +1182,9 @@
         return;
       }
 
-      if (goal().kind !== 'chase') return;
+      // ここまで来るのは追いかけ回だけ。ほかの回から呼ばれていたら
+      // 黒は指さないが、盤は押せる状態に戻しておく（上と同じ理由）
+      if (goal().kind !== 'chase') { paint(); return; }
       var m = fleeMove(S.pos);
       if (!m) { paint(); return chaseReport(); }
       var san = C.toSan(S.pos, m);
@@ -1651,9 +1678,7 @@
     if (!answerNow()) return;
     S.hinted = true;
     paint();
-    var m = C.parseSan(S.pos, answerNow());
     say('Move this piece.', 'この こまを うごかすよ。');
-    void m;
   }
 
   function hintFrom() {
