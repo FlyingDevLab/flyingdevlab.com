@@ -202,6 +202,7 @@
     replay:  null,   // { list:[局面], sans:[], at:0 }
     chased:  0,      // 追いかけ回（chase）で自分が指した手数
     setAt:   0,      // 追いかけ回で選んでいる駒のくみあわせ
+    ansAt:   0,      // win.answers の何手めまで進んだか（偶数=白の番、奇数=黒が自動で指す番）
     waitBlack: false,// 黒が逃げるのを見せている最中。そのあいだ盤は触れない
     timer:   0,      // 黒を動かすまでの待ち。レッスンを変えたら必ず止める
     done:    false
@@ -224,7 +225,11 @@
     var g = goal();
     var set = g.sets && g.sets[S.setAt];
     if (set && set.answer) return set.answer;
-    return (g.win || {}).answer;
+    var w = g.win || {};
+    // 詰みまで指させる問題。win.answers は「白 黒 白 …」の順に全部書く。
+    // 白の番だけ答えを返し、黒の番は盤が自動で指すので空にする
+    if (w.answers) return (S.ansAt % 2 === 0) ? (w.answers[S.ansAt] || '') : '';
+    return w.answer;
   }
 
 
@@ -837,7 +842,7 @@
     }
 
     var san = C.toSan(pos, move);
-    S.past.push({ pos: pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased });
+    S.past.push({ pos: pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
     S.record.push({ san: san, color: pos.turn });
 
     var next = C.apply(pos, move);
@@ -958,6 +963,23 @@
       S.waitBlack = false;
       if (S.index !== mine) return;
 
+      // 詰みまで指させる問題：決まった返しを指す
+      var sw = win();
+      if (goal().kind === 'moves' && sw.answers) {
+        var sm = C.parseSan(S.pos, sw.answers[S.ansAt]);
+        if (!sm) { paint(); return; }
+        var ssan = C.toSan(S.pos, sm);
+        S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
+        S.record.push({ san: ssan, color: S.pos.turn });
+        S.pos = C.apply(S.pos, sm);
+        sayNote(sw, S.ansAt);
+        S.ansAt++;
+        writeRecord();
+        paint();
+        updateButtons();
+        return;
+      }
+
       // おまけ：CPU が指す
       if (goal().kind === 'free') {
         // 待っているあいだに「ふたりで さす」へ切り替えられたら指さない
@@ -965,7 +987,7 @@
         var r = window.ChessCpu.choose(S.pos, lastMove);
         if (!r) { paint(); return reportFree(S.pos); }
         var csan = C.toSan(S.pos, r.move);
-        S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased });
+        S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
         S.record.push({ san: csan, color: S.pos.turn });
         S.pos = C.apply(S.pos, r.move);
         writeRecord();
@@ -979,7 +1001,7 @@
       var m = fleeMove(S.pos);
       if (!m) { paint(); return chaseReport(); }
       var san = C.toSan(S.pos, m);
-      S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased });
+      S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
       S.record.push({ san: san, color: S.pos.turn });
       S.pos = C.apply(S.pos, m);
       writeRecord();
@@ -1040,6 +1062,12 @@
   // 09. できたかどうか
   // ----------------------------------------------------------------
 
+  // win.notes[i] … i 手めを指した直後に出す一言。何が起きたか分からない人のため
+  function sayNote(w, i) {
+    var n = w.notes && w.notes[i];
+    if (n) say(n.en, n.ja, 'good');
+  }
+
   // おまけ：盤の状態を一言で伝える（決着・チェック・ひきわけ）
   function reportFree(pos) {
     var st = C.status(pos);
@@ -1079,6 +1107,15 @@
       // コンピュータと さす：白が指して、まだ続くなら黒の番
       if (cpuOn() && pos.turn === 'b' && !C.status(pos).over) letBlackRun(move);
       return;
+    }
+
+    // 詰みまで指させる問題。白の正解のあと、黒の返し（決まっている）を盤が指す。
+    // 手のあとに「いま何が起きたか」を一言で返す（notes[手の番号]）
+    if (w.answers) {
+      sayNote(w, S.ansAt);
+      S.ansAt++;
+      if (S.ansAt >= w.answers.length) return finish();
+      return letBlackRun();
     }
 
     if (answerNow()) return finish();
@@ -1339,13 +1376,14 @@
     var back = S.past.pop();
     // 追いかけ回と「コンピュータと さす」は、黒の手と自分の手が1組で1手に見える。
     // 1つだけ戻すと相手の手番で止まり、盤を触れないまま固まる
-    if ((goal().kind === 'chase' || cpuOn()) && S.past.length && back.pos.turn !== S.start.turn) {
+    if ((goal().kind === 'chase' || cpuOn() || win().answers) && S.past.length && back.pos.turn !== S.start.turn) {
       back = S.past.pop();
     }
     S.pos = back.pos;
     S.record = back.record;
     S.lineAt = back.lineAt;
     if (typeof back.chased === 'number') S.chased = back.chased;
+    if (typeof back.ansAt === 'number') S.ansAt = back.ansAt;
     S.pick = -1;
     S.waiting = null;
     S.done = false;
@@ -1379,6 +1417,7 @@
     S.waiting = null;
     S.replay = null;
     S.chased = 0;
+    S.ansAt = 0;
     S.waitBlack = false;
     S.done = false;
 

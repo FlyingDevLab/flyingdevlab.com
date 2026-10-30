@@ -545,7 +545,23 @@ window.CHESS_LESSONS = {
       ],
       task: { en: 'Find the move. It leads to mate in two.',
               ja: 'この 盤で いちばん いい 手を 見つけよう。2手で 詰む。' },
-      goal: { kind: 'moves', win: { answer: 'Rd8+' } }
+      // 詰むところまで指させる。最初の手だけで終えると、
+      // 「なぜ詰むのか」が盤の上に出ないまま終わってしまう。
+      //   answers … 白 黒 白 の順。黒の返し（Rxd8）は、それしか指せない手なので盤が指す。
+      //   answer  … 最初の手。証明（check-v2）はここを見る
+      //   notes   … 各手を指した直後に出す一言（answers と同じ並び）
+      goal: { kind: 'moves', win: {
+        answer: 'Rd8+',
+        answers: ['Rd8+', 'Rxd8', 'Rxd8#'],
+        notes: [
+          { en: 'Rd8+ steps in with check. Black has exactly one legal move: take the rook.',
+            ja: 'Rd8+。ルークが チェックで 入りこむ。黒が 指せる 手は 1つだけ。この ルークを とる しか ない。' },
+          { en: 'Black\'s rook took on d8. It was pulled away from where it was. Now your other rook can take it.',
+            ja: '黒の ルークが d8 に つられて 出て きた。もう1つの ルークで これを とれば、また チェック。' },
+          { en: 'Checkmate! Black\'s own pawns on f7, g7 and h7 block the king\'s way out.',
+            ja: 'チェックメイト！ f7・g7・h7 の 黒の ポーンが じゃまで、キングは 逃げられない。' }
+        ]
+      } }
     },
 
     // ===== おまけ ======================================================
