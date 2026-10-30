@@ -322,6 +322,17 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/chess-tactics/"/>
   </url>
 
+  <url>
+    <!-- Chess vol.3 / チェス 第3巻 じょばん（2026-10-31 追加） -->
+    <loc>https://flyingdevlab.com/kids/chess-openings/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://flyingdevlab.com/kids/chess-openings/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://flyingdevlab.com/kids/chess-openings/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://flyingdevlab.com/kids/chess-openings/"/>
+  </url>
+
   <!-- 
     ============================================================
     プライバシーポリシー（サイト共通・個人情報の取り扱い方針のページ）

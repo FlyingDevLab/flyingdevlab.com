@@ -1414,8 +1414,12 @@
       var k = DATA.lessons[n].goal.kind;
       if (k !== 'free' && k !== 'read' && k !== 'replay') { last = false; break; }
     }
-    bi(ui.doneTitle, last ? 'Volume 1 complete!' : 'Done!',
-       last ? 'これで 1かんは おわり！' : 'できた！');
+    // 巻の番号は lessons.js から取る。書き込みにすると、
+    // 巻を足したときに「3巻なのに 1かんは おわり」と出る
+    var volNo = (DATA.volume && DATA.volume.no) || 1;
+    bi(ui.doneTitle,
+       last ? 'Volume ' + volNo + ' complete!' : 'Done!',
+       last ? 'これで ' + volNo + 'かんは おわり！' : 'できた！');
 
     var chase = goal().kind === 'chase';
 

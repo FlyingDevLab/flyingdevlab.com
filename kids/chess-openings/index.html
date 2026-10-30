@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- user-scalable=no でゲーム中のピンチズームを無効化する -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!--
+  ============================================================
+  【設計メモ: チェス 第03巻 序盤 / CHESS vol.03】
+
+  ■ このページの役割
+    序盤の考え方と、名前の付いた序盤を覚える。
+    1巻で駒の動きと棋譜、2巻で戦術をやったあとの巻である。
+
+  ■ 画面の仕組みは1巻・2巻と共有している
+    /kids/shared/chess-lessons.js と chess-lessons.css。
+    このページが自分で持っているのは lessons.js だけ。
+
+  ■ 2巻と課題の形が違う。これが この巻のいちばん大事なところ
+    2巻は「いちばん いい手を さがす」課題だった。あれは
+    駒得か詰みで決まるので、機械で証明できた。
+
+    序盤はそうではない。「1.e4 と 1.d4 のどちらが良いか」には
+    答えが無い。駒得でも詰みでも決まらないし、強い人の間でも
+    流行が変わる。だからこの巻では「いちばん いい手」を当てさせない。
+    1巻と同じで、棋譜を見せて、そのとおりに指してもらう。
+
+    画面に出すのは「これがこの序盤です」であって
+    「これが最善です」ではない。ここを混ぜると嘘になる。
+
+  ■ 書かないと決めたもの
+    ・10手より先の理論（解析と流行で変わる）
+    ・「白が有利」などの評価
+    ・「誰が最初に指した」系の逸話（出典が曖昧なものが多い）
+    ・ECOコード（C50 など）。名前と番号は1対1ではなく範囲の対応で、
+      どこまでをその名前と呼ぶかに幅がある。こども向けに
+      「この序盤は C50」と書くと、そこだけ嘘が混じる
+
+    書くのは、名前の付いた序盤の最初の数手（記録が揃っていて
+    確かめられる）と、記録の残る実戦の全棋譜。棋譜は事実なので
+    検証できる。解説は自分の言葉で書く。
+
+  ■ 盤は機械で確かめてある
+    どの棋譜も、最後まで指せること・engine が書く棋譜と
+    1字も違わないことを確かめた。棋譜を1手でも書き換えたら
+    確かめ直すこと。
+
+  ■ 1巻・2巻から引き継いでいるもの
+    鍵を掛けない・時間を計らない・英語と日本語を文の種類で分ける・
+    駒はSVG・棋譜はコピーできる・盤の向きは白が下。
+
+  ■ 外部リンク・外部読み込みは1つもない
+    /kids* の CSP は default-src 'none'。
+    .github/workflows/no-external-links.yml が外部URLの混入を検査する。
+  ============================================================
+  -->
+
+  <!-- ===== SEO：ページタイトル・説明 ===== -->
+  <title>Chess vol.3 Openings / チェス 第3巻 じょばん – How Games Begin</title>
+  <meta name="description" content="How chess games begin: take the centre, develop your pieces, castle early. Then the openings that have names, move by move on the board. チェスの序盤の考え方と、名前のついた序盤を盤で覚える。広告なし・登録なし・外部送信なし。">
+
+  <!-- ===== OGP：SNS シェア用メタタグ ===== -->
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="Chess vol.3 Openings / チェス 第3巻 じょばん">
+  <meta property="og:description" content="Take the centre, develop, castle. Then the named openings. 中央・駒を出す・キングを安全に。そして名前のついた序盤。">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/chess-openings/">
+  <meta property="og:site_name"   content="Flying Dev Lab">
+  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:title"      content="Chess vol.3 Openings / チェス 第3巻 じょばん">
+  <meta name="twitter:description" content="Take the centre, develop, castle. / 中央・駒を出す・キングを安全に。">
+
+  <link rel="stylesheet" href="/kids/shared/chess-lessons.css">
+</head>
+<body>
+
+<!-- ================================================================
+     駒のかたち
+     ================================================================
+     <use> で呼ぶための型紙。画面には出さない。
+     viewBox は 0 0 100 100 で、どの駒も底辺を y=85 に揃えてある。
+     揃えていないと、盤に並べたときに駒の足が段違いに見える。
+
+     塗りと輪郭は CSS で与える（.piece--w / .piece--b）。
+     ここに色を書かないのは、同じ型紙を白と黒の両方で使うため。
+     ================================================================ -->
+<svg class="defs" aria-hidden="true" focusable="false" width="0" height="0">
+  <defs>
+
+    <!-- ポーン Pawn。玉と首と台。いちばん小さく見えるように作る -->
+    <symbol id="pc-P" viewBox="0 0 100 100">
+      <circle cx="50" cy="31" r="12.5"/>
+      <path d="M38 44h24l-3.5 8.5c0 9 5 15.5 8 21.5H33.5c3-6 8-12.5 8-21.5z"/>
+      <rect x="28" y="74" width="44" height="11" rx="4.5"/>
+    </symbol>
+
+    <!-- ルーク Rook。城の塔。上の切り欠きが3つ見えるように -->
+    <symbol id="pc-R" viewBox="0 0 100 100">
+      <path d="M27 19h11v9h8v-9h8v9h8v-9h11v19l-7 5v22l7 9H27l7-9V43l-7-5z"/>
+      <rect x="23" y="75" width="54" height="10" rx="4"/>
+    </symbol>
+
+    <!-- ナイト Knight。馬の横顔。左を向く -->
+    <symbol id="pc-N" viewBox="0 0 100 100">
+      <path d="M64 12c-1.5 5.5-5.5 8.5-11 10.5-7 2.5-13.5 7-18.5 13.5-3.5 4.5-6.5 9.5-6.5 13.5 0 4.5 3.5 6.5 7 5 3-1.5 4.5-4.5 7.5-6 2.5-1.5 5 0 4.5 2.5-1 6-5 10.5-8.5 15-4 5-7 9.5-7.5 15h47c1.5-13 2-25.5-1.5-35.5-2.5-7-6.5-12-10-16.5-2-3-2.5-10 0-16.5z"/>
+      <circle class="eye" cx="51" cy="29" r="2.6"/>
+      <rect x="26" y="75" width="48" height="10" rx="4"/>
+    </symbol>
+
+    <!-- ビショップ Bishop。司教の帽子（ミトラ）と、てっぺんの玉と切れ目 -->
+    <symbol id="pc-B" viewBox="0 0 100 100">
+      <circle cx="50" cy="16" r="5.5"/>
+      <path d="M50 24c-10 6-17.5 15.5-17.5 25.5 0 7 4 12.5 8.5 15.5h18c4.5-3 8.5-9 8.5-15.5C67.5 39.5 60 30 50 24z"/>
+      <path class="line" d="M50 32v15M43 39.5h14"/>
+      <rect x="32" y="64" width="36" height="7.5" rx="3.5"/>
+      <rect x="26" y="75" width="48" height="10" rx="4"/>
+    </symbol>
+
+    <!-- クイーン Queen。とがった冠が5つ。先に玉を乗せる -->
+    <symbol id="pc-Q" viewBox="0 0 100 100">
+      <path d="M20 32l7.5 22h45L80 32 66 42.5 58 26l-8 16.5L42 26l-8 16.5z"/>
+      <circle cx="20" cy="29" r="4.5"/>
+      <circle cx="35" cy="26" r="4.5"/>
+      <circle cx="50" cy="22.5" r="5"/>
+      <circle cx="65" cy="26" r="4.5"/>
+      <circle cx="80" cy="29" r="4.5"/>
+      <path d="M28 57h44l-4 17H32z"/>
+      <rect x="26" y="75" width="48" height="10" rx="4"/>
+    </symbol>
+
+    <!-- キング King。てっぺんに十字。冠には切り欠きを作らない（クイーンと混ざるため） -->
+    <symbol id="pc-K" viewBox="0 0 100 100">
+      <path d="M45.5 7h9v7.5h7.5v9h-7.5V31h-9v-7.5H38v-9h7.5z"/>
+      <path d="M26 38c7-6 16-9.5 24-9.5S67 32 74 38l-5 19H31z"/>
+      <rect x="28" y="59" width="44" height="7.5" rx="3.5"/>
+      <path d="M31 69h38l-2 5H33z"/>
+      <rect x="26" y="75" width="48" height="10" rx="4"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+<main class="app">
+
+  <!-- ===== ヘッダー ===== -->
+  <header class="site-header" role="banner">
+    <h1 class="site-title">CHESS<span class="title-accent">vol.3</span></h1>
+    <p class="site-tagline">
+      How games begin, and the openings that have names
+      <span class="ja" lang="ja">たいきょくの はじめかたと、名前の ある じょばん</span>
+    </p>
+  </header>
+
+  <!-- ===== 巻えらび =====
+       中身は /kids/shared/chess-lessons.js が lessons.js の volumes から作る。
+       ハブのカードを1枚に保つため、巻はここで選ぶ。 -->
+  <nav class="volumes" id="volumes" aria-label="Volumes / かん"></nav>
+
+  <!-- ===== 目次 =====
+       中身は game.js が lessons.js から作る。
+       23レッスン全部が最初から押せる。鍵は無い。
+       名前と番号を HTML と JS の2か所に持たないために、
+       出どころはレッスン表（lessons.js）だけにしている。 -->
+  <nav class="toc" id="toc" aria-label="Lessons / レッスンいちらん"></nav>
+
+  <!-- ===== いま開いているレッスン =====
+       見出し・説明・やることは game.js が入れる。 -->
+  <section class="lesson" aria-labelledby="lessonTitle">
+    <p class="lesson-no" id="lessonNo"></p>
+    <h2 class="lesson-title" id="lessonTitle"></h2>
+    <div class="lesson-body" id="lessonBody"></div>
+    <p class="task" id="task"></p>
+  </section>
+
+  <!-- ===== 盤 =====
+       64マスは game.js が作る。筋と段の名前も game.js が置く。
+       HTML に書かないのは、1章で「マスの名前」を教えるページなので、
+       名前の出どころを1か所（chess.js の nameOf）にしておきたいため。 -->
+  <!-- ===== 駒のくみあわせを選ぶ =====
+       「ひきわけと とうりょう」の回だけ出す。中身は game.js が
+       レッスン表から作る。名前と盤を2か所に持たないため。 -->
+  <div class="sets" id="sets" role="group" aria-label="Pieces to try / こまの くみあわせ" hidden></div>
+
+  <div class="board-wrap">
+    <div class="board-frame">
+      <div class="ranks" id="ranks" aria-hidden="true"></div>
+      <div class="board" id="board" role="group" aria-label="Chess board / チェスばん"></div>
+      <div class="files" id="files" aria-hidden="true"></div>
+    </div>
+
+    <!-- 並べる駒のたな。「はじめのならび」のときだけ出す。
+         盤の下に置いているのは、つまんだ駒と置き先のマスを
+         同時に見られるようにするため -->
+    <div class="palette" id="palette" hidden>
+      <p class="palette-ask">
+        Pick a piece, then tap a square<i class="ja" lang="ja">こまを えらんで、おく マスを おす</i>
+      </p>
+      <div class="palette-choices" id="paletteChoices"></div>
+    </div>
+
+    <!-- なる駒を選ぶ。プロモーションのときだけ出す -->
+    <div class="promo" id="promo" hidden>
+      <p class="promo-ask">
+        Choose a piece<i class="ja" lang="ja">なる こまを えらぶ</i>
+      </p>
+      <div class="promo-choices" id="promoChoices"></div>
+    </div>
+
+  </div>
+
+  <!-- ===== 言いたいこと1つ分の場所 =====
+       「そのマスへは とべないよ」「ビショップは ずっと 白マスだよ」など。
+       中身が空でも場所を取ったままにしている。理由は川渡りと同じ2つ。
+         ・出たり消えたりで下のボタンが動くと、押そうとした指が外れる
+         ・読み上げの live 領域は、隠すと変化が伝わらなくなる -->
+  <p class="message" id="message" role="status" aria-live="polite"></p>
+
+  <!-- ===== できたときの知らせ =====
+       盤の「下」に出す。上に重ねない。
+
+       川渡りや箱入り娘は、クリアの知らせを盤の上に重ねている。
+       あちらは終わった後の盤に見るべきものが残っていない
+       （全員が向こう岸にいる・娘が出口にいる）ので、覆って構わない。
+
+       ここは逆で、終わった瞬間の盤がそのレッスンの答えそのものである。
+         レッスン18  いま指した Ra8# の詰みの形
+         レッスン17  自分で並べ終えた初期配置
+         レッスン19  作ったステイルメイトの形
+       いちばん見たい瞬間に覆ってしまうことになる。だから下に置く。
+
+       一言（.message）より後ろに置いているのは読む順のため。
+       盤 →「ねらって いる こまを とった」→「できた！」と流れる。
+       先に知らせを出すと、終わった合図のあとに説明が来て逆になる。 -->
+  <div class="done" id="done" hidden>
+    <h3 id="doneTitle"></h3>
+    <p class="done-note" id="doneNote"></p>
+    <div class="done-buttons">
+      <button class="btn" id="retry" type="button">
+        Again<i class="ja" lang="ja">もういちど</i>
+      </button>
+      <button class="btn primary" id="advance" type="button">
+        Next lesson<i class="ja" lang="ja">つぎの レッスン</i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== 操作 ===== -->
+  <div class="controls">
+    <button class="btn" id="undo" type="button" disabled aria-label="Undo one move / ひとつ前にもどす">
+      <span aria-hidden="true">↶</span> Undo<i class="ja" lang="ja">もどす</i>
+    </button>
+    <button class="btn" id="hint" type="button" hidden aria-label="Show which piece to move / どの こまを うごかすか">
+      Hint<i class="ja" lang="ja">ヒント</i>
+    </button>
+    <button class="btn" id="forward" type="button" hidden aria-label="One move forward / 1手すすむ">
+      Forward<i class="ja" lang="ja">1手すすむ</i> <span aria-hidden="true">→</span>
+    </button>
+    <button class="btn" id="reset" type="button" aria-label="Start this lesson over / このレッスンを やりなおす">
+      Reset<i class="ja" lang="ja">やりなおす</i>
+    </button>
+  </div>
+
+  <!-- ===== 棋譜 =====
+       指した手が SAN で積まれる。選んでコピーできる。
+       進んだ記録はブラウザの中にしか置けないので、
+       棋譜だけは手元に書き写せるようにしておく。 -->
+  <section class="record">
+    <h3 class="record-title">
+      Notation<i class="ja" lang="ja">きふ</i>
+    </h3>
+    <p class="record-hint" id="recordHint">
+      Your moves appear here in notation.
+      <span class="ja" lang="ja">さした てが きふに なって ならびます。</span>
+    </p>
+    <pre class="record-text" id="recordText" tabindex="0"></pre>
+    <button class="btn small" id="copy" type="button">
+      Copy<i class="ja" lang="ja">コピー</i>
+    </button>
+  </section>
+
+  <!-- ===== レッスンの行き来 ===== -->
+  <nav class="pager" aria-label="Move between lessons / レッスンの いどう">
+    <button class="btn" id="prev" type="button">
+      <span aria-hidden="true">←</span> Back<i class="ja" lang="ja">まえ</i>
+    </button>
+    <button class="btn" id="next" type="button">
+      Next<i class="ja" lang="ja">つぎ</i> <span aria-hidden="true">→</span>
+    </button>
+  </nav>
+
+  <!-- ===== フッター =====
+       戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
+       こども向け領域の外（TOP・SNS・App Store など）へは繋がない方針。 -->
+  <footer class="site-footer" role="contentinfo">
+    <p class="footer-copy">
+      <a href="/kids/" class="footer-link"><span lang="en">&larr; Playing Dev Lab</span>&ensp;/&ensp;<span lang="ja">遊びの研究室</span></a>
+    </p>
+    <p class="footer-copy">
+      &copy; <time datetime="2026">2026</time> Flying Dev Lab. All rights reserved.
+    </p>
+  </footer>
+
+</main>
+
+<script src="/kids/shared/chess.js"></script>
+<script src="lessons.js"></script>
+<script src="/kids/shared/chess-lessons.js"></script>
+</body>
+</html>
