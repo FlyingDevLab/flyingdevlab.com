@@ -123,7 +123,7 @@
   <meta name="twitter:title"      content="Chess vol.1 Basics / チェス 第1巻 きそ">
   <meta name="twitter:description" content="How the pieces move, and how to read notation. / 駒の動きと、棋譜の読み方。">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/kids/shared/chess-lessons.css">
 </head>
 <body>
 
@@ -203,6 +203,11 @@
       <span class="ja" lang="ja">こまの うごきと、きふの よみかた</span>
     </p>
   </header>
+
+  <!-- ===== 巻えらび =====
+       中身は /kids/shared/chess-lessons.js が lessons.js の volumes から作る。
+       ハブのカードを1枚に保つため、巻はここで選ぶ。 -->
+  <nav class="volumes" id="volumes" aria-label="Volumes / かん"></nav>
 
   <!-- ===== 目次 =====
        中身は game.js が lessons.js から作る。
@@ -297,6 +302,9 @@
     <button class="btn" id="undo" type="button" disabled aria-label="Undo one move / ひとつ前にもどす">
       <span aria-hidden="true">↶</span> Undo<i class="ja" lang="ja">もどす</i>
     </button>
+    <button class="btn" id="hint" type="button" hidden aria-label="Show which piece to move / どの こまを うごかすか">
+      Hint<i class="ja" lang="ja">ヒント</i>
+    </button>
     <button class="btn" id="forward" type="button" hidden aria-label="One move forward / 1手すすむ">
       Forward<i class="ja" lang="ja">1手すすむ</i> <span aria-hidden="true">→</span>
     </button>
@@ -349,6 +357,6 @@
 
 <script src="/kids/shared/chess.js"></script>
 <script src="lessons.js"></script>
-<script src="game.js"></script>
+<script src="/kids/shared/chess-lessons.js"></script>
 </body>
 </html>

@@ -1,11 +1,23 @@
 // ================================================================
-// game.js – チェス 第01巻 基礎知識、画面がわ
+// chess-lessons.js – チェスのレッスン画面、共通の仕組み
 // ================================================================
 //
 // 役わり分け。
-//   /kids/shared/chess.js  ルールの判定だけ。DOM を知らない
-//   lessons.js             23レッスンの文章・盤・できたの条件だけ
-//   game.js（これ）        盤を描き、押されたのを受け、課題を見る
+//   /kids/shared/chess.js           ルールの判定だけ。DOM を知らない
+//   /kids/shared/chess-lessons.js   盤を描き、押されたのを受け、課題を見る（これ）
+//   /kids/shared/chess-lessons.css  その見た目
+//   各巻の lessons.js               その巻の文章・盤・できたの条件だけ
+//
+// ★ 巻をまたいで共有している ★
+//   /kids/chess/           01巻 基礎知識
+//   /kids/chess-tactics/   02巻 戦術
+//
+//   同じ1300行を巻ごとに写すと、片方で見つけた不具合を何度も直すことになり、
+//   1つ直し忘れると「同じ作りなのに巻によって挙動が違う」という、
+//   いちばん気づきにくい壊れ方をする。箱入り娘の3本が klotski.js を
+//   共有しているのと同じ理屈である。
+//
+//   ★ ここを直すとチェスの全巻が変わる。直したら全部の巻を開いて確かめること。
 //
 // このファイルにチェスのルールを書かない。
 // 「ナイトはどう動くか」を知っているのは chess.js だけで、
@@ -53,12 +65,14 @@
   function el(id) { return document.getElementById(id); }
 
   var ui = {
+    volumes:    el('volumes'),
     toc:        el('toc'),
     lessonNo:   el('lessonNo'),
     title:      el('lessonTitle'),
     body:       el('lessonBody'),
     task:       el('task'),
     sets:       el('sets'),
+    hint:       el('hint'),
     board:      el('board'),
     ranks:      el('ranks'),
     files:      el('files'),
@@ -137,7 +151,8 @@
   // 読み書きの両方を try で包み、失敗したら黙って無しとして続ける。
   // ここが無くてもレッスンは全部開く（それがこの作りの要点）。
 
-  var SEEN_KEY = 'fdl_chess1_seen';
+  // 巻ごとに分ける。1巻の ✓ が2巻に出てしまわないように
+  var SEEN_KEY = 'fdl_chess' + ((DATA.volume && DATA.volume.no) || 1) + '_seen';
 
   function readSeen() {
     try {
@@ -176,6 +191,7 @@
     askAt:   0,      // squares 課題の何問目か
     hit:     {},     // squares 課題で押せたマス
     lineAt:  0,      // line 課題の何手目か
+    hinted:  false,  // ヒントを押したか（押した回だけ印を出す）
     held:    '',     // 並べるレッスンでつまんでいる駒
     placed:  {},     // 並べるレッスンで自分が置いたマス（取り除けるのはここだけ）
     waiting: null,   // プロモーションの行き先待ち { from, to }
@@ -205,6 +221,22 @@
   // 章ごとに見出しを置き、その下にレッスンの番号を並べる。
   // 番号だけにしているのは、23のレッスン名を狭い画面に並べると
   // 目次だけで画面が1つ埋まるため。開いたレッスンの名前は下に大きく出る。
+
+  // 巻のボタン。1枚のハブカードから入って、ここで巻を選ぶ。
+  // ハブに巻ごとのカードを並べると、一覧がチェスで埋まるため
+  function paintVolumes() {
+    if (!ui.volumes || !DATA.volumes) return;
+    ui.volumes.innerHTML = '';
+    DATA.volumes.forEach(function (v) {
+      var here = v.no === (DATA.volume && DATA.volume.no);
+      var node = document.createElement(here ? 'span' : 'a');
+      if (!here) node.href = v.url;
+      node.className = 'vol-btn' + (here ? ' current' : '');
+      bi(node, 'vol.' + v.no + ' ' + v.en, v.ja);
+      if (here) node.setAttribute('aria-current', 'page');
+      ui.volumes.appendChild(node);
+    });
+  }
 
   var tocButtons = [];
 
@@ -400,7 +432,8 @@
         (marks.goto[i] ? ' goto' : '') +
         (marks.goal[i] ? ' goal' : '') +
         (marks.ask[i] ? ' ask' : '') +
-        (marks.check === i ? ' check' : '');
+        (marks.check === i ? ' check' : '') +
+        (marks.hint === i ? ' hint' : '');
 
       // 押せるかどうか。
       // 追いかけ回は「できた」のあとも触れたままにする。
@@ -417,7 +450,7 @@
 
   // 印を付けるマスを集める
   function markSet() {
-    var out = { pick: -1, goto: {}, goal: {}, ask: {}, check: -1 };
+    var out = { pick: -1, goto: {}, goal: {}, ask: {}, check: -1, hint: hintFrom() };
     var kind = goal().kind;
     var pos = S.pos;
 
@@ -543,8 +576,17 @@
     S.hit[name] = 1;
     var left = g.ask.filter(function (n) { return !S.hit[n]; }).length;
     if (left === 0) return finish();
-    say('Yes, ' + name + '. ' + left + ' to go.',
-        'せいかい。あと ' + left + 'つ。', 'good');
+    if (g.say === 'value') {
+      // ねうちを教える回。押した駒の名前と値を返す
+      var q = S.pos.board[i];
+      var t = C.typeOf(q);
+      var worth = t === 'K' ? '♾️' : String(C.VALUE[t]);
+      say(PIECE_EN[t] + ' = ' + worth + '. ' + left + ' to go.',
+          PIECE_JA[t] + 'は ' + worth + '。あと ' + left + 'つ。', 'good');
+    } else {
+      say('Yes, ' + name + '. ' + left + ' to go.',
+          'せいかい。あと ' + left + 'つ。', 'good');
+    }
     paint();
   }
 
@@ -717,6 +759,19 @@
     var pos = S.pos;
     var w = win();
 
+    // 自分で手を見つける課題。ちがう手は盤に乗せず、なぜ違うかだけ返す。
+    // いったん動かしてから戻すと、まちがいが盤の上の事実になってしまう
+    if (w.answer) {
+      var tried = C.toSan(pos, move);
+      if (!sameSan(tried, w.answer)) {
+        shake(move.to);
+        tellWrong(pos, move, tried);
+        S.pick = -1;
+        paint();
+        return;
+      }
+    }
+
     // 棋譜どおりに指す課題。ちがう手は盤に乗せない
     if (w.line) {
       var want = w.line[S.lineAt];
@@ -761,6 +816,26 @@
     // judge が新しい一言を入れるので、入れ替わりになる
     clearSay();
     judge(move, san, way);
+  }
+
+  // まちがえた手に、なぜ違うかを返す。
+  // とりかえの損得から文を作るので、問題ごとに書かなくて済む
+  function tellWrong(pos, move, san) {
+    if (move.captured) {
+      var v = C.exchangeOf(pos, move);
+      if (v < 0) {
+        return say(san + ' loses ' + (-v) + ' — it gets taken back.',
+                   san + 'は とりかえされて ' + (-v) + ' そんするよ。', 'bad');
+      }
+      if (v === 0) {
+        return say(san + ' is an even trade.',
+                   san + 'は とりかえっこ。とくには ならないよ。', 'bad');
+      }
+      return say('That wins something, but there is more.',
+                 'とくは するけど、もっと いい手が あるよ。', 'bad');
+    }
+    say('Not that move. Look at what you can take.',
+        'ちがう手だよ。とれる こまを 見てみて。', 'bad');
   }
 
   function sameSan(a, b) {
@@ -919,6 +994,8 @@
       }
       return;
     }
+
+    if (w.answer) return finish();
 
     if (w.line) {
       if (S.lineAt >= w.line.length) return finish();
@@ -1208,6 +1285,7 @@
     S.hit = {};
     S.lineAt = 0;
     S.held = '';
+    S.hinted = false;
     S.placed = {};
     S.waiting = null;
     S.replay = null;
@@ -1261,6 +1339,29 @@
       ui.undo.disabled = S.past.length === 0;
     }
     ui.reset.disabled = false;
+    if (ui.hint) {
+      ui.hint.hidden = !win().answer;
+      ui.hint.disabled = S.done || S.hinted;
+    }
+  }
+
+  // ヒント。動かす駒だけを光らせる。行き先は出さない。
+  // 答えを見せずに、探す範囲だけ狭める
+  function showHint() {
+    var w = win();
+    if (!w.answer) return;
+    S.hinted = true;
+    paint();
+    var m = C.parseSan(S.pos, w.answer);
+    say('Move this piece.', 'この こまを うごかすよ。');
+    void m;
+  }
+
+  function hintFrom() {
+    var w = win();
+    if (!S.hinted || !w.answer) return -1;
+    var m = C.parseSan(S.pos, w.answer);
+    return m ? m.from : -1;
   }
 
   function shake(i) {
@@ -1341,12 +1442,14 @@
 
   function boot() {
     buildBoard();
+    paintVolumes();
     buildToc();
 
     ui.undo.addEventListener('click', undo);
     ui.forward.addEventListener('click', function () { replayGo(1); });
     ui.reset.addEventListener('click', function () { restart(); });
     ui.copy.addEventListener('click', copyRecord);
+    if (ui.hint) ui.hint.addEventListener('click', showHint);
     ui.retry.addEventListener('click', function () { ui.done.hidden = true; restart(); });
     ui.advance.addEventListener('click', function () { open(S.index + 1); });
     ui.prev.addEventListener('click', function () { open(S.index - 1); });

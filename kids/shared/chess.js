@@ -963,6 +963,24 @@
     return taken - gainAfter(next, to, other(color));
   }
 
+  // その手で取りに行ったときの損得。
+  //
+  // exchange() は「いちばん安い駒から取る」前提で数える。
+  // こちらは「この駒で取ったら」を数える。両方が要るのは、
+  // どの駒から取るかで損得が変わるため。
+  //   ポーンで取れば得、ルークで取れば損、という形は普通にある。
+  //   02巻の3回目（とりかえすと とくか そんか）はそれを教える回で、
+  //   まちがえた手に「その駒から取ると そんするよ」と返すのに要る。
+  function exchangeOf(pos, move) {
+    if (!move || !move.captured) return 0;
+    var taken = valueOf(move.captured);
+    var next = pos.board.slice();
+    if (move.capturedAt >= 0) next[move.capturedAt] = '';   // アンパッサン
+    next[move.to] = next[move.from];
+    next[move.from] = '';
+    return taken - gainAfter(next, move.to, other(colorOf(move.piece)));
+  }
+
   // 残っている駒の合計。キングは数えない（交換できないため）
   function material(pos, color) {
     var sum = 0;
@@ -1018,6 +1036,7 @@
     valueOf: valueOf,
     cheapestAttacker: cheapestAttacker,
     exchange: exchange,
+    exchangeOf: exchangeOf,
     material: material,
 
     // 棋譜

@@ -37,13 +37,18 @@
 
 
 /* ================================================================
-   style.css – チェス 第01巻 基礎知識
+   chess-lessons.css – チェスのレッスン画面、共通の見た目
    ================================================================
+
+   巻をまたいで共有している（/kids/chess/ と /kids/chess-tactics/）。
+   見た目は巻で変えない。同じ教材の続きだからである。
+   ★ ここを直すとチェスの全巻が変わる。
 
    構成:
    01. 配色
    02. リセット & ベース
    03. ヘッダー
+   03b. 巻のボタン
    04. 目次
    05. レッスンの文章
    05b. 駒のくみあわせを選ぶ
@@ -193,6 +198,46 @@ body {
   margin-top: 2px;
 }
 .site-tagline .ja { display: block; }
+
+
+/* ----------------------------------------------------------------
+   03b. 巻のボタン
+   ----------------------------------------------------------------
+   ハブのカードは1枚だけにして、巻はここで選ぶ。
+   巻ごとにカードを並べると、ハブの一覧がチェスで埋まる。
+---------------------------------------------------------------- */
+.volumes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.vol-btn {
+  padding: 5px 12px 4px;
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid rgba(56, 56, 67, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 2px 6px var(--shadow);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+}
+.vol-btn .ja { display: block; font-size: 0.86em; }
+
+a.vol-btn:hover { transform: translateY(-1px); border-color: var(--primary); }
+a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.vol-btn.current {
+  background: var(--frame);
+  border-color: var(--frame);
+  color: #ffffff;
+}
+.vol-btn.current .ja { color: rgba(255, 255, 255, 0.85); }
 
 
 /* ----------------------------------------------------------------
@@ -600,6 +645,17 @@ body {
 }
 
 .sq.check { box-shadow: inset 0 0 0 4px var(--warn); }
+
+/* ヒント。動かす駒だけを光らせる。行き先は出さない。
+   .ask と同じ脈打ち方にしているのは、どちらも「ここを見て」の合図だから */
+.sq.hint::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 3px solid var(--pick);
+  border-radius: 6px;
+  animation: pulse 1.4s ease-in-out infinite;
+}
 
 /* 間違えて押したときに一度だけ振る。
    文字で説明する前に、押したところが違うことを体で伝える */
