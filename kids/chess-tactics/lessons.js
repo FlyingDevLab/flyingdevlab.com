@@ -43,7 +43,8 @@ window.CHESS_LESSONS = {
     { en: 'Value and trades', ja: 'ねうちと とりかえ' },
     { en: 'Two at once',      ja: 'ふたつ いっぺんに' },
     { en: 'Stuck on a line',  ja: 'うごけなく する' },
-    { en: 'Hidden attacks',   ja: 'かくれた ねらい' }
+    { en: 'Hidden attacks',   ja: 'かくれた ねらい' },
+    { en: 'Mating patterns',  ja: '詰みの かたち' }
   ],
 
   lessons: [
@@ -369,6 +370,60 @@ window.CHESS_LESSONS = {
       task: { en: 'Take the queen. The pawn guards it, but it cannot take back.',
               ja: 'ナイトで クイーンを とろう。b7 の ポーンが まもって いるけど、取り返せない。' },
       goal: { kind: 'moves', win: { answer: 'Nxc6+' } }
+    },
+
+    // ===== 5章 詰みの かたち ==========================================
+    //
+    // 6章（すてる）の下じきになる章。捨て駒は「捨てたあと どうなるか」が
+    // 見えていないと、ただ捨てるだけになる。先に詰みの形を2つ知っておく。
+    // どちらも1手で詰む手が盤に1つしか無いことを確かめてある。
+
+    {
+      chapter: 4,
+      en: 'Back-rank mate',
+      ja: 'バックランクメイト',
+      fen: '6k1/5ppp/8/8/8/8/1B3PPP/3R2K1 w - - 0 1',
+      body: [
+        { t: 'p', en: 'The pawns in front of the king protect it — and trap it.',
+          ja: 'キングの 前に ポーンが 3まい ならんで いる。まもって くれて いるけど、同時に にげ道を ふさいで いる。キングは 前に 出られない。' },
+        { t: 'pairs', items: [
+          { en: 'back-rank mate', ja: 'バックランクメイト（下段の詰み）', sym: '#' }
+        ] },
+        { t: 'p', en: 'A rook on the back rank covers the whole row.',
+          ja: 'そこへ ルークが いちばん 下の だんに 入ると、その だん ぜんぶを よこ一列 ねらう ことに なる。キングは 前にも 出られず、よこにも にげられない。これで 詰み。' },
+        { t: 'p', en: 'Your own king has exactly the same weakness.',
+          ja: 'この 盤を よく 見て。白の キングも まったく 同じ かたちを して いる。g1 の キングの 前に f2・g2・h2 の ポーン。黒に ルークが あったら、同じ ことを やられて いた。' },
+        { t: 'key',
+          en: 'Make a hole for your king before someone makes one for you.',
+          ja: 'じぶんの ポーンが にげ道を ふさぐ。1マス 空けて おくと あんしん。' }
+      ],
+      task: { en: 'Mate in one.',
+              ja: '1手で 詰ませよう。' },
+      goal: { kind: 'moves', win: { answer: 'Rd8#' } }
+    },
+
+    {
+      chapter: 4,
+      en: 'Smothered mate',
+      ja: 'スマザードメイト',
+      fen: '6rk/6pp/8/q3N3/8/8/PP4P1/6K1 w - - 0 1',
+      body: [
+        { t: 'p', en: 'This black king is walled in by its own pieces.',
+          ja: 'こんどは キングの まわりが ぜんぶ じぶんの こまで うまって いる。g8 に ルーク、g7 と h7 に ポーン。どこへも にげられない。' },
+        { t: 'pairs', items: [
+          { en: 'smothered mate', ja: 'スマザードメイト（窒息詰め）', sym: '#' }
+        ] },
+        { t: 'p', en: 'Only the knight can reach a king like that.',
+          ja: 'ふつうの こまは、まわりが うまって いる キングに とどかない。線が ふさがれて いるから。でも ナイトだけは とびこえられる。1巻で ならった とおり。' },
+        { t: 'p', en: 'Walled in means nowhere to run.',
+          ja: 'そして まわりが うまって いる ことが、そのまま 詰みに なる。王手を かけられても、にげる マスが 1つも ない。じぶんの こまに かこまれて いる から。' },
+        { t: 'key',
+          en: 'The knight jumps, so a walled-in king is not safe at all.',
+          ja: 'ナイトは とびこえる。かこまれた キングほど あぶない。' }
+      ],
+      task: { en: 'Mate in one with the knight.',
+              ja: 'ナイトで 1手で 詰ませよう。' },
+      goal: { kind: 'moves', win: { answer: 'Nf7#' } }
     }
 
   ]
