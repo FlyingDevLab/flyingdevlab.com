@@ -862,7 +862,121 @@
 
 
   // ----------------------------------------------------------------
-  // 08. 外に出すもの
+  // 08. 駒のねうちと、とりかえの損得（02巻から使う）
+  // ----------------------------------------------------------------
+  //
+  // ★ 01巻はこの節を使っていない ★
+  //   値を出さずに済ませたのは、1巻が「どう動くか」だけの巻で、
+  //   ねうちの話をすると、まだ教えていない損得が混ざるため。
+  //   02巻の1回目で値を説明してから使う。
+  //
+  // ★ 値について ★
+  //   ポーン1・ナイト3・ビショップ3・ルーク5・クイーン9。古典的な値である。
+  //
+  //   ビショップとナイトをどちらも3にしてあるのは、どちらが強いかが
+  //   盤の形で変わるため。盤が開いていればビショップ、ポーンが
+  //   かたまって動けない形ならナイトが働く。平均すればビショップが
+  //   わずかに上という調べ方もあるが、それは何万局も均した話であって、
+  //   目の前の1局には当てはまらない。片方を上に書くと嘘になる。
+  //
+  //   キングだけ別扱い。画面では ♾️ と出すが、計算の中では
+  //   大きな数を置いている。取られたら終わる駒なので他と交換できず、
+  //   「9個ぶん」のように比べられない。下の取り合いでは、
+  //   キングが取りに行けるかどうかの判定にだけ使う。
+  //
+  //   ここを変えると02巻のレッスンがすべて変わる。変えたら解き直すこと。
+
+  var VALUE = { P: 1, N: 3, B: 3, R: 5, Q: 9, K: 1000 };
+
+  function valueOf(piece) {
+    var t = typeOf(piece);
+    return t ? VALUE[t] : 0;
+  }
+
+  // そのマスを攻めている駒のうち、いちばん安いものの居場所。無ければ -1。
+  //
+  // キングだけ条件が付く。取ったあとも相手がそのマスを攻めているなら、
+  // キングは取りに行けない（取った瞬間に取られる形になるため）。
+  // だからキングは最後の候補にし、そのときだけ相手の攻めを確かめる。
+  function cheapestAttacker(board, to, color) {
+    var fake = { board: board };
+    var best = -1, bestValue = Infinity;
+    for (var i = 0; i < 64; i++) {
+      var p = board[i];
+      if (!p || colorOf(p) !== color) continue;
+      if (!hits(fake, i, to)) continue;
+      var v = valueOf(p);
+      if (v < bestValue) { bestValue = v; best = i; }
+    }
+    if (best >= 0 && typeOf(board[best]) === 'K') {
+      // キングが取ったあとの盤で、まだ相手がそのマスを攻めているか
+      var after = board.slice();
+      after[to] = after[best];
+      after[best] = '';
+      if (attackedBy({ board: after }, to, other(color))) return -1;
+    }
+    return best;
+  }
+
+  // そのマスで取り合いを続けたときに、最後にいくら得するか。
+  //
+  // 安い駒から順に取り合わせて、途中でやめる自由も入れて数える。
+  // チェスでは「静的交換評価（Static Exchange Evaluation, SEE）」と呼ぶ。
+  // 02巻では名前を出さず「とりかえすと とくか そんか」として教える。
+  //
+  // ★ 見ていないもの ★
+  //   ピンで実際には動かせない駒も、攻めているものとして数える。
+  //   途中で王手が絡んで順番が狂う形も見ていない。
+  //   そこまで見るには読みが要り、読みを入れると
+  //   「なぜその答えになるのか」を人が追えなくなる。
+  //   「ただ取りできる駒」と「踏み込んではいけないマス」は、
+  //   この範囲で全部出る。02巻が必要とするのはそこまで。
+  //
+  //   ひと手ごとに攻めている駒を数え直しているので、
+  //   うしろに控えたルークが前のルークのあとに利いてくる形
+  //   （X線）は、数え直しの結果として自然に入る。
+
+  function gainAfter(board, to, color) {
+    // color が取り返す側。取り返さない自由があるので 0 と比べる
+    var from = cheapestAttacker(board, to, color);
+    if (from < 0) return 0;
+    var taken = valueOf(board[to]);
+    var next = board.slice();
+    next[to] = next[from];
+    next[from] = '';
+    return Math.max(0, taken - gainAfter(next, to, other(color)));
+  }
+
+  // color がそのマスで取り始めたときの損得。
+  // 得なら正、損なら負。取れないマスなら 0。
+  function exchange(pos, target, color) {
+    var to = typeof target === 'string' ? indexOf(target) : target;
+    if (to < 0 || !pos.board[to]) return 0;
+    if (colorOf(pos.board[to]) === color) return 0;
+    var from = cheapestAttacker(pos.board, to, color);
+    if (from < 0) return 0;
+    var taken = valueOf(pos.board[to]);
+    var next = pos.board.slice();
+    next[to] = next[from];
+    next[from] = '';
+    // 最初の1回だけは「やめる自由」を掛けない。取りに行くと決めた手だから
+    return taken - gainAfter(next, to, other(color));
+  }
+
+  // 残っている駒の合計。キングは数えない（交換できないため）
+  function material(pos, color) {
+    var sum = 0;
+    for (var i = 0; i < 64; i++) {
+      var p = pos.board[i];
+      if (!p || colorOf(p) !== color || typeOf(p) === 'K') continue;
+      sum += valueOf(p);
+    }
+    return sum;
+  }
+
+
+  // ----------------------------------------------------------------
+  // 09. 外に出すもの
   // ----------------------------------------------------------------
 
   global.Chess = {
@@ -898,6 +1012,13 @@
     attackedBy: attackedBy,
     attackers: attackers,
     status: status,
+
+    // ねうちと とりかえ（02巻から）
+    VALUE: VALUE,
+    valueOf: valueOf,
+    cheapestAttacker: cheapestAttacker,
+    exchange: exchange,
+    material: material,
 
     // 棋譜
     toSan: toSan,
