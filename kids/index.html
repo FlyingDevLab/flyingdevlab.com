@@ -14,7 +14,7 @@
   【設計メモ: 遊びの研究室 / Playing Dev Lab（こども向けハブ）】
 
   ■ このページの役割
-    ブラウザゲーム10本の入口をひとつにまとめたページ。
+    ブラウザゲーム11本の入口をひとつにまとめたページ。
     こども向けコンテンツを /kids/ 配下の1箇所に集約するために作った。
 
   ■ 名前について
@@ -135,8 +135,8 @@
     <main id="main">
 
       <!-- ゲーム一覧
-           <ul> にしているのは「10件の並び」という構造を
-           補助技術に伝えるため。読み上げ時に「リスト、10項目」と案内される。
+           <ul> にしているのは「11件の並び」という構造を
+           補助技術に伝えるため。読み上げ時に「リスト、11項目」と案内される。
 
            各ゲームの絵文字は、そのゲームのページ内で既に使われているものを
            流用している（遊ぶ前と遊んだ後で同じ記号になるため迷わない）。
@@ -150,11 +150,13 @@
              🟥 KLOTSKI
              🏮 華容道
              🛶 川渡り
+             ♞ チェス
 
-             箱入り娘・KLOTSKI・華容道の3本だけは例外で、ゲームのページ内に
+             箱入り娘・KLOTSKI・華容道・チェスの4本は例外で、ゲームのページ内に
              絵文字を置いていない。盤に絵文字が1つ入ると、そこだけ別の素材に
-             見えるため。一覧の体裁を揃える必要があるのはこのページだけなので、
-             この3つはここでしか使われない。
+             見えるため（チェスの駒は SVG で描いている）。一覧の体裁を揃える
+             必要があるのはこのページだけなので、この4つはここでしか使われない。
+             チェスだけ色の付いた絵文字が無いため、白黒のナイト（♞）を使っている。
       -->
       <ul class="games">
         <li>
@@ -290,6 +292,28 @@
             <span class="g-tip">
               Four classic puzzles, 7 to 17 crossings
               <span class="ja" lang="ja">古典パズル4題。最短7回から17回</span>
+            </span>
+          </a>
+        </li>
+        <!-- 追加（2026-10-30）: チェス 第1巻。
+             遊ぶゲームではなく、読んで試す教材として作った11本目。
+             駒の動きと棋譜（SAN）の読み方を23のレッスンで覚える。
+             続きの巻を作ることが決まっている（02 戦術 / 03 序盤）ため、
+             ルールの判定は /kids/shared/chess.js に分けてある。
+
+             このゲームだけ鍵を掛けていない。23レッスン全部が最初から開く。
+             進んだ記録はブラウザの中にしか置けず、消えることがある。
+             消えたら戻れなくなる作りにはしない、という判断である。
+             （箱入り娘の開放の仕掛けは「もう解ける人への追加」であって、
+             無くても遊べる。こちらは読みたいところを読めないと困る） -->
+        <li>
+          <a href="chess/">
+            <span class="g-icon" aria-hidden="true">♞</span>
+            <span class="g-en">CHESS vol.1</span>
+            <span class="g-ja" lang="ja">チェス 第1巻</span>
+            <span class="g-tip">
+              How the pieces move and how to read notation, in 23 lessons
+              <span class="ja" lang="ja">駒の動きと棋譜の読み方。23レッスン</span>
             </span>
           </a>
         </li>
@@ -496,6 +520,23 @@
             <span class="ja" lang="ja">研究室から外に出る手段はありません。</span>
           </li>
         </ul>
+
+        <!-- 記録が消えることの断り。
+             外へ出さない作りの裏返しなので、約束の3つ目（記録は端末の中だけ）
+             のすぐ後ろに置いている。
+             ブラウザによっては、しばらく訪れないと保存を自動で消す仕組みを
+             持っている。名指しはしない。仕組みも期間もブラウザ側の都合で
+             変わるうえ、こちらから手を打てることが何も無いため。
+             伝えたいのは「消えることがある」という事実だけに絞る。
+             消えた後どうなるか（箱入り娘のむずかしさが閉じる、など）までは
+             書かない。ゲームごとの話が混ざると、肝心の一点がぼやける。 -->
+        <p class="note">
+          Records live only in this browser, so they do not follow you to
+          another browser or another device. Depending on the browser and
+          its settings, they can also disappear after a while without a
+          visit.
+          <span class="ja" lang="ja">記録はこのブラウザの中にだけ残ります。別のブラウザや別の端末には引き継がれません。ブラウザの環境によっては、しばらく遊ばないうちに消えることもあります。</span>
+        </p>
         <p class="note">
           For parents: this page and the games link only to each other.
           There is no link here that takes a child to another site,

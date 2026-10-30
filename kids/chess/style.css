@@ -1,0 +1,950 @@
+/* ================================================================
+   自己ホスト Nunito（latin, 400 / 700 / 900）
+   出典: @fontsource/nunito 5.2.5 — SIL Open Font License 1.1
+   フォントファイルの場所: /fonts/ （リポジトリルート）
+   make10 / ten-puzzle / 川渡り / ハブ と同じ定義です。外部リクエストは発生しません。
+   ================================================================ */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-900.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* ================================================================
+   style.css – チェス 第01巻 基礎知識
+   ================================================================
+
+   構成:
+   01. 配色
+   02. リセット & ベース
+   03. ヘッダー
+   04. 目次
+   05. レッスンの文章
+   05b. 駒のくみあわせを選ぶ
+   06. 盤
+   07. 駒
+   08. マスに付ける印
+   09. なる駒を選ぶ・並べる駒のたな
+   10. できたときの知らせ
+   11. 言いたいこと（メッセージ）
+   12. ボタン
+   12b. フォーカスの輪郭
+   13. 棋譜
+   14. レッスンの行き来
+   15. フッター
+   16. 広い画面
+   17. 動きを減らす設定
+
+   ■ 背景はハブと同じクリーム色のまま
+     箱入り娘は背景まで藍に変えているが、あれは木のオモチャの質感が
+     主題だったため。このページの主題は盤の上で起きることなので、
+     盤の色は盤の中だけに閉じ込めて、地はハブと同じクリームに揃えた。
+
+   ■ 盤のマスの色を、クリームより暗く取っている
+     白マスを背景と同じ明るさにすると、盤の輪郭が消えて
+     「どこからが盤か」が分からなくなる。
+     白マスを少し濃いベージュにし、さらに濃い枠で囲んである。
+
+   ■ 画像を1枚も使っていない
+     盤はグラデーションなし・単色2つ。駒は index.html の中の SVG。
+     読み込みが1つも増えない。
+
+   ■ 駒の塗りと輪郭を必ず別の色にしている
+     白の駒は明るい塗りに濃い輪郭、黒の駒は濃い塗りに更に濃い輪郭。
+     こうしておくと、白マスでも黒マスでも駒の形が切り出されて見える。
+     Unicode のチェス記号を使わなかったのは、白の駒が
+     輪郭だけの字になり、白マスの上で潰れるため（index.html に詳しく）。
+
+   ■ レッスンの文章は日本語を主にしている
+     英語は短い1行だけ添える。段落まるごとの英訳を並べると
+     文章が2倍の高さになり、狭い画面で盤が下へ押し出される。
+     駒の名前と棋譜の記号だけは、英語と日本語を必ず並べる
+     （.pair がその組）。理由は index.html の設計メモに書いた。
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   01. 配色
+   ----------------------------------------------------------------
+   前半はハブ・make10・ten-puzzle・川渡り と同じ値。
+   後半（盤・駒・印）はこのページだけのもの。
+---------------------------------------------------------------- */
+:root {
+  --bg:        #f5f0e6;
+  --card:      #ffffff;
+  --primary:   #4d80d1;
+  --accent:    #9a6bc7;
+  --text:      #383843;
+  --muted:     #858588;
+  --shadow:    rgba(56, 56, 67, 0.08);
+  --radius:    20px;
+
+  --sq-light:  #f0dbb6;   /* 白マス。背景のクリームより濃く取る */
+  --sq-dark:   #b07f4f;   /* 黒マス */
+  --frame:     #6b4728;   /* 盤の枠 */
+  --frame-ink: #f3e4cc;   /* 枠に書く筋と段の名前 */
+
+  --w-fill:    #fdfaf4;   /* 白の駒の塗り */
+  --w-line:    #46301c;   /* 白の駒の輪郭 */
+  --b-fill:    #312722;   /* 黒の駒の塗り */
+  --b-line:    #100b07;   /* 黒の駒の輪郭 */
+  --b-eye:     #a4907c;   /* 黒のナイトの目。塗りと同じ色だと消える */
+
+  --pick:      #e9c46a;   /* いま持ち上げている駒のマス */
+  --goto:      #4d80d1;   /* 行ける先 */
+  --goal:      #9a6bc7;   /* 課題の目印 */
+  --ask:       #2f9e8f;   /* 「このマスを押して」と聞かれているとき */
+  --warn:      #c0432c;   /* チェックされているキング・やってはいけない手 */
+  --ok:        #3f8f3a;   /* できた */
+}
+
+
+/* ----------------------------------------------------------------
+   02. リセット & ベース
+---------------------------------------------------------------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'Nunito', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+               'Yu Gothic', 'Meiryo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  /* マスを続けて素早く押したときに、ブラウザが拡大だと受け取らないようにする */
+  touch-action: manipulation;
+}
+
+.app {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 14px 14px 28px;
+}
+
+/* 日本語の添え書き。英語より一段小さく、色を落とす */
+.ja {
+  font-size: 0.82em;
+  color: var(--muted);
+  font-style: normal;
+}
+
+/* 型紙を置いている svg。画面には出さない */
+.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+
+/* ----------------------------------------------------------------
+   03. ヘッダー
+---------------------------------------------------------------- */
+.site-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.site-title {
+  font-size: clamp(22px, 7vw, 32px);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: var(--frame);
+}
+
+/* 「vol.1」だけ色と大きさを変えて、題と巻数を見分けられるようにする */
+.title-accent {
+  color: var(--accent);
+  margin-left: 0.3em;
+  font-size: 0.62em;
+  letter-spacing: 0;
+}
+
+.site-tagline {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.site-tagline .ja { display: block; }
+
+
+/* ----------------------------------------------------------------
+   04. 目次
+   ----------------------------------------------------------------
+   23レッスン全部がここに並ぶ。鍵は無い（理由は index.html の設計メモ）。
+   章ごとに見出しを置き、その下に番号のボタンを並べる。
+
+   番号だけのボタンにしているのは、22個のレッスン名を狭い画面に
+   並べると、目次だけで画面が1つ埋まってしまうため。
+   いま開いているレッスンの名前は、下の .lesson-title に大きく出る。
+
+   ✓ は「見たことがある」という印で、localStorage に置く。
+   消えても開くところは変わらないので、消えて困らない。
+---------------------------------------------------------------- */
+.toc {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--shadow);
+  padding: 10px 12px 12px;
+  margin-bottom: 12px;
+}
+
+.toc-chapter {
+  margin-top: 8px;
+}
+.toc-chapter:first-child { margin-top: 0; }
+
+.toc-head {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+/* 章の名前は英語と日本語を続けて書く。あいだを空けないと
+   「The boardばんと…」と地続きに見える */
+.toc-head .ja { font-size: 1em; color: var(--text); margin-left: 6px; }
+
+.toc-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.toc-btn {
+  position: relative;
+  min-width: 34px;
+  padding: 5px 7px 4px;
+  background: var(--bg);
+  color: var(--text);
+  border: 2px solid rgba(56, 56, 67, 0.12);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s;
+}
+.toc-btn:hover { transform: translateY(-1px); }
+
+.toc-btn.current {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+/* 見たことのあるレッスンの印。右上に小さく出す。
+   いま開いているレッスンの上では白く反転させる */
+.toc-btn.seen::after {
+  content: '✓';
+  position: absolute;
+  top: -5px;
+  right: -3px;
+  font-size: 10px;
+  color: var(--ok);
+}
+.toc-btn.current.seen::after { color: #ffffff; }
+
+
+/* ----------------------------------------------------------------
+   05. レッスンの文章
+   ----------------------------------------------------------------
+   日本語を主にし、英語は1行だけ添える（.en）。
+   駒の名前と棋譜の記号は英語と日本語を並べる（.pair）。
+---------------------------------------------------------------- */
+.lesson {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--shadow);
+  padding: 12px 14px 14px;
+  margin-bottom: 12px;
+}
+
+.lesson-no {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+/* 章の日本語名。英語のうしろに続けて置く */
+.lesson-no .ja { margin-left: 6px; color: var(--muted); }
+
+.lesson-title {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 2px;
+}
+.lesson-title .ja { display: block; font-size: 0.72em; }
+
+.lesson-body { font-size: 14px; }
+.lesson-body p { margin-top: 8px; }
+
+/* 英語の1行。日本語の説明の前に置く */
+.lesson-body .en {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* 用語の組。英語 → 日本語 →（棋譜の記号）の順に並べる。
+   ここだけは並記を崩さない。棋譜の N が Knight の N であることは、
+   2つを隣に置かないと伝わらない */
+.pair-list {
+  list-style: none;
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+}
+/* 英語・日本語・棋譜の記号を横1行に並べる。
+   入り切らないときだけ日本語が次の行へ落ちる（flex-wrap）。
+   縮める指定にすると、狭い画面で日本語が1文字ずつ折れて
+   「d の れつの ポ／ーンが e5 で と／る」のように読めなくなる。 */
+.pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.pair-en { flex: 0 0 auto; font-weight: 700; }
+.pair-ja { color: var(--text); font-size: 0.92em; }
+.pair-sym {
+  margin-left: auto;
+  font-weight: 900;
+  color: var(--accent);
+  font-size: 15px;
+}
+
+/* 覚えておく一言。囲んで目立たせる。
+   中は段落と同じく「英語の行 → 日本語の行」の順。
+   英語を紫にしているのは、この囲みの中では地の文も太字のため、
+   .lesson-body .en の灰色だと この囲みの中では沈んで読みにくいから。 */
+.key {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #f3eefa;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.key .en {
+  display: block;
+  color: var(--accent);
+  font-size: 0.92em;
+}
+
+/* いまやること。レッスンの最後に1行 */
+.task {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #eef5ff;
+  border-left: 4px solid var(--primary);
+  border-radius: 0 10px 10px 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.task .ja { display: block; font-size: 0.86em; }
+
+
+/* ----------------------------------------------------------------
+   05b. 駒のくみあわせを選ぶ（ひきわけの回だけ）
+   ----------------------------------------------------------------
+   川渡りのステージ選択と同じ役まわり。盤のすぐ上に置いて、
+   押したら盤が入れ替わることが見て分かるようにしている。
+   狭い画面では縦に積む。3つとも名前が長く、横に並べると
+   1つあたり100pxほどになって名前が読めなくなるため。
+---------------------------------------------------------------- */
+.sets {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.set-btn {
+  padding: 8px 10px 7px;
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid rgba(56, 56, 67, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px var(--shadow);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s;
+}
+.set-btn .ja { display: block; font-size: 0.86em; }
+.set-btn:hover { transform: translateY(-1px); }
+
+.set-btn.current {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+.set-btn.current .ja { color: rgba(255, 255, 255, 0.85); }
+
+.set-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* ----------------------------------------------------------------
+   06. 盤
+   ----------------------------------------------------------------
+   枠の中に、段の名前（左）・盤（中）・筋の名前（下）を grid で置く。
+
+   筋と段の名前を盤の外に出しているのは、1章で教える内容だから。
+   マスの中に小さく書く作りにすると、駒が乗ったときに隠れる。
+   外の枠に書いておけば、駒がいくつ乗っても必ず読める。
+
+   盤そのものは aspect-ratio: 1 で正方形を保つ。
+   高さを vw で計算する方式は、横長の画面で盤が画面から溢れる。
+---------------------------------------------------------------- */
+.board-wrap {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+/* 名前を出すのは左（段）と下（筋）だけだが、枠は4辺とも同じ幅にする。
+   名前のぶんだけ左右・上下の枠幅が違うと、盤が枠の中で左下へ
+   ずれて見える。上と右にも同じ幅の空きマスを1つずつ置いて揃えた。
+   空きマスは中身が無いだけで、場所は取る。 */
+.board-frame {
+  display: grid;
+  grid-template-columns: 20px 1fr 20px;
+  grid-template-rows: 20px 1fr 20px;
+  gap: 2px;
+  background: var(--frame);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 3px 10px var(--shadow);
+}
+
+.board {
+  grid-column: 2;
+  grid-row: 2;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* 段の名前（8〜1）。盤の左。上から順に並ぶ */
+.ranks {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+}
+/* 筋の名前（a〜h）。盤の下 */
+.files {
+  grid-column: 2;
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+.ranks span,
+.files span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--frame-ink);
+}
+
+/* マス。button なのでキーボードでも辿れる */
+.sq {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  background: var(--sq-light);
+  cursor: pointer;
+  /* 押したときの青い反転を消す。マス自体の印で状態を見せる */
+  -webkit-tap-highlight-color: transparent;
+}
+.sq.dark { background: var(--sq-dark); }
+
+/* 課題に関係ないときは押せないようにする。
+   押しても何も起きないマスを押せる状態にしておくと
+   「押したのに動かない」になる（川渡りの駒と同じ考え方）。
+   ただし見た目は変えない。盤がまだら模様になると
+   盤そのものの印象が壊れるため、cursor だけ変える */
+.sq:disabled { cursor: default; }
+
+
+/* ----------------------------------------------------------------
+   07. 駒
+   ----------------------------------------------------------------
+   型紙（index.html の <symbol>）を <use> で呼ぶ。
+   塗りと輪郭をここで与える。
+---------------------------------------------------------------- */
+.piece {
+  width: 84%;
+  height: 84%;
+  stroke-width: 3.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;   /* マスの button が受け取る */
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.piece--w { fill: var(--w-fill); stroke: var(--w-line); }
+.piece--b { fill: var(--b-fill); stroke: var(--b-line); }
+
+/* ビショップの切れ目。塗らずに線だけ */
+.piece .line { fill: none; }
+
+/* ナイトの目。白の駒は輪郭の色、黒の駒は明るい色にしないと消える */
+.piece--w .eye { fill: var(--w-line); stroke: none; }
+.piece--b .eye { fill: var(--b-eye); stroke: none; }
+
+
+/* ----------------------------------------------------------------
+   08. マスに付ける印
+   ----------------------------------------------------------------
+   印は5種類ある。どれも ::before か ::after で描き、
+   マスの背景色は変えない。背景を塗り替えると
+   白マスと黒マスの市松模様が崩れ、盤が盤に見えなくなる。
+
+     .pick  いま持ち上げている駒のマス        … 枠を内側に
+     .goto  その駒が行ける先                   … 中央に丸（駒がいれば枠）
+     .goal  課題の目印（ここへ行く・これを取る）… 外枠を点線で
+     .ask   「このマスを押して」と聞かれている  … 枠が脈打つ
+     .check チェックされているキングのマス      … 赤くにじむ
+---------------------------------------------------------------- */
+.sq.pick { box-shadow: inset 0 0 0 4px var(--pick); }
+
+/* 行ける先。空きマスには小さい丸、駒がいるマスには枠。
+   空きマスにも枠を出す作りにすると、駒を取れるマスと
+   ただ進めるマスが同じ見た目になる */
+.sq.goto::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: var(--goto);
+  opacity: 0.55;
+}
+.sq.goto.occupied::after {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  background: none;
+  box-shadow: inset 0 0 0 4px var(--goto);
+  opacity: 0.75;
+}
+
+.sq.goal::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 3px dashed var(--goal);
+  border-radius: 6px;
+}
+
+.sq.ask::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 3px solid var(--ask);
+  border-radius: 6px;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.25; }
+}
+
+.sq.check { box-shadow: inset 0 0 0 4px var(--warn); }
+
+/* 間違えて押したときに一度だけ振る。
+   文字で説明する前に、押したところが違うことを体で伝える */
+.sq.wrong { animation: shake 0.3s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-3px); }
+  75%      { transform: translateX(3px); }
+}
+
+
+/* ----------------------------------------------------------------
+   09. なる駒を選ぶ
+   ----------------------------------------------------------------
+   プロモーションのときだけ盤の下に出す。
+   盤の上に重ねない。重ねると、なった駒がどのマスに乗るのかが
+   見えなくなる（8段目が隠れる）。
+---------------------------------------------------------------- */
+.promo {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px var(--shadow);
+  text-align: center;
+}
+.promo-ask { font-size: 13px; font-weight: 700; }
+.promo-ask .ja { display: block; font-size: 0.86em; }
+
+.promo-choices {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.promo-btn {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sq-light);
+  border: 2px solid var(--frame);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.promo-btn:hover { transform: translateY(-2px); }
+.promo-btn .piece { width: 90%; height: 90%; }
+
+
+/* 並べる駒のたな（はじめのならび）。
+   作りは 09 と同じ。つまんでいる駒だけ枠を変えて見せる */
+.palette {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px var(--shadow);
+  text-align: center;
+}
+.palette-ask { font-size: 13px; font-weight: 700; }
+.palette-ask .ja { display: block; font-size: 0.86em; }
+
+.palette-choices {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.palette-btn {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sq-light);
+  border: 2px solid var(--frame);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.palette-btn .piece { width: 90%; height: 90%; }
+
+/* つまんでいる駒。枠を太くして持ち上げる */
+.palette-btn.picked {
+  border-color: var(--pick);
+  box-shadow: 0 0 0 3px var(--pick);
+  transform: translateY(-3px);
+}
+
+/* あと何枚置けるか。右上に小さく出す */
+.palette-left {
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  min-width: 17px;
+  padding: 0 3px;
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 17px;
+}
+.palette-btn.empty { opacity: 0.35; cursor: default; }
+.palette-btn.empty .palette-left { background: var(--muted); }
+
+.palette-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* ----------------------------------------------------------------
+   10. できたときの知らせ
+   ----------------------------------------------------------------
+   盤の「下」に出す。川渡りの .clear は盤の上に重ねているが、
+   こちらは重ねない。理由は index.html の該当箇所に書いた
+   （終わった瞬間の盤が、そのレッスンの答えそのものであるため）。
+
+   緑の枠を回しているのは、盤の下に白い箱が続く中で
+   「終わった」ことが分かる必要があるため。重ねる方式では
+   盤が隠れること自体が合図になっていたが、それが無くなった。
+---------------------------------------------------------------- */
+.done {
+  margin-top: 8px;
+  padding: 12px 14px 14px;
+  background: var(--card);
+  border: 3px solid var(--ok);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--shadow);
+  text-align: center;
+}
+.done h3 {
+  font-size: clamp(17px, 5vw, 22px);
+  font-weight: 900;
+  color: var(--ok);
+}
+.done h3 .ja { display: block; font-size: 0.7em; }
+.done-note { font-size: 13px; max-width: 340px; }
+.done-note .ja { display: block; }
+.done-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.done-buttons .btn { flex: 0 0 auto; min-width: 120px; }
+
+
+/* ----------------------------------------------------------------
+   11. 言いたいこと（メッセージ）
+   ----------------------------------------------------------------
+   中身が空でも場所を取ったままにする。理由は index.html に書いた。
+---------------------------------------------------------------- */
+.message {
+  min-height: 3.4em;
+  padding: 6px 2px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--primary);
+}
+
+/* ここは盤を見ながら読む行で、しかも「つぎは Nf3」のように
+   そのレッスンの問いそのものが出る。本文と同じ大きさでは小さい。
+   日本語を英語の下に落として、どちらも読める大きさを確保している
+   （横に続けると、狭い画面で英語と日本語が1行に混ざって切れる）。 */
+.message .ja {
+  display: block;
+  font-size: 0.86em;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.message.bad { color: var(--warn); }
+.message.good { color: var(--ok); }
+
+
+/* ----------------------------------------------------------------
+   12. ボタン
+---------------------------------------------------------------- */
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  flex: 1 1 0;
+  padding: 10px 10px 8px;
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid rgba(56, 56, 67, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px var(--shadow);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.15s;
+}
+
+/* ボタンの中の日本語は英語の下に置く */
+.btn .ja { display: block; font-size: 11px; }
+
+.btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 10px var(--shadow); }
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+
+.btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+.btn.primary .ja { color: rgba(255, 255, 255, 0.85); }
+
+.btn.small {
+  flex: 0 0 auto;
+  padding: 6px 14px 5px;
+  font-size: 12px;
+}
+.btn.small .ja { display: inline; margin-left: 4px; font-size: 10px; }
+
+
+/* ----------------------------------------------------------------
+   12b. フォーカスの輪郭
+   ----------------------------------------------------------------
+   :focus ではなく :focus-visible に付けている。
+   マウスで押しただけのときは輪郭を出さず、キーボードで辿ったときだけ
+   出す。他のゲーム（make10 / 箱入り娘 / 川渡り など）と同じ作法。
+   色は紫（--accent）。青（--primary）だと、いま開いている
+   目次のボタンと同じ色になり、どちらが居場所か分からなくなる。
+---------------------------------------------------------------- */
+.sq:focus-visible,
+.toc-btn:focus-visible,
+.promo-btn:focus-visible,
+.record-text:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  z-index: 1;
+}
+.footer-link:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+
+/* ----------------------------------------------------------------
+   13. 棋譜
+   ----------------------------------------------------------------
+   pre で出しているのは、選んでコピーしたときに
+   手の区切りがそのまま残るため。div に並べると
+   コピーした文字列から改行と空白が落ちる。
+
+   tabindex="0" を付けてあるのは、キーボードだけで使う人が
+   ここへ辿り着いて選べるようにするため。
+---------------------------------------------------------------- */
+.record {
+  margin-top: 12px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--shadow);
+  padding: 10px 12px 12px;
+}
+.record-title { font-size: 13px; font-weight: 900; }
+.record-title .ja { margin-left: 6px; }
+.record-hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.record-hint .ja { display: block; }
+
+.record-text {
+  margin-top: 6px;
+  padding: 8px 10px;
+  min-height: 3.4em;
+  max-height: 9em;
+  overflow: auto;
+  background: var(--bg);
+  border-radius: 10px;
+  font-family: 'Nunito', ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.record .btn { margin-top: 8px; }
+
+
+/* ----------------------------------------------------------------
+   14. レッスンの行き来
+---------------------------------------------------------------- */
+.pager {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+
+/* ----------------------------------------------------------------
+   15. フッター
+---------------------------------------------------------------- */
+.site-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.footer-copy { margin-top: 4px; }
+.footer-link { color: var(--primary); text-decoration: none; font-weight: 700; }
+.footer-link:hover { text-decoration: underline; }
+
+
+/* ----------------------------------------------------------------
+   16. 広い画面
+   ----------------------------------------------------------------
+   盤を大きくしすぎない。560px を超えると盤が画面の中で
+   浮いた置物のようになり、説明文との距離が開いて
+   「読む → 試す」の往復が遠くなる。
+   広げるのは説明文の幅だけで、盤は 420px で止める。
+---------------------------------------------------------------- */
+@media (min-width: 700px) {
+  .app { max-width: 680px; }
+
+  /* 名前が読める幅が取れるので横に並べる */
+  .sets { grid-template-columns: repeat(3, 1fr); }
+
+  .board-frame { max-width: 460px; margin: 0 auto; }
+
+  .lesson-body { font-size: 15px; }
+}
+
+
+/* ----------------------------------------------------------------
+   17. 動きを減らす設定
+   ----------------------------------------------------------------
+   OS で「視差効果を減らす」を選んでいる人には動きを出さない。
+   脈打つ印（.ask）は動きで知らせているので、
+   動かさないかわりに常に濃い枠として見えるようにする。
+---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .btn:hover:not(:disabled) { transform: none; }
+  .sq.ask::before { opacity: 1; }
+}
