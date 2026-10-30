@@ -42,7 +42,8 @@ window.CHESS_LESSONS = {
   chapters: [
     { en: 'Value and trades', ja: 'ねうちと とりかえ' },
     { en: 'Two at once',      ja: 'ふたつ いっぺんに' },
-    { en: 'Stuck on a line',  ja: 'うごけなく する' }
+    { en: 'Stuck on a line',  ja: 'うごけなく する' },
+    { en: 'Hidden attacks',   ja: 'かくれた ねらい' }
   ],
 
   lessons: [
@@ -283,6 +284,91 @@ window.CHESS_LESSONS = {
       task: { en: 'Check the king with your bishop, then take what was behind it.',
               ja: 'ビショップで 王手を かけよう。キングが どいた あと、うしろに いる クイーンが とれる。' },
       goal: { kind: 'moves', win: { answer: 'Ba3+' } }
+    },
+
+    // ===== 4章 かくれた ねらい ========================================
+    //
+    // 1つめは「見つける」回にしてある。3章のピンと同じ理由。
+    // ただのディスカバードアタックで駒得する問題を作ろうとすると、
+    // 相手が1手で両方を受けられる盤になりやすい（実際そうなった。
+    // ナイトでクイーンをねらい、ルークでビショップをねらう盤を
+    // 組んだが、Qe7 の1手でクイーンが逃げながらビショップを守った）。
+    // この章で先に分かってほしいのは「うしろの線がひらく」ことなので、
+    // 見つける回にした。王手がからむ2つは駒得で証明できる。
+
+    {
+      chapter: 3,
+      en: 'The attack behind your own piece',
+      ja: 'かくれた ねらい',
+      fen: '6k1/pp1b2pp/8/8/3N4/8/PP4PP/3RK3 w - - 0 1',
+      body: [
+        { t: 'p', en: 'Your rook is aiming down the d-file, but your own knight is in the way.',
+          ja: 'd1 の ルークは d の れつを ねらって いる。でも その 線の 上に、みかたの ナイトが 立って いる。だから いまは 何も ねらえて いない。' },
+        { t: 'pairs', items: [
+          { en: 'discovered attack', ja: 'ディスカバードアタック（開き攻撃）', sym: '' }
+        ] },
+        { t: 'p', en: 'Move the knight, and the line opens by itself.',
+          ja: 'ナイトを どかすと、ふさいで いた 線が ひらく。ナイトが どこへ うごいても ひらく。これが かくれた ねらい。あいては ナイトの ほうを 見て いるので、うしろから 出て くる 線に 気づきにくい。' },
+        { t: 'p', en: 'And the knight itself can attack something as it leaves.',
+          ja: 'こわいのは、どく ナイトが そのとき べつの ところを ねらえる こと。1手で 2か所を ねらえる ことに なる。フォークと にて いるけど、ねらって いるのが 2まいの こま、というのが ちがう。' },
+        { t: 'key',
+          en: 'Look behind your own pieces. Moving one opens a line.',
+          ja: 'じぶんの こまの うしろを 見る。どければ 線が ひらく。' }
+      ],
+      task: { en: 'Which black piece gets attacked the moment the knight moves?',
+              ja: 'ナイトが どいた とたんに ねらわれる 黒の こまが ある。どれか おそう。' },
+      goal: { kind: 'squares', ask: ['d7'], ordered: false }
+    },
+
+    {
+      chapter: 3,
+      en: 'Discovered check',
+      ja: 'ディスカバードチェック',
+      fen: '3k4/pp4pp/8/5q2/3N4/8/PP4PP/3RK3 w - - 0 1',
+      body: [
+        { t: 'p', en: 'When the line that opens hits the king, it is a discovered check.',
+          ja: 'ひらいた 線が、あいての キングに 当たる ことが ある。これが ディスカバードチェック（開き王手）。この 盤では、ナイトが どけば ルークが キングに 当たる。' },
+        { t: 'pairs', items: [
+          { en: 'discovered check', ja: 'ディスカバードチェック（開き王手）', sym: '+' }
+        ] },
+        { t: 'p', en: 'A check cannot be ignored. So the moving piece can do anything.',
+          ja: 'ここが つよい。王手は ほうって おけない。あいては 王手を 外す ことで せいいっぱいで、どいた ナイトの ことを かまって いられない。だから ナイトは、どこへ うごいても いい。' },
+        { t: 'p', en: 'Even taking a well-guarded piece.',
+          ja: 'まもられて いる こまを とっても いい。取り返す ひまが ないから。ふつうなら 損な 手が、開き王手の あいだだけ ただの 得に なる。' },
+        { t: 'key',
+          en: 'During a discovered check, the moving piece can do anything.',
+          ja: '開き王手の あいだ、どいた こまは 何を しても いい。' }
+      ],
+      task: { en: 'Take the queen with your knight, opening the rook\u2019s check.',
+              ja: 'ナイトで クイーンを とろう。同時に ルークの 王手が ひらく。' },
+      goal: { kind: 'moves', win: { answer: 'Nxf5+' } }
+    },
+
+    {
+      chapter: 3,
+      en: 'Double check',
+      ja: 'ダブルチェック',
+      fen: '3k4/1p2p1pp/2q5/8/3N4/8/PP4PP/3RK3 w - - 0 1',
+      goals: ['c6'],
+      body: [
+        { t: 'p', en: 'Sometimes the moving piece gives check too. Two checks at once.',
+          ja: 'どいた こまも、そのとき 王手を かける ことが ある。2まいから 同時に 王手。これが ダブルチェック。開き王手の いちばん つよい かたち。' },
+        { t: 'pairs', items: [
+          { en: 'double check', ja: 'ダブルチェック（両王手）', sym: '++' }
+        ] },
+        { t: 'p', en: 'Remember the three ways out of check.',
+          ja: '1巻で ならった、王手から にげる 3つの ほうほうを 思い出して。あいだに 入る・ねらって いる こまを とる・キングが にげる。この 3つ しか ない。' },
+        { t: 'p', en: 'Two of them stop working.',
+          ja: 'ダブルチェックでは、はじめの 2つが きかない。あいだに 入っても、2本の 線を いっぺんには ふさげない。とろうとしても、1手で 2まいは とれない。のこるのは キングが にげる だけ。' },
+        { t: 'p', en: 'So a guarded piece can be taken for free.',
+          ja: 'この 盤の クイーンは b7 の ポーンに まもられて いる。ふつうなら とっても 取り返される。でも ダブルチェックなら、取り返す 手が そもそも 指せない。' },
+        { t: 'key',
+          en: 'Double check leaves only one answer: the king must move.',
+          ja: 'ダブルチェックは、キングが にげる しか ない。' }
+      ],
+      task: { en: 'Take the queen. The pawn guards it, but it cannot take back.',
+              ja: 'ナイトで クイーンを とろう。b7 の ポーンが まもって いるけど、取り返せない。' },
+      goal: { kind: 'moves', win: { answer: 'Nxc6+' } }
     }
 
   ]
