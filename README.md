@@ -78,7 +78,7 @@ Our children's apps are built with **no ads, no in-app purchases, and no data se
 | `kids/river-crossing/` | ブラウザゲーム：River Crossing（川渡り） |
 | `kids/chess/` | 教材：チェス 01巻 きそ（駒の動きと棋譜の読み方・23レッスン） |
 | `kids/chess-tactics/` | 教材：チェス 02巻 せんじゅつ（7章19問＋おまけ） |
-| `kids/chess-openings/` | 教材：チェス 03巻 じょばん（作りかけ。1章3問） |
+| `kids/chess-openings/` | 教材：チェス 03巻 じょばん（作りかけ。2章6問） |
 | `kids/shared/` | 複数のページが共有するもの（`klotski.js` ／ チェスの `chess.js`・`chess-lessons.js`・`chess-lessons.css`） |
 | `privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
 
@@ -186,7 +186,7 @@ sitemap では、この3本だけが互いを `hreflang` の代替として申�
 |---|---|---|
 | 01 きそ | `/kids/chess/` | 駒の動きと棋譜の読み方。23レッスン |
 | 02 せんじゅつ | `/kids/chess-tactics/` | フォーク・ピン・スキュア・ディスカバード・捨て駒。7章19問 |
-| 03 じょばん | `/kids/chess-openings/` | 序盤の考え方と、名前のある序盤（作りかけ。1章3問） |
+| 03 じょばん | `/kids/chess-openings/` | 序盤の考え方と、名前のある序盤（作りかけ。2章6問） |
 | 04 なかばん | （未着手） | 配置の評価。利き・モビリティ・ポーン構造 |
 
 **画面の仕組みは巻で共有しています。** `kids/shared/chess-lessons.js` と
