@@ -568,7 +568,15 @@
       }
       S.askAt++;
       S.hit[name] = 1;
-      if (S.askAt >= g.ask.length) return finish();
+      if (S.askAt >= g.ask.length) {
+        // ここも順番なし版と同じ。言わずに finish() へ行くと
+        // 「できた！」の上に「つぎは ○○」が残り、
+        // つぎが無いのに在ると書いてあることになる
+        var all = g.ask.length > 1;
+        say('Yes, ' + name + '.' + (all ? ' That is all ' + g.ask.length + '.' : ''),
+            'せいかい。' + (all ? g.ask.length + 'つ ぜんぶ。' : ''), 'good');
+        return finish();
+      }
       say('Yes, ' + name + '.', 'せいかい。つぎは ' + g.ask[S.askAt] + '。', 'good');
       paint();
       return;
@@ -585,18 +593,32 @@
     }
     S.hit[name] = 1;
     var left = g.ask.filter(function (n) { return !S.hit[n]; }).length;
-    if (left === 0) return finish();
+
+    // 最後の1マスでも一言は言う。言わずに finish() へ行くと、
+    // 「できた！」の上に1つ前の「あと 1つ」が残ったままになり、
+    // のこり0なのに1と書いてあることになる。
+    // 押すマスが1つだけの回は数を言わない（「1つ ぜんぶ」は日本語にならない）
+    var tailEn = '', tailJa = '';
+    if (left > 0) {
+      tailEn = ' ' + left + ' to go.';
+      tailJa = 'あと ' + left + 'つ。';
+    } else if (g.ask.length > 1) {
+      tailEn = ' That is all ' + g.ask.length + '.';
+      tailJa = g.ask.length + 'つ ぜんぶ。';
+    }
+
     if (g.say === 'value') {
       // ねうちを教える回。押した駒の名前と値を返す
       var q = S.pos.board[i];
       var t = C.typeOf(q);
       var worth = t === 'K' ? '♾️' : String(C.VALUE[t]);
-      say(PIECE_EN[t] + ' = ' + worth + '. ' + left + ' to go.',
-          PIECE_JA[t] + 'は ' + worth + '。あと ' + left + 'つ。', 'good');
+      say(PIECE_EN[t] + ' = ' + worth + '.' + tailEn,
+          PIECE_JA[t] + 'は ' + worth + '。' + tailJa, 'good');
     } else {
-      say('Yes, ' + name + '. ' + left + ' to go.',
-          'せいかい。あと ' + left + 'つ。', 'good');
+      say('Yes, ' + name + '.' + tailEn,
+          'せいかい。' + tailJa, 'good');
     }
+    if (left === 0) return finish();
     paint();
   }
 
@@ -1176,8 +1198,11 @@
     if (at === rp.list.length - 1) {
       var st = C.status(S.pos);
       if (st.kind === 'checkmate') {
-        say('Checkmate — ' + (st.winner === 'w' ? 'White' : 'Black') + ' wins. 1-0',
-            'チェックメイト。' + (st.winner === 'w' ? '白' : '黒') + 'の かち。きふの さいごは 1-0。', 'good');
+        // 決着の書き方は resultOf にまとめてある。
+        // ここで '1-0' と直に書くと、黒が勝つ棋譜を1本入れた日に嘘になる
+        var res = resultOf(S.pos);
+        say('Checkmate — ' + (st.winner === 'w' ? 'White' : 'Black') + ' wins. ' + res,
+            'チェックメイト。' + (st.winner === 'w' ? '白' : '黒') + 'の かち。きふの さいごは ' + res + '。', 'good');
       }
       markSeen(S.index);
     }

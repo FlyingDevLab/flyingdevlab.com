@@ -37,7 +37,8 @@ window.CHESS_LESSONS = {
   chapters: [
     { en: 'Three rules',   ja: 'じょばんの 3つの きまり' },
     { en: 'Three mistakes', ja: 'やっては いけない こと' },
-    { en: 'Openings with names', ja: '名前の ある じょばん' }
+    { en: 'Openings with names', ja: '名前の ある じょばん' },
+    { en: 'A real game',         ja: '実戦の きふ' }
   ],
 
   lessons: [
@@ -344,6 +345,68 @@ window.CHESS_LESSONS = {
       task: { en: 'Play the London System.',
               ja: 'ロンドンを さしてみよう。' },
       goal: { kind: 'moves', win: { line: ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'e6'] } }
+    },
+
+    // ===== 4章 実戦の きふ ============================================
+    //
+    // オペラ座の対局（1858年・パリ）。17手で終わる。
+    // 1巻の棋譜の読み方、2巻の捨て駒と詰み、3巻の序盤の3つのきまりが
+    // 1局の中に全部入っているので、この巻のおしまいに置いた。
+    //
+    // 本文に書いた数は、盤を数えて確かめてある。
+    //   14手めが終わった時点で、まだ元の位置にいる駒は 白0・黒2
+    //   （f8 のビショップと h8 のルーク）
+    //   詰んだ時点の残り駒は 白15・黒25。黒のほうが10多いまま詰む
+    //   Qb8+ に対する黒の合法手は 1つだけ
+    //
+    // 対局の素性は、記録のはっきりしているところまでにした。
+    // 「どの演目の最中だったか」は書いていない。よく語られるが、
+    // 本によって演目が違う。
+
+    {
+      chapter: 3,
+      en: 'The Opera Game',
+      ja: 'オペラ座の 対局',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'Paris, 1858. White is Paul Morphy; two players shared the black pieces.',
+          ja: '1858年、パリの オペラ座で 指された 対局。白は ポール・モーフィー。黒は ふたりの 人が 相談しながら 指した。オペラ座で 指されたので「オペラ座の 対局」と よばれて いる。' },
+        { t: 'p', en: 'Watch the two sides follow — and not follow — the three rules.',
+          ja: '17手で おわる 短い たいきょく。3章の 3つの きまりを、白は そのまま やり、黒は やらない。ボタンで 1手ずつ 送りながら、そこを 見て みて。' },
+        { t: 'p', en: 'White gets everything out and castles on move 12.',
+          ja: '白は こまを つぎつぎ 出して、12手めで キャスリング。14手めが おわった ところで、白は まだ もとの ところに いる こまが 0。黒は 2つ（f8 の ビショップと h8 の ルーク）。黒の キングも e8 に いた まま。' },
+        { t: 'p', en: 'And here is the strange part.',
+          ja: 'おもしろいのは ここ。詰んだ ときに のこって いる こまの ねうちを 数えると、白は 15、黒は 25。黒の ほうが 10も 多い。白は さいごに ビショップと クイーンを すてて いる から。それでも 詰まされるのは 黒の ほう。2巻で ならった とおり、詰むなら こまの 数は かんけいない。' },
+        { t: 'key',
+          en: 'Having more pieces does not help if you are the one getting mated.',
+          ja: 'こまが 多くても、詰まされたら おわり。' }
+      ],
+      task: { en: 'Step through the game one move at a time.',
+              ja: 'ボタンで 1手ずつ 送りながら 読もう。ぜんぶで 33手。' },
+      goal: { kind: 'replay', line: '1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3 Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5 11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7 Rxd7 14. Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8#' }
+    },
+
+    {
+      chapter: 3,
+      en: 'Finish it yourself',
+      ja: 'さいごを 自分で',
+      fen: '4kb1r/p2r1ppp/4qn2/1B2p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 2 15',
+      body: [
+        { t: 'p', en: 'This is the position before the last five moves.',
+          ja: 'さっきの 対局の、さいごの 5手の 直前。こんどは じぶんで さしてみよう。ならった ものが 3つ つながって いる。' },
+        { t: 'p', en: 'First, remove the guard.',
+          ja: '1つめ Bxd7+。d7 の ナイトを とる。この ナイトは 黒の まもりに なって いた。2巻の「そらす」で ならった、仕事を して いる こまを どかす 手。' },
+        { t: 'p', en: 'Then give up the queen.',
+          ja: '2つめ Qb8+。いちばん つよい クイーンを すてる。黒には これを とる 手しか のこって いない。ほんとうに 1つだけ。2巻の「おびき出す」の かたち。' },
+        { t: 'p', en: 'And mate on the back rank.',
+          ja: '3つめ Rd8# で 詰み。ルークが いちばん 下の だんに 入る。2巻の バックランクメイト。黒の キングは キャスリングを しないまま、まん中に のこって いた。' },
+        { t: 'key',
+          en: 'Three things you learned, one after another.',
+          ja: 'そらす → すてる → 詰ます。3つが つながる。' }
+      ],
+      task: { en: 'Play the last five moves.',
+              ja: 'さいごの 5手を さしてみよう。' },
+      goal: { kind: 'moves', win: { line: ['Bxd7+', 'Nxd7', 'Qb8+', 'Nxb8', 'Rd8#'] } }
     }
 
   ]

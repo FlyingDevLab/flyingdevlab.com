@@ -153,14 +153,14 @@
   <nav class="volumes" id="volumes" aria-label="Volumes / かん"></nav>
 
   <!-- ===== 目次 =====
-       中身は game.js が lessons.js から作る。
-       23レッスン全部が最初から押せる。鍵は無い。
+       中身は共有の /kids/shared/chess-lessons.js が lessons.js から作る。
+       19レッスン全部が最初から押せる。鍵は無い。
        名前と番号を HTML と JS の2か所に持たないために、
        出どころはレッスン表（lessons.js）だけにしている。 -->
   <nav class="toc" id="toc" aria-label="Lessons / レッスンいちらん"></nav>
 
   <!-- ===== いま開いているレッスン =====
-       見出し・説明・やることは game.js が入れる。 -->
+       見出し・説明・やることは共有の chess-lessons.js が入れる。 -->
   <section class="lesson" aria-labelledby="lessonTitle">
     <p class="lesson-no" id="lessonNo"></p>
     <h2 class="lesson-title" id="lessonTitle"></h2>
@@ -169,12 +169,13 @@
   </section>
 
   <!-- ===== 盤 =====
-       64マスは game.js が作る。筋と段の名前も game.js が置く。
-       HTML に書かないのは、1章で「マスの名前」を教えるページなので、
-       名前の出どころを1か所（chess.js の nameOf）にしておきたいため。 -->
+       64マスは共有の chess-lessons.js が作る。筋と段の名前もそこが置く。
+       HTML に書かないのは、マスの名前の出どころを
+       1か所（chess.js の nameOf）に保つため。1巻と同じ作りにしている。 -->
   <!-- ===== 駒のくみあわせを選ぶ =====
-       「ひきわけと とうりょう」の回だけ出す。中身は game.js が
-       レッスン表から作る。名前と盤を2か所に持たないため。 -->
+       1巻の「ひきわけと とうりょう」の回だけが使う。この巻では出ない。
+       場所を消していないのは、共有の chess-lessons.js が巻に関係なく
+       この要素の hidden を書き換えるため。消すと例外になる。 -->
   <div class="sets" id="sets" role="group" aria-label="Pieces to try / こまの くみあわせ" hidden></div>
 
   <div class="board-wrap">
@@ -184,7 +185,8 @@
       <div class="files" id="files" aria-hidden="true"></div>
     </div>
 
-    <!-- 並べる駒のたな。「はじめのならび」のときだけ出す。
+    <!-- 並べる駒のたな。1巻の「はじめのならび」の回だけが使う。
+         この巻では出ない。消していない理由は、ひとつ上と同じ。
          盤の下に置いているのは、つまんだ駒と置き先のマスを
          同時に見られるようにするため -->
     <div class="palette" id="palette" hidden>
@@ -194,7 +196,8 @@
       <div class="palette-choices" id="paletteChoices"></div>
     </div>
 
-    <!-- なる駒を選ぶ。プロモーションのときだけ出す -->
+    <!-- なる駒を選ぶ。プロモーションのときだけ出す。
+         この巻の棋譜には成る手が無いので、出ない -->
     <div class="promo" id="promo" hidden>
       <p class="promo-ask">
         Choose a piece<i class="ja" lang="ja">なる こまを えらぶ</i>
@@ -219,9 +222,8 @@
        （全員が向こう岸にいる・娘が出口にいる）ので、覆って構わない。
 
        ここは逆で、終わった瞬間の盤がそのレッスンの答えそのものである。
-         レッスン18  いま指した Ra8# の詰みの形
-         レッスン17  自分で並べ終えた初期配置
-         レッスン19  作ったステイルメイトの形
+         ねらった駒を取り終えた形
+         詰みで終わる回は、その詰みの形
        いちばん見たい瞬間に覆ってしまうことになる。だから下に置く。
 
        一言（.message）より後ろに置いているのは読む順のため。
