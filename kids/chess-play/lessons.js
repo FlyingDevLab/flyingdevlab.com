@@ -24,7 +24,10 @@
 
 window.CHESS_LESSONS = {
 
-  volume: { no: 'play', en: 'Play', ja: 'あそぶ' },
+  // unitEn … ここで選ぶのはレッスンではなく指し方なので「Mode」と数える。
+  //          見出しと読み上げが「Lesson 1 / 3」ではなく「Mode 1 / 3」になる。
+  //          巻のページは書かないので Lesson のまま
+  volume: { no: 'play', en: 'Play', ja: 'あそぶ', unitEn: 'Mode' },
   volumes: [
     { no: 1, en: 'Basics',   ja: 'きそ',       url: '/kids/chess/' },
     { no: 2, en: 'Tactics',  ja: 'せんじゅつ', url: '/kids/chess-tactics/' },
@@ -32,8 +35,12 @@ window.CHESS_LESSONS = {
     { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess-play/', tab: true }
   ],
 
+  // named … 目次に番号ではなく名前を並べる。
+  //         ここは3つとも指し方の名前そのもので、番号にすると
+  //         「コンピュータと さすのは何番か」を選ぶ前に当てられない。
+  //         巻の目次とちがって、ここは最初に選ぶ入口である
   chapters: [
-    { en: 'Play', ja: 'あそぶ' }
+    { en: 'Play', ja: 'あそぶ', named: true }
   ],
 
   lessons: [

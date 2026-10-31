@@ -182,6 +182,15 @@
   }
 
 
+  // 1つ分の呼び名。巻は「Lesson」だが、「あそぶ」で選ぶのはレッスンではなく
+  // 指し方（モード）なので、lessons.js の volume に unitEn を書いて差し替える。
+  // 書かなければ Lesson のまま（01〜03巻はどれも書いていない）。
+  //
+  // 英語にだけ出る。日本語側は章の名前がそのまま入るので、
+  // ここで日本語を持つと、使われない組が1つ増えるだけになる。
+  var UNIT_EN = (DATA.volume && DATA.volume.unitEn) || 'Lesson';
+
+
   // ----------------------------------------------------------------
   // 03. いまの状態
   // ----------------------------------------------------------------
@@ -313,7 +322,7 @@
         }
         // 読み上げは名前を出す章でも番号から言う。
         // 「レッスン7のイタリアン」と、目次の中の居場所が先に分かる形にする
-        b.setAttribute('aria-label', 'Lesson ' + (li + 1) + ': ' + les.en);
+        b.setAttribute('aria-label', UNIT_EN + ' ' + (li + 1) + ': ' + les.en);
         b.addEventListener('click', function () { open(li); });
         row.appendChild(b);
         tocButtons[li] = b;
@@ -359,7 +368,7 @@
 
     // 章の名前もここで英語と日本語を並べる。英語だけの行を作らない
     bi(ui.lessonNo,
-       'Lesson ' + (S.index + 1) + ' / ' + DATA.lessons.length + '  ·  ' + ch.en,
+       UNIT_EN + ' ' + (S.index + 1) + ' / ' + DATA.lessons.length + '  ·  ' + ch.en,
        ch.ja);
     bi(ui.title, les.en, les.ja);
 
