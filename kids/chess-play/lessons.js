@@ -76,8 +76,8 @@ window.CHESS_LESSONS = {
       body: [
         { t: 'p', en: 'You play White and the computer plays Black. All the rules are on.',
           ja: '白が きみで、黒は コンピュータが さす。1巻で ならった きまりは ぜんぶ きいて いる。' },
-        { t: 'p', en: 'Black stays near its own side. But it takes a piece nobody protects, and it takes back when it can.',
-          ja: '黒は あまり 前に 出て こない。でも、まもられて いない こまは とりに くるし、とられた ときは とりかえせるなら とりかえす。' },
+        { t: 'p', en: 'Black looks ahead a little. It takes a piece nobody protects, and it takes back when it can.',
+          ja: '黒は 少し さきを 読んで さして くる。まもられて いない こまは とりに くるし、とられた ときは とりかえせるなら とりかえす。' },
         { t: 'p', en: 'Checkmate wins. If Black has no move and is not in check, it is a stalemate — a draw.',
           ja: '黒を 詰ませたら きみの かち。黒が 動けなく なっても チェックされて いなければ ステイルメイトで ひきわけ。' },
         { t: 'key',

@@ -934,17 +934,6 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
    消えてしまうと「音があること」ごと分からなくなるので、残したまま薄くする */
 .btn.small.off { opacity: 0.55; text-decoration: line-through; }
 
-/* いまの つよさ。選ぶものではないので、ボタンには見せない。
-   盤のすぐ上に小さく置く（「あそぶ」のページだけに出る） */
-.level {
-  margin: 0 0 6px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--muted);
-}
-.level .ja { margin-left: 6px; color: var(--text); }
-
 
 /* ----------------------------------------------------------------
    12b. フォーカスの輪郭

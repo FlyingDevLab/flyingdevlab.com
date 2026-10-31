@@ -92,7 +92,6 @@
     retry:      el('retry'),
     advance:    el('advance'),
     message:    el('message'),
-    level:      el('level'),
     undo:       el('undo'),
     forward:    el('forward'),
     reset:      el('reset'),
@@ -199,25 +198,41 @@
 
 
   // ----------------------------------------------------------------
-  // 02b. つよさの段（「あそぶ」でコンピュータと指すとき）
+  // 02b. 相手の強さ（「あそぶ」でコンピュータと指すとき。画面には出さない）
   // ----------------------------------------------------------------
   //
-  // 勝ったら1つ上がり、負けたら2つ下がる（下限1・上限5）。
-  // 強さを選ぶ画面は置いていない。選ばせると、こどもは自分に
-  // 合う段を知らないまま選ぶことになる。指した結果のほうが正しい。
+  // ★ このページが目指しているもの ★
+  //   入門である。チェスを好きになってもらうのが目的で、
+  //   強い相手を用意することではない。
+  //   いっぱい勝たせて、たまに負けさせる。それでいい気持ちになって
+  //   また指したくなる、という形にしてある。
   //
-  // ★ 負けを −2 にしてある理由 ★
-  //   勝ち +1・負け −2 だと、実力よりすこし下に落ち着く。
-  //   子ども向けにはその偏りが良い。勝てない相手と続けて指しても
-  //   覚えることは増えないが、たまに勝てる相手となら続く。
-  //   1つずつ上下させると、実力が拮抗したところで勝ったり負けたりが
-  //   続き、ゆるい局がいつまでも来ない。
+  // ★ 段のことは画面に出さない ★
+  //   いま何段目かも、強さが変わることも、どこにも書かない。
+  //   書くと「次は何段目か」が目的になってしまい、
+  //   勝った嬉しさが「段が上がった」にすり替わる。
+  //   こどもは、相手が強くなったことに気づかないまま強くなればよい。
+  //
+  //   強さを選ばせる画面も置いていない。選ばせると、自分に合う段を
+  //   知らないまま選ぶことになる。指した結果のほうが正しい。
+  //
+  // ★ 勝ち +1・負け −3 ★
+  //   この上げ下げだと、勝率がだいたい4分の3のあたりに落ち着く
+  //   （上がる力と下がる力が釣り合うのが、そこだから）。
+  //   4局に3局は勝ち、たまに負ける。入門にはその比がよい。
+  //   1つずつ上下させると勝ったり負けたりが続き、
+  //   「いっぱい勝っている」という感じにならない。
+  //
+  //   はじめは1段（いちばんやさしい）から。中ほどから始めると、
+  //   1巻を終えたばかりのこどもが最初の数局を落とす。
+  //   入門の相手が最初に見せるものが負けでは、話が逆である。
   //
   // ★ 消えても困らない ★
-  //   localStorage が使えない環境では、毎回まんなか（3段）から始まる。
+  //   localStorage が使えない環境では、毎回1段から始まる。
   //   段が巻の進み方に影響することは無い。
   var LEVEL_KEY = 'fdl_chess_level';
-  var LEVEL_MIN = 1, LEVEL_MAX = 5, LEVEL_START = 3;
+  var LEVEL_MIN = 1, LEVEL_MAX = 5, LEVEL_START = 1;
+  var LEVEL_DOWN = 3;
 
   function readLevel() {
     try {
@@ -237,10 +252,9 @@
     if (!window.ChessAi) return;          // 決まりごとの相手に段は無い
     var was = level;
     if (winner === 'w') level = Math.min(LEVEL_MAX, level + 1);
-    else if (winner === 'b') level = Math.max(LEVEL_MIN, level - 2);
+    else if (winner === 'b') level = Math.max(LEVEL_MIN, level - LEVEL_DOWN);
     if (level === was) return;
     writeLevel(level);
-    paintLevel();
   }
 
   // 音の入り切り。読み込んでいないページではボタンごと隠す
@@ -253,13 +267,6 @@
     ui.sound.setAttribute('aria-label',
       on ? 'Turn the piece sound off / こまの おとを けす'
          : 'Turn the piece sound on / こまの おとを つける');
-  }
-
-  function paintLevel() {
-    if (!ui.level) return;
-    ui.level.hidden = !window.ChessAi;
-    if (!window.ChessAi) return;
-    bi(ui.level, 'Strength ' + level + ' / ' + LEVEL_MAX, 'つよさ ' + level + ' / ' + LEVEL_MAX);
   }
 
   function markSeen(i) {
@@ -307,7 +314,7 @@
     keepFen: '',     // やりなおしで並べ直しに戻るときだけ入る
     ansAt:   0,      // win.answers の何手めまで進んだか（偶数=白の番、奇数=黒が自動で指す番）
     last:    null,   // 直前に指した手 { from, to }。盤に印を出すため
-    scored:  false,  // この局の決着で、つよさの段をもう動かしたか
+    scored:  false,  // この局の決着で、相手の強さをもう動かしたか
     waitBlack: false,// 黒が逃げるのを見せている最中。そのあいだ盤は触れない
     timer:   0,      // 黒を動かすまでの待ち。レッスンを変えたら必ず止める
     done:    false
@@ -1452,7 +1459,7 @@
   // おまけ：盤の状態を一言で伝える（決着・チェック・ひきわけ）
   function reportFree(pos) {
     var st = C.status(pos);
-    // 決着がついた局だけ、つよさの段を上げ下げする。
+    // 決着がついた局だけ、相手の強さを上げ下げする（画面には出さない）。
     // 同じ局で二度動かさないよう、決着を見たことを覚えておく
     if (st.over && cpuOn() && !S.scored) {
       S.scored = true;
@@ -1831,7 +1838,6 @@
     if (kind === 'replay') buildReplay();
     paintSets();
     paintPalette();
-    paintLevel();
 
     bi(ui.task, les.task.en, les.task.ja);
     writeRecord();
