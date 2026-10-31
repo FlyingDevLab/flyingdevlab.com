@@ -113,12 +113,34 @@
   //   5段目（深さ3）に届くのは速い端末だけで、遅い端末では
   //   安全弁（BUDGET）が働いて深さ2の答えが使われる。
   //   待ち時間はどの端末でも変わらないので、そこは画面側で揃えている。
+  //
+  // ★ 下の段では、取り合いの読み（静止探索）も浅くする ★
+  //   深さと雑さだけで下げたとき、いちばん下の段でも
+  //   1巻のおまけの相手（chess-cpu.js）より強かった（12局で9勝3敗）。
+  //   静止探索があると、取り合いの最後まで読み切るので
+  //   深さ1でも駒の損をしないためである。
+  //
+  //   こどもが最初に覚えるのは「取り返されることに気づかなかった」
+  //   という失敗で、相手がそこを一度も間違えないと、
+  //   1巻を終えたばかりでは勝てる見込みが無い。
+  //   いちばん下の段は静止探索を切ってあり、そこで同じ間違いをする。
+  //
+  //   測り直した結果（各12局、白＝この相手／黒＝1巻のおまけの相手）。
+  //     1段  0勝10敗2分   ← おまけの相手より弱い。勝てる段
+  //     2段 10勝 2敗0分
+  //     3段 12勝 0敗0分
+  //     4段 11勝 0敗1分
   var LEVELS = [
-    { depth: 1, slack: 300 },   // 1段 かなり雑。取れるものは取るが、ねらいは無い
-    { depth: 1, slack: 100 },   // 2段
-    { depth: 2, slack:  50 },   // 3段 相手の返しが見える（はじめはここ）
-    { depth: 2, slack:   0 },   // 4段
-    { depth: 3, slack:   0 }    // 5段 2手の組み合わせが見える
+    // 1段 取り合いの先を読まない。取り返されるのに気づかず駒を損する
+    { depth: 1, slack: 300, qdepth: 0 },
+    // 2段 取り返しだけは見える
+    { depth: 1, slack: 150, qdepth: 2 },
+    // 3段 相手の返しが見える（はじめはここ）
+    { depth: 2, slack:  50, qdepth: 4 },
+    // 4段
+    { depth: 2, slack:   0, qdepth: 4 },
+    // 5段 2手の組み合わせが見える
+    { depth: 3, slack:   0, qdepth: 4 }
   ];
 
   // 取り合いを何手まで追うか（静止探索の底）。
@@ -257,7 +279,7 @@
   }
 
   // 本体。me から見た点を返す。deadline を過ぎたら null を返して打ち切る
-  function search(pos, depth, alpha, beta, me, deadline) {
+  function search(pos, depth, alpha, beta, me, deadline, qd) {
     if (Date.now() > deadline) return null;
 
     var moves = C.legalMoves(pos);
@@ -274,7 +296,7 @@
       //   深く読めるようにした途端に効いてくる種類の間違いである。
       return pos.turn === me ? -(MATE + depth) : (MATE + depth);
     }
-    if (depth <= 0) return quiesce(pos, alpha, beta, me, QDEPTH);
+    if (depth <= 0) return quiesce(pos, alpha, beta, me, qd);
 
     // 読む順。取る手を先に見ると、早く枝を落とせる
     moves.sort(function (a, b) {
@@ -286,7 +308,7 @@
     var mine = pos.turn === me;
     var best = mine ? -Infinity : Infinity;
     for (var i = 0; i < moves.length; i++) {
-      var sc = search(C.step(pos, moves[i]), depth - 1, alpha, beta, me, deadline);
+      var sc = search(C.step(pos, moves[i]), depth - 1, alpha, beta, me, deadline, qd);
       if (sc === null) return null;
       if (mine) {
         if (sc > best) best = sc;
@@ -321,6 +343,8 @@
     var maxDepth = Math.min(MAX_DEPTH, (opts && opts.depth) || set.depth || DEPTH);
     var slack = (opts && typeof opts.slack === 'number') ? opts.slack : set.slack;
     var budget = (opts && opts.budget) || BUDGET;
+    var qd = (opts && typeof opts.qdepth === 'number') ? opts.qdepth
+           : (typeof set.qdepth === 'number' ? set.qdepth : QDEPTH);
 
     var me = pos.turn;
     var t0 = Date.now();
@@ -336,7 +360,7 @@
       // 僅差で並ぶ手の点はそのまま残り、下の tie 選びは変わらない
       var ra = -Infinity;
       for (var i = 0; i < root.length; i++) {
-        var sc = search(C.step(pos, root[i]), depth - 1, ra, Infinity, me, deadline);
+        var sc = search(C.step(pos, root[i]), depth - 1, ra, Infinity, me, deadline, qd);
         if (sc === null) { cut = true; break; }
         scored.push({ move: root[i], score: sc });
         // 窓を切った手は「これ以下」としか分からない値が返る。
