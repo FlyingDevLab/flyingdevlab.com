@@ -530,8 +530,12 @@
       }
     });
 
-    ui.prev.disabled = S.index === 0;
-    ui.next.disabled = S.index === DATA.lessons.length - 1;
+    // まえ・つぎのボタンは、置いていないページがある（「あそぶ」）。
+    // 選ぶものが3つの入口で、目次から直に開けるので、順に送る意味が無い。
+    // ボタンが無いときは何もしない。直書きすると、消した途端に
+    // null を触る例外でページ全体が起動しなくなる
+    if (ui.prev) ui.prev.disabled = S.index === 0;
+    if (ui.next) ui.next.disabled = S.index === DATA.lessons.length - 1;
   }
 
 
@@ -2036,8 +2040,8 @@
       if (ui.advance.dataset.go) { window.location.href = ui.advance.dataset.go; return; }
       open(S.index + 1);
     });
-    ui.prev.addEventListener('click', function () { open(S.index - 1); });
-    ui.next.addEventListener('click', function () { open(S.index + 1); });
+    if (ui.prev) ui.prev.addEventListener('click', function () { open(S.index - 1); });
+    if (ui.next) ui.next.addEventListener('click', function () { open(S.index + 1); });
 
     window.addEventListener('hashchange', function () { open(startAt()); });
 

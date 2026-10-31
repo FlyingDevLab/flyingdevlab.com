@@ -278,15 +278,11 @@
     </button>
   </section>
 
-  <!-- ===== レッスンの行き来 ===== -->
-  <nav class="pager" aria-label="Move between modes / モードの いどう">
-    <button class="btn" id="prev" type="button">
-      <span aria-hidden="true">←</span> Back<i class="ja" lang="ja">まえ</i>
-    </button>
-    <button class="btn" id="next" type="button">
-      Next<i class="ja" lang="ja">つぎ</i> <span aria-hidden="true">→</span>
-    </button>
-  </nav>
+  <!-- ===== まえ・つぎのボタンは置かない =====
+       ここは順に進む場所ではなく、指し方を選ぶ入口である。
+       3つは目次から直に開ける。巻のページには置いてあるが、
+       あちらはレッスンを順に読み進めるためのもの。
+       （共有の chess-lessons.js は、ボタンが無いページでも動く） -->
 
   <!-- ===== フッター =====
        戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
