@@ -231,7 +231,7 @@
   //   localStorage が使えない環境では、毎回1段から始まる。
   //   段が巻の進み方に影響することは無い。
   var LEVEL_KEY = 'fdl_chess_level';
-  var LEVEL_MIN = 1, LEVEL_MAX = 5, LEVEL_START = 1;
+  var LEVEL_MIN = 1, LEVEL_MAX = 7, LEVEL_START = 1;
   var LEVEL_DOWN = 3;
 
   function readLevel() {

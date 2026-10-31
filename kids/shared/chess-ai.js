@@ -130,17 +130,26 @@
   //     2段 10勝 2敗0分
   //     3段 12勝 0敗0分
   //     4段 11勝 0敗1分
+  //   いちばん下の2段には blunder（なにも見ないで指す割合）を入れてある。
+  //   雑さ（slack）を広げるだけでは「良い手の中から雑に選ぶ」までしか
+  //   下がらず、駒をただで渡してはくれない。入門の相手には、
+  //   ときどき何も見ずに指して駒を置いていくくらいでちょうどよい。
+  //   こちらが「ただで取れる駒を取る」練習をする相手になる。
   var LEVELS = [
-    // 1段 取り合いの先を読まない。取り返されるのに気づかず駒を損する。
+    // 1段 半分は、なにも見ないで指す。ただで駒を置いていく。
     //     「あそぶ」はここから始まる（入門が目的なので、いちばんやさしい段から）
+    { depth: 1, slack: 300, qdepth: 0, blunder: 0.5 },
+    // 2段 ときどき、なにも見ないで指す
+    { depth: 1, slack: 300, qdepth: 0, blunder: 0.2 },
+    // 3段 取り合いの先を読まない。取り返されるのに気づかず駒を損する
     { depth: 1, slack: 300, qdepth: 0 },
-    // 2段 取り返しだけは見える
+    // 4段 取り返しだけは見える
     { depth: 1, slack: 150, qdepth: 2 },
-    // 3段 相手の返しが見える
+    // 5段 相手の返しが見える
     { depth: 2, slack:  50, qdepth: 4 },
-    // 4段
+    // 6段
     { depth: 2, slack:   0, qdepth: 4 },
-    // 5段 2手の組み合わせが見える
+    // 7段 2手の組み合わせが見える
     { depth: 3, slack:   0, qdepth: 4 }
   ];
 
@@ -346,6 +355,14 @@
     var budget = (opts && opts.budget) || BUDGET;
     var qd = (opts && typeof opts.qdepth === 'number') ? opts.qdepth
            : (typeof set.qdepth === 'number' ? set.qdepth : QDEPTH);
+    var blunder = (opts && typeof opts.blunder === 'number') ? opts.blunder : (set.blunder || 0);
+
+    // なにも見ないで指す回。読む前に決めるので、ここでは時間も使わない
+    // （待ち時間は画面側が揃えるので、速く返っても間は変わらない）
+    if (blunder > 0 && (rng || Math.random)() < blunder) {
+      return { move: pick(root, rng), depth: 0, score: 0, ms: 0,
+               level: (opts && opts.level) || 3, slack: slack, blundered: true };
+    }
 
     var me = pos.turn;
     var t0 = Date.now();
