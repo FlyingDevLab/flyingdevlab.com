@@ -5,9 +5,13 @@
 // レッスンではなく、実際に指して遊ぶ場所。巻（01〜03）とは関係なく、
 // 巻えらびの右の「あそぶ」タブから開く。
 //
-//   1. ふたりで さす        白黒とも自分たちで指す
-//   2. コンピュータと さす     黒を /kids/shared/chess-cpu.js が指す
+//   1. コンピュータと さす     黒を /kids/shared/chess-ai.js が指す
+//   2. ふたりで さす        白黒とも自分たちで指す
 //   3. ならべて あそぶ        好きな駒を並べてから、ふたりか、コンピュータと指す
+//
+//   コンピュータが先頭なのは、ひとりで開くことがいちばん多いため。
+//   ふたりで指すには相手を連れてくる必要があり、並べて遊ぶには
+//   何を並べるか決める必要がある。どちらも、開いてすぐには始められない。
 //
 // 盤を描くのは /kids/shared/chess-lessons.js、
 // ルールの判定は /kids/shared/chess.js。ここには仕組みを書かない。
@@ -19,7 +23,12 @@
 //   （no + 1）に入らないため。
 //
 // ★ 強さを選ぶ画面は無い ★
-//   コンピュータは先を読まない。決まりごとは chess-cpu.js の冒頭に書いた。
+//   指した結果で決まる（chess-lessons.js の moveLevel）。
+//   画面には強さのことを何も出さない。入門の場所なので、
+//   「次は何段目か」が目的になってしまうのを避けている。
+//
+//   相手の中身は /kids/shared/chess-ai.js の冒頭に書いた。
+//   1巻のおまけが使う chess-cpu.js とは別物で、あちらは先を読まない。
 // ================================================================
 
 window.CHESS_LESSONS = {
@@ -47,6 +56,27 @@ window.CHESS_LESSONS = {
 
     {
       chapter: 0,
+      en: 'Play the computer',
+      ja: 'コンピュータと さす',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      body: [
+        { t: 'p', en: 'You play White and the computer plays Black. All the rules are on.',
+          ja: '白が きみで、黒は コンピュータが さす。1巻で ならった きまりは ぜんぶ きいて いる。' },
+        { t: 'p', en: 'Black looks ahead a little. It takes a piece nobody protects, and it takes back when it can.',
+          ja: '黒は 少し さきを 読んで さして くる。まもられて いない こまは とりに くるし、とられた ときは とりかえせるなら とりかえす。' },
+        { t: 'p', en: 'Checkmate wins. If Black has no move and is not in check, it is a stalemate — a draw.',
+          ja: '黒を 詰ませたら きみの かち。黒が 動けなく なっても チェックされて いなければ ステイルメイトで ひきわけ。' },
+        { t: 'key',
+          en: 'A piece nobody protects can be taken.',
+          ja: 'まもられて いない こまは とられる。' }
+      ],
+      task: { en: 'White moves first.',
+              ja: '白から どうぞ。' },
+      goal: { kind: 'free', cpu: true }
+    },
+
+    {
+      chapter: 0,
       en: 'Two players',
       ja: 'ふたりで さす',
       fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -66,27 +96,6 @@ window.CHESS_LESSONS = {
       task: { en: 'White moves first.',
               ja: '白から どうぞ。' },
       goal: { kind: 'free' }
-    },
-
-    {
-      chapter: 0,
-      en: 'Play the computer',
-      ja: 'コンピュータと さす',
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-      body: [
-        { t: 'p', en: 'You play White and the computer plays Black. All the rules are on.',
-          ja: '白が きみで、黒は コンピュータが さす。1巻で ならった きまりは ぜんぶ きいて いる。' },
-        { t: 'p', en: 'Black looks ahead a little. It takes a piece nobody protects, and it takes back when it can.',
-          ja: '黒は 少し さきを 読んで さして くる。まもられて いない こまは とりに くるし、とられた ときは とりかえせるなら とりかえす。' },
-        { t: 'p', en: 'Checkmate wins. If Black has no move and is not in check, it is a stalemate — a draw.',
-          ja: '黒を 詰ませたら きみの かち。黒が 動けなく なっても チェックされて いなければ ステイルメイトで ひきわけ。' },
-        { t: 'key',
-          en: 'A piece nobody protects can be taken.',
-          ja: 'まもられて いない こまは とられる。' }
-      ],
-      task: { en: 'White moves first.',
-              ja: '白から どうぞ。' },
-      goal: { kind: 'free', cpu: true }
     },
 
     {
