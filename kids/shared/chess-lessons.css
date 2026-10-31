@@ -126,6 +126,7 @@
   --goal:      #9a6bc7;   /* 課題の目印 */
   --ask:       #2f9e8f;   /* 「このマスを押して」と聞かれているとき */
   --warn:      #c0432c;   /* チェックされているキング・やってはいけない手 */
+  --last:      #c8a84b;   /* 直前に指した手。混ぜた結果は .sq.last に直書き */
   --ok:        #3f8f3a;   /* できた */
 }
 
@@ -662,6 +663,24 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
 
 .sq.check { box-shadow: inset 0 0 0 4px var(--warn); }
 
+/* 直前に指した手。出発したマスと、着いたマスの両方を染める。
+   これが無いと、黒が動いても盤に跡が残らず、
+   何が変わったのかを自分で探すことになる（とくに相手が指す回）。
+
+   ★ 枠ではなく、下に敷く色にしてある ★
+     枠はすでに「持ち上げている駒（pick）」「行ける先（goto）」
+     「チェック（check）」「ヒント（hint）」が使っている。
+     ここに5本目の枠を足すと、どの枠が何なのか見分けが付かない。
+     色を敷くだけなら、ほかの印と重なっても両方読める。
+
+   白マスと黒マスで別の色を直に書いているのは、同じ色を重ねると
+   黒マスの上でほとんど見えないため。どちらも --last（#c8a84b）を
+   そのマスの色に混ぜた値で、白マスは 38%、黒マスは 32% 混ぜてある。
+   計算で書く手もあるが、対応していないブラウザで印ごと消えるより、
+   混ぜた結果をそのまま置くほうがこのページには合う。 */
+.sq.last      { background: #e1c88d; }
+.sq.last.dark { background: #b88c4e; }
+
 /* ヒント。動かす駒だけを光らせる。行き先は出さない。
    .ask と同じ脈打ち方にしているのは、どちらも「ここを見て」の合図だから */
 .sq.hint::before {
@@ -910,6 +929,21 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
   font-size: 12px;
 }
 .btn.small .ja { display: inline; margin-left: 4px; font-size: 10px; }
+
+/* 音を切っているときのボタン。色を抜いて、入っていないことを見せる。
+   消えてしまうと「音があること」ごと分からなくなるので、残したまま薄くする */
+.btn.small.off { opacity: 0.55; text-decoration: line-through; }
+
+/* いまの つよさ。選ぶものではないので、ボタンには見せない。
+   盤のすぐ上に小さく置く（「あそぶ」のページだけに出る） */
+.level {
+  margin: 0 0 6px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.level .ja { margin-left: 6px; color: var(--text); }
 
 
 /* ----------------------------------------------------------------

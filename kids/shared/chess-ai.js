@@ -67,9 +67,64 @@
 
   var C = root.Chess;
 
-  // 考えてよい上限。ここを超えた深さには進まない（上の★を読むこと）
-  var BUDGET = 600;
-  var MAX_DEPTH = 5;
+  // ★ 深さは固定。端末の速さで強さを変えない ★
+  //   時間だけで区切ると、速い端末ほど深く読んで強くなる。
+  //   同じページなのに、安い端末の子と新しいパソコンの子で
+  //   相手の強さが変わることになる。それは公平でないし、
+  //   こちらが「どのくらいの強さか」を決められなくなる。
+  //   だから読む深さはここで決め打ちにし、どの端末でも同じにする。
+  //
+  //   BUDGET は強さのためではなく、遅い端末を守るための安全弁である。
+  //   探索のあいだページは固まる（JavaScript は1本道なので指も
+  //   スクロールも効かない）ので、ここを超えたら浅い答えで妥協する。
+  //   速い端末では一度も効かない。
+  var DEPTH = 3;
+  var BUDGET = 900;
+
+  // ★ 読む深さの絶対の上限 ★
+  //   はしご（LEVELS）の最上段とちょうど同じ。
+  //   opts で深さを直に渡しても、ここを超えては読まない。
+  //
+  //   3 で止めてあるのは、4 がどの端末でも1手の待ち（1.5秒）に
+  //   収まらないためである。1段あげるごとに約7倍かかる（実測）。
+  //     PC        深さ3 =  409ms   深さ4 =  2724ms
+  //     中位スマホ 深さ3 = 1895ms   深さ4 = 11117ms
+  //     安い端末   深さ3 = 4135ms   深さ4 = 24217ms
+  //
+  //   さらに先は、端末が速くなっても届かない。同じ7倍を積むと
+  //   深さ10はこの作りだとPCでも1手に数日かかる計算になる。
+  //   Stockfish が深さ20を1秒で読めるのは速いからではなく、
+  //   作りがまるきり別物だから（ビットボード・置換表・枝刈り）で、
+  //   ハードの性能では埋まらない差である。
+  //
+  //   ここを上げるときは、上の数字を測り直してからにすること。
+  //   上げた分はそのまま「盤が固まる時間」になる。
+  var MAX_DEPTH = 3;
+
+  // ★ 強さのはしご ★
+  //   勝ったら1つ上がり、負けたら下がる（上げ下げを決めるのは画面側）。
+  //   段を深さだけで作ると1・2・3の3段しか作れないので、
+  //   「わざとの雑さ」（slack）と組み合わせて5段にしている。
+  //
+  //   slack は「いちばん良い手から、これだけ落ちる手までは同じとみなす」幅。
+  //   広いほど、読めてはいるのに雑な手を選ぶ。100 はポーン1枚ぶん。
+  //   深さを下げるのとちがって、こちらは読む時間が増えない。
+  //
+  //   5段目（深さ3）に届くのは速い端末だけで、遅い端末では
+  //   安全弁（BUDGET）が働いて深さ2の答えが使われる。
+  //   待ち時間はどの端末でも変わらないので、そこは画面側で揃えている。
+  var LEVELS = [
+    { depth: 1, slack: 300 },   // 1段 かなり雑。取れるものは取るが、ねらいは無い
+    { depth: 1, slack: 100 },   // 2段
+    { depth: 2, slack:  50 },   // 3段 相手の返しが見える（はじめはここ）
+    { depth: 2, slack:   0 },   // 4段
+    { depth: 3, slack:   0 }    // 5段 2手の組み合わせが見える
+  ];
+
+  // 取り合いを何手まで追うか（静止探索の底）。
+  // 4 にしてあるのは、取り・取り返し・また取り・取り返しで
+  // たいていの取り合いが終わるため
+  var QDEPTH = 4;
 
   // 駒のねうち。1ポーン＝100 で数える。
   // chess.js の VALUE（1・3・5・9）と同じ比だが、こちらは
@@ -137,10 +192,6 @@
 
   var MATE = 100000;
 
-  // これ以内の差は「同じくらい良い手」とみなす。5分の1ポーン。
-  // 毎局おなじ展開にしないために、この中から乱数で選ぶ。
-  // ゆるめると、見えていて損な手まで混ざる
-  var TIE = 20;
 
   // 局面の点数。me から見た点。me が良ければ正。
   //
@@ -164,8 +215,14 @@
 
   // 取る手だけを、読み切るまで続ける（静止探索）。
   // 深さで打ち切ると取り返しが見えないので、そこだけ先を見る
-  function quiesce(pos, alpha, beta, me) {
+  function quiesce(pos, alpha, beta, me, left) {
     var stand = evaluate(pos, me);
+    // 取り合いの連鎖にも底を付ける。
+    // 付けないと、盤に取る手が残っているかぎり降り続け、
+    // 深さ3を読むだけでこのマシンで570ms、
+    // 深さ4で3.8秒かかっていた（上限を付けると1桁速くなる）。
+    // 取り合いは普通そんなに続かないので、底で切っても答えは変わらない
+    if (left <= 0) return stand;
     if (pos.turn === me) {
       if (stand >= beta) return beta;
       if (stand > alpha) alpha = stand;
@@ -187,7 +244,7 @@
     caps.sort(function (a, b) { return VALUE[C.typeOf(b.captured)] - VALUE[C.typeOf(a.captured)]; });
 
     for (var k = 0; k < caps.length; k++) {
-      var sc = quiesce(C.step(pos, caps[k]), alpha, beta, me);
+      var sc = quiesce(C.step(pos, caps[k]), alpha, beta, me, left - 1);
       if (pos.turn === me) {
         if (sc >= beta) return beta;
         if (sc > alpha) alpha = sc;
@@ -217,7 +274,7 @@
       //   深く読めるようにした途端に効いてくる種類の間違いである。
       return pos.turn === me ? -(MATE + depth) : (MATE + depth);
     }
-    if (depth <= 0) return quiesce(pos, alpha, beta, me);
+    if (depth <= 0) return quiesce(pos, alpha, beta, me, QDEPTH);
 
     // 読む順。取る手を先に見ると、早く枝を落とせる
     moves.sort(function (a, b) {
@@ -252,22 +309,30 @@
   //   lastMove  使わない。chess-cpu.js と呼び方を揃えるためだけに受け取る
   //   rng       検証で差し替えるため
   // 返り値 … { move, depth, score, ms }。合法手が無ければ null
-  function choose(pos, lastMove, rng) {
+  function choose(pos, lastMove, rng, opts) {
     var root = C.legalMoves(pos);
     if (!root.length) return null;
     if (root.length === 1) return { move: root[0], depth: 0, score: 0, ms: 0 };
 
+    // opts で段・深さ・安全弁を差し替えられる。
+    //   level … 1〜5。はしごの段（画面から渡すのはこれだけ）
+    //   depth / slack / budget … 検証と調整のため、直に指定する道
+    var set = LEVELS[Math.min(LEVELS.length, Math.max(1, (opts && opts.level) || 3)) - 1];
+    var maxDepth = Math.min(MAX_DEPTH, (opts && opts.depth) || set.depth || DEPTH);
+    var slack = (opts && typeof opts.slack === 'number') ? opts.slack : set.slack;
+    var budget = (opts && opts.budget) || BUDGET;
+
     var me = pos.turn;
     var t0 = Date.now();
-    var deadline = t0 + BUDGET;
+    var deadline = t0 + budget;
     var bestMove = root[0], bestScore = 0, reached = 0;
 
-    for (var depth = 1; depth <= MAX_DEPTH; depth++) {
+    for (var depth = 1; depth <= maxDepth; depth++) {
       var scored = [], cut = false;
       // ここでも alpha を持ち越す。手ごとに窓を開け直すと、
       // いちばん大事な場所（最初の分かれ道）だけ枝刈りが効かず、
       // 同じ深さを読むのに倍以上の時間がかかる。
-      // 下限を best より TIE だけ低くしてあるので、
+      // 下限を best より slack だけ低くしてあるので、
       // 僅差で並ぶ手の点はそのまま残り、下の tie 選びは変わらない
       var ra = -Infinity;
       for (var i = 0; i < root.length; i++) {
@@ -277,7 +342,7 @@
         // 窓を切った手は「これ以下」としか分からない値が返る。
         // その値が同点の線とちょうど重なると、読み切っていない手が
         // 同点集合に紛れ込む。1だけ下げて、必ず線の外に落とす
-        if (sc - TIE - 1 > ra) ra = sc - TIE - 1;
+        if (sc - slack - 1 > ra) ra = sc - slack - 1;
       }
       // 時間切れで読み終わらなかった深さは捨てる。
       // 途中までの並びで決めると、まだ読んでいない手が
@@ -286,27 +351,27 @@
 
       scored.sort(function (a, b) { return b.score - a.score; });
       bestScore = scored[0].score;
-      // 僅差は同じ価値とみなし、その中から選ぶ（TIE の説明は上）
+      // 僅差は同じ価値とみなし、その中から選ぶ（slack の説明は LEVELS）
       var tie = [];
       for (var k = 0; k < scored.length; k++) {
-        if (scored[k].score >= bestScore - TIE) tie.push(scored[k].move);
+        if (scored[k].score >= bestScore - slack) tie.push(scored[k].move);
       }
       bestMove = pick(tie, rng);
       reached = depth;
 
       // 詰みが見えたら、それ以上depthを伸ばしても意味がない
       if (bestScore >= MATE - 100) break;
-      // 次の深さに入るだけの時間が残っていない。
-      // 入っても読み終わらず捨てることになるので、ここで止める
-      if (Date.now() - t0 > BUDGET / 3) break;
     }
 
-    return { move: bestMove, depth: reached, score: bestScore, ms: Date.now() - t0 };
+    return { move: bestMove, depth: reached, score: bestScore, ms: Date.now() - t0,
+             level: (opts && opts.level) || 3, slack: slack };
   }
 
   root.ChessAi = {
     choose: choose,
     evaluate: evaluate,
+    LEVELS: LEVELS,
+    MAX_DEPTH: MAX_DEPTH,
     BUDGET: BUDGET
   };
 

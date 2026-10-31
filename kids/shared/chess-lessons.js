@@ -92,12 +92,14 @@
     retry:      el('retry'),
     advance:    el('advance'),
     message:    el('message'),
+    level:      el('level'),
     undo:       el('undo'),
     forward:    el('forward'),
     reset:      el('reset'),
     record:     el('recordText'),
     recordHint: el('recordHint'),
     copy:       el('copy'),
+    sound:      el('sound'),
     prev:       el('prev'),
     next:       el('next')
   };
@@ -120,6 +122,27 @@
     }
   }
   function clearSay() { say('', ''); }
+
+  // 指した手の音。取ったか、チェックになったかで鳴らし分ける。
+  //
+  // ★ 音でしか分からないことを作らない ★
+  //   指した手は盤の印と棋譜に必ず出る。音はその控えでしかない。
+  //   耳が使えなくても、音を消していても、失われる情報は無い。
+  //   鳴らす仕掛けそのものは chess-sound.js にある（読み込んでいない
+  //   ページでは、ここが黙って何もしない）。
+  function sayMoveSound(move, after) {
+    var snd = window.ChessSound;
+    if (!snd) return;
+    if (C.status(after).over) return snd.over();
+    if (C.inCheck(after, after.turn)) return snd.check();
+    if (move && move.captured) return snd.capture();
+    snd.move();
+  }
+
+  // 駒を1つ置いた・取り除いたときの音（並べる回と ならべて あそぶ）
+  function sayPlaceSound() {
+    if (window.ChessSound) window.ChessSound.move();
+  }
 
   // 英語の見出し＋日本語の添え書き。<i class="ja"> を使う形に揃える
   function bi(node, en, ja) {
@@ -174,6 +197,71 @@
 
   var seen = readSeen();
 
+
+  // ----------------------------------------------------------------
+  // 02b. つよさの段（「あそぶ」でコンピュータと指すとき）
+  // ----------------------------------------------------------------
+  //
+  // 勝ったら1つ上がり、負けたら2つ下がる（下限1・上限5）。
+  // 強さを選ぶ画面は置いていない。選ばせると、こどもは自分に
+  // 合う段を知らないまま選ぶことになる。指した結果のほうが正しい。
+  //
+  // ★ 負けを −2 にしてある理由 ★
+  //   勝ち +1・負け −2 だと、実力よりすこし下に落ち着く。
+  //   子ども向けにはその偏りが良い。勝てない相手と続けて指しても
+  //   覚えることは増えないが、たまに勝てる相手となら続く。
+  //   1つずつ上下させると、実力が拮抗したところで勝ったり負けたりが
+  //   続き、ゆるい局がいつまでも来ない。
+  //
+  // ★ 消えても困らない ★
+  //   localStorage が使えない環境では、毎回まんなか（3段）から始まる。
+  //   段が巻の進み方に影響することは無い。
+  var LEVEL_KEY = 'fdl_chess_level';
+  var LEVEL_MIN = 1, LEVEL_MAX = 5, LEVEL_START = 3;
+
+  function readLevel() {
+    try {
+      var n = parseInt(window.localStorage.getItem(LEVEL_KEY), 10);
+      if (n >= LEVEL_MIN && n <= LEVEL_MAX) return n;
+    } catch (e) { /* 使えないだけ */ }
+    return LEVEL_START;
+  }
+  function writeLevel(n) {
+    try { window.localStorage.setItem(LEVEL_KEY, String(n)); } catch (e) { /* 使えないだけ */ }
+  }
+
+  var level = readLevel();
+
+  // 決着がついたときに呼ぶ。winner は 'w'（こちらの勝ち）/'b'/null
+  function moveLevel(winner) {
+    if (!window.ChessAi) return;          // 決まりごとの相手に段は無い
+    var was = level;
+    if (winner === 'w') level = Math.min(LEVEL_MAX, level + 1);
+    else if (winner === 'b') level = Math.max(LEVEL_MIN, level - 2);
+    if (level === was) return;
+    writeLevel(level);
+    paintLevel();
+  }
+
+  // 音の入り切り。読み込んでいないページではボタンごと隠す
+  function paintSound() {
+    if (!ui.sound) return;
+    if (!window.ChessSound) { ui.sound.hidden = true; return; }
+    var on = window.ChessSound.isOn();
+    ui.sound.classList.toggle('off', !on);
+    ui.sound.setAttribute('aria-pressed', on ? 'true' : 'false');
+    ui.sound.setAttribute('aria-label',
+      on ? 'Turn the piece sound off / こまの おとを けす'
+         : 'Turn the piece sound on / こまの おとを つける');
+  }
+
+  function paintLevel() {
+    if (!ui.level) return;
+    ui.level.hidden = !window.ChessAi;
+    if (!window.ChessAi) return;
+    bi(ui.level, 'Strength ' + level + ' / ' + LEVEL_MAX, 'つよさ ' + level + ' / ' + LEVEL_MAX);
+  }
+
   function markSeen(i) {
     if (seen[i]) return;
     seen[i] = 1;
@@ -218,6 +306,8 @@
     arrFen:  '',     // ならべて あそぶ：並べ終えた盤（やりなおすと、ここへ戻る）
     keepFen: '',     // やりなおしで並べ直しに戻るときだけ入る
     ansAt:   0,      // win.answers の何手めまで進んだか（偶数=白の番、奇数=黒が自動で指す番）
+    last:    null,   // 直前に指した手 { from, to }。盤に印を出すため
+    scored:  false,  // この局の決着で、つよさの段をもう動かしたか
     waitBlack: false,// 黒が逃げるのを見せている最中。そのあいだ盤は触れない
     timer:   0,      // 黒を動かすまでの待ち。レッスンを変えたら必ず止める
     done:    false
@@ -497,7 +587,8 @@
         (marks.goal[i] ? ' goal' : '') +
         (marks.ask[i] ? ' ask' : '') +
         (marks.check === i ? ' check' : '') +
-        (marks.hint === i ? ' hint' : '');
+        (marks.hint === i ? ' hint' : '') +
+        (marks.last[i] ? ' last' : '');
 
       // 押せるかどうか。
       // 追いかけ回は「できた」のあとも触れたままにする。
@@ -514,7 +605,11 @@
 
   // 印を付けるマスを集める。able は movesByFrom が集めた「指せる手」
   function markSet(able) {
-    var out = { pick: -1, goto: {}, goal: {}, ask: {}, check: -1, hint: hintFrom() };
+    var out = { pick: -1, goto: {}, goal: {}, ask: {}, check: -1, hint: hintFrom(), last: {} };
+    // 直前に指した手の、出発マスと行き先。
+    // これが無いと、黒が動いても盤に跡が残らず、
+    // 何が変わったのかを自分で探すことになる
+    if (S.last) { out.last[S.last.from] = 1; out.last[S.last.to] = 1; }
     var kind = goal().kind;
     var pos = S.pos;
 
@@ -719,6 +814,7 @@
       b[i] = '';
       paintSandboxPalette();
       paint();
+      sayPlaceSound();
       clearSay();
       return;
     }
@@ -753,6 +849,7 @@
     b[i] = S.held;
     paintSandboxPalette();
     paint();
+    sayPlaceSound();
     clearSay();
   }
 
@@ -855,6 +952,7 @@
       delete S.placed[i];
       paintPalette();
       paint();
+      sayPlaceSound();
       clearSay();
       return;
     }
@@ -874,6 +972,7 @@
     S.placed[i] = 1;
     paintPalette();
     paint();
+    sayPlaceSound();
 
     var want = C.fromFen(goal().want);
     var filled = Object.keys(S.placed).length;
@@ -1056,13 +1155,15 @@
     }
 
     var san = C.toSan(pos, move);
-    S.past.push({ pos: pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
+    S.past.push({ pos: pos, record: S.record.slice(), lineAt: S.lineAt,
+                  chased: S.chased, ansAt: S.ansAt, last: S.last });
     S.record.push({ san: san, color: pos.turn });
 
     var next = C.apply(pos, move);
     // 相手が動かないレッスンは、手番を自分に戻す
     if (lesson().still) next.turn = pos.turn;
     S.pos = next;
+    S.last = { from: move.from, to: move.to };
     S.pick = -1;
     S.waiting = null;
     ui.promo.hidden = true;
@@ -1072,6 +1173,7 @@
     writeRecord();
     paint();
     updateButtons();
+    sayMoveSound(move, S.pos);
     // 前の一言（「なる こまを えらんで」など）をここで消す。
     // judge が新しい一言を入れるので、入れ替わりになる
     clearSay();
@@ -1153,11 +1255,28 @@
     return best;
   }
 
+  // 黒を指す仕掛け。ページが読み込んだものを使う。
+  //
+  //   chess-ai.js を読み込んでいる    → 先を読む相手（「あそぶ」タブ）
+  //   chess-cpu.js だけ読み込んでいる → 決まりごとの相手（1巻のおまけ）
+  //
+  // どちらを使うかは index.html の <script> が決める。
+  // ここに「どの巻はどちら」という表を持たないのは、表を持つと
+  // 巻を足すたびに2か所を直すことになるため。
+  //
+  // どちらも黒専用のつもりで呼ぶ。chess-cpu.js は中で黒を直書きしており
+  // （legalMoves(pos, 'b')）、白を持たせると白の手番で黒の手を返す。
+  // 「あそぶ」も巻のおまけも、自分が白と決まっているので困らない。
+  // 黒を持って指す回を作るときは、まずあちらを直すこと。
+  function blackBrain() {
+    return window.ChessAi || window.ChessCpu || null;
+  }
+
   // おまけで「コンピュータと さす」を選んでいるか。
   // 選びは goal.sets に cpu: true を付けて持つ（追いかけ回の駒の選びと同じ置き場）
   function cpuOn() {
     var g = goal();
-    if (!window.ChessCpu) return false;
+    if (!blackBrain()) return false;
     // 並べて あそぶ：並べ終えて指しているあいだだけ
     if (g.kind === 'sandbox') return S.phase === 'play' && S.vsCpu;
     if (g.kind !== 'free') return false;
@@ -1165,9 +1284,49 @@
     return !!(g.cpu || (set && set.cpu));
   }
 
+  // 黒が指すまでの間。
+  //
+  // ★ 「待つ」と「固まる」は別のものである ★
+  //   先を読む相手は、考えているあいだページが止まる（JavaScript は
+  //   1本道なので、指もスクロールも効かない）。待ち時間をぜんぶ
+  //   探索に使うと「間を置いている」ではなく「固まっている」になる。
+  //
+  //   そこで、考えた時間を測って、残りを待つ形にしてある。
+  //     1. 自分の手が盤に乗ったのを見せる（LEAD）
+  //     2. 考える（止まる。chess-ai.js の安全弁が上限）
+  //     3. 1.5秒になるまで待つ（止まらない）
+  //     4. 指す
+  //   どの端末でも合計は 1.5秒で揃い、固まるのは 2 の分だけになる。
+  //
+  // ★ なぜ 1.5秒も置くのか ★
+  //   速すぎると、黒が動いたのかどうかが分からない。
+  //   盤は一瞬で書き換わるので、見ていないと何が起きたか追えない。
+  //   直前の手に印を付けた（markSet の last）のも同じ理由で、
+  //   時間と印と音の3つで「いま黒が指した」を伝えている。
+  var BLACK_PAUSE = 420;    // 決まった返し・逃げるだけの回。考えないので短い
+  var CPU_TOTAL   = 1500;   // 考える相手のときの、合計の間
+  var CPU_LEAD    = 150;    // 考え始める前に、自分の手を見せる間
+  var CPU_MIN     = 250;    // 考え終わってから指すまでの、最低限の間
+
   // 黒を動かして見せる。白の手が盤に乗ってから少し置く。
   // すぐ動かすと、自分の手と相手の手が同時に起きたように見える
   // lastMove … 白が直前に指した手。CPU の「取り返す」が使う
+  // 黒が1手指す。3つの道（決まった返し・コンピュータ・逃げる）が
+  // 同じことをしていたので1つにまとめた。
+  // 棋譜に積み、盤を進め、直前の手の印を付け、音を鳴らすところまで。
+  function playBlack(move) {
+    var san = C.toSan(S.pos, move);
+    S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt,
+                  chased: S.chased, ansAt: S.ansAt, last: S.last });
+    S.record.push({ san: san, color: S.pos.turn });
+    S.pos = C.apply(S.pos, move);
+    S.last = { from: move.from, to: move.to };
+    writeRecord();
+    paint();
+    updateButtons();
+    sayMoveSound(move, S.pos);
+  }
+
   function letBlackRun(lastMove) {
     S.waitBlack = true;
     paint();
@@ -1176,6 +1335,8 @@
     // （レッスン18を開いた瞬間に白が1手動く、という壊れ方をしていた）
     var mine = S.index;
     var setWas = S.setAt;
+    // 考える相手のときだけ先に短く置く。考えた時間は向こうで測って埋める
+    var thinks = (goal().kind === 'free' || goal().kind === 'sandbox') && cpuOn();
     S.timer = window.setTimeout(function () {
       S.timer = 0;
       S.waitBlack = false;
@@ -1186,35 +1347,38 @@
       if (goal().kind === 'moves' && sw.answers) {
         var sm = C.parseSan(S.pos, sw.answers[S.ansAt]);
         if (!sm) { paint(); return; }
-        var ssan = C.toSan(S.pos, sm);
-        S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
-        S.record.push({ san: ssan, color: S.pos.turn });
-        S.pos = C.apply(S.pos, sm);
+        playBlack(sm);
         sayNote(sw, S.ansAt);
         S.ansAt++;
-        writeRecord();
-        paint();
-        updateButtons();
         return;
       }
 
-      // おまけ：CPU が指す
+      // おまけ・あそぶ：コンピュータが指す
       if (goal().kind === 'free' || goal().kind === 'sandbox') {
         // 待っているあいだに「ふたりで さす」へ切り替えられたら指さない。
         // 抜けるときも必ず塗り直す。waitBlack のあいだ盤は
         // 64マスすべてを押せなくしているので、塗り直さずに抜けると
         // 黒が指しも しないまま、盤を触れない状態で残る
         if (S.setAt !== setWas || !cpuOn()) { paint(); return; }
-        var r = window.ChessCpu.choose(S.pos, lastMove);
+
+        var brain = blackBrain();
+        var t0 = Date.now();
+        // 段は ChessAi だけが見る。ChessCpu は受け取っても使わない
+        var r = brain.choose(S.pos, lastMove, null, { level: level });   // ここだけ止まる
+        var spent = Date.now() - t0;
         if (!r) { paint(); return reportFree(S.pos); }
-        var csan = C.toSan(S.pos, r.move);
-        S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
-        S.record.push({ san: csan, color: S.pos.turn });
-        S.pos = C.apply(S.pos, r.move);
-        writeRecord();
-        paint();
-        updateButtons();
-        reportFree(S.pos);
+
+        // 合計が CPU_TOTAL になるように、残りを待ってから指す。
+        // 考えるのが速い端末ほど長く待つ（強さではなく間を揃える）
+        var rest = Math.max(CPU_MIN, CPU_TOTAL - CPU_LEAD - spent);
+        S.waitBlack = true;
+        S.timer = window.setTimeout(function () {
+          S.timer = 0;
+          S.waitBlack = false;
+          if (S.index !== mine || S.setAt !== setWas || !cpuOn()) { paint(); return; }
+          playBlack(r.move);
+          reportFree(S.pos);
+        }, rest);
         return;
       }
 
@@ -1223,15 +1387,9 @@
       if (goal().kind !== 'chase') { paint(); return; }
       var m = fleeMove(S.pos);
       if (!m) { paint(); return chaseReport(); }
-      var san = C.toSan(S.pos, m);
-      S.past.push({ pos: S.pos, record: S.record.slice(), lineAt: S.lineAt, chased: S.chased, ansAt: S.ansAt });
-      S.record.push({ san: san, color: S.pos.turn });
-      S.pos = C.apply(S.pos, m);
-      writeRecord();
-      paint();
-      updateButtons();
+      playBlack(m);
       chaseReport();
-    }, 420);
+    }, thinks ? CPU_LEAD : BLACK_PAUSE);
   }
 
   // 何手さしたか、まだ詰んでいないことを伝える
@@ -1294,6 +1452,12 @@
   // おまけ：盤の状態を一言で伝える（決着・チェック・ひきわけ）
   function reportFree(pos) {
     var st = C.status(pos);
+    // 決着がついた局だけ、つよさの段を上げ下げする。
+    // 同じ局で二度動かさないよう、決着を見たことを覚えておく
+    if (st.over && cpuOn() && !S.scored) {
+      S.scored = true;
+      moveLevel(st.winner);
+    }
     if (st.kind === 'checkmate') {
       say('Checkmate. ' + (st.winner === 'w' ? 'White' : 'Black') + ' wins.',
           'チェックメイト。' + (st.winner === 'w' ? '白' : '黒') + 'の かち。', 'good');
@@ -1472,7 +1636,7 @@
       cur = C.apply(cur, m);
       list.push(cur);
     });
-    S.replay = { list: list, sans: r.sans, at: 0 };
+    S.replay = { list: list, sans: r.sans, moves: r.moves, at: 0 };
     S.pos = list[0];
   }
 
@@ -1482,6 +1646,10 @@
     if (at < 0 || at >= rp.list.length) return;
     rp.at = at;
     S.pos = rp.list[at];
+    // 送った先の1手に印を付ける。頭に戻したときは印を消す
+    S.last = (at > 0 && rp.moves[at - 1])
+      ? { from: rp.moves[at - 1].from, to: rp.moves[at - 1].to } : null;
+    if (step > 0 && at > 0) sayMoveSound(rp.moves[at - 1], S.pos);
 
     S.record = [];
     for (var i = 0; i < at; i++) {
@@ -1609,6 +1777,7 @@
     S.lineAt = back.lineAt;
     if (typeof back.chased === 'number') S.chased = back.chased;
     if (typeof back.ansAt === 'number') S.ansAt = back.ansAt;
+    S.last = back.last || null;
     S.pick = -1;
     S.waiting = null;
     S.done = false;
@@ -1644,6 +1813,8 @@
     S.chased = 0;
     S.ansAt = 0;
     S.waitBlack = false;
+    S.last = null;
+    S.scored = false;
     S.done = false;
 
     // 並べて あそぶ：いつも並べる段階から始める。
@@ -1660,6 +1831,7 @@
     if (kind === 'replay') buildReplay();
     paintSets();
     paintPalette();
+    paintLevel();
 
     bi(ui.task, les.task.en, les.task.ja);
     writeRecord();
@@ -1845,6 +2017,12 @@
       restart();
     });
     ui.copy.addEventListener('click', copyRecord);
+    paintSound();
+    if (ui.sound) ui.sound.addEventListener('click', function () {
+      if (!window.ChessSound) return;
+      window.ChessSound.set(!window.ChessSound.isOn());
+      paintSound();
+    });
     if (ui.hint) ui.hint.addEventListener('click', showHint);
     ui.retry.addEventListener('click', function () { ui.done.hidden = true; restart(); });
     ui.advance.addEventListener('click', function () {

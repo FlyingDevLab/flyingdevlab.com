@@ -200,6 +200,11 @@
        中身が空でも場所を取ったままにしている。理由は川渡りと同じ2つ。
          ・出たり消えたりで下のボタンが動くと、押そうとした指が外れる
          ・読み上げの live 領域は、隠すと変化が伝わらなくなる -->
+  <!-- いまの つよさ。選ばせるのではなく、いまどこに居るかを見せるだけ。
+       勝つと1つ上がり、負けると2つ下がる（chess-lessons.js の moveLevel）。
+       「コンピュータと さす」ページだけに置く。巻のページには段が無い -->
+  <p class="level" id="level" hidden></p>
+
   <p class="message" id="message" role="status" aria-live="polite"></p>
 
   <!-- ===== できたときの知らせ =====
@@ -242,6 +247,10 @@
     </button>
     <button class="btn" id="reset" type="button" aria-label="Start this mode over / この モードを やりなおす">
       Reset<i class="ja" lang="ja">やりなおす</i>
+    </button>
+    <button class="btn small" id="sound" type="button" aria-pressed="true"
+            aria-label="Turn the piece sound off / こまの おとを けす">
+      <span aria-hidden="true">♪</span> Sound<i class="ja" lang="ja">おと</i>
     </button>
   </div>
 
@@ -288,7 +297,10 @@
 </main>
 
 <script src="/kids/shared/chess.js"></script>
-<script src="/kids/shared/chess-cpu.js"></script>
+<script src="/kids/shared/chess-sound.js"></script>
+<!-- 先を読む相手。これを読み込んだページだけが、考える相手と指す。
+     巻のページは読み込まないので、1巻のおまけは決まりごとの相手のまま -->
+<script src="/kids/shared/chess-ai.js"></script>
 <script src="lessons.js"></script>
 <script src="/kids/shared/chess-lessons.js"></script>
 </body>
