@@ -3,8 +3,8 @@
 // ================================================================
 //
 // この巻の「文章」と「盤」と「できたの条件」だけを持つ。
-// 盤を描くのは /kids/shared/chess-lessons.js、
-// ルールの判定は /kids/shared/chess.js。
+// 盤を描くのは /kids/chess/shared/chess-lessons.js、
+// ルールの判定は /kids/chess/shared/chess.js。
 //
 // ★ この巻は「いちばん いい手」を当てさせない ★
 //   2巻の問題は駒得か詰みで決まるので、唯一の最善であることを
@@ -30,9 +30,9 @@ window.CHESS_LESSONS = {
   volume: { no: 3, en: 'Openings', ja: 'じょばん' },
   volumes: [
     { no: 1, en: 'Basics',   ja: 'きそ',       url: '/kids/chess/' },
-    { no: 2, en: 'Tactics',  ja: 'せんじゅつ', url: '/kids/chess-tactics/' },
-    { no: 3, en: 'Openings', ja: 'じょばん',   url: '/kids/chess-openings/' },
-    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess-play/', tab: true }
+    { no: 2, en: 'Tactics',  ja: 'せんじゅつ', url: '/kids/chess/tactics/' },
+    { no: 3, en: 'Openings', ja: 'じょばん',   url: '/kids/chess/openings/' },
+    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess/play/', tab: true }
   ],
 
   // ★ named を付けた章は、目次に番号ではなくレッスン名が並ぶ ★

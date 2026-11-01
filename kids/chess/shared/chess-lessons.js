@@ -3,16 +3,16 @@
 // ================================================================
 //
 // 役わり分け。
-//   /kids/shared/chess.js           ルールの判定だけ。DOM を知らない
-//   /kids/shared/chess-lessons.js   盤を描き、押されたのを受け、課題を見る（これ）
-//   /kids/shared/chess-lessons.css  その見た目
+//   /kids/chess/shared/chess.js           ルールの判定だけ。DOM を知らない
+//   /kids/chess/shared/chess-lessons.js   盤を描き、押されたのを受け、課題を見る（これ）
+//   /kids/chess/shared/chess-lessons.css  その見た目
 //   各巻の lessons.js               その巻の文章・盤・できたの条件だけ
 //
 // ★ 巻をまたいで共有している ★
 //   /kids/chess/           01巻 基礎知識
-//   /kids/chess-tactics/   02巻 戦術
-//   /kids/chess-openings/  03巻 序盤
-//   /kids/chess-play/      あそぶ（巻ではなくタブ）
+//   /kids/chess/tactics/   02巻 戦術
+//   /kids/chess/openings/  03巻 序盤
+//   /kids/chess/play/      あそぶ（巻ではなくタブ）
 //
 //   この1本を巻ごとに写すと、片方で見つけた不具合を何度も直すことになり、
 //   1つ直し忘れると「同じ作りなのに巻によって挙動が違う」という、
@@ -41,7 +41,7 @@
 //
 //   自動で相手が動くのは2回だけ。
 //   ・20「ひきわけと とうりょう」 … 黒のキングが逃げる（fleeMove）
-//   ・おまけ「コンピュータと さす」 … 黒が決まりごとで指す（/kids/shared/chess-cpu.js）
+//   ・おまけ「コンピュータと さす」 … 黒が決まりごとで指す（/kids/chess/shared/chess-cpu.js）
 //   どちらも先は読まない。
 //
 //   20のほうは「次に自分が動ける数がいちばん多い所へ逃げる」

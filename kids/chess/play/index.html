@@ -7,66 +7,65 @@
 
   <!--
   ============================================================
-  【設計メモ: チェス 第02巻 戦術 / CHESS vol.02】
+  【設計メモ: チェス あそぶ / CHESS PLAY】
 
   ■ このページの役割
-    駒をねらう形を覚える。フォーク・ピン・スキュア・ディスカバード
-    アタック・ダブルチェック・サクリファイス。
-    1巻（/kids/chess/）で駒の動きと棋譜を覚えたあとの巻である。
+    レッスンではなく、実際に指して遊ぶ場所。
+    巻（01〜03）とは関係なく、いつでも開ける。
+    巻えらびの右に「あそぶ」のタブとして並んでいる。
 
-  ■ 画面の仕組みは1巻と共有している
-    /kids/shared/chess-lessons.js と chess-lessons.css。
-    このページが自分で持っているのは lessons.js だけ。
-    ★ 共有のほうを直すとチェスの全巻が変わる。
+  ■ 中身は3つ
+    1. コンピュータと さす  黒を /kids/chess/shared/chess-ai.js が指す
+    2. ふたりで さす     白黒とも自分たちで指す
+    3. ならべて あそぶ     好きな駒を並べてから、ふたりか、コンピュータと指す
 
-  ■ 1巻との違いは2つ
-    ・答えを教えない課題がある（win.answer）。1巻は「この手を指して」と
-      棋譜を見せる課題だったが、この巻は自分で見つける。
-      ちがう手を指そうとしても盤は動かさず、なぜ違うかだけ返す。
-      その文は「とりかえの損得」から作るので、問題ごとに書いていない。
-    ・ヒントがある。押すと動かす駒だけが光る。行き先は出さない。
-      答えを見せずに、探す範囲だけ狭めるため。
-      1巻は「言われたとおりにする」課題だったので要らなかった。
+    コンピュータを先頭に置いているのは、ひとりで開くことが
+    いちばん多いため。ふたりで指すには相手を連れてくる必要があり、
+    並べて遊ぶには何を並べるか決める必要がある。
+    どちらも、開いてすぐには始められない。
 
-  ■ 問題は全部あつらえたもので、機械で証明してある
-    1問ずつ、次の3つを確かめた。
-      1. その手が唯一の最善であること（2番手と差があること）
-      2. ちゃんと駒得になること（開始時の駒の差からの増分で測る）
-      3. 取ったあとが「詰ませられない駒組み」にならないこと
-    3は盤をすかすかに作ると静かに起きる。クイーンを取っても、
-    残りがキング＋ナイト対キングなら引き分けで、教えたことが嘘になる。
-    （1巻で、その駒組みに詰みの形が1つも無いことを総当たりで確かめてある）
+  ■ 画面の仕組みは各巻と共有している
+    /kids/chess/shared/chess-lessons.js と chess-lessons.css。
+    ルールの判定は /kids/chess/shared/chess.js。ここには書かない。
+    ★ 共有のほうを直すとチェスの全巻とこのページが変わる。
 
-    実戦から採らずに作っているのは、ねらった戦術だけがきれいに出る盤を
-    作れることと、答えが1つに決まることを保証できるため。
-    実戦の棋譜は03巻で、別の役まわりで出す。
+  ■ 相手は少し先を読む
+    中身は /kids/chess/shared/chess-ai.js。このページだけが読み込む。
+    1巻のおまけが使う chess-cpu.js とは別物で、あちらは先を読まない
+    （あれは「まもられて いない こまは とられる」を教える回の
+    練習台なので、強くすると教材として壊れる）。
 
-  ■ 1巻から引き継いでいるもの
-    鍵を掛けない・時間を計らない・英語と日本語を文の種類で分ける・
-    駒はSVG・棋譜はコピーできる・盤の向きは白が下。
-    理由は1巻の設計メモに書いた。
+    強さを選ぶ画面は置いていない。指した結果で決まる。
+    画面には強さのことを何も出さない。ここは入門の場所で、
+    「次は何段目か」が目的になると、勝った嬉しさがそれにすり替わる。
 
-  ■ 外部リンク・外部読み込みは1つもない
-    /kids* の CSP は default-src 'none'。
+  ■ 並べた盤の約束
+    ・キングは1色1つ。ポーンは1段と8段に置けない。ポーンは8つ、駒は16まで
+    ・白の番から始まる。黒が白からチェックされている盤は始められない
+    ・キャスリングは、キングとルークがはじめの場所にいる組だけできる
+    ・棋譜の頭に [FEN "…"] を付ける。並べた盤が分からないと読み返せない
+
+  ■ 鍵を掛けていない・外へ出ない
+    記録はブラウザに置かない（✓ の見た目だけ）。
     .github/workflows/no-external-links.yml が外部URLの混入を検査する。
   ============================================================
   -->
 
   <!-- ===== SEO：ページタイトル・説明 ===== -->
-  <title>Chess vol.2 Tactics / チェス 第2巻 せんじゅつ – Forks, Pins and Skewers</title>
-  <meta name="description" content="Learn chess tactics you can try on the board: forks, pins, skewers, discovered attacks, double check and sacrifices. Every puzzle is machine-checked to have one answer. チェスの戦術を盤で試しながら覚える。フォーク・ピン・スキュア・ディスカバードアタック。広告なし・登録なし・外部送信なし。">
+  <title>Chess Play / チェス あそぶ – Play with a Friend or the Computer</title>
+  <meta name="description" content="Play chess with a friend on one screen, play the computer, or set up your own pieces first. チェスを、ともだちと、コンピュータと、好きな駒を並べて遊ぶ。広告なし・登録なし・外部送信なし。">
 
   <!-- ===== OGP：SNS シェア用メタタグ ===== -->
   <meta property="og:type"        content="website">
-  <meta property="og:title"       content="Chess vol.2 Tactics / チェス 第2巻 せんじゅつ">
-  <meta property="og:description" content="Forks, pins, skewers and sacrifices, as puzzles you play. フォーク・ピン・スキュア・捨て駒を、盤で解きながら。">
-  <meta property="og:url"         content="https://flyingdevlab.com/kids/chess-tactics/">
+  <meta property="og:title"       content="Chess Play / チェス あそぶ">
+  <meta property="og:description" content="Play with a friend, play the computer, or set up your own pieces. ともだちと、コンピュータと、好きな駒を並べて。">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/chess/play/">
   <meta property="og:site_name"   content="Flying Dev Lab">
   <meta name="twitter:card"       content="summary">
-  <meta name="twitter:title"      content="Chess vol.2 Tactics / チェス 第2巻 せんじゅつ">
-  <meta name="twitter:description" content="Forks, pins, skewers and sacrifices. / フォーク・ピン・スキュア・捨て駒。">
+  <meta name="twitter:title"      content="Chess Play / チェス あそぶ">
+  <meta name="twitter:description" content="Play with a friend or the computer. / ともだちと、コンピュータと。">
 
-  <link rel="stylesheet" href="/kids/shared/chess-lessons.css">
+  <link rel="stylesheet" href="/kids/chess/shared/chess-lessons.css">
 </head>
 <body>
 
@@ -140,24 +139,24 @@
 
   <!-- ===== ヘッダー ===== -->
   <header class="site-header" role="banner">
-    <h1 class="site-title">CHESS<span class="title-accent">vol.2</span></h1>
+    <h1 class="site-title">CHESS<span class="title-accent">play</span></h1>
     <p class="site-tagline">
-      How to spot the moves that win material
-      <span class="ja" lang="ja">こまを ねらう かたちを 見つける</span>
+      Play a real game
+      <span class="ja" lang="ja">じっさいに さして あそぶ</span>
     </p>
   </header>
 
   <!-- ===== 巻えらび =====
-       中身は /kids/shared/chess-lessons.js が lessons.js の volumes から作る。
+       中身は /kids/chess/shared/chess-lessons.js が lessons.js の volumes から作る。
        ハブのカードを1枚に保つため、巻はここで選ぶ。 -->
   <nav class="volumes" id="volumes" aria-label="Volumes / かん"></nav>
 
   <!-- ===== 目次 =====
-       中身は共有の /kids/shared/chess-lessons.js が lessons.js から作る。
-       19レッスン全部が最初から押せる。鍵は無い。
+       中身は共有の /kids/chess/shared/chess-lessons.js が lessons.js から作る。
+       3つ全部が最初から押せる。鍵は無い。
        名前と番号を HTML と JS の2か所に持たないために、
        出どころはレッスン表（lessons.js）だけにしている。 -->
-  <nav class="toc" id="toc" aria-label="Lessons / レッスンいちらん"></nav>
+  <nav class="toc" id="toc" aria-label="Modes / モードえらび"></nav>
 
   <!-- ===== いま開いているレッスン =====
        見出し・説明・やることは共有の chess-lessons.js が入れる。 -->
@@ -221,10 +220,9 @@
        あちらは終わった後の盤に見るべきものが残っていない
        （全員が向こう岸にいる・娘が出口にいる）ので、覆って構わない。
 
-       ここは逆で、終わった瞬間の盤がそのレッスンの答えそのものである。
-         ねらった駒を取り終えた形
-         詰みで終わる回は、その詰みの形
-       いちばん見たい瞬間に覆ってしまうことになる。だから下に置く。
+       巻のページは、終わった瞬間の盤がそのレッスンの答えそのものなので
+       上に重ねず、下に置いている。このページは遊ぶ場所で「できた！」は
+       出ないが、置き場所は各巻と揃えてある（共有のスクリプトが同じ要素を探す）。
 
        一言（.message）より後ろに置いているのは読む順のため。
        盤 →「ねらって いる こまを とった」→「できた！」と流れる。
@@ -253,7 +251,7 @@
     <button class="btn" id="forward" type="button" hidden aria-label="One move forward / 1手すすむ">
       Forward<i class="ja" lang="ja">1手すすむ</i> <span aria-hidden="true">→</span>
     </button>
-    <button class="btn" id="reset" type="button" aria-label="Start this lesson over / このレッスンを やりなおす">
+    <button class="btn" id="reset" type="button" aria-label="Start this mode over / この モードを やりなおす">
       Reset<i class="ja" lang="ja">やりなおす</i>
     </button>
     <button class="btn small" id="sound" type="button" aria-pressed="true"
@@ -280,15 +278,11 @@
     </button>
   </section>
 
-  <!-- ===== レッスンの行き来 ===== -->
-  <nav class="pager" aria-label="Move between lessons / レッスンの いどう">
-    <button class="btn" id="prev" type="button">
-      <span aria-hidden="true">←</span> Back<i class="ja" lang="ja">まえ</i>
-    </button>
-    <button class="btn" id="next" type="button">
-      Next<i class="ja" lang="ja">つぎ</i> <span aria-hidden="true">→</span>
-    </button>
-  </nav>
+  <!-- ===== まえ・つぎのボタンは置かない =====
+       ここは順に進む場所ではなく、指し方を選ぶ入口である。
+       3つは目次から直に開ける。巻のページには置いてあるが、
+       あちらはレッスンを順に読み進めるためのもの。
+       （共有の chess-lessons.js は、ボタンが無いページでも動く） -->
 
   <!-- ===== フッター =====
        戻り導線。行き先は /kids/ のハブまでで、そこから先には出られない。
@@ -304,9 +298,12 @@
 
 </main>
 
-<script src="/kids/shared/chess.js"></script>
-<script src="/kids/shared/chess-sound.js"></script>
+<script src="/kids/chess/shared/chess.js"></script>
+<script src="/kids/chess/shared/chess-sound.js"></script>
+<!-- 先を読む相手。これを読み込んだページだけが、考える相手と指す。
+     巻のページは読み込まないので、1巻のおまけは決まりごとの相手のまま -->
+<script src="/kids/chess/shared/chess-ai.js"></script>
 <script src="lessons.js"></script>
-<script src="/kids/shared/chess-lessons.js"></script>
+<script src="/kids/chess/shared/chess-lessons.js"></script>
 </body>
 </html>

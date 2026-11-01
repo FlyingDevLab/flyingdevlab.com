@@ -6,9 +6,9 @@
 // 画面のことは何も知らない。DOM に触る行は1行もない。
 //
 //   /kids/chess/           第01巻 基礎知識
-//   /kids/chess-tactics/   第02巻 戦術
-//   /kids/chess-openings/  第03巻 序盤
-//   /kids/chess-play/      あそぶ（ふたりで・コンピュータと・ならべて）
+//   /kids/chess/tactics/   第02巻 戦術
+//   /kids/chess/openings/  第03巻 序盤
+//   /kids/chess/play/      あそぶ（ふたりで・コンピュータと・ならべて）
 //
 // ★ なぜ最初から shared に置いたのか ★
 //   起こした日、このファイルを使うページは01巻の1枚しかなかった。

@@ -3,8 +3,8 @@
 // ================================================================
 //
 // この巻の「文章」と「盤」と「できたの条件」だけを持つ。
-// 盤を描くのは /kids/shared/chess-lessons.js、
-// ルールの判定は /kids/shared/chess.js。ここには仕組みを書かない。
+// 盤を描くのは /kids/chess/shared/chess-lessons.js、
+// ルールの判定は /kids/chess/shared/chess.js。ここには仕組みを書かない。
 // 書き方の決まりは1巻の lessons.js の冒頭に書いたものと同じ。
 //
 // ★ この巻だけの goal ★
@@ -36,9 +36,9 @@ window.CHESS_LESSONS = {
   volume: { no: 2, en: 'Tactics', ja: 'せんじゅつ' },
   volumes: [
     { no: 1, en: 'Basics',  ja: 'きそ',       url: '/kids/chess/' },
-    { no: 2, en: 'Tactics', ja: 'せんじゅつ', url: '/kids/chess-tactics/' },
-    { no: 3, en: 'Openings', ja: 'じょばん', url: '/kids/chess-openings/' },
-    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess-play/', tab: true }
+    { no: 2, en: 'Tactics', ja: 'せんじゅつ', url: '/kids/chess/tactics/' },
+    { no: 3, en: 'Openings', ja: 'じょばん', url: '/kids/chess/openings/' },
+    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess/play/', tab: true }
   ],
 
   chapters: [

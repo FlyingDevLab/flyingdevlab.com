@@ -77,10 +77,11 @@ Our children's apps are built with **no ads, no in-app purchases, and no data se
 | `kids/huarongdao/` | ブラウザゲーム：華容道（箱入り娘の中国語版・繁体字） |
 | `kids/river-crossing/` | ブラウザゲーム：River Crossing（川渡り） |
 | `kids/chess/` | 教材：チェス 01巻 きそ（駒の動きと棋譜の読み方・23レッスン） |
-| `kids/chess-tactics/` | 教材：チェス 02巻 せんじゅつ（7章19問＋おまけ） |
-| `kids/chess-openings/` | 教材：チェス 03巻 じょばん（4章15問） |
-| `kids/chess-play/` | チェス：あそぶ（ふたりで・コンピュータと・ならべて。巻とは別のタブ） |
-| `kids/shared/` | 複数のページが共有するもの（`klotski.js` ／ チェスの `chess.js`・`chess-lessons.js`・`chess-lessons.css`） |
+| `kids/chess/tactics/` | 教材：チェス 02巻 せんじゅつ（7章19問＋おまけ） |
+| `kids/chess/openings/` | 教材：チェス 03巻 じょばん（4章15問） |
+| `kids/chess/play/` | チェス：あそぶ（ふたりで・コンピュータと・ならべて。巻とは別のタブ） |
+| `kids/chess/shared/` | チェスの4ページが共有するもの（`chess.js`・`chess-lessons.js`・`chess-lessons.css`・`chess-ai.js`・`chess-cpu.js`・`chess-sound.js`） |
+| `kids/shared/` | 複数のページが共有するもの（箱入り娘3本の `klotski.js`） |
 | `privacy-policy/` | アプリ別プライバシーポリシー（App Store登録用・多言語対応） |
 
 ### この表に無いもの
@@ -186,16 +187,16 @@ sitemap では、この3本だけが互いを `hreflang` の代替として申�
 | 巻 | URL | 中身 |
 |---|---|---|
 | 01 きそ | `/kids/chess/` | 駒の動きと棋譜の読み方。23レッスン |
-| 02 せんじゅつ | `/kids/chess-tactics/` | フォーク・ピン・スキュア・ディスカバード・捨て駒。7章19問 |
-| 03 じょばん | `/kids/chess-openings/` | 序盤の考え方、名前のある序盤、実戦の棋譜。4章15問 |
+| 02 せんじゅつ | `/kids/chess/tactics/` | フォーク・ピン・スキュア・ディスカバード・捨て駒。7章19問 |
+| 03 じょばん | `/kids/chess/openings/` | 序盤の考え方、名前のある序盤、実戦の棋譜。4章15問 |
 | 04 なかばん | （未着手） | 配置の評価。利き・モビリティ・ポーン構造 |
-| あそぶ（タブ） | `/kids/chess-play/` | 巻とは関係なく、実際に指して遊ぶ。ふたりで・コンピュータと・ならべて |
+| あそぶ（タブ） | `/kids/chess/play/` | 巻とは関係なく、実際に指して遊ぶ。ふたりで・コンピュータと・ならべて |
 
 「あそぶ」は巻ではなくタブなので、巻えらびの右に並びますが `vol.` は付きません
 （`lessons.js` の `volumes` に `tab: true` を付けて区別しています。`no` が数でなく
 `'play'` なのは、巻の「つぎの巻」の計算に入らないため）。
 
-**画面の仕組みは巻で共有しています。** `kids/shared/chess-lessons.js` と
+**画面の仕組みは巻で共有しています。** `kids/chess/shared/chess-lessons.js` と
 `chess-lessons.css` で、各巻が持っているのは `lessons.js` だけです。
 1300行を巻ごとに写すと、片方で見つけた不具合を何度も直すことになります
 （`klotski.js` を3本で共有しているのと同じ理屈）。
@@ -330,7 +331,7 @@ Unicode のチェス記号（♔♕♖）は使っていません。白の駒が
 白いマスの上で読み取りにくいこと、環境によって形が大きく変わることが理由です。
 `index.html` の中に `<symbol>` として置いてあり、画像ファイルは1枚も増えていません。
 
-#### ルールの判定は `kids/shared/chess.js` にあります
+#### ルールの判定は `kids/chess/shared/chess.js` にあります
 
 合法手・チェック・メイト・ステイルメイト・プロモーション・アンパッサン・
 キャスリング・50手ルール・千日手・駒不足、そして棋譜（SAN）の読み書き。
@@ -437,7 +438,7 @@ Unicode のチェス記号（♔♕♖）は使っていません。白の駒が
 #### 「コンピュータと さす」の相手は考えません
 
 1巻のレッスン23と「あそぶ」は、白を自分が指し、黒を
-`kids/shared/chess-cpu.js` が指します。ルールを覚えた直後に、
+`kids/chess/shared/chess-cpu.js` が指します。ルールを覚えた直後に、
 勝ち負けを気にせず駒を動かして取る練習をするための相手です。
 強さや難しさには触れず、選ぶ画面も置いていません。
 

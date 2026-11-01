@@ -14,7 +14,7 @@
     1巻で駒の動きと棋譜、2巻で戦術をやったあとの巻である。
 
   ■ 画面の仕組みは1巻・2巻と共有している
-    /kids/shared/chess-lessons.js と chess-lessons.css。
+    /kids/chess/shared/chess-lessons.js と chess-lessons.css。
     このページが自分で持っているのは lessons.js だけ。
 
   ■ 2巻と課題の形が違う。これが この巻のいちばん大事なところ
@@ -64,13 +64,13 @@
   <meta property="og:type"        content="website">
   <meta property="og:title"       content="Chess vol.3 Openings / チェス 第3巻 じょばん">
   <meta property="og:description" content="Take the centre, develop, castle. Then the named openings. 中央・駒を出す・キングを安全に。そして名前のついた序盤。">
-  <meta property="og:url"         content="https://flyingdevlab.com/kids/chess-openings/">
+  <meta property="og:url"         content="https://flyingdevlab.com/kids/chess/openings/">
   <meta property="og:site_name"   content="Flying Dev Lab">
   <meta name="twitter:card"       content="summary">
   <meta name="twitter:title"      content="Chess vol.3 Openings / チェス 第3巻 じょばん">
   <meta name="twitter:description" content="Take the centre, develop, castle. / 中央・駒を出す・キングを安全に。">
 
-  <link rel="stylesheet" href="/kids/shared/chess-lessons.css">
+  <link rel="stylesheet" href="/kids/chess/shared/chess-lessons.css">
 </head>
 <body>
 
@@ -152,12 +152,12 @@
   </header>
 
   <!-- ===== 巻えらび =====
-       中身は /kids/shared/chess-lessons.js が lessons.js の volumes から作る。
+       中身は /kids/chess/shared/chess-lessons.js が lessons.js の volumes から作る。
        ハブのカードを1枚に保つため、巻はここで選ぶ。 -->
   <nav class="volumes" id="volumes" aria-label="Volumes / かん"></nav>
 
   <!-- ===== 目次 =====
-       中身は共有の /kids/shared/chess-lessons.js が lessons.js から作る。
+       中身は共有の /kids/chess/shared/chess-lessons.js が lessons.js から作る。
        15レッスン全部が最初から押せる。鍵は無い。
        名前と番号を HTML と JS の2か所に持たないために、
        出どころはレッスン表（lessons.js）だけにしている。 -->
@@ -308,9 +308,9 @@
 
 </main>
 
-<script src="/kids/shared/chess.js"></script>
-<script src="/kids/shared/chess-sound.js"></script>
+<script src="/kids/chess/shared/chess.js"></script>
+<script src="/kids/chess/shared/chess-sound.js"></script>
 <script src="lessons.js"></script>
-<script src="/kids/shared/chess-lessons.js"></script>
+<script src="/kids/chess/shared/chess-lessons.js"></script>
 </body>
 </html>

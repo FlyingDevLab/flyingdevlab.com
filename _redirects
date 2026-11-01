@@ -106,3 +106,46 @@
 
 /ten-puzzle            /kids/ten-puzzle/               301
 /ten-puzzle/*          /kids/ten-puzzle/:splat         301
+
+# ----------------------------------------------------------------
+# チェスの引っ越し（2026-11-01）
+# ----------------------------------------------------------------
+# チェスは 4つのページ（巻3つ＋あそぶ）と 6つの共有ファイルに
+# 分かれていて、/kids/ の中で横並びに散らばっていた。
+# 1箇所にまとめるため /kids/chess/ の下へ移した。
+#
+# 1巻（/kids/chess/）だけは URL を変えていない。チェスで一番
+# リンクされている入口なので、ここを動かすと失うものが大きい。
+# 1巻は /kids/chess/ の直下、残りはその下の階層、という形になる。
+#
+# ⚠️ このパスは、以下のファイルでも参照されている。
+#    URL を変えるときは、あわせて更新すること。
+#      sitemap.xml … 検索エンジンへの申告
+#      kids/index.html … 一覧からの入口（1巻へ）
+#      kids/chess/*/lessons.js … 巻のあいだを行き来する volumes
+#      kids/chess/*/index.html … 各ページの og:url
+#
+# ページ
+
+/kids/chess-tactics          /kids/chess/tactics/           301
+/kids/chess-tactics/*        /kids/chess/tactics/:splat     301
+
+/kids/chess-openings         /kids/chess/openings/          301
+/kids/chess-openings/*       /kids/chess/openings/:splat    301
+
+/kids/chess-play             /kids/chess/play/              301
+/kids/chess-play/*           /kids/chess/play/:splat        301
+
+# 共有ファイル
+#
+# これは検索エンジンのためではなく、ブラウザのキャッシュのため。
+# 古い HTML がキャッシュに残っていると、古い方のパスを読みに来る。
+# 転送しないと盤がまるごと出なくなるので、6本とも残しておく。
+# （klotski.js は動かしていないので /kids/shared/ に残っている）
+
+/kids/shared/chess.js           /kids/chess/shared/chess.js           301
+/kids/shared/chess-lessons.js   /kids/chess/shared/chess-lessons.js   301
+/kids/shared/chess-lessons.css  /kids/chess/shared/chess-lessons.css  301
+/kids/shared/chess-ai.js        /kids/chess/shared/chess-ai.js        301
+/kids/shared/chess-cpu.js       /kids/chess/shared/chess-cpu.js       301
+/kids/shared/chess-sound.js     /kids/chess/shared/chess-sound.js     301

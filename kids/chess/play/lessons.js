@@ -5,7 +5,7 @@
 // レッスンではなく、実際に指して遊ぶ場所。巻（01〜03）とは関係なく、
 // 巻えらびの右の「あそぶ」タブから開く。
 //
-//   1. コンピュータと さす     黒を /kids/shared/chess-ai.js が指す
+//   1. コンピュータと さす     黒を /kids/chess/shared/chess-ai.js が指す
 //   2. ふたりで さす        白黒とも自分たちで指す
 //   3. ならべて あそぶ        好きな駒を並べてから、ふたりか、コンピュータと指す
 //
@@ -13,8 +13,8 @@
 //   ふたりで指すには相手を連れてくる必要があり、並べて遊ぶには
 //   何を並べるか決める必要がある。どちらも、開いてすぐには始められない。
 //
-// 盤を描くのは /kids/shared/chess-lessons.js、
-// ルールの判定は /kids/shared/chess.js。ここには仕組みを書かない。
+// 盤を描くのは /kids/chess/shared/chess-lessons.js、
+// ルールの判定は /kids/chess/shared/chess.js。ここには仕組みを書かない。
 //
 // ★ 巻ではない ★
 //   終わりの知らせ（できた！）は出ない。goal.kind が 'free' と 'sandbox' で、
@@ -27,7 +27,7 @@
 //   画面には強さのことを何も出さない。入門の場所なので、
 //   「次は何段目か」が目的になってしまうのを避けている。
 //
-//   相手の中身は /kids/shared/chess-ai.js の冒頭に書いた。
+//   相手の中身は /kids/chess/shared/chess-ai.js の冒頭に書いた。
 //   1巻のおまけが使う chess-cpu.js とは別物で、あちらは先を読まない。
 // ================================================================
 
@@ -39,9 +39,9 @@ window.CHESS_LESSONS = {
   volume: { no: 'play', en: 'Play', ja: 'あそぶ', unitEn: 'Mode' },
   volumes: [
     { no: 1, en: 'Basics',   ja: 'きそ',       url: '/kids/chess/' },
-    { no: 2, en: 'Tactics',  ja: 'せんじゅつ', url: '/kids/chess-tactics/' },
-    { no: 3, en: 'Openings', ja: 'じょばん',   url: '/kids/chess-openings/' },
-    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess-play/', tab: true }
+    { no: 2, en: 'Tactics',  ja: 'せんじゅつ', url: '/kids/chess/tactics/' },
+    { no: 3, en: 'Openings', ja: 'じょばん',   url: '/kids/chess/openings/' },
+    { no: 'play', en: 'Play', ja: 'あそぶ', url: '/kids/chess/play/', tab: true }
   ],
 
   // named … 目次に番号ではなく名前を並べる。
