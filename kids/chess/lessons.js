@@ -37,6 +37,10 @@
 //
 //     { kind:'squares', ask:['a1','h1'], ordered:false }
 //        言われたマスを押す。ordered が true なら順番どおりに
+//        mark で「ここを押して」の印の出どころを変えられる
+//          （書かない） 聞いているマスそのものが脈打つ
+//          'frame'      そのマスの筋と段、枠の名前2つが脈打つ。マスは光らない
+//          'rank'       段の名前だけが脈打つ。どの筋かは自分で見つける
 //     { kind:'moves', win:{…} }
 //        盤で手を指す。win の中身で「できた」が決まる
 //          capture:['c6','e3']   そのマスの駒を全部とる
@@ -145,7 +149,13 @@ window.CHESS_LESSONS = {
       ],
       task: { en: 'Press each square as it is named.',
               ja: 'いわれた マスを 1つずつ おしてみよう。' },
-      goal: { kind: 'squares', ask: ['e4', 'a7', 'c2', 'f6', 'h5', 'd8'], ordered: true }
+      // 印は e4 のマスではなく、枠の e と 4 に出す（mark:'frame'）。
+      // マスを光らせると、名前を読まずに光っているところを押せば
+      // 正解になり、この回の目的がそのまま消える。
+      // 教えたいのは「e の れつ」と「4 だんめ」を目でたどる手つきなので、
+      // 指さすのは答えのマスではなく、たどる先の2文字にしてある
+      goal: { kind: 'squares', ask: ['e4', 'a7', 'c2', 'f6', 'h5', 'd8'],
+              ordered: true, mark: 'frame' }
     },
 
     {
@@ -164,7 +174,11 @@ window.CHESS_LESSONS = {
       ],
       task: { en: 'Press every light square on the first rank.',
               ja: '1だんめ（いちばん 下の れつ）の 白マスを ぜんぶ おしてみよう。4つ あるよ。' },
-      goal: { kind: 'squares', ask: ['b1', 'd1', 'f1', 'h1'], ordered: false }
+      // 印は段の名前「1」だけ（mark:'rank'）。
+      // 白マス4つを光らせると、白か黒かを見分ける前に答えが分かる。
+      // どの段かだけ教えて、4つを選ぶところは自分でやってもらう
+      goal: { kind: 'squares', ask: ['b1', 'd1', 'f1', 'h1'],
+              ordered: false, mark: 'rank' }
     },
 
     // ===== 2章 こまの うごき ===========================================

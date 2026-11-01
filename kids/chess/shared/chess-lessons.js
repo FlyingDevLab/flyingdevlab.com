@@ -582,6 +582,12 @@
 
   var squares = [];
 
+  // 盤の外の名前。段（上から 8→1）と筋（左から a→h）の span を、
+  // 並んだ順に持っておく。「ここを押して」の印を、
+  // マスではなくこちらに出す回があるため（markSet の mark）
+  var rankCells = [];
+  var fileCells = [];
+
   function buildBoard() {
     ui.board.innerHTML = '';
     squares = [];
@@ -597,15 +603,19 @@
     // 盤の外の名前。段は上から 8→1、筋は左から a→h
     ui.ranks.innerHTML = '';
     ui.files.innerHTML = '';
+    rankCells = [];
+    fileCells = [];
     for (var r = 8; r >= 1; r--) {
       var s = document.createElement('span');
       s.textContent = String(r);
       ui.ranks.appendChild(s);
+      rankCells.push(s);
     }
     for (var f = 0; f < 8; f++) {
       var t = document.createElement('span');
       t.textContent = C.FILES.charAt(f);
       ui.files.appendChild(t);
+      fileCells.push(t);
     }
   }
 
@@ -646,11 +656,24 @@
         (piece ? (C.colorOf(piece) === 'w' ? 'white ' : 'black ') + PIECE_EN[C.typeOf(piece)] : 'empty'));
     }
 
+    // 盤の外の名前の印。答えのマスを指さすかわりに、
+    // 筋と段の名前を光らせる回がある（markSet の mark）。
+    // 読み上げには何も足さない。探しているマスの名前は
+    // すでに message が言っているので、枠にも書くと二度言うことになる
+    for (var fi = 0; fi < fileCells.length; fi++) {
+      fileCells[fi].classList.toggle('ask', !!marks.file[fi]);
+    }
+    for (var ri = 0; ri < rankCells.length; ri++) {
+      rankCells[ri].classList.toggle('ask', !!marks.rank[ri]);
+    }
   }
 
   // 印を付けるマスを集める。able は movesByFrom が集めた「指せる手」
   function markSet(able) {
-    var out = { pick: -1, goto: {}, goal: {}, ask: {}, check: -1, hint: hintFrom(), last: {} };
+    // file と rank は盤の外の名前。file は左から 0=a、
+    // rank は buildBoard の並びに合わせて 0=8だんめ
+    var out = { pick: -1, goto: {}, goal: {}, ask: {}, file: {}, rank: {},
+                check: -1, hint: hintFrom(), last: {} };
     // 直前に指した手の、出発マスと行き先。
     // これが無いと、黒が動いても盤に跡が残らず、
     // 何が変わったのかを自分で探すことになる
@@ -660,12 +683,19 @@
 
     if (kind === 'squares' && !S.done) {
       var g = goal();
-      if (g.ordered) {
-        var next = g.ask[S.askAt];
-        if (next) out.ask[C.indexOf(next)] = 1;
-      } else {
-        g.ask.forEach(function (n) { if (!S.hit[n]) out.ask[C.indexOf(n)] = 1; });
-      }
+      // 順番どおりの回は次の1つだけ。そうでない回はまだ押せていない分
+      var left = g.ordered ? [g.ask[S.askAt]]
+                           : g.ask.filter(function (n) { return !S.hit[n]; });
+      left.forEach(function (n) {
+        if (!n) return;            // 順番どおりの回で、最後まで押し終えたあと
+        var at = C.indexOf(n);
+        // mark を書いていない回は、聞いているマスそのものを光らせる。
+        // 'frame' と 'rank' は、答えを指さすかわりに盤の外の名前を
+        // 光らせる（なぜそうするかは lessons.js のレッスン2と3に書いた）
+        if (g.mark === 'frame') out.file[C.fileOf(at)] = 1;
+        if (g.mark === 'frame' || g.mark === 'rank') out.rank[8 - C.rankOf(at)] = 1;
+        if (!g.mark) out.ask[at] = 1;
+      });
       return out;
     }
 

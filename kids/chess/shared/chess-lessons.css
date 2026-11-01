@@ -125,6 +125,8 @@
   --goto:      #4d80d1;   /* 行ける先 */
   --goal:      #9a6bc7;   /* 課題の目印 */
   --ask:       #2f9e8f;   /* 「このマスを押して」と聞かれているとき */
+  --ask-deep:  #1b6b60;   /* 同じ合図を枠の名前に出すときの下じき。
+                             --ask のままだと白い11pxの字が読めない */
   --warn:      #c0432c;   /* チェックされているキング・やってはいけない手 */
   --last:      #c8a84b;   /* 直前に指した手。混ぜた結果は .sq.last に直書き */
   --ok:        #3f8f3a;   /* できた */
@@ -554,6 +556,29 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
   color: var(--frame-ink);
 }
 
+/* 聞いている筋と段。マスではなく、こちらの名前を光らせる回がある。
+   e4 を押させたいときに e4 のマスを光らせると、名前を読まずに
+   光っているところを押せてしまう。1章で覚えてほしいのは
+   「e の れつ」と「4 だんめ」を目でたどる手つきなので、
+   指さすのは答えではなく、たどる先の名前にしてある。
+   どの回で出すかは lessons.js の goal の mark が決める。
+
+   脈打ちを .sq.ask の pulse ではなく pulse-soft にしてあるのは、
+   この印がマスより ずっと小さいため。1マスぶんの枠なら 0.25 まで
+   薄くなっても形が残るが、20px の小さな字は消えたように見える。
+   同じ合図なので速さは揃え、薄くなる深さだけ浅くした */
+.ranks span.ask,
+.files span.ask {
+  background: var(--ask-deep);
+  color: #ffffff;
+  border-radius: 4px;
+  animation: pulse-soft 1.4s ease-in-out infinite;
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+
 /* マス。button なのでキーボードでも辿れる */
 .sq {
   position: relative;
@@ -615,6 +640,8 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
      .goto  その駒が行ける先                   … 中央に丸（駒がいれば枠）
      .goal  課題の目印（ここへ行く・これを取る）… 外枠を点線で
      .ask   「このマスを押して」と聞かれている  … 枠が脈打つ
+            回によっては、マスではなく盤の外の名前が脈打つ。
+            そちらは .ranks span.ask / .files span.ask
      .check チェックされているキングのマス      … 赤くにじむ
 ---------------------------------------------------------------- */
 .sq.pick { box-shadow: inset 0 0 0 4px var(--pick); }
@@ -1079,4 +1106,6 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
   * { animation: none !important; transition: none !important; }
   .btn:hover:not(:disabled) { transform: none; }
   .sq.ask::before { opacity: 1; }
+  .ranks span.ask,
+  .files span.ask { opacity: 1; }
 }
