@@ -127,13 +127,31 @@ window.CHESS_LESSONS = {
           ja: 'どちらで とるかで、けっかが まるきり かわる。ルークで とると、ポーンに とりかえされて 5を 失い 3を 得る。ポーンで とると、とりかえされても 1を 失って 3を 得る。' },
         { t: 'p', en: 'Line them up cheapest first.',
           ja: 'とりあいに なりそうな マスは、安い こまから じゅんに 当てて いく。こう 数えると、とった ほうが いいのか、やめた ほうが いいのかが わかる。' },
+        { t: 'p', en: 'And the trade does not stop there.',
+          ja: 'それに、とりあいは 1手で おわらない。黒が e6 の ポーンで とりかえして くると、その ポーンは d5 に 出て くる。d5 を まもって いた ポーンが、d5 に 立つ わけだから、もう だれも まもって いない。d1 の ルークで とりかえせる。さいごまで かぞえて はじめて、とくか そんかが わかる。' },
         { t: 'key',
           en: 'Start the trade with your cheapest attacker.',
           ja: 'とりあいは、安い こまから はじめる。' }
       ],
-      task: { en: 'Win the knight on d5. Choose which piece takes it.',
-              ja: 'd5 の ナイトを とろう。どちらの こまで とるかを よく かんがえて。' },
-      goal: { kind: 'moves', win: { answer: 'cxd5' } }
+      task: { en: 'Win the knight on d5. Choose which piece takes it, then play the trade out.',
+              ja: 'd5 の ナイトを とろう。どちらの こまで とるかを よく かんがえて。とりあいは さいごまで つづくよ。黒は 自分で 指して くる。' },
+      // 1手で切ると、とりかえされる ところも、とりかえし返す ところも
+      // 盤に出ない。安い こまから はじめる のが なぜ とくなのかは、
+      // 最後まで指してみないと数字にならないので、3手ぜんぶ指させる。
+      //   cxd5 → exd5（黒は盤が指す）→ Rxd5
+      // 白8 黒6 で始まり、白7 黒2 で終わる。白の3とく。
+      // 最後の Rxd5 のあと、d5 のルークを狙う黒の駒は1つも無い。
+      goal: { kind: 'moves', win: {
+        answers: ['cxd5', 'exd5', 'Rxd5'],
+        notes: [
+          { en: 'You took with the cheap pawn. Black will take back with the e-pawn.',
+            ja: '安い ポーンで とった。これで 3の ナイトが 手に 入る。黒は e6 の ポーンで とりかえして くるよ。' },
+          { en: 'Black took back. Look at d5 again — the guard moved onto the square, so nobody guards it now.',
+            ja: 'とりかえされた。失ったのは 1の ポーン。でも おわりでは ない。d5 を まもって いた ポーンが、d5 に 出て きた。もう だれも まもって いない。' },
+          { en: 'A knight and a pawn for one pawn: three ahead. That is what starting cheap does.',
+            ja: 'とりかえした。かぞえると、3の ナイトと 1の ポーンを とって、1の ポーンを 失った。3 とく。安い こまから はじめたから こうなる。' }
+        ]
+      } }
     },
 
     {
