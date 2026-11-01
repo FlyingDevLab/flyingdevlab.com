@@ -653,6 +653,7 @@
         (marks.goto[i] ? ' goto' : '') +
         (marks.goal[i] ? ' goal' : '') +
         (marks.ask[i] ? ' ask' : '') +
+        (marks.line[i] ? ' line' : '') +
         (marks.check === i ? ' check' : '') +
         (marks.hint === i ? ' hint' : '') +
         (marks.last[i] ? ' last' : '');
@@ -680,18 +681,54 @@
     }
   }
 
+  // 2つのマスを結ぶ1本の線。通るマスも入れて、両端まで返す。
+  // たて・よこ・ななめ のどれにもなっていなければ、両端だけ返す
+  function rayBetween(fromName, toName) {
+    var a = C.indexOf(fromName), b = C.indexOf(toName);
+    if (a < 0 || b < 0) return [];
+    var df = C.fileOf(b) - C.fileOf(a);
+    var dr = C.rankOf(b) - C.rankOf(a);
+    if (df && dr && Math.abs(df) !== Math.abs(dr)) return [a, b];
+    var sf = df === 0 ? 0 : (df > 0 ? 1 : -1);
+    var sr = dr === 0 ? 0 : (dr > 0 ? 1 : -1);
+    var out = [], f = C.fileOf(a), r = C.rankOf(a);
+    for (var k = 0; k < 8; k++) {
+      var at = C.at(f, r);
+      if (at < 0) break;
+      out.push(at);
+      if (at === b) break;
+      f += sf; r += sr;
+    }
+    return out;
+  }
+
   // 印を付けるマスを集める。able は movesByFrom が集めた「指せる手」
   function markSet(able) {
     // file と rank は盤の外の名前。file は左から 0=a、
     // rank は buildBoard の並びに合わせて 0=8だんめ
     var out = { pick: -1, goto: {}, goal: {}, ask: {}, file: {}, rank: {},
-                check: -1, hint: hintFrom(), last: {} };
+                line: {}, check: -1, hint: hintFrom(), last: {} };
     // 直前に指した手の、出発マスと行き先。
     // これが無いと、黒が動いても盤に跡が残らず、
     // 何が変わったのかを自分で探すことになる
     if (S.last) { out.last[S.last.from] = 1; out.last[S.last.to] = 1; }
     var kind = goal().kind;
     var pos = S.pos;
+
+    // 答えを先に見せない回（show）。
+    // 「1マスも うごけない こまを さがす」ような回で、さがすものが
+    // 脈打っていたら、さがす回にならない。押す前は何も光らせない。
+    // そのかわり押せたあとに、答えの理由になっている線を
+    // 通るマスごと まるごう出す。ピンは「1本の線の上に2つ並んでいる」
+    // ことが ぜんぶなので、線として見えないと理由が伝わらない
+    if (kind === 'squares' && goal().show) {
+      if (S.done) {
+        rayBetween(goal().show[0], goal().show[1]).forEach(function (at) {
+          out.line[at] = 1;
+        });
+      }
+      return out;
+    }
 
     if (kind === 'squares' && !S.done) {
       var g = goal();

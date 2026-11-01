@@ -658,6 +658,7 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
      .ask   「このマスを押して」と聞かれている  … 枠が脈打つ
             回によっては、マスではなく盤の外の名前が脈打つ。
             そちらは .ranks span.ask / .files span.ask
+     .line  答えの理由になっている1本の線        … 下に色を敷く
      .check チェックされているキングのマス      … 赤くにじむ
 ---------------------------------------------------------------- */
 .sq.pick { box-shadow: inset 0 0 0 4px var(--pick); }
@@ -723,6 +724,19 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
    混ぜた結果をそのまま置くほうがこのページには合う。 */
 .sq.last      { background: #e1c88d; }
 .sq.last.dark { background: #b88c4e; }
+
+/* 答えの理由になっている線。ピンの回で、押せたあとにだけ出る。
+   ★ 枠ではなく、下に敷く色にしてある ★
+     枠は pick・goto・check・hint・ask がすでに使っている。
+     6本目の枠を足しても見分けが付かないし、何より
+     「線」はマスを1つずつ囲っても線に見えない。
+     端から端まで同じ色を敷けば、1本の線として読める。
+
+   白マスと黒マスで別の色を直に書いているのは .sq.last と同じ理由で、
+   同じ色を重ねると黒マスの上でほとんど見えないため。
+   どちらも --goal（#9a6bc7）をそのマスの色に半分ずつ混ぜた値 */
+.sq.line      { background: #c5a3be; }
+.sq.line.dark { background: #a5758b; }
 
 /* ヒント。動かす駒だけを光らせる。行き先は出さない。
    .ask と同じ脈打ち方にしているのは、どちらも「ここを見て」の合図だから */
