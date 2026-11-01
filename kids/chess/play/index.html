@@ -254,6 +254,17 @@
     <button class="btn" id="reset" type="button" aria-label="Start this mode over / この モードを やりなおす">
       Reset<i class="ja" lang="ja">やりなおす</i>
     </button>
+    <!-- 投了。コンピュータと さすあいだだけ出る（chess-lessons.js の canResign）。
+         ふたりで さすときは出さない。目の前の相手に言えばよいため。
+
+         ■ なぜ やりなおす の右なのか
+           もどす の隣に置くと、戻すつもりで投げてしまう。
+           1つはさんで、いちばん端に置いている。
+           それでも1回目は「ほんとうに？」に変わるだけで、投げない。 -->
+    <button class="btn" id="resign" type="button" hidden
+            aria-label="Give up this game / まけを みとめる">
+      Resign<i class="ja" lang="ja">まけました</i>
+    </button>
     <button class="btn small" id="sound" type="button" aria-pressed="true"
             aria-label="Turn the piece sound off / こまの おとを けす">
       <span aria-hidden="true">♪</span> Sound<i class="ja" lang="ja">おと</i>

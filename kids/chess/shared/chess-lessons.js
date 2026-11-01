@@ -95,6 +95,7 @@
     undo:       el('undo'),
     forward:    el('forward'),
     reset:      el('reset'),
+    resign:     el('resign'),
     record:     el('recordText'),
     recordHint: el('recordHint'),
     copy:       el('copy'),
@@ -132,7 +133,12 @@
   function sayMoveSound(move, after) {
     var snd = window.ChessSound;
     if (!snd) return;
-    if (C.status(after).over) return snd.over();
+    var st = C.status(after);
+    // 「あそぶ」では、主張できるだけの引き分けもそこで終わり（12b）。
+    // 終わる音も、そのときに鳴らす。巻は規則どおりなので、まだ鳴らさない
+    var kind = goal().kind;
+    var free = (kind === 'free' || kind === 'sandbox');
+    if (st.over || (st.claimable && free)) return snd.over();
     if (C.inCheck(after, after.turn)) return snd.check();
     if (move && move.captured) return snd.capture();
     snd.move();
@@ -223,6 +229,22 @@
   //   1つずつ上下させると勝ったり負けたりが続き、
   //   「いっぱい勝っている」という感じにならない。
   //
+  // ★ 投了 −3・ひきわけ −1 ★
+  //   投げたのは負けたということなので、負けと同じだけ下げる。
+  //   ひきわけは、勝てなかったが負けてもいない。半分だけ下げる……
+  //   のではなく、1段にしてある。3段も下げると、ひきわけ1回で
+  //   相手が急にやさしくなったことに気づいてしまう。
+  //
+  // ★ もどす −1（おすたびに）★
+  //   ここは勝たせる場所である。もどすのは、自分の手が悪かったと
+  //   気づいたとき。気づいた子に、同じ強さの相手をもう一度
+  //   ぶつける理由がない。おした回数だけ下がり、1段で止まる。
+  //
+  //   段はモジュールの変数で、黒が指すたびに渡している。
+  //   つまり、もどした直後から相手が弱くなる。次の局からではない。
+  //
+  //   この3つを足した分、落ち着き先は4分の3より上がる。それでよい。
+  //
   //   はじめは1段（いちばんやさしい）から。中ほどから始めると、
   //   1巻を終えたばかりのこどもが最初の数局を落とす。
   //   入門の相手が最初に見せるものが負けでは、話が逆である。
@@ -232,7 +254,9 @@
   //   段が巻の進み方に影響することは無い。
   var LEVEL_KEY = 'fdl_chess_level';
   var LEVEL_MIN = 1, LEVEL_MAX = 7, LEVEL_START = 1;
-  var LEVEL_DOWN = 3;
+  var LEVEL_DOWN = 3;    // 負け・投了
+  var LEVEL_DRAW = 1;    // ひきわけ
+  var LEVEL_UNDO = 1;    // 「もどす」を1回おすごと
 
   function readLevel() {
     try {
@@ -247,12 +271,19 @@
 
   var level = readLevel();
 
-  // 決着がついたときに呼ぶ。winner は 'w'（こちらの勝ち）/'b'/null
+  // 決着がついたときに呼ぶ。winner は 'w'（こちらの勝ち）/'b'/null（ひきわけ）
   function moveLevel(winner) {
+    if (winner === 'w') return bumpLevel(1);
+    if (winner === 'b') return bumpLevel(-LEVEL_DOWN);
+    bumpLevel(-LEVEL_DRAW);
+  }
+
+  // 段を動かす。はしごの外には出ない。
+  // 決着のほかに「もどす」からも呼ばれる
+  function bumpLevel(by) {
     if (!window.ChessAi) return;          // 決まりごとの相手に段は無い
     var was = level;
-    if (winner === 'w') level = Math.min(LEVEL_MAX, level + 1);
-    else if (winner === 'b') level = Math.max(LEVEL_MIN, level - LEVEL_DOWN);
+    level = Math.min(LEVEL_MAX, Math.max(LEVEL_MIN, level + by));
     if (level === was) return;
     writeLevel(level);
   }
@@ -315,6 +346,9 @@
     ansAt:   0,      // win.answers の何手めまで進んだか（偶数=白の番、奇数=黒が自動で指す番）
     last:    null,   // 直前に指した手 { from, to }。盤に印を出すため
     scored:  false,  // この局の決着で、相手の強さをもう動かしたか
+    over:    null,   // 「あそぶ」の決着 { kind, winner }。盤を止め、棋譜に結果を書く
+    askResign: false,// 投了ボタンが「ほんとうに？」になっているあいだ
+    resignTimer: 0,  // 「ほんとうに？」がひとりでに戻るまでの待ち
     waitBlack: false,// 黒が逃げるのを見せている最中。そのあいだ盤は触れない
     timer:   0,      // 黒を動かすまでの待ち。レッスンを変えたら必ず止める
     done:    false
@@ -664,6 +698,9 @@
   // 「押したのに動かない」になる（川渡りの駒と同じ考え方）
   function touchable(i, kind, able) {
     var pos = S.pos;
+    // 「あそぶ」で決着がついたら、盤は止まる。
+    // 止めないと「ひきわけ」と言われた あとの手が棋譜に積み上がる
+    if (S.over) return false;
     if (kind === 'read' || kind === 'replay') return false;
     if (kind === 'squares') return true;
     if (kind === 'setup') {
@@ -730,6 +767,8 @@
   function onSquare(ev) {
     var kind = goal().kind;
     if (S.done && kind !== 'chase') return;
+    if (S.over) return;
+    cancelResign();            // 盤を触ったら「ほんとうに？」は取り消す
     var i = parseInt(ev.currentTarget.dataset.i, 10);
 
     if (kind === 'squares') return answerSquare(i);
@@ -1318,6 +1357,7 @@
   var CPU_TOTAL   = 1500;   // 考える相手のときの、合計の間
   var CPU_LEAD    = 150;    // 考え始める前に、自分の手を見せる間
   var CPU_MIN     = 250;    // 考え終わってから指すまでの、最低限の間
+  var RESIGN_WAIT = 5000;   // 投了の「ほんとうに？」が、ひとりでに戻るまで
 
   // 黒を動かして見せる。白の手が盤に乗ってから少し置く。
   // すぐ動かすと、自分の手と相手の手が同時に起きたように見える
@@ -1460,15 +1500,82 @@
     if (n) say(n.en, n.ja, 'good');
   }
 
+  // ----------------------------------------------------------------
+  // 12b. 「あそぶ」の決着
+  // ----------------------------------------------------------------
+  //
+  // ★ 主張できるだけの引き分けも、ここでは終わりにする ★
+  //   規則では、3回同じ局面と50手は「引き分けに しよう」と言える だけで、
+  //   黙って指し続けてもよい（自動で止まるのは5回同形と75手）。
+  //   chess.js はそのとおりに claimable で分けて返す。巻3つは
+  //   規則どおりの判定を使うので、あちらは触っていない。
+  //
+  //   「あそぶ」だけ、言えるようになった時点で終わりにする。理由は2つ。
+  //     言う相手がいない。コンピュータに「引き分けにしよう」と言えない
+  //     終わらない局がいちばんつまらない
+  //   それに、同じ形を繰り返したら引き分けで終わると分かれば、
+  //   勝っている側は形を変えて前に進む手を探すようになる。
+  //   50手ルールも同じで、ポーンを動かすか駒を取るかしないと戻らない。
+  //   教えなくても、盤のほうが教えてくれる。
+  //
+  //   終わった理由は必ず画面に出す。黙って止まると理不尽に見えるし、
+  //   出しておけば規則そのものも伝わる。
+
+  // 決着。盤を止め、棋譜に結果を書き、相手の強さを動かす。
+  // 一局につき一度だけ通る
+  function endGame(kind, winner) {
+    if (S.over) return;
+    cancelResign();
+    S.over = { kind: kind, winner: winner || null };
+    // 相手の強さを上げ下げする（画面には出さない）。
+    // 同じ局で二度動かさないよう、決着を見たことを覚えておく
+    if (cpuOn() && !S.scored) {
+      S.scored = true;
+      moveLevel(S.over.winner);
+    }
+    // doMove と playBlack は judge より先に塗り終えているので、
+    // 決着が付いたことは、ここで塗り直さないと画面に出ない
+    writeRecord();
+    paint();
+    updateButtons();
+  }
+
+  // 投げられるのは、コンピュータと指していて、まだ決着がついていないときだけ。
+  // 「ふたりで さす」には出さない。目の前の相手に言えばよい
+  function canResign() {
+    return !!(ui.resign && cpuOn() && !S.over);
+  }
+
+  // 1回目は確かめるだけ。押しまちがいで局が終わるのがいちばん困る
+  function resign() {
+    if (!canResign()) return;
+    if (!S.askResign) {
+      S.askResign = true;
+      updateButtons();
+      say('Press it again to resign.', 'もう いちど おすと、まけに なるよ。');
+      S.resignTimer = window.setTimeout(function () {
+        S.resignTimer = 0;
+        cancelResign();
+        clearSay();
+      }, RESIGN_WAIT);
+      return;
+    }
+    endGame('resign', 'b');
+    say('You resigned. Black wins.', 'まけを みとめた。黒の かち。', 'good');
+  }
+
+  function cancelResign() {
+    if (S.resignTimer) { window.clearTimeout(S.resignTimer); S.resignTimer = 0; }
+    if (!S.askResign) return;
+    S.askResign = false;
+    updateButtons();
+  }
+
   // おまけ：盤の状態を一言で伝える（決着・チェック・ひきわけ）
   function reportFree(pos) {
     var st = C.status(pos);
-    // 決着がついた局だけ、相手の強さを上げ下げする（画面には出さない）。
-    // 同じ局で二度動かさないよう、決着を見たことを覚えておく
-    if (st.over && cpuOn() && !S.scored) {
-      S.scored = true;
-      moveLevel(st.winner);
-    }
+    // 主張できるだけの引き分けも、ここでは決着として扱う
+    if (st.over || st.claimable) endGame(st.kind, st.winner);
     if (st.kind === 'checkmate') {
       say('Checkmate. ' + (st.winner === 'w' ? 'White' : 'Black') + ' wins.',
           'チェックメイト。' + (st.winner === 'w' ? '白' : '黒') + 'の かち。', 'good');
@@ -1476,10 +1583,12 @@
       say('Stalemate. A draw.', 'ステイルメイト。ひきわけ。', 'good');
     } else if (st.kind === 'material') {
       say('Neither side can mate. A draw.', 'もう どちらも 詰ませられない。ひきわけ。', 'good');
-    } else if (st.kind === 'repetition5' || st.kind === 'seventyfive') {
-      say('Automatic draw.', 'じどうで ひきわけ。', 'good');
-    } else if (st.claimable) {
-      say('A draw can be claimed here.', 'いま「ひきわけに しよう」と 言える ばんめん。');
+    } else if (st.kind === 'repetition' || st.kind === 'repetition5') {
+      say('The same position came up three times. A draw.',
+          'おなじ ばんめんに 3かい なった。ひきわけ。', 'good');
+    } else if (st.kind === 'fifty' || st.kind === 'seventyfive') {
+      say('Fifty moves with no pawn moved and nothing taken. A draw.',
+          '50手の あいだ、ポーンも うごかず こまも とられなかった。ひきわけ。', 'good');
     } else if (C.inCheck(pos, pos.turn)) {
       say('Check.', 'チェック。' + (pos.turn === 'w' ? '白' : '黒') + 'の キングが ねらわれて いる。');
     } else {
@@ -1502,8 +1611,10 @@
 
     if (kind === 'free' || kind === 'sandbox') {
       reportFree(pos);
-      // コンピュータと さす：白が指して、まだ続くなら黒の番
-      if (cpuOn() && pos.turn === 'b' && !C.status(pos).over) letBlackRun(move);
+      // コンピュータと さす：白が指して、まだ続くなら黒の番。
+      // 決着は S.over で見る。主張できるだけの引き分けも「あそぶ」では
+      // 終わりなので、C.status().over を見ていたのでは足りない
+      if (cpuOn() && pos.turn === 'b' && !S.over) letBlackRun(move);
       return;
     }
 
@@ -1703,6 +1814,13 @@
   // 棋譜のいちばんうしろに書く結果。決着がついていなければ空。
   // 書き方は PGN と同じ 1-0 / 0-1 / 1/2-1/2（レッスン20で教えるもの）。
   function resultOf(pos) {
+    // 「あそぶ」の決着は S.over が持つ。投了は盤に跡が残らないので、
+    // 盤だけ見ても分からない。主張できるだけの引き分けも同じ
+    if (S.over) {
+      if (S.over.winner === 'w') return '1-0';
+      if (S.over.winner === 'b') return '0-1';
+      return '1/2-1/2';
+    }
     var st = C.status(pos);
     if (st.kind === 'checkmate') return st.winner === 'w' ? '1-0' : '0-1';
     if (st.kind === 'stalemate' || st.kind === 'material' ||
@@ -1777,6 +1895,10 @@
     if (S.timer) { window.clearTimeout(S.timer); S.timer = 0; S.waitBlack = false; }
     if (goal().kind === 'replay') return replayGo(-1);
     if (!S.past.length) return;
+    cancelResign();
+    // コンピュータと指しているあいだは、もどすたびに相手が弱くなる。
+    // おした回数だけ下がり、1段で止まる（02b に考え方を書いた）
+    if (cpuOn()) bumpLevel(-LEVEL_UNDO);
     var back = S.past.pop();
     // 追いかけ回と「コンピュータと さす」は、黒の手と自分の手が1組で1手に見える。
     // 1つだけ戻すと相手の手番で止まり、盤を触れないまま固まる
@@ -1791,6 +1913,10 @@
     S.last = back.last || null;
     S.pick = -1;
     S.waiting = null;
+    // 決着のあとに もどしたら、そこから続けられる。
+    // 次の決着で、もう一度ちゃんと段を上げ下げする
+    S.over = null;
+    S.scored = false;
     S.done = false;
     ui.promo.hidden = true;
     ui.done.hidden = true;
@@ -1807,6 +1933,7 @@
 
     // 待っている手があれば捨てる。残すと、やり直した盤の上で動く
     if (S.timer) { window.clearTimeout(S.timer); S.timer = 0; }
+    cancelResign();
 
     S.start = C.fromFen(startFen());
     S.pos = C.fromFen(startFen());
@@ -1826,6 +1953,7 @@
     S.waitBlack = false;
     S.last = null;
     S.scored = false;
+    S.over = null;
     S.done = false;
 
     // 並べて あそぶ：いつも並べる段階から始める。
@@ -1884,6 +2012,14 @@
       ui.undo.disabled = S.past.length === 0;
     }
     ui.reset.disabled = false;
+    // 投了。コンピュータと指しているあいだだけ出す。
+    // 1回おすと「ほんとうに？」に変わり、もう1回で投了になる
+    if (ui.resign) {
+      ui.resign.hidden = !canResign();
+      bi(ui.resign, S.askResign ? 'Really?' : 'Resign',
+                    S.askResign ? 'ほんとうに？' : 'まけました');
+      ui.resign.classList.toggle('asking', !!S.askResign);
+    }
     if (ui.hint) {
       ui.hint.hidden = !answerNow();
       ui.hint.disabled = S.done || S.hinted;
@@ -2027,6 +2163,7 @@
       restart();
     });
     ui.copy.addEventListener('click', copyRecord);
+    if (ui.resign) ui.resign.addEventListener('click', resign);
     paintSound();
     if (ui.sound) ui.sound.addEventListener('click', function () {
       if (!window.ChessSound) return;

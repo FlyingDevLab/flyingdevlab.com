@@ -934,6 +934,26 @@ a.vol-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px;
    消えてしまうと「音があること」ごと分からなくなるので、残したまま薄くする */
 .btn.small.off { opacity: 0.55; text-decoration: line-through; }
 
+/* 投了ボタンが「ほんとうに？」になっているあいだ。
+   チェックされたキングと同じ色を使う。この画面で「気をつけて」を
+   表しているのが この色だけなので、増やさずに揃えている */
+.btn.asking {
+  background: var(--warn);
+  border-color: var(--warn);
+  color: #ffffff;
+}
+.btn.asking .ja { color: rgba(255, 255, 255, 0.85); }
+
+/* せまい画面では、ボタンの左右を詰める。
+   「あそぶ」には「まけました」が増えて4つ並ぶので、ここを詰めないと
+   「やりなおす」や「ほんとうに？」が2行に折れて、ボタンだけ背が高くなる */
+@media (max-width: 480px) {
+  .controls { gap: 6px; }
+  .btn { padding: 10px 4px 8px; font-size: 13px; }
+  .btn .ja { font-size: 10px; }
+  .btn.small { padding: 6px 10px 5px; }
+}
+
 
 /* ----------------------------------------------------------------
    12b. フォーカスの輪郭

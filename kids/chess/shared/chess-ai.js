@@ -347,7 +347,8 @@
     if (root.length === 1) return { move: root[0], depth: 0, score: 0, ms: 0 };
 
     // opts で段・深さ・安全弁を差し替えられる。
-    //   level … 1〜5。はしごの段（画面から渡すのはこれだけ）
+    //   level … 1〜7。はしごの段（画面から渡すのはこれだけ）。
+    //           LEVELS の数と合わせること
     //   depth / slack / budget … 検証と調整のため、直に指定する道
     var set = LEVELS[Math.min(LEVELS.length, Math.max(1, (opts && opts.level) || 3)) - 1];
     var maxDepth = Math.min(MAX_DEPTH, (opts && opts.depth) || set.depth || DEPTH);
