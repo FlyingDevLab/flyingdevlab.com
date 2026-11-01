@@ -15,7 +15,11 @@
 //   body は上から順に並ぶ。t で種類を決める。
 //
 //     { t:'p',     en:'…', ja:'…' }        段落。英語は短い1行、日本語が本体
-//     { t:'pairs', items:[{en,ja,sym}] }   用語の組。英語・日本語・棋譜の記号
+//     { t:'pairs', items:[{en,ja,sym,pc}] }
+//                                          用語の組。英語・日本語・棋譜の記号。
+//                                          pc に駒の字（P N B R Q K）を書くと、
+//                                          その行の左に白と黒の形が並ぶ。
+//                                          名前と形を同じ画面に置くため
 //     { t:'key',   en:'…', ja:'…' }        覚えておく一言。囲んで出す
 //
 //   どの種類も en と ja の両方を必ず書く。英語だけ・日本語だけの行は作らない。
@@ -218,7 +222,7 @@ window.CHESS_LESSONS = {
         { t: 'p', en: 'A pawn captures diagonally, not forward.',
           ja: 'そして ポーンは、うごく むきと とる むきが ちがう。すすむのは まっすぐ 前だけど、とるのは ななめ 前。だから まっすぐ 前に いる こまは とれない。すすめなく なる だけ。じつは この「むきが ちがう」のは ポーンだけで、ほかの こまは ぜんぶ、うごける ところが そのまま とれる ところ。' },
         { t: 'pairs', items: [
-          { en: 'Pawn', ja: 'ポーン', sym: 'なし' }
+          { en: 'Pawn', ja: 'ポーン', sym: 'なし', pc: 'P' }
         ] },
         { t: 'key',
           en: 'Forward to move, diagonal to take. Only the pawn works this way.',
@@ -249,7 +253,7 @@ window.CHESS_LESSONS = {
         { t: 'p', en: 'A knight always lands on the opposite colour.',
           ja: 'おもしろい ことに、ナイトは うごく たびに マスの いろが かわる。白マスから とんだら つぎは 黒マス、そのつぎは また 白マス。つぎの レッスンの ビショップは ちょうど 反対で、ずっと おなじ いろの マスから 出られない。' },
         { t: 'pairs', items: [
-          { en: 'Knight', ja: 'ナイト', sym: 'N' }
+          { en: 'Knight', ja: 'ナイト', sym: 'N', pc: 'N' }
         ] },
         { t: 'key',
           en: 'The knight moves in an L, and is the only piece that jumps.',
@@ -279,7 +283,7 @@ window.CHESS_LESSONS = {
         { t: 'p', en: 'That is why each side has two: one for each colour.',
           ja: 'だから ビショップは どちらの がわにも 2まい ある。1まいは 白マスの ビショップ、もう1まいは 黒マスの ビショップ。2まい そろって はじめて、ばんの ぜんぶの マスに とどく ように なる。' },
         { t: 'pairs', items: [
-          { en: 'Bishop', ja: 'ビショップ', sym: 'B' }
+          { en: 'Bishop', ja: 'ビショップ', sym: 'B', pc: 'B' }
         ] },
         { t: 'key',
           en: 'A light-square bishop and a dark-square bishop. The pair makes one set.',
@@ -314,7 +318,7 @@ window.CHESS_LESSONS = {
         { t: 'p', en: 'It cannot jump over anything.',
           ja: 'とちゅうに こまが あると、そこで 止まる。とびこえる ことは できない。あいての こまが あれば、その マスで とって 止まる。' },
         { t: 'pairs', items: [
-          { en: 'Rook', ja: 'ルーク', sym: 'R' }
+          { en: 'Rook', ja: 'ルーク', sym: 'R', pc: 'R' }
         ] },
         { t: 'key',
           en: 'Rook: straight lines only, and no jumping.',
@@ -338,7 +342,7 @@ window.CHESS_LESSONS = {
         { t: 'p', en: 'She still cannot jump over pieces.',
           ja: 'いちばん とおくまで とどく こまだけど、とびこえる ことは できない。とちゅうに こまが あれば そこで 止まる。' },
         { t: 'pairs', items: [
-          { en: 'Queen', ja: 'クイーン', sym: 'Q' }
+          { en: 'Queen', ja: 'クイーン', sym: 'Q', pc: 'Q' }
         ] },
         { t: 'key',
           en: 'Queen = rook + bishop.',
@@ -362,7 +366,7 @@ window.CHESS_LESSONS = {
         { t: 'p', en: 'A king may never step onto a square the enemy attacks.',
           ja: 'そして キングには もう1つ きまりが ある。あいてに ねらわれて いる マスには 入れない。じぶんから とられる ところへ 歩いて いく ことは できない。' },
         { t: 'pairs', items: [
-          { en: 'King', ja: 'キング', sym: 'K' }
+          { en: 'King', ja: 'キング', sym: 'K', pc: 'K' }
         ] },
         { t: 'key',
           en: 'The king moves one square, and never onto an attacked one.',
@@ -386,12 +390,12 @@ window.CHESS_LESSONS = {
         { t: 'p', en: 'Knight is N, because King already took K.',
           ja: 'きごうは えいごの あたまの 字。でも ナイト（Knight）だけ ちがって N。あたまの K は キング（King）が さきに つかって いるから、2ばんめの 字を つかう。' },
         { t: 'pairs', items: [
-          { en: 'King',   ja: 'キング',     sym: 'K' },
-          { en: 'Queen',  ja: 'クイーン',   sym: 'Q' },
-          { en: 'Rook',   ja: 'ルーク',     sym: 'R' },
-          { en: 'Bishop', ja: 'ビショップ', sym: 'B' },
-          { en: 'Knight', ja: 'ナイト',     sym: 'N' },
-          { en: 'Pawn',   ja: 'ポーン',     sym: 'なし' }
+          { en: 'King',   ja: 'キング',     sym: 'K',    pc: 'K' },
+          { en: 'Queen',  ja: 'クイーン',   sym: 'Q',    pc: 'Q' },
+          { en: 'Rook',   ja: 'ルーク',     sym: 'R',    pc: 'R' },
+          { en: 'Bishop', ja: 'ビショップ', sym: 'B',    pc: 'B' },
+          { en: 'Knight', ja: 'ナイト',     sym: 'N',    pc: 'N' },
+          { en: 'Pawn',   ja: 'ポーン',     sym: 'なし', pc: 'P' }
         ] },
         { t: 'p', en: 'Pawns have no letter. e4 means a pawn went to e4.',
           ja: 'ポーンには きごうが ない。e4 と マスの なまえ だけが 書いて あったら、それは ポーンの 手。いちばん 数が おおい こまなので、いちばん みじかく 書く。' },

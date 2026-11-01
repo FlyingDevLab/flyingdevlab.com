@@ -526,6 +526,18 @@
         block.items.forEach(function (it) {
           var li = document.createElement('li');
           li.className = 'pair';
+          // 駒の形。名前のすぐ左に、白と黒を並べて出す。
+          // 名前が付いているのは形のほうで、色は どちらの側か を言っている
+          // だけである。2つ並べておけば、そのことは説明しなくても伝わる。
+          // 読み上げには出さない（pieceSvg が aria-hidden を付けている）。
+          // すぐ右に名前が書いてあるので、読ませると同じことを二度言う
+          if (it.pc) {
+            var pc = document.createElement('span');
+            pc.className = 'pair-pc';
+            pc.appendChild(pieceSvg(it.pc.toUpperCase()));
+            pc.appendChild(pieceSvg(it.pc.toLowerCase()));
+            li.appendChild(pc);
+          }
           var a = document.createElement('span');
           a.className = 'pair-en';
           a.lang = 'en';
