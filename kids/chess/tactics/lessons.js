@@ -494,9 +494,26 @@ window.CHESS_LESSONS = {
           en: 'If it is mate, the value of the piece does not matter.',
           ja: '詰むなら、こまの ねうちは かんけい ない。' }
       ],
-      task: { en: 'Give up the queen so the knight can mate.',
-              ja: 'クイーンを すてて、ナイトで 詰ませよう。2手で 詰む。' },
-      goal: { kind: 'moves', win: { answer: 'Qg8+' } }
+      task: { en: 'Give up the queen, then mate with the knight.',
+              ja: 'クイーンを すてて、ナイトで 詰ませよう。白の 手は 2つ。クイーンを すてた あと、黒が とりかえすのは ばんが さすよ。' },
+      // 詰みまで指させる。クイーンを すてて おわりでは、
+      // すてた理由が盤に出ない。Rxg8 で にげ道が ふさがり、
+      // そこへ Nf7# が入る、までを ひと続きに さしてもらう。
+      // 黒の Rxg8 は ばんが さす（answers の奇数番）。
+      // ほかに さす手は 無い。g8 に 入った クイーンは
+      // h6 の ナイトが まもって いるので キングは とれず、
+      // 黒に のこって いる こまは f8 の ルークだけ
+      goal: { kind: 'moves', win: {
+        answers: ['Qg8+', 'Rxg8', 'Nf7#'],
+        notes: [
+          { en: 'The queen is there to be taken. Black has only one move.',
+            ja: '9の クイーンを すてた。キングは とれない。g8 は h6 の ナイトが まもって いる。とれるのは f8 の ルークだけ。黒に ほかの 手は ない。' },
+          { en: 'The rook took — and now it is standing on the escape square.',
+            ja: 'ルークが とりかえした。これで g8 は 黒の ルークで うまった。キングの まわりを 見て。g7 と h7 は ポーン、g8 は ルーク。じぶんの こまで かこまれて いる。' },
+          { en: 'Mate. The queen was worth nine; it did not matter.',
+            ja: '詰み。f7 の ナイトが h8 を おさえた。ほかの にげ道は、g8 が ルーク、g7 と h7 が ポーンで、ぜんぶ 黒の じぶんの こま。f7 の ナイトを とれる こまも ない。すてた クイーンは 9。でも しょうぶが おわったので、数える ばめんは 来ない。' }
+        ]
+      } }
     },
 
     {
