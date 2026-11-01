@@ -65,7 +65,7 @@
 //        コンピュータと さす。ルールは全部きいている
 //
 // ★ 盤と棋譜は機械で確かめてある ★
-//   23レッスンすべてについて、次を確認した（2026-10-30）。
+//   23レッスンすべてについて、次を確認した（2026-11-01）。
 //     ・fen が読めて、駒の数と手番が意図どおりであること
 //     ・課題が達成できること（とる手・行く手・棋譜の手が実際に合法手である）
 //     ・最後のレッスンの棋譜が、本当にチェックメイトで終わること
@@ -233,10 +233,14 @@ window.CHESS_LESSONS = {
       chapter: 1,
       en: 'Knight',
       ja: 'ナイト',
-      fen: '8/8/2p5/1pPPP3/2PNP3/2PPPp2/8/8 w - - 0 1',
+      // 的は b5 → d6 → f5 と ひとつづきに 跳べる並びにしてある。
+      // 逆回りでも3手で取り切れる。以前は c6・b5・f3 で、c6 から b5 へは
+      // 跳べないので一度 d4 へ戻る必要があり、課題文もそう断っていた。
+      // L字が次のL字につながることは、つなげてみないと手に残らない。
+      fen: '8/8/3p4/1pPPPp2/2PNP3/2PPP3/8/8 w - - 0 1',
       still: true,
       only: 'N',
-      goals: ['c6', 'b5', 'f3'],
+      goals: ['b5', 'd6', 'f5'],
       body: [
         { t: 'p', en: 'The knight moves in an L: two squares, then one to the side.',
           ja: 'ナイトは L の かたちに うごく。まっすぐ 2マス 行って、そこから よこへ 1マス。いつも おなじ かたち、いつも おなじ きょり。' },
@@ -251,18 +255,22 @@ window.CHESS_LESSONS = {
           en: 'The knight moves in an L, and is the only piece that jumps.',
           ja: 'ナイトは L じがた。ただ1つ とびこえられる こま。' }
       ],
-      task: { en: 'Jump out and take all three marked pawns.',
-              ja: 'ナイトは みかたの ポーンに ぐるりと かこまれて いる。とびこえて 外に 出て、しるしの ポーン 3つを とろう。とちゅうで もとの マスに もどっても いいよ。' },
-      goal: { kind: 'moves', win: { capture: ['c6', 'b5', 'f3'] } }
+      task: { en: 'Jump out and take all three marked pawns, one after another.',
+              ja: 'ナイトは みかたの ポーンに ぐるりと かこまれて いる。とびこえて 外に 出て、しるしの ポーン 3つを とろう。3つは つづけて とれる。もどらなくても いいよ。' },
+      goal: { kind: 'moves', win: { capture: ['b5', 'd6', 'f5'] } }
     },
 
     {
       chapter: 1,
       en: 'Bishop',
       ja: 'ビショップ',
-      fen: '8/8/7p/8/4p3/p3p3/8/2B5 w - - 0 1',
+      // c1 → a3 → f8 → h6 → e3 と、戻らずに一周できる並び。逆回りも通る。
+      // f8 を足したのはそのため。斜めが盤の端から端まで届くことは、
+      // 長い1手を実際に引いてみないと分からない。
+      // e4 だけ白マスなので、どう回っても一生とどかない。
+      fen: '5p2/8/7p/8/4p3/p3p3/8/2B5 w - - 0 1',
       still: true,
-      goals: ['a3', 'e3', 'h6'],
+      goals: ['a3', 'f8', 'h6', 'e3'],
       body: [
         { t: 'p', en: 'The bishop moves only on diagonals.',
           ja: 'ビショップは ななめに まっすぐ、何マスでも うごける。たてや よこには うごけない。とびこえる ことも できない。' },
@@ -277,18 +285,29 @@ window.CHESS_LESSONS = {
           en: 'A light-square bishop and a dark-square bishop. The pair makes one set.',
           ja: '白マスの ビショップと 黒マスの ビショップ。2まいで 1くみ。' }
       ],
-      task: { en: 'Take the three marked pawns. One pawn cannot be taken at all.',
-              ja: 'しるしの ついた ポーン 3つを とろう。しるしの ない ポーンが 1つ あるけど、それは どうしても とれない。なぜか かんがえてみて。' },
-      goal: { kind: 'moves', win: { capture: ['a3', 'e3', 'h6'] } }
+      task: { en: 'Take the four marked pawns. One pawn cannot be taken at all.',
+              ja: 'しるしの ついた ポーン 4つを とろう。ぐるりと 一周 できる ならび だよ。しるしの ない ポーンが 1つ あるけど、それは どうしても とれない。なぜか かんがえてみて。' },
+      goal: { kind: 'moves', win: { capture: ['a3', 'f8', 'h6', 'e3'] } }
     },
 
     {
       chapter: 1,
       en: 'Rook',
       ja: 'ルーク',
-      fen: '8/3p4/8/8/p2R2p1/8/8/8 w - - 0 1',
+      // d6 の白ポーンは、この回のために置いてある。
+      // 本文は「とちゅうに こまが あると、そこで 止まる」と書いているのに、
+      // 盤には邪魔をする駒が1つも無かった。しかも止めるのが味方の駒だという
+      // いちばん忘れやすいところを、説明ではなく盤のほうから教えてもらう。
+      // d4 から上は d5 までしか行けないので、
+      // d4 → a4 → a7 → d7 → g7 → g4 と回ることになる。逆回りも同じ。
+      //
+      // only を 'R' にしたのは、d7 を取ったあと d6 のポーンが動けるように
+      // なるため。はじめの局面ではこのポーンに合法手が1つも無く、
+      // 触ることもできない（押しても動かないマスは触れない作りになっている）。
+      fen: '8/p2p2p1/3P4/8/p2R2p1/8/8/8 w - - 0 1',
       still: true,
-      goals: ['d7', 'a4', 'g4'],
+      only: 'R',
+      goals: ['a4', 'a7', 'd7', 'g7', 'g4'],
       body: [
         { t: 'p', en: 'The rook moves in straight lines: up, down, left, right.',
           ja: 'ルークは たてと よこに まっすぐ、何マスでも うごける。ななめには うごけない。' },
@@ -301,9 +320,9 @@ window.CHESS_LESSONS = {
           en: 'Rook: straight lines only, and no jumping.',
           ja: 'ルークは たて・よこ。とびこえ なし。' }
       ],
-      task: { en: 'Take all three marked pawns with the rook.',
-              ja: 'ルークで、しるしの ついた ポーン 3つを ぜんぶ とろう。あいては うごかないよ。' },
-      goal: { kind: 'moves', win: { capture: ['d7', 'a4', 'g4'] } }
+      task: { en: 'Take all five marked pawns. Your own pawn blocks the way up.',
+              ja: 'ルークで、しるしの ついた ポーン 5つを ぜんぶ とろう。まっすぐ 上に 行こうと すると すぐ 止まる。d6 に いるのは みかたの ポーン。みかたでも とびこえる ことは できない。まわって いけば、ぐるりと 一周 できるよ。あいては うごかない。' },
+      goal: { kind: 'moves', win: { capture: ['a4', 'a7', 'd7', 'g7', 'g4'] } }
     },
 
     {
@@ -381,7 +400,7 @@ window.CHESS_LESSONS = {
           ja: '字が ついて いなければ ポーン。ナイトは N。' }
       ],
       task: { en: 'Play each written move on the board.',
-              ja: '上に 出る きふの とおりに、1手ずつ さしてみよう。白と 黒を こうたいに うごかすよ。' },
+              ja: 'ばんの 下に 1手ずつ 出る きふの とおりに さしてみよう。白と 黒を こうたいに うごかすよ。' },
       goal: { kind: 'moves', win: { line: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'] } }
     },
 
@@ -412,33 +431,53 @@ window.CHESS_LESSONS = {
       chapter: 2,
       en: 'When two pieces can go there',
       ja: '2まい とも 行ける とき',
-      fen: '4k3/8/8/8/8/5N2/8/1N2K3 w - - 0 1',
+      // 盤の置き方には理由が4つある。どれも外せない。
+      //
+      //   1. d2 の黒ポーンは、次の手で d1 に入ってクイーンになる。
+      //      d1 を見ている白の駒は1つも無い（a1 は黒のルーク、
+      //      d3 のビショップは d1 に届かない）ので、脅しは本物である。
+      //      そして d2 を取れるのはナイト2枚だけ。
+      //      「2まいとも行ける」が、盤の上の用事として出てくる。
+      //   2. a1 の黒ルークは b1 のナイトを狙っている。
+      //   3. f1 の白ルークが、その黒ルークの道をふさいでいる。
+      //      これが無いと b1 のナイトは h1 のキングに縛られて1手も動けず、
+      //      d2 へ行けるナイトが1枚だけになる。すると棋譜は Nxd2 と
+      //      書かれる（書き分ける必要が無いため）。この回の題材そのものが
+      //      消えるので、f1 のルークは飾りではない。
+      //   4. b のナイトで取ると1だんめが開き、Rxf1+ が入る。
+      //      f のナイトで取れば Rxb1 しかなく、その b1 は d3 のビショップが
+      //      守っている。つまり正解が f のほうである理由も盤の上にある。
+      //
+      // f2 と h2 のポーンは、どちらも g3 で取れる並びにしてある。
+      // 下の「ポーンには書きたしが要らない」の話を、仮の盤ではなく
+      // 目の前の盤で見せるため。
+      fen: '4k3/8/8/8/8/3B1N2/3p1PPP/rN3R1K w - - 0 1',
       body: [
         { t: 'p', en: 'If two identical pieces can reach the same square, the notation says which one.',
-          ja: 'この ばんには 白の ナイトが 2まい ある。b1 の ナイトも、f3 の ナイトも、どちらも d2 へ 行ける。Nd2 と 書いた だけでは、どちらが うごいたのか わからない。' },
+          ja: 'd2 の 黒ポーンは、つぎの 手で クイーンに なって しまう。とめられるのは 白の ナイト 2まい だけ。b1 の ナイトも、f3 の ナイトも、どちらも d2 の ポーンを とれる。Nxd2 と 書いた だけでは、どちらが とったのか わからない。' },
         { t: 'p', en: 'Add the file it came from. If the files match, add the rank instead.',
-          ja: 'そこで、出てきた れつの 字を あいだに 入れる。b の れつから 来た ナイトなら Nbd2。f の れつから 来た ナイトなら Nfd2。もし 2まいが おなじ れつに いる ときは、かわりに だんの すうじを 書く。' },
+          ja: 'そこで、出てきた れつの 字を あいだに 入れる。b の れつから 来た ナイトなら Nbxd2。f の れつから 来た ナイトなら Nfxd2。もし 2まいが おなじ れつに いる ときは、かわりに だんの すうじを 書く。' },
         { t: 'pairs', items: [
-          { en: 'b-knight to d2', ja: 'b から 来た ナイトが d2 へ', sym: 'Nbd2' },
-          { en: 'f-knight to d2', ja: 'f から 来た ナイトが d2 へ', sym: 'Nfd2' }
+          { en: 'b-knight takes d2', ja: 'b から 来た ナイトが d2 で とる', sym: 'Nbxd2' },
+          { en: 'f-knight takes d2', ja: 'f から 来た ナイトが d2 で とる', sym: 'Nfxd2' }
         ] },
         { t: 'p', en: 'Pawns never need this. They already name their file.',
           ja: 'では ポーンは どう なるのか。じつは ポーンだけ、この 書きたしが いらない。' },
         { t: 'p', en: 'Two pawns can only meet on a square they both capture on.',
           ja: 'まず、2まいの ポーンが おなじ マスへ 行けるのは「とる」ときだけ。まっすぐ すすむ だけなら、1つの マスへ 行ける ポーンは かならず 1まいしか ない。おなじ れつに 2まい いても、さきに いる ポーンが うしろの ポーンを ふさいで しまうから。' },
         { t: 'p', en: 'And a capturing pawn writes its file anyway, as you learned last lesson.',
-          ja: 'そして ポーンが とる ときは、まえの レッスンで ならった とおり、かならず 出てきた れつを 書く。たとえば 白の ポーンが d4 と f4 に いて、どちらも e5 で とれる とき、d の ポーンなら dxe5、f の ポーンなら fxe5。書きたす までも なく、はじめから 書き分けて ある。（この ばんには ポーンは いない。かたちの はなし）' },
+          ja: 'そして ポーンが とる ときは、まえの レッスンで ならった とおり、かならず 出てきた れつを 書く。この ばんの f2 と h2 の ポーンを 見て。どちらも g3 で とれる。もし g3 に あいての こまが 来たら、f の ポーンなら fxg3、h の ポーンなら hxg3。書きたす までも なく、はじめから 書き分けて ある。' },
         { t: 'pairs', items: [
-          { en: 'd-pawn takes e5', ja: 'd の れつの ポーンが e5 で とる', sym: 'dxe5' },
-          { en: 'f-pawn takes e5', ja: 'f の れつの ポーンが e5 で とる', sym: 'fxe5' }
+          { en: 'f-pawn takes g3', ja: 'f の れつの ポーンが g3 で とる', sym: 'fxg3' },
+          { en: 'h-pawn takes g3', ja: 'h の れつの ポーンが g3 で とる', sym: 'hxg3' }
         ] },
         { t: 'key',
           en: 'Add just enough to say which piece it was. No more than that.',
           ja: 'どちらの こまか わかる ぶんだけ 書きたす。わかる なら 書かない。ポーンは もともと 書いて あるので、足さない。' }
       ],
-      task: { en: 'Play Nbd2 — the knight from the b-file, not the other one.',
-              ja: 'Nbd2 を さしてみよう。b の れつの ナイトだよ。まちがえて f3 の ナイトを うごかすと、それは Nfd2 に なって しまう。' },
-      goal: { kind: 'moves', win: { line: ['Nbd2'] } }
+      task: { en: 'Take the pawn with the f-knight. That move is Nfxd2.',
+              ja: 'f3 の ナイトで d2 の ポーンを とろう。その 手は Nfxd2。まちがえて b1 の ナイトで とると、それは Nbxd2 に なって しまう。おまけに 1だんめが あいて、a1 の ルークに f1 の ルークを とられる。' },
+      goal: { kind: 'moves', win: { line: ['Nfxd2'] } }
     },
 
     // ===== 4章 とくべつな きまり =======================================
@@ -712,7 +751,7 @@ window.CHESS_LESSONS = {
           ja: '読めれば させる。さいごまで いけたら 1巻は おわり。' }
       ],
       task: { en: 'Play all thirteen moves from the notation.',
-              ja: '上に 出る 手を、1つずつ 読んで さしていこう。ぜんぶで 13手。' },
+              ja: 'ばんの 下に 1つずつ 出る 手を、読んで さしていこう。ぜんぶで 13手。' },
       goal: { kind: 'moves', win: { line: [
         'e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'd6', 'Nc3', 'Bg4',
         'Nxe5', 'Bxd1', 'Bxf7+', 'Ke7', 'Nd5#'
