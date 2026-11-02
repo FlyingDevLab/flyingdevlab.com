@@ -320,7 +320,7 @@ main { flex: 1; display: flex; justify-content: center; padding: 0 16px 24px; }
 
 /*
   ★ アニメーションを減らす設定への配慮 ★
-  kids/ 配下の他の5本と同じ書き方に揃えている。
+  kids/ 配下の、先に作った5本と同じ書き方に揃えている。
   animation: none ではなく duration を極小にしているのは、
   最終状態をきちんと適用させるため（none だと初期状態のまま残る）。
 */
