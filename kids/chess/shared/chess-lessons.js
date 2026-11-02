@@ -715,20 +715,21 @@
     var kind = goal().kind;
     var pos = S.pos;
 
-    // 答えを先に見せない回（show）。
-    // 「1マスも うごけない こまを さがす」ような回で、さがすものが
-    // 脈打っていたら、さがす回にならない。押す前は何も光らせない。
-    // そのかわり押せたあとに、答えの理由になっている線を
-    // 通るマスごと まるごう出す。ピンは「1本の線の上に2つ並んでいる」
-    // ことが ぜんぶなので、線として見えないと理由が伝わらない
-    if (kind === 'squares' && goal().show) {
-      if (S.done) {
-        rayBetween(goal().show[0], goal().show[1]).forEach(function (at) {
-          out.line[at] = 1;
-        });
-      }
-      return out;
+    // 答えの理由になっている線（show）。
+    // できたあとに、2マスを結ぶ線を、通るマスごと まるごと出す。
+    // ピンも スキュアも「1本の線の上に2つ並んでいる」ことが ぜんぶ
+    // なので、線として見えないと理由が伝わらない。
+    //
+    // さがす回（kind:'squares'）では、できるまで何も光らせない。
+    // さがすものが脈打っていたら、さがす回にならないため。
+    // 指す回（kind:'moves'）では、ほかの印はそのまま出す。
+    // 王手の赤わくは出たほうがいいし、線が出るのは できたあとなので
+    // 指しているあいだの手がかりにはならない
+    var show = goal().show;
+    if (show && S.done) {
+      rayBetween(show[0], show[1]).forEach(function (at) { out.line[at] = 1; });
     }
+    if (kind === 'squares' && show) return out;
 
     if (kind === 'squares' && !S.done) {
       var g = goal();
