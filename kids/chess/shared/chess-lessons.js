@@ -653,6 +653,7 @@
         (marks.goto[i] ? ' goto' : '') +
         (marks.goal[i] ? ' goal' : '') +
         (marks.ask[i] ? ' ask' : '') +
+        (marks.hit[i] ? ' hit' : '') +
         (marks.line[i] ? ' line' : '') +
         (marks.check === i ? ' check' : '') +
         (marks.hint === i ? ' hint' : '') +
@@ -666,7 +667,9 @@
       // 読み上げ。マスの名前を必ず先に言う（1章の目的がこれ）
       b.setAttribute('aria-label', C.nameOf(i) + ', ' +
         (C.isLightSquare(i) ? 'light' : 'dark') + ' square, ' +
-        (piece ? (C.colorOf(piece) === 'w' ? 'white ' : 'black ') + PIECE_EN[C.typeOf(piece)] : 'empty'));
+        (piece ? (C.colorOf(piece) === 'w' ? 'white ' : 'black ') + PIECE_EN[C.typeOf(piece)] : 'empty') +
+        // 押したかどうかは目では ✓ で分かる。読み上げにも同じことを言う
+        (marks.hit[i] ? ', done' : ''));
     }
 
     // 盤の外の名前の印。答えのマスを指さすかわりに、
@@ -707,13 +710,23 @@
     // file と rank は盤の外の名前。file は左から 0=a、
     // rank は buildBoard の並びに合わせて 0=8だんめ
     var out = { pick: -1, goto: {}, goal: {}, ask: {}, file: {}, rank: {},
-                line: {}, check: -1, hint: hintFrom(), last: {} };
+                line: {}, check: -1, hint: hintFrom(), last: {}, hit: {} };
     // 直前に指した手の、出発マスと行き先。
     // これが無いと、黒が動いても盤に跡が残らず、
     // 何が変わったのかを自分で探すことになる
     if (S.last) { out.last[S.last.from] = 1; out.last[S.last.to] = 1; }
     var kind = goal().kind;
     var pos = S.pos;
+
+    // 押して すんだマス（マスを押す回だけ）。
+    // これが無いと、押したマスと押していないマスが同じ見た目になり、
+    // どれを押したかを頭で覚えておく回になってしまう。
+    // 「あと 2つ」の文字では、のこりの数は分かっても どれかが 分からない。
+    // できたあとも消さない。押すマス ぜんぶに印が残った形が、
+    // この回の「できた」の絵になる
+    if (kind === 'squares') {
+      Object.keys(S.hit).forEach(function (n) { out.hit[C.indexOf(n)] = 1; });
+    }
 
     // 答えの理由になっている線（show）。
     // できたあとに、2マスを結ぶ線を、通るマスごと まるごと出す。
