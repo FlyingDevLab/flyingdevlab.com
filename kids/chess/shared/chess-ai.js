@@ -239,8 +239,8 @@
       if (!p) continue;
       var t = C.typeOf(p);
       var white = C.colorOf(p) === 'w';
-      // 盤の並びは 0 が a8。白の表は上下をひっくり返して引く
-      var v = VALUE[t] + PST[t][white ? (56 - (i & 56)) + (i & 7) : i];
+      // 盤の並びは 0 が a8。表は白から見た形なので、黒だけ上下をひっくり返して引く
+      var v = VALUE[t] + PST[t][white ? i : (56 - (i & 56)) + (i & 7)];
       score += (C.colorOf(p) === me) ? v : -v;
     }
     return score;
